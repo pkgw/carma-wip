@@ -1,0 +1,30 @@
+expand 1.2
+limits 0 10 0 10
+move 5 8
+putlabel 0.5 Roman to Greek Letter Key
+move 5 7
+putlabel 0.5 Examples:  \\gu = \gu    \\gU = \gU
+move 3 6
+putlabel 1.0 a b c d e f g h
+move 5 6
+putlabel 0.5 i k l m n o p q
+move 7 6
+putlabel 0.0 r s t u w x y z
+move 3 5.5
+putlabel 1.0 \ga \gb \gc \gd \ge \gf \gg \gh
+move 5 5.5
+putlabel 0.5 \gi \gk \gl \gm \gn \go \gp \gq
+move 7 5.5
+putlabel 0.0 \gr \gs \gt \gu \gw \gx \gy \gz
+move 3 4.5
+putlabel 1.0 A B C D E F G H
+move 5 4.5
+putlabel 0.5 I K L M N O P Q
+move 7 4.5
+putlabel 0.0 R S T U W X Y Z
+move 3 4
+putlabel 1.0 \gA \gB \gC \gD \gE \gF \gG \gH
+move 5 4
+putlabel 0.5 \gI \gK \gL \gM \gN \gO \gP \gQ
+move 7 4
+putlabel 0.0 \gR \gS \gT \gU \gW \gX \gY \gZ
