@@ -1,0 +1,39 @@
+viewport 0.2 0.8 0.3 0.9  # Set the location of the window.
+expand 1.2                # Set the character size.
+font 2                    # Set the font.
+limits 0 10 0 100         # Set the world coordinate limits.
+fill 1                    # Fill solid.
+rect 7 9 80 90            # Draw a filled rectangle.
+fill 2                    # Fill hollow.
+rect 3 5 80 90            # Draw a hollow rectangle.
+lstyle 1                  # Solid line.
+lwidth 2                  # Thicker line.
+move 5 80
+draw 2 40
+lstyle 2                  # Dashed line.
+lwidth 1                  # Normal thickness.
+move 9 80
+draw 6 40
+lstyle 1                  # Solid line.
+symbol 2                  # Set symbol to a `+' sign.
+move 2 20
+dot                       # Draw the symbol.
+symbol 3                  # Set symbol to a `*' sign.
+move 3 20
+dot                       # Draw the symbol.
+symbol 4                  # Set symbol to an open circle.
+move 4 20
+dot                       # Draw the symbol.
+symbol 5                  # Set symbol to a `x' sign.
+move 5 20
+dot                       # Draw the symbol.
+symbol 6                  # Set symbol to an open square.
+move 6 20
+dot                       # Draw the symbol.
+symbol 7                  # Set symbol to an open diamond.
+move 7 20
+dot                       # Draw the symbol.
+symbol 14                 # Set symbol to a hollow `+' sign.
+move 8 20
+dot                       # Draw the symbol.
+box bcnst bcnstv          # Draw a box with numbers and tick marks.

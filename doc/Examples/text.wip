@@ -1,0 +1,41 @@
+viewport 0.2 0.8 0.2 0.9
+limits 0 1 16 0
+box bc bc
+move 0.05 1
+label Normal:  \fnABCDQ efgh 1234 \ga\gb\gg\gd \gL\gH\gD\gW
+move 0.05 2
+label Roman:  \frABCDQ efgh 1234 \ga\gb\gg\gd \gL\gH\gD\gW
+move 0.05 3
+label Italic:  \fiABCDQ efgh 1234 \ga\gb\gg\gd \gL\gH\gD\gW
+move 0.05 4
+label Script:  \fsABCDQ efgh 1234 \ga\gb\gg\gd \gL\gH\gD\gW
+move 0.05 5
+label \fif\fr(\fix\fr) = \fix\fr\u2\dcos(2\gp\fix\fr)e\u\fix\fr\u2
+move 0.05 6
+label \fiH\d0\u \fr= 75 \(2233) 25 km s\u-1\d Mpc\u-1\d
+move 0.05 7
+label \fsL/L\d\(2281)\u\fr = 5.6 (\gl1216\A)
+expand 1.5
+lwidth 3
+move 0.05 10
+label Bigger (1.5)
+expand 0.5
+lwidth 1
+move 0.5 10
+label Smaller (0.5)
+expand 1
+symbol 3
+move 0.5 12
+dot
+putlabel 0 Left justified (0.0)
+move 0.5 13
+dot
+putlabel 0.5 Centered (0.5)
+move 0.5 14
+dot
+putlabel 1.0 Right justified (1.0)
+move 0.5 15
+dot
+angle 45
+putlabel 0 Angle = 45\(2218)
+angle 0
