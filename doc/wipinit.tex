@@ -1,0 +1,193 @@
+%% This file is to be included by latex in wip.tex
+%
+\mylabel{a:wipinit}
+\myfile{wipinit.tex}
+
+\wip\ has set up most of the default attributes so that the user should
+not have to ``worry'' about them until they want to alter them to
+enhance their plot.
+There may be a time, however, when a user will want to customize
+characteristics a certain way.
+For example, suppose a user typically works with
+a tektronix device\index{Devices}\index{Devices!device-type!/tek}.
+The hard coded device type is
+the {\tt /xwindow}\index{Devices!device-type!/xwindow}.
+To override this default device, the user could start \wip\ with
+the command\index{Command Line}\index{Command Line!switches}
+\begin{wiplist}%
+  \item[\%] {\tt wip -d /tek}
+\end{wiplist}
+every time they use \wip.
+Obviously, a simpler solution is desired.
+Placing the line
+\begin{wiplist}%
+  \index{Commands!{\tt set}}
+  \item[\ ] {\tt set device /tek}
+\end{wiplist}
+in the file \wipinit in the user's home directory
+will cause \wip\ to always act as if the hard coded initial device was a
+tektronix terminal.\footnote{This default device may still be overridden
+with the command line option {\em -d~device-type}
+(see Appendix~\ref{a:cmdline}).}
+
+An another example, suppose a user typically displays images
+with the $x$-axis representing Right Ascension and the $y$-axis Declination.
+Then, this user might like to have a call to
+{\tt box}\index{Commands!{\tt box}}\index{Boxes!commands!{\tt box}}
+without any arguments to correctly label the $x$-axis in hours, minutes, and
+seconds and the $y$-axis in degrees, minutes, and seconds.
+By default, \wip\ defines
+{\em xbox}\index{String Variables!variables!{\em xbox}}
+as the string ``BCNST'' and
+{\em ybox}\index{String Variables!variables!{\em ybox}}
+as ``BCNSTV''
+(see Table~\ref{t:userstrvar} for an explanation of these characters).
+One alternative might be that
+the user would specify the string\index{String Variables} variables
+{\em xbox}\index{String Variables!variables!{\em xbox}} and
+{\em ybox}\index{String Variables!variables!{\em ybox}}
+\begin{wiplist}%
+  \index{Commands!{\tt set}}
+  \item {\tt set xbox bcnsthz}
+\samepage
+  \item {\tt set ybox bcnstvdyz}
+\end{wiplist}
+whenever they entered \wip.
+A better alternative, however, would be for the user to specify
+these string variables in their \wipinit file as:
+\begin{wiplist}%
+  \index{Commands!{\tt set}}
+  \item[\ ] {\tt set xbox bcnsthz}
+\samepage
+  \item[\ ] {\tt set ybox bcnstvdyz}.
+\end{wiplist}
+Then, whenever \wip\ is started, these values will become the
+default values for the string variables {\em xbox} and {\em ybox}.
+
+In addition to setting these variables, a user may also
+want to
+automatically load files containing
+macro\index{Macros}\index{Commands!{\tt macro}}%
+\index{Macros!commands!{\tt macro}}
+definitions
+or set other user variables\index{User Variables}\index{Commands!{\tt set}}
+to certain values whenever \wip\ is
+started.
+A user should use caution when using
+the {\tt set} command in their \wipinit file:
+calculations made with variables established by the device
+(\eg X1, VY1, FILL, etc.) are undefined at this
+point and, hence, so are results based on their values.
+For this reason, the command {\tt set} should generally be used
+cautiously in the user's \wipinit file except for string variables and
+the most rudimentary of calculations.
+
+As an example of how to define macros automatically,
+suppose a user has a file named {\tt mymacro.wip} that
+contains a macro definition that is used often.
+Placing the line
+\begin{wiplist}%
+  \index{Commands!{\tt macro}}
+  \item[\ ] {\tt macro mymacro.wip}
+\end{wiplist}
+in the user's \wipinit file will automatically load the
+macro definitions from the named file every time \wip\ is started.
+Remember everything in the named file but macro definitions
+will be ignored by the {\tt macro} command.
+
+\begin{table}
+  \caption{Acceptable commands in the \wipinit File}
+  \mylabel{t:wipinitem}
+  \index{Commands!{\tt set}}
+  \index{Macros!commands!{\tt macro}}
+  \index{Macros}
+  \index{Commands!{\tt macro}}
+  \index{User Variables}
+  \index{String Variables}
+  \index{String Variables!variables!{\em print}}
+  \index{String Variables!variables!{\em xbox}}
+  \index{String Variables!variables!{\em ybox}}
+  \index{String Variables!variables!{\em xheader}}
+  \index{String Variables!variables!{\em yheader}}
+  \index{String Variables!variables!{\em levtype}}
+  \index{String Variables!variables!{\em device}}
+  \index{String Variables!variables!{\em helpfile}}
+  \index{Devices!device-type!/xwindow}
+  \index{Devices!the {\em device} string}
+  \index{Hardcopy!the {\em print} string}
+  \index{Boxes!the {\em xbox} string}
+  \index{Boxes!the {\em ybox} string}
+  \index{Images!header files}
+  \index{Images!setting contour levels}
+  \index{Help!on-line help file!the {\em helpfile} string}
+  \index{Help!on-line help file!\$WIPHELP}
+  \index{Commands!{\tt new}}
+  \index{Commands!{\tt free}}
+  \index{User Variables!commands!{\tt new}}
+  \index{User Variables!commands!{\tt free}}
+  \index{User Variables!user defined variables}
+  \centering
+  \setlength{\tabentrylen}{\textwidth}
+  \addtolength{\tabentrylen}{-2.0in}
+  \begin{tabular}{|l|p{\tabentrylen}|l|} \hline\hline
+      \multicolumn{1}{|c}{Command} & \multicolumn{1}{|c}{Required Argument}
+     & \multicolumn{1}{|c|}{Default value} \\ \hline
+    && \\
+    set device   & ``device-name/device-type''      & /xwindow \\
+    set xbox     & Box options (Table~\ref{t:box}) for the X-axis & BCNST \\
+    set ybox     & Box options (Table~\ref{t:box}) for the Y-axis & BCNSTV \\
+    set print    & Print command (System dependent) & {\tt lpr} \\
+    set xheader  & X-axis header options (Section~\ref{ss:header}) & rd \\
+    set yheader  & Y-axis header options (Section~\ref{ss:header}) & rd \\
+    set levtype  & Contour scaling type (Section~\ref{ss:levels}) & absolute \\
+    set helpfile & The on-line help file (System dependent)       & \$WIPHELP \\
+    set maxarray & The maximum size of the {\bf X, Y, ERR},
+                   and {\bf PSTYLE} arrays.
+                   This must be set in the \wipinit file.         & 20,000 \\
+    set   & Set options (see Chapter~\ref{c:uservar})             & (none) \\
+    macro & Macro file name                                       & (none) \\
+    new   & New user variable name (Section~\ref{s:varnew})       & (none) \\
+    free  & User variable name to remove (Section~\ref{s:varnew}) & (none) \\
+    && \\ \hline\hline
+  \end{tabular}
+\end{table}
+
+Table~\ref{t:wipinitem} lists the commands and string variables
+that may be specified in your \wipinit file.
+Note that the user variable {\tt maxarray} can only be set in
+the \wipinit file.
+This is because once these arrays are initialized, they can not have
+their maximum size changed.
+In addition, comments\index{Comments} may be placed anywhere in
+the \wipinit file as long as they begin with the comment character
+(\#).\index{Comments!comment character(\#)}
+For a further explanation of how to define macros, see
+Chapter~\ref{c:macros}.
+The command {\tt set}\index{Commands!{\tt set}}
+and user variables\index{User Variables}
+are discussed more fully in Chapter~\ref{c:uservar}.
+
+A typical \wipinit file might contain the following lines:
+\begin{wiplist}%
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt macro}}
+  \index{User Variables!commands!{\tt set}}
+  \index{Devices!device-type!/xserve}
+  \index{Devices!the {\em device} string}
+  \item[\ ] {\tt set device   /xserve}
+\samepage
+  \item[\ ] {\tt set xbox     BCNSTHZ}
+  \item[\ ] {\tt set ybox     BCNSTVDYZ}
+  \item[\ ] {\tt set print    lp -d ps -w}
+  \item[\ ] {\tt macro /myroot/subdir/macro1.wip}
+  \item[\ ] {\tt macro /myroot/macro2.wip}
+\end{wiplist}
+where the user has two files containing macros
+({\tt /myroot/subdir/macro1.wip} and /{\tt myroot/macro2.wip})
+that are always loaded whenever \wip\ begins.
+In addition, this example illustrates how to set the default graphics
+device to the {\tt /xserve} X window driver;
+change the default arguments for the {\tt box} command;
+and set the print command to send the plot (under Solaris) to the
+printer named {\tt ps} with a notification to the user after
+it is printed.
