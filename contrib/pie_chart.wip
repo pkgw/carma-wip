@@ -1,0 +1,272 @@
+####################################################################
+# Version 1.0 April 9, 2003 RAG
+#
+# pie_chart.wip
+#
+# This is a simplistic set of macros that allow simple pie charts to be 
+# drawn in WIP.  In case you want to try it, here is how the macros work.
+# 
+# Create an ASCII file with the following columns (and no blank lines):
+# 
+# 1) the number that represents the size of a sector (it will be renormalized)
+# 2) the color for the sector (numbers less than zero show an unfilled
+#                               frame drawn in the foreground color)
+# 3) the color for a label    (numbers less than zero suppress the label for
+#                               a particular sector)
+# 4) the label                (labels are placed such that they are centered
+#                               on a sector and are written at the current
+#                               default angle)
+# 
+# If you want to customize the labels then know that a unit circle (radius
+# of one) is being drawn and you can place the label yourself manually).
+# 
+#
+# There are four basic macros that will be invoked by a user in order
+# to create most charts.  Other macros exist within this set but these 
+# are basically the subroutines that do the work.
+#
+# A description of the arguments for the macros follow a short example.
+#
+#
+####################################################################
+# Example:
+####################################################################
+#device postscript_file.ps/vcps
+#
+#get_pie_data   datafile.txt 1
+#draw_pie_data  45.0 2
+#label_pie_data 45.0 3 4
+#mtext T 1.0 0.5 0.5 Title
+#move 0 0                     \
+#fill 2                       |- draws a circle around the output...
+#arc 2 2 360 0                /
+#clear_pie_data
+#hardcopy
+#
+#
+####################################################################
+# Macro descriptions, arguments, etc...
+####################################################################
+# 
+# get_pie_data filename N
+#
+#   This reads the Nth column of filename and normalizes the size of the
+#   set of sectors by the sum of the values in the Nth column.
+#
+#
+# draw_pie_data angle M
+#
+#   This redefines the current viewport so that pixels are considered to be
+#   square and sets the limits to -1 1 -1 1 (so a unit circle will fill the
+#   area).  Then the sectors read by the first macro (get_pie_data) are drawn.
+#
+#   The argument "angle" is just an offset for the angle where the first slice 
+#   is drawn (i.e. it rotates the chart which sometimes is handy for getting
+#   the simple labels to look better).  The second argument (M) is the column 
+#   that specifies color in the same input file as was used in get_pie_data... 
+#   If the value is negative a wireframe is drawn with the foreground color 
+#   (i.e. color 1)
+#
+#
+# label_pie_data angle O P
+#
+#   This marks labels at the center of each sector.  The argument "angle" is
+#   the same as the previous function.  The argument "O" is the column
+#   describing the color for the label (here a negative value supresses
+#   drawing a specific label).  The arguement "P" is the column where 
+#   the labels begin.  Note that the label is assumed to be the remainder
+#   of the text starting with column "P" so that labels with multiple words
+#   can be supported.
+#
+# clear_pie_data
+#
+#   This macro has no arguments.  It basically cleans up all the variables
+#   that were being used and reinitialized the x and y vectors so that WIP
+#   can continue execture on new files without problems.  If you are going 
+#   to simply invoke a hardcopy and exit then you can skip this.
+#
+####################################################################
+# The macros are below this point.  They are pretty simple go ahead
+# and take a look, make alterations, whatever... 
+####################################################################
+
+########################################
+define clear_pie_data
+#
+free pie_slices
+lines 1 1
+xcol 1
+end
+
+
+########################################
+define get_pie_data
+#
+# $1 = data file
+# $2 = column containing sizes of pie chart slices
+#
+
+new tmppie_sum tmppie_nptsx tmppie_cnt tmppie_normfac
+data $1 
+xcol $2
+set tmppie_nptsx npts(x)  
+new pie_slices[tmppie_nptsx]
+set tmppie_cnt 0
+loop tmppie_nptsx pie_xsum tmppie_cnt tmppie_sum 
+set tmppie_normfac ( 1.0 / tmppie_sum )
+set tmppie_cnt 0
+loop tmppie_nptsx pie_scale tmppie_cnt pie_slices tmppie_normfac
+free tmppie_sum tmppie_nptsx tmppie_cnt tmppie_normfac
+
+end
+
+########################################################
+define pie_xsum
+#
+# sum the x-vector
+#
+# $1 = counter
+# $2 = sum variable 
+#
+set $1 $1 + 1
+set $2 ( $2 + x[$1] )
+end
+
+
+########################################################
+define pie_scale
+#
+# multiply the x-vector by a factor place into the new vector
+#
+# $1 = counter
+# $2 = new vector name
+# $3 = normalization factor
+#
+set $1 $1 + 1 
+set $2[$1] ( x[$1] * $3 )
+end
+
+
+########################################################
+define draw_pie_data
+#
+# $1 = Sector offset
+# $2 = Columm containing color for sector
+
+winadj 0 2 0 2 
+limits -1 1 -1 1
+
+new tmppie_ang1 tmppie_numslice tmppie_cnt 
+
+set tmppie_numslice npts(pie_slices)  
+set tmppie_cnt 0
+move 0. 0.
+set tmppie_ang1 $1
+loop tmppie_numslice pie_draw_sector tmppie_cnt tmppie_ang1 $2
+
+free tmppie_ang1 tmppie_numslice tmppie_cnt 
+end
+
+
+########################################################
+define pie_draw_sector
+#
+# $1 = Counter 
+# $2 = Sector offset
+# $3 = Columm containing color for sector
+#
+# Note the the variable tmppie_dang controls how accurately each wedge
+# is drawn (it controls the steps for the curved edge of a slice)
+# the units are degrees.
+#
+
+new tmppie_dang tmppie_vcnt tmppie_nvals tmppie_arcsize
+set tmppie_dang 0.2
+
+set $1 $1 + 1
+set tmppie_arcsize ( 360.0 * pie_slices[$1] )
+lines $1 $1
+xcol 1
+ycol 1
+ecol $3
+if ( err[1] < 0  ) fill 2
+if ( err[1] >= 0 ) fill 1
+if ( err[1] >= 0 ) color err[1]
+
+set tmppie_vcnt  ( 1 )
+set tmppie_nvals ( ( tmppie_arcsize \ tmppie_dang ) + 2 ) 
+set x[1] 0.0
+set y[1] 0.0
+set tmppie_nvals ( tmppie_nvals - 2 )
+loop tmppie_nvals pie_gen_sector tmppie_vcnt $2 tmppie_dang
+set tmppie_nvals ( tmppie_nvals + 2 )
+set x[tmppie_nvals] ( cosd( $2 + tmppie_arcsize ) )
+set y[tmppie_nvals] ( sind( $2 + tmppie_arcsize ) )
+poly
+
+set $2 $2 + tmppie_arcsize 
+color 1
+if ( err[1] >= 0 ) fill 2
+free tmppie_dang tmppie_vcnt tmppie_nvals tmppie_arcsize
+
+end
+
+########################################################
+define label_pie_data
+#
+# $1 = Angle offset...
+# $2 = Column for label color
+# $3 = Column for label
+#
+#
+new tmppie_ang1 tmppie_numslice tmppie_cnt 
+
+set tmppie_numslice npts(pie_slices)  
+set tmppie_cnt 0
+set tmppie_ang1 $1
+loop tmppie_numslice pie_sector_label tmppie_cnt tmppie_ang1 $2 $3
+
+free tmppie_ang1 tmppie_numslice tmppie_cnt 
+end
+
+
+########################################################
+define pie_sector_label
+#
+# $1 = counter
+# $2 = Angle offset...
+# $3 = Column for label color
+# $4 = Column for label
+
+new tmppie_arcsize tmppie_halfarc tmppie_xlab tmppie_ylab "tmppie_label"
+
+set $1 $1 + 1
+set tmppie_arcsize ( 360.0 * pie_slices[$1] )
+set tmppie_halfarc ( 0.5 * tmppie_arcsize )
+
+set tmppie_xlab ( 0.5 * cosd( $2 + tmppie_halfarc ) )
+set tmppie_ylab ( 0.5 * sind( $2 + tmppie_halfarc ) )
+move tmppie_xlab tmppie_ylab
+lines $1 $1
+ecol $3
+if ( err[1] >= 0 ) color err[1]
+set tmppie_label ""
+lines $1 $1
+if ( err[1] >= 0 ) string tmppie_label $4 0
+if ( err[1] >= 0 ) putlabel 0.5 \[tmppie_label]
+set $2 $2 + tmppie_arcsize
+color 1
+free tmppie_arcsize tmppie_halfarc tmppie_xlab tmppie_ylab "tmppie_label"
+
+end
+
+
+########################################################
+define pie_gen_sector
+
+set $1 $1 + 1
+set x[$1] ( cosd( $2 + ( $3 * ( $1 - 2 ) ) ) )
+set y[$1] ( sind( $2 + ( $3 * ( $1 - 2 ) ) ) )
+end
+
+########################################################
