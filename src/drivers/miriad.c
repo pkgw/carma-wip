@@ -17,6 +17,12 @@
  *    pjt  12sep99   Fixed horrid bug fclose() mask, solved linux coredumps
  *                   but still some very odd linux problems with masked files
  *    pjt   2dec00   ansi-c, tracking down that still unsolved problem
+ *    pjt  21sep02   back to that unsolved problem, courtesy Tam (and some cleanup)
+ *                   The problem was little endian machines with a mask file would
+ *                   sometimes (depending on size) read the mask in a too small 
+ *                   buffer. Solution was to teach the mask reader to use a smaller buffer
+ *                   (of course miriad.c should have never been written but inherited from
+ *                   the corresponding MIRIAD libraries....... i.e. xyio.c   
  *
  * Routines:
  * Void *miropen(Const char *name, int naxis, int axes[]);
@@ -28,9 +34,9 @@
  * void mirrdhdi(Void *file, Const char *keyword, int *value, int defval);
  * void mirrdhda(Void *file, Const char *keyword, char *value, Const char *defval, size_t maxlen);
  * int mirhdprsnt(Void *file, Const char *keyword);
- * static char *mirsrch ARGS(( MIRIAD *f, Const char *keyword, long int *size, long int *offset ));
- * static MIRMASK *mirfindmask ARGS(( MIRIAD *f, Const char *name, int nx ));
- * static int maskread ARGS(( MIRIAD *f,int *flags, size_t length, long int offset ));
+ * static char *mirsrch(MIRIAD *f, Const char *keyword, long int *size, long int *offset);
+ * static MIRMASK *mirfindmask(MIRIAD *f, Const char *name, int nx);
+ * static int maskread(MIRIAD *f,int *flags, size_t length, long int offset);
  */
 
 #define WIP_IMAGE
@@ -91,14 +97,15 @@ typedef struct {
   int axes[MAXNAX];  /* Number of pixels along each axis. */
   long int offset;   /* Offset into file. */
   char *buffer;      /* Array used if data conversion needed. */
+  int buflen;        /* allocated space for *buffer */
   MIRMASK *mask;     /* Pointer to mask structure. */
 } MIRIAD;
 
 /* Declare private routines. */
 
-static char *mirsrch ARGS(( MIRIAD *f, Const char *keyword, long int *size, long int *offset ));
-static MIRMASK *mirfindmask ARGS(( MIRIAD *f, Const char *name, int nx ));
-static int maskread ARGS(( MIRIAD *f,int *flags, size_t len, long int offset ));
+static char *mirsrch(MIRIAD *f, Const char *keyword, long int *size, long int *offset);
+static MIRMASK *mirfindmask(MIRIAD *f, Const char *name, int nx);
+static int maskread(MIRIAD *f,int *flags, size_t len, long int offset);
 
 /* Declare static variables (if needed). */
 
@@ -125,16 +132,16 @@ Void *miropen(Const char *name, int naxis, int axes[])
 {
     char naxes[16], s[ITEM_HDR_SIZE];
     char filename[BUFSIZ];
-    int i, ndim, temp;
+    int i, ndim, temp, buflen;
     long int size;
     size_t retval;
     MIRIAD *f;
 
     if (wipDebugMode() > 0)
-      (void)fprintf(stdout, "Trying MIRIAD format...\n");
+      fprintf(stderr, "Trying MIRIAD format...\n");
 
     if ((f = (MIRIAD *)malloc(sizeof(MIRIAD))) == (MIRIAD *)NULL) {
-      (void)fprintf(stderr,
+      fprintf(stderr,
         "### Warning: Failed to allocate memory in miropen\n");
       return((Void *)NULL);
     }
@@ -148,20 +155,20 @@ Void *miropen(Const char *name, int naxis, int axes[])
 
     /* Access the image data. */
 
-    (void)strcpy(filename, name);
-    (void)strcat(filename, HEADER);
+    strcpy(filename, name);
+    strcat(filename, HEADER);
     if ((f->fdhead = fopen(filename, "rb")) == (FILE *)NULL) {
       if (wipDebugMode() > 0)
-        (void)fprintf(stderr, "### Warning: Failed to open [%s].\n", filename);
+        fprintf(stderr, "### Warning: Failed to open [%s].\n", filename);
       mirclose((Void *)f);
       return((Void *)NULL);
     }
 
-    (void)strcpy(filename, name);
-    (void)strcat(filename, IMAGE);
+    strcpy(filename, name);
+    strcat(filename, IMAGE);
     if ((f->fdimage = fopen(filename, "rb")) == (FILE *)NULL) {
       if (wipDebugMode() > 0)
-        (void)fprintf(stderr, "### Warning: Failed to open [%s].\n", filename);
+        fprintf(stderr, "### Warning: Failed to open [%s].\n", filename);
       mirclose((Void *)f);
       return((Void *)NULL);
     }
@@ -170,18 +177,21 @@ Void *miropen(Const char *name, int naxis, int axes[])
 
     mirrdhdi((Void *)f, "naxis", &ndim, 0);
     if ((ndim < 1) || (ndim > MAXNAX)) {
-      (void)fprintf(stderr,
+      fprintf(stderr,
         "### Warning: Bad value of NAXIS [%d] with file [%s].\n", ndim, name);
       mirclose((Void *)f);
       return((Void *)NULL);
     }
 
     size = 1;
+    if (wipDebugMode() > 0)
+      fprintf(stderr, "MirOpen: 1 size %d\n", size);
+
     for (i = 0; i < ndim; i++) {
-      (void)sprintf(naxes, "naxis%d", i+1);
+      sprintf(naxes, "naxis%d", i+1);
       mirrdhdi((Void *)f, naxes, &temp, 0);
       if ((temp < 1) || ((i >= naxis) && (temp != 1))) {
-        (void)fprintf(stderr,
+        fprintf(stderr,
           "### Warning: Cannot handle Miriad dimension %d being %d.\n",
           i+1, temp);
         mirclose((Void *)f);
@@ -192,6 +202,10 @@ Void *miropen(Const char *name, int naxis, int axes[])
     }
     for (i = ndim; i < naxis; i++) axes[i] = 1;
 
+    if (wipDebugMode() > 0)
+      fprintf(stderr, "MirOpen: size %d\n", size);
+
+
     /*
      *  Now compute and check that the size of the image file is OK
      *  and that it starts with the "real_item" sequence.
@@ -199,23 +213,23 @@ Void *miropen(Const char *name, int naxis, int axes[])
 
     size = (size * H_REAL_SIZE) + ITEM_HDR_SIZE;
     if ((fseek(f->fdimage, 0L, SEEK_END) != 0) || (ftell(f->fdimage) < size)) {
-      (void)fprintf(stderr,
+      fprintf(stderr,
         "### Warning: Image file [%s] appears too small.\n", name);
       mirclose((Void *)f);
       return((Void *)NULL);
     }
 
-    (void)rewind(f->fdimage);                /* Rewind the image file. */
+    rewind(f->fdimage);                /* Rewind the image file. */
     retval = fread((Void *)s, sizeof(char), (size_t)ITEM_HDR_SIZE, f->fdimage);
     if (retval != (size_t)ITEM_HDR_SIZE) {
-      (void)fprintf(stderr,
+      fprintf(stderr,
         "### Warning: Trouble reading image file [%s].\n", name);
       mirclose((Void *)f);
       return((Void *)NULL);
     }
 
     if (memcmp(s, real_item, ITEM_HDR_SIZE) != 0) {
-      (void)fprintf(stderr,
+      fprintf(stderr,
         "### Warning: Bad Miriad image file magic number.\n");
       mirclose((Void *)f);
       return((Void *)NULL);
@@ -241,21 +255,32 @@ Void *miropen(Const char *name, int naxis, int axes[])
 	   has to be rounded up by 32.
          */
 #ifdef RND
-    f->buffer = (char *)malloc(4*RND(axes[0],4)); /* roundup a bit */
+    buflen = 4*RND(axes[0],4);               /* roundup a bit */
 #else
-    f->buffer = (char *)malloc(4 * axes[0]);
+    buflen = 4*axes[0];
 #endif
+    if (wipDebugMode() > 0)
+      fprintf(stderr, "MirOpen: buflen = %d bytes\n", buflen);
+    f->buffer = (char *)malloc(buflen);
     if (f->buffer == (char *)NULL) {
       (void)fprintf(stderr,
         "### Fatal Error: Ran out of memory opening Miriad image.\n");
       mirclose((Void *)f);
       return((Void *)NULL);
     }
+    f->buflen = buflen;
 #endif
 
     /* If the file has a mask item associated with it, try to access it. */
+    if (wipDebugMode() > 0)
+      fprintf(stderr, "MirOpen: reading mask %s\n", filename);
+
 
     f->mask = mirfindmask(f, name, axes[0]);
+
+    if (wipDebugMode() > 0)
+      fprintf(stderr, "MirOpen: done with %s\n", filename);
+
 
     return((Void *)f);
 }
@@ -273,8 +298,14 @@ void mirclose(Void *file)
     if ((f = (MIRIAD *)file) == (MIRIAD *)NULL)
       return;
 
-    if (f->fdimage != (FILE *)NULL) (void)fclose(f->fdimage);
-    if (f->fdhead != (FILE *)NULL) (void)fclose(f->fdhead);
+    if (f->fdimage != (FILE *)NULL) {
+      fclose(f->fdimage);
+      f->fdimage = NULL;
+    }
+    if (f->fdhead != (FILE *)NULL) {
+      fclose(f->fdhead);
+      f->fdhead = NULL;
+    }
 
     if (f->buffer != (char *)NULL) (void)free((Void *)f->buffer);
 
@@ -285,12 +316,15 @@ void mirclose(Void *file)
 	/* this will cause pretty horrid things with masking present */
       if ((f->mask->hdoffset > 0) && (f->mask->fdmask != (FILE *)NULL))
 #endif
-        (void)fclose(f->mask->fdmask);
-      if (f->mask->flag != (int *)NULL) (void)free((Void *)f->mask->flag);
-      (void)free((Void *)f->mask);
+	{
+	  fclose(f->mask->fdmask);
+	  f->mask->fdmask = NULL;
+	}
+      if (f->mask->flag != (int *)NULL) free((Void *)f->mask->flag);
+      free((Void *)f->mask);
     }
 
-    (void)free((Void *)f);
+    free((Void *)f);
     file = (Void *)NULL;
 
     return;
@@ -318,7 +352,7 @@ int mirread(Void *file, int indx, FLOAT *array, FLOAT badpixel)
     MIRIAD *f;
 
     if ((f = (MIRIAD *)file) == (MIRIAD *)NULL)
-      return(1);
+      return 1;
 
     length = H_REAL_SIZE * f->axes[0];
     flen = length / sizeof(FLOAT);
@@ -353,8 +387,17 @@ int mirread(Void *file, int indx, FLOAT *array, FLOAT badpixel)
       offset = f->offset + (indx * length) + MASKOFFSET;
       flags = f->mask->flag;
       if (maskread(f, flags, length, offset) < 0) {
-        (void)fprintf(stderr, "### Error: Mask I/O read error in mirread.\n");
+        fprintf(stderr, "### Error: Mask I/O read error in mirread.\n");
       } else {
+#if 0
+	/* print out the mask as 1's and 0s' */
+	for (i=0; i<f->axes[0]; i++) {
+	  if (i==0) printf("MASK: ");
+	  if (flags[i]) printf("1");
+	  else          printf("0");
+	}
+	printf("\n");
+#endif
         for (i = 0; i < f->axes[0]; i++) {
 #ifdef TEST
           if (wipDebugMode() > 0)
@@ -385,22 +428,22 @@ int mirsetpl(Void *file, int naxis, int axes[])
     MIRIAD *f;
 
     if ((f = (MIRIAD *)file) == (MIRIAD *)NULL)
-      return(1);
+      return 1;
 
     if ((naxis < 1) || ((naxis + 1) >= MAXNAX))
-      return(1);
+      return 1;
 
     offset = 0;
     for (i = naxis - 1; i >= 0; i--) {
       if(axes[i] < 1 || axes[i] > f->axes[i+2]) {
-        (void)fprintf(stderr,
+        fprintf(stderr,
           "### Error: Illegal coordinate index in mirsetpl.\n");
-        return(1);
+        return 1;
       }
       offset = (offset + axes[i] - 1) * f->axes[i+1];
     }
     f->offset = offset * f->axes[0];
-    return(0);
+    return 0;
 }
 /************************************************************************/
 void mirrdhdd(Void *file, Const char *keyword, double *value, double defval)
@@ -649,27 +692,30 @@ static MIRMASK *mirfindmask(MIRIAD *f, Const char *name, int nx)
     long int size, offset;
     size_t retval;
     FILE *fd;
-    MIRMASK *mask;
+    MIRMASK *mask;    /* will be allocated and returned */
 
     inheader = 0;
 
-    (void)strcpy(filename, name);
-    (void)strcat(filename, MASK);
-    if ((fd = fopen(filename, "rb")) == (FILE *)NULL) {
-      if (wipDebugMode() > 0)
-        (void)fprintf(stderr,
-          "### Warning: Failed to open mask file [%s]; will try header.\n",
-          filename);
+    if (wipDebugMode() > 0)
+      fprintf(stderr,"MirFindMask: %s\n",name);
 
-      item = mirsrch(f, "mask", &size, &offset);
+    strcpy(filename, name);
+    strcat(filename, MASK);
+    if ((fd = fopen(filename, "rb")) == (FILE *)NULL) {        /* if mask file not found */
+      if (wipDebugMode() > 0)
+        fprintf(stderr,
+		"### Warning: Failed to open mask file [%s]; will try header.\n",
+		filename);
+
+      item = mirsrch(f, "mask", &size, &offset);               /* find it in 'header' */
       if (item == (char *)NULL) {
         if (wipDebugMode() > 0)
-          (void)fprintf(stderr,
-            "### Warning: Failed to find mask entry in the header either.\n");
-        return((MIRMASK *)NULL);
+          fprintf(stderr,
+		  "### Warning: Failed to find mask entry in the header either.\n");
+        return (MIRMASK *)NULL;
       } else {
-        (void)memcpy(s, item, ITEM_HDR_SIZE);     /* Save the data type. */
-        (void)free((Void *)item);      /* Free this allocated memory up. */
+        memcpy(s, item, ITEM_HDR_SIZE);     /* Save the data type. */
+        free((Void *)item);      /* Free this allocated memory up. */
       }
 
       /* Mask is in the header (the image must be small). */
@@ -681,10 +727,10 @@ static MIRMASK *mirfindmask(MIRIAD *f, Const char *name, int nx)
     /* A mask item is associated with this image. */
 
     if ((mask = (MIRMASK *)malloc(sizeof(MIRMASK))) == (MIRMASK *)NULL) {
-      (void)fprintf(stderr,
+      fprintf(stderr,
         "### Warning: Failed to allocate mask memory in miropen.\n");
-      if (inheader == 0) (void)fclose(fd);
-      return((MIRMASK *)NULL);
+      if (inheader == 0) fclose(fd);
+      return (MIRMASK *)NULL;
     }
 
     mask->fdmask = fd;
@@ -696,32 +742,36 @@ static MIRMASK *mirfindmask(MIRIAD *f, Const char *name, int nx)
       mask->hdoffset = 0;
 
       size = H_INT_SIZE * (MASKOFFSET/BITS_PER_INT);
+      if (wipDebugMode() > 0)
+	fprintf(stderr,"MirFindMask: MASKOFFSET=%d size=%d\n",
+		MASKOFFSET,size);
+
       if ((fseek(mask->fdmask, 0L, SEEK_END) != 0) ||
           ((mask->size = ftell(mask->fdmask)) <= size)) {
-        (void)fprintf(stderr,
+        fprintf(stderr,
           "### Warning: Miriad mask item appears bad in miropen.\n");
-        (void)fclose(mask->fdmask);
-        (void)free((Void *)mask);
-        return((MIRMASK *)NULL);
+        fclose(mask->fdmask);
+        free((Void *)mask);
+        return (MIRMASK *)NULL;
       }
 
-      (void)rewind(mask->fdmask);             /* Rewind the mask item. */
+      rewind(mask->fdmask);             /* Rewind the mask item. */
       retval = fread((Void *)s,sizeof(char),(size_t)ITEM_HDR_SIZE,mask->fdmask);
       if (retval != (size_t)ITEM_HDR_SIZE) {
-        (void)fprintf(stderr,
+        fprintf(stderr,
           "### Warning: Trouble reading mask file of [%s].\n", filename);
-        (void)fclose(mask->fdmask);
-        (void)free((Void *)mask);
-        return((MIRMASK *)NULL);
+        fclose(mask->fdmask);
+        free((Void *)mask);
+        return (MIRMASK *)NULL;
       }
     }
 
     if (memcmp(s, int_item, ITEM_HDR_SIZE) != 0) {
-      (void)fprintf(stderr,
-        "### Warning: Miriad mask item not integer valued.\n");
-      if (inheader == 0) (void)fclose(mask->fdmask);
-      (void)free((Void *)mask);
-      return((MIRMASK *)NULL);
+      fprintf(stderr,
+	      "### Warning: Miriad mask item not integer valued.\n");
+      if (inheader == 0) fclose(mask->fdmask);
+      free((Void *)mask);
+      return (MIRMASK *)NULL;
     }
 
     mask->size = (mask->size / H_INT_SIZE) * BITS_PER_INT;
@@ -730,23 +780,20 @@ static MIRMASK *mirfindmask(MIRIAD *f, Const char *name, int nx)
 
     /* RND3 or RND4 ??? -- but should it really matter ?? */
 #ifdef RND
-    mask->flag = (int *)malloc(sizeof(int)*RND(nx,4));
-    /* printf("DEBUG: RND alloc %d for mask\n",RND(nx,4)); */
-#else
-    /* this can cause bugs in linux if nx%4 nonzero, e.g. 127 size */
-    mask->flag = (int *)malloc(sizeof(int)*nx);
-    /* printf("DEBUG: non-RND alloc %d for mask\n",nx); */
+    nx = RND(nx,4);
 #endif
+    /* printf("DEBUG: malloc %d int's (possibly RND) for the mask\n",nx); */
+    mask->flag = (int *)malloc(sizeof(int)*nx);
 
     if (mask->flag == (int *)NULL) {
-      (void)fprintf(stderr,
+      fprintf(stderr,
         "### Warning: Failed to allocate Miriad mask array memory.\n");
       if (inheader == 0) (void)fclose(mask->fdmask);
-      (void)free((Void *)mask);
-      return((MIRMASK *)NULL);
+      free((Void *)mask);
+      return (MIRMASK *)NULL;
     }
 
-    return(mask);
+    return mask;
 }
 
 /**********************************************************************/
@@ -756,7 +803,7 @@ static int maskread(MIRIAD *f, int *flags, size_t length, long int offset)
   Returns number of mask entries found; -1 otherwise.
 ------------------------------------------------------------------------*/
 {
-    int i, boff, blen, bitmask, len;
+    int i, boff, blen, bitmask, len, buflen;
     int *idat, *flag0;
     long int itemsize;
     long int n;
@@ -769,38 +816,45 @@ static int maskread(MIRIAD *f, int *flags, size_t length, long int offset)
     flag0 = flags;
     fd = mask->fdmask;
 
+#if NO_CVT
+    buflen = BUFFERSIZE;
+#else
+    buflen = f->buflen/BITS_PER_INT;
+#endif
+
     while (n > 0) {
       /* Get a buffer full of information, if it is needed. */
       boff = offset - mask->offset;
       if ((boff < 0) || (boff >= mask->length)) {
         mask->offset = (offset / BITS_PER_INT) * BITS_PER_INT;
         mask->length = mask->size - mask->offset;
-        mask->length = MIN(mask->length, (BUFFERSIZE * BITS_PER_INT));
-        if (mask->length <= 0) {
-          (void)fprintf(stderr, "Read past end of mask file.\n");
-          return(-1);
+        mask->length = MIN(mask->length, (buflen * BITS_PER_INT));
+	if (mask->length <= 0) {
+          fprintf(stderr, "Read past end of mask file.\n");
+          return -1;
         }
 
         itemsize = (mask->offset / BITS_PER_INT) * H_INT_SIZE;
         itemsize += mask->hdoffset;
         if (fseek(fd, itemsize, SEEK_SET) != 0)
-          return(-1);
+          return -1;
 
         itemsize = (mask->length / BITS_PER_INT) * H_INT_SIZE;
 
 #if NO_CVT
         isize = (size_t)(itemsize / sizeof(int));
-        if (fread((Void *)mask->buf, sizeof(int), isize, fd) != isize) {
+	/* printf("DEBUG: NO_CVT fread(int;isize=%d)\n",isize); */
+        if (fread((Void *)mask->buf, sizeof(int), isize, fd) != isize)
 #else
-        isize = (size_t)itemsize;
+	isize = (size_t)itemsize;
 	/* next line has read_overflow in not RND */
-	/* printf("DEBUG: isize=%d\n",isize); */
-        if (fread(f->buffer, sizeof(char), isize, fd) != isize) {
+	/* printf("DEBUG: no NO_CVT fread(char,isize=%d)\n",isize); */
+        if (fread(f->buffer, sizeof(char), isize, fd) != isize)
 #endif
-          (void)fprintf(stderr,
-            "### Fatal Error: I/O read error in maskread.\n");
-          return(-1);
-        }
+	  {
+	    fprintf(stderr,"### Fatal Error: I/O read error in maskread.\n");
+	    return -1;
+	  }
 
 #if NO_CVT
 #else
@@ -833,7 +887,7 @@ static int maskread(MIRIAD *f, int *flags, size_t length, long int offset)
 
     n = (long int)length - (flags - flag0);
     if (n < 0)
-      (void)fprintf(stderr, "### Error: Buffer overflow in maskread!\n");
+      fprintf(stderr, "### Error: Buffer overflow in maskread!\n");
 
     return(flags - flag0);
 }
@@ -923,3 +977,12 @@ main(int argc, char *argv[])
     (void)printf("TEST: Finished.\n");
 }
 #endif /* TEST */
+
+#if 0
+/* faking this will make the mask bug go away */
+void free(void *ptr)
+{
+  printf("DEBUG: free=0x%x\n",ptr);
+  return;
+}
+#endif

@@ -23,7 +23,8 @@
         2.3.2  22sep00 More variables (MAXVAR) in evaluate.c
         2.3.3  10oct00 include fix for cd1_1/2_2 for cdelt in image.c
         2.3.4  30nov00 more stringspace, fixed  FWHM reporting in Gaussfit
+        2.3.5  21sep02 mask reading in linux corrected
 */
 #ifndef WIP_VERSION
-#define WIP_VERSION "Version: 2.3.4 2dec00"
+#define WIP_VERSION "Version: 2.3.5 21sep02"
 #endif /* WIP_VERSION */
