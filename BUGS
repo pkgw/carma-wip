@@ -5,3 +5,15 @@ wip test.wip -e wipcmd  arg1
 but this doesn't seem to be able to enter a command argument with whitespace
 wip test.wip -e wipcmd  "arg1a arg1b"
 
+
+Some items for the future:
+--------------------------
+
+1) wip uses homebrewn routines to read miriad and fits files. these have proven
+   to be fragile and the cause of numerous problems. they should ideally by default
+   be using the miriad and cfitsio library (though a fallback would be nice to have).
+
+2) pyWIP: python-to-wip interface. there are already some python pgplot interfaces.
+  
+
+
