@@ -1,3 +1,7 @@
 In this directory we save user contributed code. They are not
 supported as well as wip itself, but we will do our best in
 maintaining compatibility alongside wip's developements.
+
+Current examples:
+
+	feiling		Chin Fei's interface to libwip.a
