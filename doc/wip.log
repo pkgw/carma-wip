@@ -1,0 +1,381 @@
+This is TeX, Version 3.14159 (C version 6.1) (format=latex 96.9.11)  14 NOV 1996 10:42
+**wip
+(wip.tex
+LaTeX2e <1996/06/01>
+Hyphenation patterns for english, english, loaded.
+
+(/local/lib/teTeX-0.4/texmf/tex/latex/base/latex209.def
+File: latex209.def 1996/05/21 v0.51 Standard LaTeX file
+
+Entering LaTeX 2.09 compatibility mode.
+\footheight=\dimen102
+\@maxsep=\dimen103
+\@dblmaxsep=\dimen104
+\@cla=\count79
+\@clb=\count80
+\mscount=\count81
+(/local/lib/teTeX-0.4/texmf/tex/latex/base/tracefnt.sty
+Package: tracefnt 1996/05/08 v3.0h Standard LaTeX package (font tracing)
+\tracingfonts=\count82
+LaTeX Info: Redefining \selectfont on input line 139.
+)
+\symbold=\mathgroup4
+\symsans=\mathgroup5
+\symtypewriter=\mathgroup6
+\symitalic=\mathgroup7
+\symsmallcaps=\mathgroup8
+\symslanted=\mathgroup9
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 307.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 308.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 309.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 315.
+LaTeX Info: Redefining \em on input line 325.
+
+(/local/lib/teTeX-0.4/texmf/tex/latex/base/latexsym.sty
+Package: latexsym 1995/11/28 v2.2c Standard LaTeX package (lasy symbols)
+\symlasy=\mathgroup10
+LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 86.
+)
+LaTeX Font Info:    Redeclaring math delimiter \lgroup on input line 389.
+LaTeX Font Info:    Redeclaring math delimiter \rgroup on input line 391.
+LaTeX Font Info:    Redeclaring math delimiter \bracevert on input line 393.
+
+(/local/lib/teTeX-0.4/texmf/tex/latex/config/latex209.cfg
+(/local/lib/teTeX-0.4/texmf/tex/latex/tools/rawfonts.sty
+Compatibility mode: package `' requested, but `rawfonts' provided.
+Package: rawfonts 1994/05/08 Low-level LaTeX 2.09 font compatibility
+
+(/local/lib/teTeX-0.4/texmf/tex/latex/tools/somedefs.sty
+Package: somedefs 1994/06/01 Toolkit for optional definitions
+)
+LaTeX Font Info:    Try loading font information for U+lasy on input line 36.
+
+(/local/lib/teTeX-0.4/texmf/tex/latex/base/Ulasy.fd
+File: Ulasy.fd 1995/11/28 v2.2cLaTeX symbol font definitions
+))))
+(/local/lib/teTeX-0.4/texmf/tex/latex/base/report.cls
+Document Class: report 1996/05/26 v1.3r Standard LaTeX document class
+(/local/lib/teTeX-0.4/texmf/tex/latex/base/size10.clo
+File: size10.clo 1996/05/26 v1.3r Standard LaTeX file (size option)
+)
+\c@part=\count83
+\c@chapter=\count84
+\c@section=\count85
+\c@subsection=\count86
+\c@subsubsection=\count87
+\c@paragraph=\count88
+\c@subparagraph=\count89
+\c@figure=\count90
+\c@table=\count91
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+Compatibility mode: definition of \rm ignored.
+Compatibility mode: definition of \sf ignored.
+Compatibility mode: definition of \tt ignored.
+Compatibility mode: definition of \bf ignored.
+Compatibility mode: definition of \it ignored.
+Compatibility mode: definition of \sl ignored.
+Compatibility mode: definition of \sc ignored.
+LaTeX Info: Redefining \cal on input line 620.
+LaTeX Info: Redefining \mit on input line 621.
+\bibindent=\dimen105
+)
+(/local/lib/teTeX-0.4/local/tex/latex209/sty/makeidx.sty
+Document style option `makeidx' - released 21 Oct 91
+) (/local/lib/teTeX-0.4/texmf/tex/latex/misc/comment.sty
+Excluding comment 'comment')
+(/local/lib/teTeX-0.4/local/tex/latex209/dvips/epsf.sty
+\epsffilein=\read1
+\epsfxsize=\dimen106
+\epsfysize=\dimen107
+\epsftsize=\dimen108
+\epsfrsize=\dimen109
+\epsftmp=\dimen110
+\pspoints=\dimen111
+)
+(/local/lib/teTeX-0.4/local/tex/latex/html.sty) (wip.sty
+\tabentrylen=\skip43
+)
+\@indexfile=\write3
+
+Writing index file wip.idx
+(wip.aux)
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 123.
+LaTeX Font Info:    ... okay on input line 123.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 126.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 126.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 126.
+ [0
+
+] (disclaimer.tex
+Underfull \hbox (badness 10000) in paragraph at lines 53--54
+
+ []
+
+) [1] [2
+
+] (wip.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 8.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 8.
+
+Underfull \vbox (badness 1194) has occurred while \output is active []
+
+ [3
+
+]
+[4])
+\tf@toc=\write4
+ [5] (wip.lot)
+\tf@lot=\write5
+ [6
+
+] (wip.lof)
+\tf@lof=\write6
+ [7
+
+] [8
+
+] [1
+
+] [2]
+Chapter 1.
+(howto.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [3
+
+]
+Underfull \vbox (badness 1087) has occurred while \output is active []
+
+ [4])
+[5]
+Chapter 2.
+(iface.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [6
+
+])
+[7]
+Chapter 3.
+(concepts.tex [8
+
+] [9] [10] [11] [12] [13] [14] [15] [16]
+Overfull \hbox (7.19038pt too wide) in paragraph at lines 716--752
+ [][] 
+ []
+
+[17] [18]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [19]
+[20]) [21]
+Chapter 4.
+(basic.tex [22
+
+] [23]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 195.
+
+ (/local/lib/teTeX-0.4/texmf/tex/latex/base/OMScmr.fd
+File: OMScmr.fd 1996/05/19 v2.4h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 195.
+
+[24] [25]) [26]
+Chapter 5.
+(images.tex [27
+
+] [28] [29] [30]
+Underfull \vbox (badness 5091) has occurred while \output is active []
+
+ [31]
+[32] [33] [34] [35]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [36]
+[37] [38] [39]) [40] [41
+
+] [42]
+Chapter 6.
+(fit.tex [43
+
+] [44] [45]) [46]
+Chapter 7.
+(macros.tex [47
+
+] [48] [49] [50] [51] [52] [53]) [54]
+Chapter 8.
+(uservar.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [55
+
+]
+Overfull \hbox (5.20059pt too wide) in paragraph at lines 112--139
+ [][] 
+ []
+
+
+Overfull \hbox (1.50665pt too wide) in paragraph at lines 159--188
+ [][] 
+ []
+
+
+Overfull \hbox (6.84pt too wide) in paragraph at lines 210--240
+ [][] 
+ []
+
+
+Underfull \vbox (badness 1122) has occurred while \output is active []
+
+ [56]
+[57] [58] [59] [60] [61] [62] [63]) [64]
+Chapter 9.
+(flow.tex [65
+
+] [66]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [67]
+[68]) [69] [70
+
+] [71]
+Appendix A.
+(wipinit.tex [72
+
+]
+Overfull \hbox (6.71028pt too wide) in paragraph at lines 132--153
+ [][] 
+ []
+
+) [73] [74]
+Appendix B.
+(cmdline.tex [75
+
+] [76]) [77]
+Appendix C.
+(glossary.tex [78
+
+]) [79]
+Appendix D.
+(cmdname.tex (lhelp.tex [80
+
+] [81] [82] [83] [84] [85]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9> on input line 519.
+ [86] [87] [88] [89]
+[90] [91] [92] [93] [94] [95]
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <9> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 1334.
+
+ [96] [97] [98])) [99]
+Appendix E.
+(samples.tex [100
+
+] [101] (Examples/basic.wip) [102
+
+] [103] (Examples/simple.wip) (Examples/data.dat) [104
+
+] [105] (Examples/text.wip)
+
+LaTeX Warning: Float too large for page by 30.92953pt on input line 97.
+
+[106
+
+] [107] (Examples/greek.wip)
+Overfull \hbox (15.77031pt too wide) in paragraph at lines 101--101
+[]|  []|   
+ []
+
+[108
+
+] [109] (Examples/panel.wip) [110
+
+] [111] (Examples/cos.wip) [112
+
+] [113]
+(Examples/symbol.wip) [114
+
+] [115] (Examples/hershey.wip) [116
+
+] [117]
+(Examples/fit.wip
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [118
+
+])
+[119] [120] (Examples/image.wip) (Examples/orion.hed)
+
+LaTeX Warning: Float too large for page by 12.86224pt on input line 125.
+
+[121
+
+] [122] (Examples/image2.wip
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [123
+
+])
+Overfull \hbox (44.87872pt too wide) in paragraph at lines 129--129
+[]|  []|   
+ []
+
+[124] [125] (Examples/overlay.wip)
+
+LaTeX Warning: Float too large for page by 12.86224pt on input line 133.
+
+) [126
+
+] [127]
+Appendix F.
+(faq.tex [128
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [129]
+[130] [131] [132] [133]
+LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 413
+.
+LaTeX Font Info:    No file OMScmtt.fd. on input line 413.
+LaTeX Font Warning: Font shape `OMS/cmtt/m/n' undefined
+(Font)              using `OMS/cmsy/m/n' instead
+(Font)              for symbol `textbraceleft' on input line 413.
+ [134] [135]) (wip.ind [136] [137
+
+] [138] [139] [140]
+[141])
+###### Type: makeindex wip.idx
+###### To create the .ind file from the .idx file
+###### in case the index file needs to be regenerated
+(wip.aux)
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+ ) 
+Here is how much of TeX's memory you used:
+ 1025 strings out of 10912
+ 10268 string characters out of 72227
+ 70293 words of memory out of 262141
+ 3712 multiletter control sequences out of 9500
+ 27922 words of font info for 103 fonts, out of 150000 for 255
+ 14 hyphenation exceptions out of 607
+ 23i,12n,22p,331b,420s stack positions out of 300i,40n,60p,3000b,4000s
+
+Output written on wip.dvi (150 pages, 426464 bytes).

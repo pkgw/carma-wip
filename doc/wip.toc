@@ -1,0 +1,62 @@
+\contentsline {chapter}{Table of Contents}{iii}
+\contentsline {chapter}{List of Tables}{vi}
+\contentsline {chapter}{List of Figures}{vii}
+\contentsline {part}{\uppercase {i}\hspace {1em}General Concepts}{1}
+\contentsline {chapter}{\numberline {1}How to Use This Manual}{3}
+\contentsline {chapter}{\numberline {2}The User Interface}{6}
+\contentsline {chapter}{\numberline {3}General Graphics Concepts}{8}
+\contentsline {section}{\numberline {3.1}Graphical Devices}{8}
+\contentsline {section}{\numberline {3.2}Help, Echo, and Show}{12}
+\contentsline {section}{\numberline {3.3}Coordinate Systems}{12}
+\contentsline {section}{\numberline {3.4}Attributes}{13}
+\contentsline {section}{\numberline {3.5}Boxes}{14}
+\contentsline {section}{\numberline {3.6}Text}{17}
+\contentsline {section}{\numberline {3.7}Data Files}{19}
+\contentsline {section}{\numberline {3.8}Cursor Interaction}{20}
+\contentsline {chapter}{\numberline {4}Basic Plotting}{22}
+\contentsline {section}{\numberline {4.1}Simple Plots}{22}
+\contentsline {section}{\numberline {4.2}Single Variable Plots}{24}
+\contentsline {chapter}{\numberline {5}Images}{27}
+\contentsline {section}{\numberline {5.1}Image Files}{27}
+\contentsline {section}{\numberline {5.2}Image Characteristics}{29}
+\contentsline {section}{\numberline {5.3}Window Adjustments for Images}{34}
+\contentsline {section}{\numberline {5.4}Image Plots}{38}
+\contentsline {part}{\uppercase {ii}\hspace {1em}Advanced Concepts}{41}
+\contentsline {chapter}{\numberline {6}Data Fitting}{43}
+\contentsline {section}{\numberline {6.1}Fitting}{43}
+\contentsline {section}{\numberline {6.2}Limiting and Displaying Fits}{46}
+\contentsline {chapter}{\numberline {7}Macros}{47}
+\contentsline {section}{\numberline {7.1}General Concepts}{47}
+\contentsline {section}{\numberline {7.2}Creating Macros}{48}
+\contentsline {section}{\numberline {7.3}Macro Arguments}{49}
+\contentsline {section}{\numberline {7.4}Editing Macros}{50}
+\contentsline {section}{\numberline {7.5}Executing Macros}{53}
+\contentsline {section}{\numberline {7.6}Saving and Recalling Macros}{53}
+\contentsline {chapter}{\numberline {8}User Variables}{55}
+\contentsline {section}{\numberline {8.1}General Concepts}{55}
+\contentsline {section}{\numberline {8.2}Pre-Defined Variables}{56}
+\contentsline {section}{\numberline {8.3}Accessing the User Variables}{59}
+\contentsline {section}{\numberline {8.4}Creating and Removing User Variables}{63}
+\contentsline {chapter}{\numberline {9}Control Flow}{65}
+\contentsline {section}{\numberline {9.1}IF}{65}
+\contentsline {section}{\numberline {9.2}LOOP}{68}
+\contentsline {part}{\uppercase {iii}\hspace {1em}Appendices}{70}
+\contentsline {chapter}{\numberline {A}The {\tt .wipinit\ }File}{72}
+\contentsline {chapter}{\numberline {B}Command Line Interface}{75}
+\contentsline {chapter}{\numberline {C}Glossary}{78}
+\contentsline {chapter}{\numberline {D}Table of Current Command Names}{80}
+\contentsline {chapter}{\numberline {E}Sample Plots}{100}
+\contentsline {section}{\numberline {E.1}Basic graphics commands}{102}
+\contentsline {section}{\numberline {E.2}Reading data from an external file}{104}
+\contentsline {section}{\numberline {E.3}Fonts and different ways to present text}{106}
+\contentsline {section}{\numberline {E.4}Roman to Greek character mapping}{108}
+\contentsline {section}{\numberline {E.5}Macros and subdivision of a view surface}{110}
+\contentsline {section}{\numberline {E.6}Generating data internally with macros}{112}
+\contentsline {section}{\numberline {E.7}Symbols used to plot points}{114}
+\contentsline {section}{\numberline {E.8}Hershey Symbols}{116}
+\contentsline {section}{\numberline {E.9}Fitting}{118}
+\contentsline {section}{\numberline {E.10}A simple image}{121}
+\contentsline {section}{\numberline {E.11}Multiple image layout and more macros}{123}
+\contentsline {section}{\numberline {E.12}Overlay of multiple images}{126}
+\contentsline {chapter}{\numberline {F}Frequently Asked Questions}{128}
+\contentsline {chapter}{Index}{136}
