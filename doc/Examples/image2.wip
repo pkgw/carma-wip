@@ -1,0 +1,80 @@
+define xytovp             # $1=x $2=y : Sets ($3, $4) to viewport coords.
+set $3 ((vx2 - vx1) * ($1 - x1) / (x2 - x1)) + vx1
+set $4 ((vy2 - vy1) * ($2 - y1) / (y2 - y1)) + vy1
+end
+
+define vptoxy             # $1=vx $2=vy : Sets ($3, $4) to xy coords.
+set $3 ((x2 - x1) * ($1 - vx1) / (vx2 - vx1)) + x1
+set $4 ((y2 - y1) * ($2 - vy1) / (vy2 - vy1)) + y1
+end
+
+define dobox              # $1=blcx $2=trcx $3=blcy $4=trcy
+move $1 $3                # Move to lower left corner.
+draw $1 $4                # Draw to upper left corner.
+draw $2 $4                # Draw to upper right corner.
+draw $2 $3                # Draw to lower right corner.
+draw $1 $3                # Close box by drawing to lower left corner.
+end
+
+define outline            # $1-$4=box, $5=lstyle; sets \11-\14.
+new tmpls                 # Create a dummy lstyle variable.
+set tmpls lstyle          # Save current lstyle value.
+lstyle $5                 # Set to new input lstyle value.
+dobox $1 $2 $3 $4         # Draw outline of box.
+xytovp $1 $3 \11 \12      # Convert to viewport values and save them.
+xytovp $2 $4 \13 \14      # Convert to viewport values and save them.
+lstyle tmpls              # Reset lstyle value.
+free tmpls                # Release the dummy lstyle variable.
+end
+
+define doconnect          # $1=lstyle; sets \1-\4 and uses \11-\14.
+new tmpls xp yp           # Create a dummy lstyle and position variables.
+set tmpls lstyle          # Save current lstyle value.
+xytovp x1 y1 \1 \2        # Convert lower left corner to viewport values.
+xytovp x2 y2 \3 \4        # Do the same for the upper right corner.
+viewport 0 1 0 1          # Make entire screen accessable.
+lstyle $1                 # Set to new input lstyle value.
+vptoxy \11 \12 xp yp      # Convert point to world coordinates.
+move xp yp                # Move to this position.
+vptoxy \1 \2 xp yp        # Convert point to world coordinates.
+draw xp yp                # Draw to this position.
+vptoxy \13 \14 xp yp      # Convert point to world coordinates.
+move xp yp                # Move to this position.
+vptoxy \3 \4 xp yp        # Convert point to world coordinates.
+draw xp yp                # Draw to this position.
+lstyle tmpls              # Reset lstyle value.
+free tmpls xp yp          # Release the variables.
+end
+
+ticksize 240 4 3600 4     # Force the tick size spacing.
+viewport 0.2 0.55 0.2 1.0 # Select the left side.
+lstyle 1                  # Set the line style.
+expand 1.15               # Set the character size.
+font 2                    # Set the font type.
+image orion.fits 1        # Read in plane #1.
+winadj 0 nx 0 ny          # Set the x/y scale to be the same.
+header rd                 # Read header and set limits.
+halftone 0 20             # Draw the halftone.
+box bcnsthz bcnstvdyz     # Draw a box.
+xlabel \ga (1950)
+mtext L 3.5 0.5 0.5 \gd (1950)
+expand 1.5                # Make the top label a bit bigger.
+mtext T -2 0.1 0 T\dmax
+expand 1.15               # Reset character size.
+limits 1 nx 1 ny          # Reset the limits to pixels.
+set \1 nx - 101           # Set the left edge subimage.
+set \2 nx                 # Set the right edge subimage.
+set \3 ny - 161           # Set the bottom edge subimage.
+set \4 ny                 # Set the top edge subimage.
+outline \1 \2 \3 \4  4    # Draw an outline around selected region.
+viewport 0.7 0.95 vy1 vy2 # Select the right side.
+subimage \1 \2 \3 \4      # Select the subimage.
+set \5 \2 - \1 + 1        # When setting the aspect ratio, add 1 to
+set \6 \4 - \3 + 1        # each axis to account for the pixel size.
+winadj 0 \5 0 \6          # Scale so RA = DEC.
+header rd                 # Reset the limits to RA, DEC.
+levels 10 20 30 40        # Set the contour levels.
+contour                   # Draw the contour.
+ticksize 120 4 1800 3     # Force a smaller tick size spacing.
+box bcnsthz bcnstvdyzf    # Draw a box.
+doconnect 2               # Connect image with subimage outline.
