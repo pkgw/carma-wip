@@ -1,0 +1,1043 @@
+# Rescale - scaling the way I think of it.
+#
+# Usage: Rescale xscale yscale
+#
+#       will set viewport limits such that the picture
+#       is multiplicatively re-scaled by xscale and yscale.
+#       Re-scaled picture will also be centered.
+#
+# Example: ReScale 0.5 1.25	
+#       will resize the picture to 50% in x and 125% in y
+#       of the original size.
+#       Device coordinates are used (K = 0 in WIP "scale").
+#       Note also that chars are scaled too, so one needs to
+#       use "expand" if they are to be resized.
+#
+define Rescale
+echo "Rescaling to " $1 " by " $2 " of original size."
+new ovx1 ovx2 ovy1 ovy2
+set ovx1 vx1
+set ovx2 vx2
+set ovy1 vy1
+set ovy2 vy2
+set \8 1.0 / $1
+set \9 1.0 / $2
+set \0 \8 * ( x2 - x1 ) / ( vx2 - vx1 )
+set \1 \9 * ( y2 - y1 ) / ( vy2 - vy1 )
+if ( \0 < 0 ) set \0 -1.0 * \0
+if ( \1 < 0 ) set \1 -1.0 * \1
+scale \0 \1 0
+# Split the difference to re-center the picture
+set \2 ((ovx2 - ovx1) - (vx2 - vx1)) * 0.5
+set \3 ((ovy2 - ovy1) - (vy2 - vy1)) * 0.5
+set vx1 vx1 + \2
+set vx2 vx2 + \2
+set vy1 vy1 + \3
+set vy2 vy2 + \3
+# now call viewport with the new values
+viewport vx1 vx2 vy1 vy2
+free ovx1 ovx2 ovy1 ovy2
+end
+
+# lookup table
+# Usage: lut file invert
+# invert is the parameter N for wip cmd Lookup
+#
+define lut 
+#echo Getting lookup table from $1
+  data $1
+  xcol 2
+  ycol 3
+  ecol 4
+  pcol 1
+  lookup $2
+end
+
+#dtext - 3 args (x, y, text)
+# put text at x,y
+define dtext
+  move $1 $2
+  label $3
+end
+
+#rmove - relative move from current x and y
+# args dx, dy
+# moves to currentx+dx currenty+dy
+#
+define rmove
+  new xdx ydy
+  set xdx cx + $1
+  set ydy cy + $2
+  move xdx ydy
+  free xdx ydy
+end
+
+#rline - draw a line from current x and y (relative)
+# args lstyle dx, dy
+# lines to currentx+dx currenty+dy
+#
+define rline
+  new xdx ydy
+  lstyle $1
+  set xdx cx + $2
+  set ydy cy + $3
+  draw xdx ydy
+  free xdx ydy
+end
+
+
+# dline - 5 args.
+# draw line of lstyle $1 from ($2,$3) to ($4,$5)
+#
+define dline
+lstyle $1
+move $2 $3
+draw $4 $5
+end
+
+# xline draw a line at a fixed x parallel to y axis - 2 args
+# lstyle, xvalue
+define xline
+ lstyle $1
+ move $2 y1
+ draw $2 y2
+end
+
+# yline draw a line at a fixed y parallel to x axis - 2 args
+# lstyle, yvalue
+define yline
+ lstyle $1
+ move x1 $2 
+ draw x2 $2 
+end
+
+# darrow - 5 args
+# draw arrow of lstyle $1 from ($2,$3) to ($4,$5)
+define darrow
+lstyle $1
+move $2 $3
+arrow $4 $5
+end
+
+# dbox - 5 args - lstyle xlo xhi ylo yhi
+# draw box according to inputs
+define dbox
+dline $1 $2 $4 $3 $4 
+dline $1 $3 $4 $3 $5 
+dline $1 $3 $5 $2 $5 
+dline $1 $2 $5 $2 $4 
+end
+
+define boxSide
+# usage boxSide xC yC xS yS
+# draw a box centered at xC,yC that is
+# xS by yS on a side
+move $1 $2 
+symbol 16
+expand 1.1
+dot
+expand 1
+new xl xh yl yh xside yside
+set xside $3 / 2
+set yside $4 / 2
+set xl $1 - xside
+set xh $1 + xside
+set yl $2 - yside
+set yh $2 + yside
+dbox 1 xl xh yl yh 
+free xl xh yl yh xside yside
+end
+
+#circ - 4 args
+#draw circle of radius $4 at ($2,$3) with lstyle $1
+define circ
+lstyle $1
+move $2 $3
+arc $4 $4 360
+end
+
+define dcirc
+circ $1 $2 $3 $4
+end
+
+# select x[] and y[] pairs to plot based on e[]
+# usage: select count lower upper symbol
+# plot if lower <= e[] <= upper 
+define select 
+set $1 $1 + 1
+if ((err[$1] >= $2) && (err[$1] <= $3)) plot $1 $4
+end
+
+# plot symbol $2 at x[$1] y[$1]
+define plot
+symbol $2
+move x[$1] y[$1]
+dot
+end
+
+define cb  # clear buffer
+delete 1 1000 buffer
+end
+
+define lb  # list buffer
+list 1 100 buffer
+end
+
+define lm  # list macro ($1)
+list 1 100 $1
+end
+
+define dm  # delete macro ($1)
+delete 1 100 $1
+end
+
+#  y = y/e
+define ydive 
+set $1 $1 + 1
+set y[$1] y[$1] / err[$1]
+end
+
+
+#  x = x/e
+define xdive 
+set $1 $1 + 1
+set x[$1] x[$1] / err[$1]
+end
+
+#  x = x*e
+define xmule 
+set $1 $1 + 1
+set x[$1] x[$1] * err[$1]
+end
+
+# e = e/x
+define edivx
+set $1 $1 + 1
+set err[$1] err[$1] / x[$1]
+end
+
+# e = e*x
+define emulx
+set $1 $1 + 1
+set err[$1] err[$1] * x[$1]
+end
+
+# e = e+x
+define eplusx
+set $1 $1 + 1
+set err[$1] err[$1] + x[$1]
+end
+
+define xsube
+set $1 $1 + 1
+set x[$1] x[$1] - err[$1]
+end
+
+define ysube
+set $1 $1 + 1
+set y[$1] y[$1] - err[$1]
+end
+
+#div[xye]: divide [xye]vector by $1; $2 is counter
+#usage: loop N div[xye] divisor counter
+define divy 
+set $2 $2 + 1
+set y[$2] y[$2] / $1
+end
+
+define divx 
+set $2 $2 + 1
+set x[$2] x[$2] / $1
+end
+
+# set err vector to some value $1
+define sete 
+set $2 $2 + 1
+set err[$2] $1
+end
+
+define dive 
+set $2 $2 + 1
+set err[$2] err[$2] / $1
+end
+
+#mul[xye]: multiply[xye]vector by $1; $2 is counter
+#usage: loop N mul[xye] multiplicand counter
+define muly 
+set $2 $2 + 1
+set y[$2] y[$2] * $1
+end
+
+define mulx 
+set $2 $2 + 1
+set x[$2] x[$2] * $1
+end
+
+define mule 
+set $2 $2 + 1
+set err[$2] err[$2] * $1
+end
+
+#sub[xye]: sub $1 from [xye]vector ; $2 is counter
+#usage: loop N sub[xye] subtractend counter
+define suby 
+#new diff
+set $2 $2 + 1
+#set diff y[$2] - $1
+#echo y[$2] "   " diff
+set y[$2] y[$2] - $1
+echo "y:" y[$2]
+#free diff
+end
+
+define subx 
+set $2 $2 + 1
+set x[$2] x[$2] - $1
+echo "x:" x[$2]
+end
+
+define reversex
+set $1 $1 + 1
+set x[$1] -1.0 * x[$1] 
+end
+
+define reversey
+set $1 $1 + 1
+set y[$1] -1.0 * y[$1] 
+end
+
+define absx 
+set $1 $1 + 1
+set x[$1] abs(x[$1])
+echo "absx: " x[$1]
+end
+
+define absy 
+set $1 $1 + 1
+set y[$1] abs(y[$1])
+echo "absy: " y[$1]
+end
+
+define sube 
+set $2 $2 + 1
+set err[$2] err[$2] - $1
+end
+
+#add[xye]: add $1 to [xye]vector ; $2 is counter
+#usage: loop N add[xye] addend counter
+define addy 
+set $2 $2 + 1
+set y[$2] y[$2] + $1
+end
+
+define addx 
+set $2 $2 + 1
+set x[$2] x[$2] + $1
+end
+
+define adde 
+set $2 $2 + 1
+set err[$2] err[$2] + $1
+end
+
+# next 2 taken from wip manual example
+# "Multiple image layout and more macros"
+
+# viewport to xy coords
+# $1=vx $2=vy : Sets ($3, $4) to xy coords.
+define vptoxy             
+set $3 ((x2 - x1) * ($1 - vx1) / (vx2 - vx1)) + x1
+set $4 ((y2 - y1) * ($2 - vy1) / (vy2 - vy1)) + y1
+end
+
+# xy to viewport coords
+# $1=x $2=y : Sets ($3, $4) to viewport coords.
+define xytovp             
+set $3 ((vx2 - vx1) * ($1 - x1) / (x2 - x1)) + vx1
+set $4 ((vy2 - vy1) * ($2 - y1) / (y2 - y1)) + vy1
+end
+
+
+define beamit
+#-------------------------------
+# Modified lwl's original version
+# to allow of location beam icon as an argument
+#
+# use: beamit bgrect bpos [ fillcolor ]
+# where bgrect =  1  make a box around the beam using the foreground color
+#                 0  make a box around the beam using the background color
+#                -1  don't make a box around the beam
+#
+# where bpos = 0 put beam in lower left
+# 	       1 put beam in lower right
+# 	       2 put beam in upper right
+# 	       3 put beam in upper left
+#
+# where fillcolor = color of beam, default=15 (light gray)
+#
+# NB: I tried "UL" , "LL", etc but WIP's if statement
+# can't compare strings.
+#-------------------------------
+#
+set \11 bmaj * 3600 * 180 / pi
+set \12 bmin * 3600 * 180 / pi
+new bpos
+set bpos $2
+new fillcolor
+set fillcolor $3
+#if ( $3 != " " ) set fillcolor $3
+echo "fill color is " fillcolor
+# define the various beam positions 
+new lrx lry llx lly urx ury ulx uly
+new xx yy
+set xx ( 0.95 * ( vx2 - vx1 ) ) + vx1
+set yy ( 0.05 * ( vy2 - vy1 ) ) + vy1
+vptoxy xx yy lrx lry
+set xx ( 0.05 * ( vx2 - vx1 ) ) + vx1
+set yy ( 0.05 * ( vy2 - vy1 ) ) + vy1 
+vptoxy xx yy llx lly
+set xx ( 0.95 * (vx2 - vx1 ) ) + vx1
+set yy ( 0.95 * (vy2 - vy1 ) ) + vy1
+vptoxy xx yy urx ury
+set xx ( 0.05 * ( vx2 - vx1 ) ) + vx1
+set yy ( 0.95 * ( vy2 - vy1 ) ) + vy1
+vptoxy xx yy ulx uly
+if ( bpos == 0 ) move llx lly
+if ( bpos == 1 ) move lrx lry
+if ( bpos == 2 ) move urx ury
+if ( bpos == 3 ) move ulx uly 
+#
+#
+# Decide positional delta offsets for beam.
+# Assume astronomically-handed coordinate system!
+#
+new offx offy
+if ( ( bpos == 1 ) || ( bpos == 2 ) ) set offx -0.5
+if ( ( bpos == 0 ) || ( bpos == 3 ) ) set offx 0.5
+if ( ( bpos == 0 ) || ( bpos == 1 ) ) set offy 0.5
+if ( ( bpos == 2 ) || ( bpos == 3 ) ) set offy -0.5
+beam \11 \12 bpa offx offy 1 fillcolor $1
+free lrx lry llx lly urx ury ulx uly bpos
+free offx offy xx yy fillcolor
+end
+
+# put the beam at the current position 
+# usage: beam bmaj bmin position_angle
+# $1=bmaj; $2=bmin; $3=posang.
+define oldbeam  
+new newx1 newx2 newcx newcy beamang factor rectx1 rectx2 recty1 recty2
+new oldsty oldcol oldfil oldwid oldang oldx1 oldx2 oldcx oldcy 
+set oldsty lstyle                         # save current setup to restore later
+set oldcol color
+set oldwid lwidth
+set oldfil fill
+set oldang angle
+set oldx1 x1
+set oldx2 x2
+set oldcx cx
+set oldcy cy
+set factor 1.0
+#set factor 15.0
+lstyle 1
+lwidth 2
+fill 1
+set beamang 90.0 + $3
+set newx1 x1 * factor
+set newx2 x2 * factor 
+set newcx cx * factor
+set newcy cy 
+limits newx1 newx2 y1 y2
+move newcx newcy
+set rectx1 newcx - ($1 / 2) 
+set rectx2 newcx + ($1 / 2)
+set recty1 newcy - ($1 / 2)
+set recty2 newcy + ($1 / 2)
+color 0
+rect rectx1 rectx2 recty1 recty2
+color oldcol
+#fill 2
+#rect rectx1 rectx2 recty1 recty2
+fill 1
+color 15
+angle beamang
+arc $1 $2
+fill 2
+color oldcol
+arc $1 $2 lstyle oldsty  # reset everything to how it started 
+color  oldcol
+lwidth oldwid
+fill   oldfil
+angle  oldang
+limits oldx1 oldx2 y1 y2
+move oldcx oldcy
+free oldsty oldcol oldfil oldwid oldang oldx1 oldx2 oldcx oldcy
+free newx1 newx2 newcx newcy beamang factor rectx1 rectx2 recty1 recty2
+end
+
+define doconnect          # $1=lstyle; sets \1-\4 and uses \11-\14.
+new tmpls xp yp           # Create a dummy lstyle and position variables.
+set tmpls lstyle          # Save current lstyle value.
+xytovp x1 y1 \1 \2        # Convert lower left corner to viewport values.
+xytovp x2 y2 \3 \4        # Do the same for the upper right corner.
+viewport 0 1 0 1          # Make entire screen accessable.
+lstyle $1                 # Set to new input lstyle value.
+vptoxy \11 \12 xp yp      # Convert point to world coordinates.
+move xp yp                # Move to this position.
+vptoxy \1 \2 xp yp        # Convert point to world coordinates.
+draw xp yp                # Draw to this position.
+vptoxy \13 \14 xp yp      # Convert point to world coordinates.
+move xp yp                # Move to this position.
+vptoxy \3 \4 xp yp        # Convert point to world coordinates.
+draw xp yp                # Draw to this position.
+lstyle tmpls              # Reset lstyle value.
+free tmpls xp yp          # Release the variables.
+end
+
+
+#these four are for reading in masses stats files and 
+# calculating error bars
+define Merrp
+set $1 $1 + 1
+set err[$1] x[$1] * err[$1] - x[$1]
+set err[$1] err[$1] / x[$1]
+end
+
+define Merrm
+set $1 $1 + 1
+set err[$1] x[$1] - x[$1] / err[$1]
+set err[$1] err[$1] / x[$1]
+end
+
+define VMerrp
+set $1 $1 + 1
+set err[$1] y[$1] * err[$1] - y[$1]
+set err[$1] err[$1] / y[$1]
+end
+
+define VMerrm
+set $1 $1 + 1
+set err[$1] y[$1] - y[$1] / err[$1]
+set err[$1] err[$1] / y[$1]
+end
+
+#sqare x
+define sqrx
+set $1 $1 + 1
+set x[$1] x[$1] * x[$1]
+end
+
+#sqare y
+define sqry
+set $1 $1 + 1
+set y[$1] y[$1] * y[$1]
+end
+
+#hershey symbols
+define dopanel               # $1=Panel #; $2=Nx; $3=Ny; uses \0 and \1.
+set \1 $1 % ($2 * $3)        # Make sure the index is in range.
+set \0 1 + (\1 % $2)         # Index in the x-direction.
+set \1 1 + (\1 \ $2)         # Index in the y-direction.
+set \0 \0 + ($2 * ($3 - \1)) # Flip the y index direction.
+panel -$2 -$3 \0             # Set the panel.
+end
+
+define dosymbol              # $1=Counter; $2=Nx; $3=Ny.
+set $1 $1 + 1                # Increment the Counter.
+dopanel $1 $2 $3             # Set up the panel.
+lwidth 1                     # Set the line width to narrow.
+box bc bc                    # Draw the frame for this panel.
+expand 0.5                   # Set a small character size.
+mtext t -1.1 0.97 1.0 \[$1]
+lwidth 2                     # Get a thicker line.
+expand 1.0                   # Reset the character size.
+symbol $1                    # Chose this symbol.
+move 0 0                     # Move to the center of the panel.
+dot                          # Draw the symbol.
+end
+
+define hershey		# 1 arg: symbol number to start with 
+viewport 0.2 0.8 0.2 0.8     # Set the viewport scale.
+winadj 0 4 0 8               # Set the aspect ratio.
+limits -1 1 -1 1             # Set limits.
+set nsig 0                   # Force display to only use integer format.
+set \10 $1 - 1               # Initialize the loop counter.
+erase
+loop 32 dosymbol \10 4 8     # Draw each symbol.
+end
+
+# mnemonics for hershey symbol numbers
+
+define square
+symbol 0
+end
+
+define filled_square
+symbol 16
+end
+
+define triangle
+symbol 7
+end
+
+define filled_triangle
+symbol 13
+end
+
+define circle 
+symbol 4
+end
+
+define filled_circle
+symbol 17
+end
+
+define star 
+symbol 12
+end
+
+define filled_star 
+symbol 18
+end
+
+define diamond 
+symbol 11
+end
+
+define angstrom
+symbol 2078
+end
+
+define integral
+symbol 2412
+end
+
+define another_integral
+symbol 2268
+end
+
+define sun
+symbol 9
+end
+
+define mercury
+symbol 2282
+end
+
+define venus  
+symbol 2283
+end
+
+define earth
+symbol 8
+end
+
+define moon
+symbol 2291
+end
+
+define mars
+symbol 2285
+end
+
+define jupiter
+symbol 2286
+end
+
+define saturn
+symbol 2287
+end
+
+define uranus
+symbol 2288
+end
+
+define neptune
+symbol 2289
+end
+
+define pluto
+symbol 2290
+end
+
+define comet
+symbol 2292
+end
+
+define leftarrow
+symbol 28
+end
+
+define rightarrow
+symbol 29
+end
+
+define downarrow
+symbol 31
+end
+
+define uparrow
+symbol 32
+end
+
+define asterisk
+symbol 3
+end
+
+define X
+symbol 5
+end
+
+define print_hershey
+echo "Here are some Hershey Symbol numbers:"
+echo "square is 0"
+echo "filled_square is 16"
+echo "triangle is 7"
+echo "filled_triangle is 13"
+echo "circle is 4"
+echo "filled_circle is 17"
+echo "star is 12"
+echo "filled_star is 18"
+echo "diamond is 11"
+echo "angstrom is 2078"
+echo "integral is 2412"
+echo "another_integral is 2268"
+echo "sun is 9"
+echo "mercury is 2282"
+echo "venus  is 2283"
+echo "earth is 8"
+echo "moon is 2291"
+echo "mars is 2285"
+echo "jupiter is 2286"
+echo "saturn is 2287"
+echo "uranus is 2288"
+echo "neptune is 2289"
+echo "pluto is 2290"
+echo "comet is 2292"
+echo "leftarrow is 28"
+echo "rightarrow is 29"
+echo "downarrow is 31"
+echo "uparrow is 32"
+echo "asterisk is 3"
+echo "X is 5"
+end
+
+define Finding_Chart
+# "finding chart" for Ursa Major
+# $1-$4 are viewport location
+# rescale will be automatic
+font 1
+expand 1.0
+lwidth 2
+image UMlb.WCO
+winadj 0 nx 0 ny
+header gl gl
+viewport $1 $2 $3 $4 
+halftone 100 200
+tick 1 1 1 1
+lstyle 4
+box bc bc
+lstyle 1
+slev a 1.25
+levels 1
+lwidth 1
+contour
+end
+
+
+# standard top wedge for plots
+# Usage: standard_wedge xtick nxsub lo hi label
+define standard_wedge
+new expsave xts yts nxs nys
+set expsave expand
+set xts xtick
+set yts ytick
+set nxs nxsub
+set nys nysub
+expand 1.2
+tick $1 $2 $1 $2
+wedge t 0.8 2  $3 $4 bcmst
+expand 0.6
+mtext t 5.5 .94 .5 $5 $6 $7 $8 $9 $0
+expand expsave
+tick xts nxs yts nys
+free expsave xts nxs yts nys
+end
+
+# standard bottom wedge for plots
+# Usage: bottom_wedge xtick nxsub lo hi label
+define bottom_wedge
+new expsave xts yts nxs nys
+set expsave expand 
+set xts xtick 
+set yts ytick 
+set nxs nxsub 
+set nys nysub
+expand 1.2
+tick $1 $2 $1 $2
+wedge b 0.8 2  $3 $4 bcnst
+expand 1.0
+mtext b 3.5 0.94 .5 $5 $6 $7 $8 $9 $0
+expand expsave
+tick xts nxs yts nys
+free expsave xts nxs yts nys
+end
+
+
+# shortcut
+define std_wedge
+standard_wedge $1 $2 $3 $4 $5 $6 $7 $8 $9 $0
+end
+
+# id string with user string
+# rather than nam / date
+define myid 
+new xp yp savexp
+new svx1 svx2 svy1 svy2
+set svx1 vx1
+set svx2 vx2
+set svy1 vy1
+set svy2 vy2
+set savexp expand
+viewport 0 1 0 1          # Make entire screen accessable.
+vptoxy 0.80 0.025 xp yp
+move xp yp
+expand 0.5
+label $1 $2 $3 $4 $5 $6 $7 $8 $9 $0 
+# reset plot parameters
+expand savexp
+viewport svx1 svx2 svy1 svy2
+free xp yp savexp svx1 svx2 svy1 svy2 
+end
+
+# standard LUT
+define std_lut
+lut /home/mpound/images/marclut.rgb 1
+end
+
+define std_lut_inv
+lut /home/mpound/images/marclut.rgb -1
+end
+
+# crosshair
+define crosshair
+new dx dy a b c d
+set dx 0.03 * ( x2 - x1 )
+set dy 0.03 * ( y2 - y1 )
+set a $1 + dx
+set b $2 + dy
+set c $1 + ( 2.5 * dx )
+set d $2 + ( 2.5 * dy )
+# echo dx dy a b c d
+dline 1 $1 b $1 d
+dline 1 a $2 c $2
+set a $1 - dx
+set b $2 - dy
+set c $1 - ( 2.5 * dx )
+set d $2 - ( 2.5 * dy )
+# echo dx dy a b c d
+dline 1 $1 b $1 d
+dline 1 a $2 c $2
+free dx dy a b c d
+end
+
+# draw offset and scaled circles
+define scalecircs
+new scale offx offy
+set scale $4
+set offx $2
+set offy $3
+new thex they
+new scalex scaley
+set scalex ( scale * $5 )
+set scaley ( scale * $6 )
+set thex offx + scalex
+set they offy + scaley
+#echo offx offy
+#echo thex / 60 "," they / 60
+#echo scalex "," scaley
+#echo 0.83333 * thex / 60 "," 0.83333 * they / 60
+echo thex / 60 "," they / 60
+#echo thex  "," they
+dcirc $1 thex they $7
+end
+
+# convert h(d)ms to world coords (from header rd rd)
+# RA units are decimal hours times 3600!
+# Usage: toWorld H M S 
+define toWorld
+ new towval hh mm ss
+ set hh $1 * 3600
+ set mm $2 * 60
+ set ss $3
+ if ( $1 < 0 ) set towval  ( hh - mm - ss )
+ if ( $1 >= 0 ) set towval  ( hh + mm + ss )
+# echo "Value is " towval
+ free hh mm ss 
+end
+
+## 
+# logarithmic errorbars
+# example usage:  
+#    data data.lis 
+#    xcolumn 1 
+#    ycolumn 2 
+#    ecolumn 3 
+#    set \0 0 
+#    loop npts(err) eplus \0 
+#    logarithm y 
+#    points 
+#    errorbar 2 
+#    ycolumn 2 
+#    ecolumn 3 
+#    set \0 0 
+#    loop npts(err) eminus \0 
+#    logarithm y 
+#    points 
+#    errorbar 4 
+###
+define yeplus
+    set $1 $1 + 1 
+	echo err[$1]
+    set err[$1] log((y[$1] + err[$1]) / y[$1]) 
+	echo err[$1]
+end 
+define yeminus 
+    set $1 $1 + 1 
+	echo err[$1]
+    set err[$1] log(y[$1] / (y[$1] - err[$1])) 
+	echo err[$1]
+end 
+
+define xeplus
+    set $1 $1 + 1 
+    echo err[$1]
+    set err[$1] log((x[$1] + err[$1]) / x[$1])
+    echo err[$1]
+end
+
+define xeminus
+    set $1 $1 + 1
+    set err[$1] log(x[$1] / (x[$1] - err[$1]))
+    echo err[$1]
+end
+
+define pink
+	rgb 99 1.0 0.5 1.0
+	color 99
+end
+
+##
+# original doheader from wip manual
+##
+define origdoheader
+    new cd11 cd21 cd12 cd22 
+    new xconvert yconvert 
+    set xconvert 3600.0 / 15.0 
+    set yconvert 3600.0 
+    set cd11 CD1_1 * xconvert / cosd(crvaly) 
+    set cd21 CD2_1 * yconvert 
+    set cd12 CD1_2 * xconvert / cosd(crvaly) 
+    set cd22 CD2_2 * yconvert 
+    set \1 (xconvert * crvalx) - (crpixx * cd11) - (crpixy * cd12) 
+    set \2 (yconvert * crvaly) - (crpixx * cd21) - (crpixy * cd22) 
+    transfer \1 cd11 cd12 \2 cd21 cd22 
+    set \11 \1 + (cd11 * (subx1 - 0.5)) + (cd12 * (suby1 - 0.5) ) 
+    set \12 \1 + (cd11 * (subx2 + 0.5)) + (cd12 * (suby2 + 0.5) ) 
+    set \13 \2 + (cd21 * (subx1 - 0.5)) + (cd22 * (suby1 - 0.5) ) 
+    set \14 \2 + (cd21 * (subx2 + 0.5)) + (cd22 * (suby2 + 0.5) ) 
+    limits \11 \12 \13 \14 
+    subimage 1 nx 1 ny 
+    free xconvert yconvert 
+    free cd11 cd21 cd12 cd22 
+end
+
+##
+# It is not uncommon for HST images to
+# have DEC on axis1 and RA on axis2. This macro will
+# get the scaling and limits correct, but put DEC
+# on x-axis and RA on y-axis
+##
+define DRdoheader
+    new cd11 cd21 cd12 cd22
+    new xconvert yconvert
+    set xconvert 3600.0 / 15.0
+    set yconvert 3600.0
+    set cd11 CD1_1 * xconvert / cosd(crvaly)
+    set cd21 CD2_1 * yconvert
+    set cd12 CD1_2 * xconvert / cosd(crvaly)
+    set cd22 CD2_2 * yconvert
+#    set \1 (xconvert * crvalx) - (crpixx * cd11) - (crpixy * cd12)
+#    set \2 (yconvert * crvaly) - (crpixx * cd21) - (crpixy * cd22)
+    set \1 yconvert * crvalx
+    set \2 xconvert * crvaly
+    transfer \1 cd11 cd12 \2 cd21 cd22
+    set \11 \1 +  xconvert 
+    set \12 \1 -  xconvert 
+    set \13 \2 +  xconvert 
+    set \14 \2 -  xconvert 
+    limits \11 \12 \13 \14 
+    echo x1 x2 y1 y2
+#echo xconvert yconvert 
+    free xconvert yconvert 
+    free cd11 cd21 cd12 cd22
+end
+
+##
+# It is not uncommon for HST images to
+# have DEC on axis1 and RA on axis2. This macro will
+# get the scaling and limits correct and put RA 
+# on x-axis and DEC on y-axis
+##
+define RAdoheader
+    new cd11 cd21 cd12 cd22
+    new xconvert yconvert
+    set xconvert 3600.0 / 15.0
+    set yconvert 3600.0
+    set cd11 CD1_1 * xconvert / cosd(crvaly)
+    set cd21 CD2_1 * yconvert
+    set cd12 CD1_2 * xconvert / cosd(crvaly)
+    set cd22 CD2_2 * yconvert
+#    set \1 (xconvert * crvalx) - (crpixx * cd11) - (crpixy * cd12)
+#    set \2 (yconvert * crvaly) - (crpixx * cd21) - (crpixy * cd22)
+    set \1 yconvert * crvalx
+    set \2 xconvert * crvaly
+    transfer \2 cd11 cd12 \1 cd21 cd22
+    set \11 \1 +  xconvert 
+    set \12 \1 -  xconvert 
+    set \13 \2 +  xconvert 
+    set \14 \2 -  xconvert 
+    limits \13 \14 \11 \12 
+    echo x1 x2 y1 y2
+#echo xconvert yconvert 
+    free xconvert yconvert 
+    free cd11 cd21 cd12 cd22
+end
+##
+# It is not uncommon for HST images to
+# have DEC on axis1 and RA on axis2. This macro will
+# get the scaling and limits correct and put RA 
+# on x-axis and DEC on y-axis
+##
+define XXdoheader
+    new cd11 cd21 cd12 cd22
+    new xconvert yconvert
+    set xconvert 3600.0 / 15.0
+    set yconvert 3600.0
+    set cd11 cdelt1 * xconvert / cosd(crvaly)
+    set cd21 cdelt2 * yconvert
+    set cd12 cdelt1 * xconvert / cosd(crvaly)
+    set cd22 cdelt2 * yconvert
+#    set \1 (xconvert * crvalx) - (crpixx * cd11) - (crpixy * cd12)
+#    set \2 (yconvert * crvaly) - (crpixx * cd21) - (crpixy * cd22)
+    set \1 yconvert * crvalx
+    set \2 xconvert * crvaly
+    transfer \1 cd11 cd12 \2 cd21 cd22
+#    set \11 \1 +  xconvert 
+#    set \12 \1 -  xconvert 
+#    set \13 \2 +  xconvert 
+#    set \14 \2 -  xconvert 
+#    limits \11 \12 \13 \14
+#echo xconvert yconvert 
+    free xconvert yconvert 
+    free cd11 cd21 cd12 cd22
+end

@@ -5,3 +5,7 @@ maintaining compatibility alongside wip's developements.
 Current examples:
 
 	feiling		Chin Fei's interface to libwip.a
+
+
+pie_chart.wip	Robert Gruendl's macros to aid in pie chart building
+mwp_macros.wip  Marc Pound's library of useful WIP macros (include log errorbars)
