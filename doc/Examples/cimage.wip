@@ -1,0 +1,24 @@
+viewport 0.1 0.9 0.15 0.9  # Set viewport to most of the page.
+limits 0 1 0 1             # Match user limits to the viewport.
+color 14                   # Select a dark gray color.
+fill 1                     # Set fill type to solid.
+rect 0 1 0 1               # Fill the rectangle with gray.
+viewport 0.25 0.75 0.2 0.9 # Reset the viewport size.
+expand 1.1                 # Set the character size.
+font 2                     # Set the font type.
+image orion.fits 1         # Read in plane #1.
+winadj 0 nx 0 ny           # Set the x/y scale to be the same.
+header rd                  # Read header and set limits.
+palette 2                  # Select the rainbox palette
+halftone 0 20              # Draw the halftone.
+color 7                    # Draw the box in yellow.
+box bcnsthz bcnstvdyzf     # Draw a box.
+expand 1.5                 # Make the top label a bit bigger.
+color 2                    # Set the color to red.
+mtext T -2 0.15 0 T\dmax
+expand 1.1                 # Reset character size.
+color 7                    # Write axis labels in yellow too.
+xlabel \ga (1950)
+mtext L 3.5 0.5 0.5 \gd (1950)
+wedge RI 0.5 3.0 0 20 BCMV
+color 1                    # Reset the color.
