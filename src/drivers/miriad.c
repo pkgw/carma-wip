@@ -59,7 +59,13 @@ static char dble_item[ITEM_HDR_SIZE] = {0,0,0,5};
 #define IMAGE  "/image"
 #define MASK   "/mask"
 
-#define BUFFERSIZE    128
+/* normally BUFFERSIZE is 128 or so, but it really can be (should be?) dynamic.
+   to fix the bug with masks, the easiest is just to make BUFFERSIZE as large
+   as MAXDIM.... really guys, this code should not even exist, it should be re-used
+   from the xyio routines in the miriad library...  that library also supports LFS
+   (files > 2GB). This routine will have too much work getting that working.
+*/
+#define BUFFERSIZE    10000
 #define BITS_PER_INT   31
 #define MASKOFFSET   (((ITEM_HDR_SIZE-1)/H_INT_SIZE + 1)*BITS_PER_INT)
 
@@ -79,10 +85,11 @@ static int bits[BITS_PER_INT] = {
     0x10000000, 0x20000000, 0x40000000};
 
 /* Define the private structures used to handle this image. */
+#define BUGSPILL 4
 
 typedef struct {
   FILE *fdmask;          /* File descriptor of mask item. */
-  int  buf[BUFFERSIZE];  /* Array used to read mask information. */
+  int  buf[BUFFERSIZE+BUGSPILL];  /* Array used to read mask information. */
   int *flag;             /* Array used to hold masks for one row. - one int per pixel */
   long int size;         /* Size of mask item on disk (including int_item). */
   long int offset;       /* Offset into mask item stored in buf[]. */
@@ -811,6 +818,7 @@ static int maskread(MIRIAD *f, int *flags, size_t length, long int offset)
     FILE *fd;
     MIRMASK *mask;
 
+    /* printf("DEBUG: maskread(%x,%d,%d)\n",flags,length,offset); */
     mask = f->mask;
     n = length;
     flag0 = flags;
@@ -844,6 +852,11 @@ static int maskread(MIRIAD *f, int *flags, size_t length, long int offset)
 #if NO_CVT
         isize = (size_t)(itemsize / sizeof(int));
 	/* printf("DEBUG: NO_CVT fread(int;isize=%d)\n",isize); */
+	if (isize*sizeof(int) > BUFFERSIZE) {
+	  fprintf(stderr,"### Fatal error: BUFFERSIZE overrun fread\n");
+	  return -1;
+	}
+
         if (fread((Void *)mask->buf, sizeof(int), isize, fd) != isize)
 #else
 	isize = (size_t)itemsize;
@@ -859,6 +872,12 @@ static int maskread(MIRIAD *f, int *flags, size_t length, long int offset)
 #if NO_CVT
 #else
 	isize /= sizeof(int);		/* PJT added 29-aug-99 */
+#if 1
+	if (isize > BUFFERSIZE+BUGSPILL) {
+	  fprintf(stderr,"### Fatal error: %d BUFFERSIZE overrun unpack32_c\n",isize*sizeof(int));
+	  return -1;
+	}
+#endif
         unpack32_c(f->buffer, mask->buf, isize);
 #endif
       }
