@@ -1,0 +1,62 @@
+<HTML>
+<HEAD>
+<TITLE>WIP Version 2.2 Changes</TITLE>
+</HEAD>
+
+<BODY>
+<H1>WIP Version 2.2 Changes</H1>
+
+This version reflects corrections and enhancements to WIP (Version 2.2):
+
+<OL>
+  <LI> Corrected a bug in the image driver routines.  A variable wasn't
+     declared large enough and so some headers caused memory overwrite.
+
+  <LI> The previous version of WIP (2.1) had removed a comment in the
+     parsing routine for the cursor command.  The command then issued
+     (incorrectly) an error message.  The null command has been reinserted.
+
+  <LI> The <CODE>winadj</CODE> command in the image2.wip file in the
+     Examples was incorrect.  This has been corrected.
+
+  <LI> Re-inserted the stdin option to the command line.  This is now
+     done using the convention of a double minus sign (<CODE>--</CODE>).
+
+  <LI> Added the command line option <CODE>-q</CODE> to enable quiet
+     mode so no informational messages are written to stdout.  This will
+     be useful for plot devices that use stdout as their file.  It
+     should probably be used with the <CODE>-x</CODE> command line option.
+     It is turned off when interactive mode is started.
+
+  <LI> In version 2.1, the <CODE>arc</CODE> command was corrected to
+     agree with the documentation that angles increase counter-clockwise.
+     This made WIP not backward compatible for this command.  The fix
+     for those with previous macros is the following.  Suppose you had:
+     <UL>
+       <LI> arc maj min angext start
+     </UL>
+     Then, make the following change:
+     <UL>
+       <LI> set \0 180 - start
+       <LI> arc maj min -angext \0
+     </UL>
+     Alternatively:
+     <UL>
+       <LI> set \0 180 - start - angext
+       <LI> arc maj min angext \0
+     </UL>
+     If you also use the <CODE>angle</CODE> command to rotate the entire arc,
+     then you must also multiple its argument by -1.
+
+  <LI> Debug mode was changed from a global variable to a subroutine.
+     This included adding a new user variable (debugmode).
+
+  <LI> The <CODE>wedge</CODE> command has changed (again).  It now
+     has a simple default box argument if none is provided by the user.
+     It appears most people will want a basic box (BCSTN/M) and will
+     only occasionally need to override this default.  The examples show
+     how to override the default; to get no box, use the box option 0.
+</OL>
+
+</BODY>
+</HTML>
