@@ -1,0 +1,104 @@
+<HTML>
+<HEAD>
+<TITLE>WIP Version 2.1 Changes</TITLE>
+</HEAD>
+
+<BODY>
+<H1>WIP Version 2.1 Changes</H1>
+
+This version reflects corrections and enhancements to WIP (Version 2.1):
+
+<OL>
+  <LI> Flipped the sense (direction) of the color palettes.  This will
+     affect previously defined scripts but it is better to get the
+     correct form now than to confuse others down the road.  The impact
+     of this is also seen in the <CODE>wedge</CODE> routine.
+     Also added <CODE>palette 0</CODE>
+     which is a ramp from the background color to the foreground color.
+     This palette is now the default when a new device is chosen.
+
+  <LI> Added the <CODE>beam</CODE> command.  This pointed out the need
+     to fix the arc subroutine.  It was drawing incorrectly when an axis
+     direction was reversed (eg. X-axis as RA).  Now all angles increase
+     counter-clockwise as per documentation and regardless of axis orientation.
+
+  <LI> Added a file in the Examples directory that defines a macro which
+     can handle FITS files with the CDx_y matrix (common in HST images).
+     This also demonstrates how to specify the transformation matrix for
+     images with arbitrary rotation.
+
+  <LI> Added an optional argument to the <CODE>image</CODE> command that
+     will permit smoothing of the input image data.
+
+  <LI> Added optional arguments to the <CODE>halftone</CODE> command that
+     causes histogram equalization to be performed on the color LUT.  A
+     blank value can also be given for the histogram algorithm to ignore
+     when computing the data histogram.
+     Only the selected subimage is counted.
+
+  <LI> Modified the <CODE>wedge</CODE> command.  This permits user defined
+     tick arguments (with <CODE>ticksize</CODE>) to get used.  The change
+     also requires the user to provide <CODE>box</CODE> command-like
+     arguments if they want a box around their wedge.  Now, if the user
+     wishes a label associated with the wedge, they need to do it with a
+     separate label command (like <CODE>mtext</CODE>).
+     <BR><STRONG>Note:</STRONG> This change of the label argument to a
+     box drawing one is not backward compatible.
+
+  <LI> Modified the <CODE>panel</CODE> command to allow a negative third
+     argument.  If it is negative, then the panel ordering goes left to
+     right and top-down.
+
+  <LI> Modified fits.c driver to permit BITPIX=8 (byte) images.
+
+  <LI> Modified inoutput.c and declare.h to recognize NOVARARGS flag.
+     This was added for those systems that don't handle varargs.h properly.
+
+  <LI> Modified error bar routine to permit locations 5 and 6.  Now
+     all the checking for proper location values is handled by PGPLOT.
+
+  <LI> Fixed makewip and wipdefs.h for OSF/1 compilations.  It was
+     defining alpha but that was used as a variable in some routines.
+     Changed alpha definition to OSF.  (I hope this is generic enough.)
+
+  <LI> Added subroutines wip[gs]etcir so the color index range changes
+     would directly affect the user variables cmin/cmax.
+
+  <LI> Corrected the way color index ranges are tested in histo.c and
+     points.c and how cmin/cmax are initially defined when a device
+     is opened.  Histo.c and points.c now get the full color index
+     range permitted for the current device rather than the range
+     specified by cmin/cmax.  When a new device is opened, cmin/cmax
+     are set up to be the same values as internal to PGPLOT (ie. cmin
+     is always 16 and cmax, if smaller, is set to 0).  Palette.c was
+     also modified to limit the palette range to indices larger than
+     (or equal to) 16.
+
+  <LI> Changed sysdepunix directory to just sysdep.  The script makewip
+     was modified accordingly.
+
+  <LI> Created a new directory called fit, moved plot/linefit.c into it,
+     and then split the individual fitting routines into their own files.
+     The script makewip was modified accordingly.  This included the
+     addition of two different polynomial fitting routines.
+
+  <LI> Added the command line option "<CODE>-e cmd [args]</CODE>" which
+     permits one to issue an initial command.  It is executed after the
+     files are read and before the -x option is checked.
+
+  <LI> Added the cyclic palette (option 12).  Thanks to georg@itpgyro1.fzk.de
+     for suggesting it.
+
+  <LI> Created a log directory and put the files of changes (like this
+     one) in it.  Also converted them to HTML so they could be accessed
+     from the WIP home page.
+
+  <LI> Changed the default action of basic images to NOT byte-swap.
+     Since basic images are usually created locally, they are probably
+     stored in the native format.  However, I also added the ability
+     for users to override this default by specifying the image type
+     with an upper case letter.
+</OL>
+
+</BODY>
+</HTML>
