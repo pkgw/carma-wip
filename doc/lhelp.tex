@@ -1,0 +1,1617 @@
+\item [{\tt AITOFF [L B] } --] converts L-b coordinate values to equivalent x-y positions.\\
+	{\tt AITOFF} will convert the X values (longitude) from
+	the most recent {\tt XCOLUMN}
+	command and the Y values (latitude) from the most recent
+	{\tt YCOLUMN} command and convert them
+	to the equivalent x-y positions for use in an Aitoff (more
+	precisely, a Hammer) projection.  The {\tt AITOFF}
+	command MUST be called every time new data is inserted either
+	with the {\tt XCOLUMN} or
+	{\tt YCOLUMN} commands.  If the
+	optional arguments {\tt L} and {\tt B} are present,
+	they are converted to the equivalent x-y positions for use in
+	an Aitoff projection.  For the equivalent Aitoff ``box'', see the
+	{\tt GLOBE} command.
+\item [{\tt ANGLE D or ANGLE X1 X2 Y1 Y2 } --] sets angle of text or points to D degrees.\\
+	{\tt ANGLE} will cause text from
+	{\tt LABEL} and
+	{\tt PUTLABEL} commands to be
+	presented at {\tt D} degrees counterclockwise from the
+	horizontal (+x direction).  Alternatively, if there are four
+	arguments present, then they are taken to be the World (user)
+	coordinates of two positions and the {\tt ANGLE} is set
+	to the slope of the line.
+\item [{\tt ARC MAJX MAJY [ANG [STARTANG]] } --] draws an arc with major axes {\tt MAJX}, {\tt MAJY}.\\
+	{\tt ARC} draws an arc at the current cursor position
+	with major axes {\tt MAJX} and {\tt MAJY} (in World
+	coordinate units).  The curve is drawn as a polygon with the
+	characteristics specified by the command
+	{\tt FILL}.  The number of points used to
+	generate the curve can be controlled by adjusting the value of
+	the character expansion
+	(see the command {\tt EXPAND}).
+	The optional parameter {\tt ANG} defines the angular extent
+	of the arc in degrees (set to 360 degrees if not given).
+	An additional optional parameter, {\tt STARTANG},
+	may be used to determine an initial offset angle of the arc relative to
+	{\tt MAJX} (this defaults to 0 degrees if this parameter is
+	not present).  Use the command {\tt ANGLE}
+	to set the rotation of {\tt MAJX} with respect to the
+	positive x-axis.  All angles are in units of degrees and are
+	defined to be zero toward the right of the viewport
+	(regardless of the direction of the World Coordinate system)
+	and increasing counter-clockwise.
+	See also the {\tt BEAM} command.
+	NOTE: If the World Coordinate system
+	is currently RA and DEC, a rotated arc may not plot correctly.
+	Use {\tt 'header px px'} or
+	{\tt 'header so so'}
+	(or some other equivalent offset option) to set the coordinate
+	system to something comparable in scale.
+\item [{\tt ARROW X Y [ANGLE [VENT]] } --] Draws an arrow.\\
+	{\tt ARROW} draws an arrow from the current cursor
+	position to the World (user) coordinate ({\tt X,Y}).
+	The acute angle of the arrow point, in degrees, is specified by
+	the optional input {\tt ANGLE}; angles in the range
+	20.0 to 90.0 give reasonable results.  If {\tt ANGLE} is
+	not present on the command line, a value of 45.0 degrees is used.
+	The fraction of the triangular arrow-head that is cut away from the
+	back is specified by the optional parameter {\tt VENT}.
+	A value of 0.0 gives a triangular wedge arrow-head; 1.0 gives
+	an open \verb+>+.  Values of 0.3 to 0.7 give reasonable results.  The
+	default value for VENT (if it is not present) is 0.3.
+	{\tt EXPAND} can be used to vary
+	the length of the arrowhead.  For
+	{\tt EXPAND} set to 1.0, the default
+	size of the arrowhead is 1/40th of the smaller of the width or
+	height of the view surface.
+\item [{\tt ASK K } --] Changes the current device prompt state.\\
+	The command {\tt ASK} will set the prompt state to ON if
+	{\tt K} is set to 1 and the current device selected is
+	interactive; otherwise, {\tt ASK} will set the prompt
+	state to OFF.  If {\tt ASK} is set ON, then every command
+	that erases the page will prompt the user before clearing the
+	screen.  The default state of this is OFF; also, every time a new
+	device is selected (see {\tt DEVICE}),
+	{\tt ASK} is set to OFF.
+\item [{\tt AUTOLEVS NLEV [TYPE [MIN [MAX]]] } --] sets up the contour levels automatically.\\
+	{\tt AUTOLEVS} will fill an internal contour level array
+	with {\tt NLEV} contours between the values {\tt MIN}
+	and {\tt MAX}.  {\tt NLEV} must be input, but the
+	rest of the parameters are optional.  If either of or both
+	{\tt MIN} and {\tt MAX} are not given, they are
+	default to the minimum and maximum of the current array loaded
+	using the command {\tt IMAGE}.  The
+	optional parameter {\tt TYPE} is a string of characters
+	specifying the type of contour levels to generate.  If
+	{\tt TYPE} is {\tt LIN}, then the contour levels
+	are linearly spaced (this is the default if {\tt TYPE}
+	is not present); if {\tt TYPE} is {\tt LOG}, then
+	the levels are spaced evenly in the logarithm.
+\item [{\tt BAR K [THRESH [GAP]] } --] draws bar graphs on (x,y) pairs in direction {\tt 90(K-1)}.\\
+	{\tt BAR} is analogous to the command
+	{\tt BIN} except that it will draw a
+	bar graph on all (x,y) coordinates read by
+	{\tt XCOLUMN} and
+	{\tt YCOLUMN} in the direction
+	specified by the argument {\tt K}.  Set the argument
+	{\tt K} to 1 to put the bar extending towards the +X
+	direction; 2 for +Y; 3 for -X; and 4 for -Y.  The values read
+	by the most recent call to {\tt ECOLUMN}
+	determine which color to draw individual bars.  If this array is
+	empty, the current color index is used.  The optional argument
+	{\tt THRESH} may be used to specify the "bottom" of the
+	bar.  If this optional argument is present, then it is used to
+	anchor the beginning of the bar graph and should be entered in
+	the units of that axis.  If this optional argument is not
+	present, the box edge opposite the direction the bar extends
+	acts as the threshold.  An additional optional argument
+	{\tt GAP} may be used to specify the "width" of the bar.
+	If this is not present, the width is defined as the difference
+	between the mean of the current point and the next point and the
+	mean of the current point and the previous point.  If
+	{\tt GAP} is present, it should be in entered in units of
+	that axis (i.e.  for {\tt K == 2}, {\tt GAP}
+	should be in the units of the X-axis) and the bar will be
+	centered on the point with half the width on either side.
+\item [{\tt BEAM MAJ MIN PA [OFFX OFFY [SCALE [FILLCOLOR [BGRECT]]]] } --] draws a beam.\\
+	{\tt BEAM} draws a beam at the current cursor position
+	outlined using the current color and line width properties.
+	It has a major axis {\tt MAJ} and minor axis
+	{\tt MIN} and is rotated by a position angle {\tt PA}
+	(which is in units of degrees defined as zero along the positive
+	Y-axis (regardless of the current World Coordinate system) and
+	increasing counter-clockwise).  The optional parameters
+	{\tt OFFX} and {\tt OFFY} (which both default to 0)
+	define the offset of the center of the beam from the current
+	cursor position.  These offsets are in units of the width or
+	height of the box that bounds the beam.  The beam will first be
+	drawn solid using the optional input {\tt FILLCOLOR} and is
+	then drawn hollow with the current color.  If {\tt FILLCOLOR}
+	is not provided, it defaults to color index 15.
+	By default, the axes will be scaled as if {\tt header rd rd}
+	has been previously called.  This means that the X-axis will be
+	scaled by 15*cos(declination).  To override this scaling, the optional
+	input {\tt SCALE} can be provided and set to whatever
+	scaling is desired (no scaling can be achieved by setting
+	{\tt SCALE} to 1).  If {\tt SCALE} is set to any
+	negative value (or is not present), then RA-Dec type scaling will be
+	done.  The major and minor axes of the beam should be in the same
+	units as the two axes.  This means if {\tt SCALE} is set
+	to anything but 1, then they should both be in the same units
+	as the Y-axis.
+	If the optional argument {\tt BGRECT} is provided
+	(it defaults to 0) and is not negative, then a solid rectangle
+	will be drawn in that color (color index {\tt BGRECT}) first.
+	The rectangle will only be as large as the width and height of the beam.
+\item [{\tt BGCI N } --] sets the text background color index to {\tt N}.\\
+	{\tt BGCI} sets the text background color index for
+	subsequent text.  By default, text does not obscure underlying
+	graphics.  If the text background color index is positive,
+	however, text is opaque:  the bounding box of the text is
+	filled with the color specified by the value of {\tt N}
+	before drawing the text characters.  Use color index 0 to erase
+	underlying graphics before drawing text.  If {\tt N} is
+	less than 0, the text will be transparent; if greater than or
+	equal to 0, the text will be drawn on an opaque background with
+	color index {\tt N}.  The initial value of the text
+	background color index is -1 (transparent) and is reset to -1
+	whenever a new device is selected.
+\item [{\tt BIN [K [GAP] ] } --] draws a histogram of (x,y) pairs.\\
+	{\tt BIN} connects the coordinates read by
+	{\tt XCOLUMN} and
+	{\tt YCOLUMN} as a histogram.  If
+	the optional argument {\tt K} is present and equal to 0,
+	then the individual X values denote the lower left edge (in X)
+	of the bin.  If {\tt K} is set to 1 or is not present,
+	then the individual X values denote the center location of the
+	bin.  If the optional parameter {\tt GAP} is present, it
+	represents the distance (in X axis units) that signals a gap in
+	the histogram not to be connected.  This is useful for histograms
+	with irregular spacing or directional changes.  A good value
+	for {\tt GAP} is 2.
+\item [{\tt BOX [x [y] ] } --] makes a box labeled according to {\tt LIMITS} and {\tt TICKSIZE}.\\
+	{\tt BOX} annotates the viewport with a frame, axes,
+	numeric labels, etc.  The two arguments {\tt X} and
+	{\tt Y} are strings of options that determine the type
+	of box and the labeling that will be drawn.  The option letters
+	may be in any order and do not depend on case.  If either
+	parameter is omitted, the missing parameter is given the
+	default value set by the string variables XBOX and YBOX (see
+	the command {\tt SET}).  If none of the
+	letters `A', `B', or `C' are specified, then tick marks will
+	not be drawn.  The options currently available
+	are found in Table~\ref{t:box}.
+\item [{\tt BUFFER } --] predefined macro name that refers to the entire command buffer.\\
+	Typing {\tt BUFFER} will execute the contents of the
+	command buffer (the same as the command
+	"{\tt playback}" or
+	"{\tt playback buffer}").
+	{\tt BUFFER} may also be used as an argument for commands
+	requiring a macro name (e.g.  {\tt LIST}
+	and {\tt WRITE}).
+\item [{\tt COLOR N } --] select color for lines and characters.\\
+	{\tt COLOR} defines the current color index used for
+	filling polygons, drawing lines, and labeling characters for
+	the selected device.  {\tt COLOR} is originally set to 1
+	and is reset to this value whenever a new device is selected.
+	The number of colors available is device dependent (the range
+	can be displayed with the command
+	'{\tt echo cmin cmax}').  If the
+	requested color index is not available on the selected device,
+	a color index 1 will be substituted.  The first 16 colors
+	usually have predefined values.  Additional values are device
+	dependent.  Each color associated with the color index
+	{\tt N} is listed in
+	Table~\ref{t:colors}.
+\item [{\tt CONNECT } --] connects (x,y) pairs with line segments.\\
+	{\tt CONNECT} draws line segments connecting the
+	coordinates read by {\tt XCOLUMN}
+	and {\tt YCOLUMN}.  The lines are
+	drawn using the current line style (set by the command
+	{\tt LSTYLE}), in the current color
+	(set by the command {\tt COLOR}), and
+	the current thickness (set by the command
+	{\tt LWIDTH}).
+\item [{\tt CONTOUR [N [BLANK [MIN]]] } --] makes a contour plot of an array read with {\tt IMAGE}.\\
+	{\tt CONTOUR} makes a contour plot of an array read with
+	the {\tt IMAGE} command at the
+	contour levels set using either the
+	{\tt LEVELS} or
+	{\tt AUTOLEVS} commands.  The contour
+	levels MUST be set before a call to {\tt CONTOUR}.  The
+	contour level array will be modified according to the current
+	value of the user variable SLEVEL and the string variable
+	LEVTYPE (also see the command {\tt SLEVEL})
+	before calling any of the contour methods below.
+	\par 
+	Currently, there are four contour routines available.  The
+	optional parameter {\tt N} allows the user to select
+	which of four contour drawing methods will be used to generate
+	the plot.  If {\tt N} is the character `s', then the
+	command will produce a fast contour plot (this is the default
+	if {\tt N} is not present); if {\tt N} is `t',
+	then a smoother contour is produced; if {\tt N} is `b',
+	then the same contour plot as with `s' is produced but with
+	blanking; and `l' produces the same contour plot as with `t',
+	but with contour level labeling.
+	\par 
+	For {\tt N} set to `b', an optional argument
+	{\tt BLANK} may be given to specify the blanking value
+	such that array elements equal in value to {\tt BLANK}
+	are ignored (blanked).  For {\tt N} set to `l', the
+	optional argument {\tt BLANK} defines the spacing along
+	the contour between labels (in grid cells) and the optional
+	parameter {\tt MIN} specifies the minimum number of
+	cells that must be crossed before drawing the first contour
+	label.  The default value for {\tt BLANK} is 0.0 when
+	{\tt N} = `b' and 16 for {\tt N} = `l';
+	{\tt MIN} defaults to 8.  The optional parameters are
+	ignored by the contour options {\tt N} = `s' and `t'.
+	\par 
+	By default, each contour line is drawn with the current line
+	attributes (color index, line style, and line width).  However,
+	for options `t' and `l', the default is to draw negative contours
+	values with dashed and positive contours values with solid lines.
+	If, however, the parameter {\tt N} is set to `-t'
+	(option `t' prepended with a minus sign), then negative contours
+	values will be drawn with the same line style as positive
+	contours values.
+\item [{\tt CURSOR [x y] } --] enables cursor and returns x-y location and the key pressed.\\
+	{\tt CURSOR} enables the graphics cursor and returns the
+	x-y position of the cursor along with the key pressed.
+	{\tt CURSOR} may also display the image value of the
+	selected position if an array is currently loaded (see the
+	{\tt IMAGE} command) and the cursor
+	position lies within the scope of the image region (see the
+	command {\tt TRANSFER}).  The two
+	optional arguments may be used to determine the starting
+	position of the cursor.  If both parameters are given, they are
+	used as the World (user) coordinates for the starting
+	position.  If only one parameter is present, it is used as the
+	X starting position and the Y position is set as the current
+	cursor position.  Finally, if no arguments are present, the
+	current cursor position is used as a starting position.
+	\par 
+	If {\tt CURSOR} is called inside a macro (see the command
+	{\tt DEFINE}), with the command
+	{\tt PLAYBACK}, or is executed inside
+	a file via the command {\tt INPUT}, then
+	only one keystroke is allowed and no saving of commands will be
+	done.  If, on the other hand, {\tt CURSOR} is called
+	interactively, then {\tt CURSOR} may perform several
+	functions, depending on the character typed.  Internal calls to
+	{\tt CURSOR} will occur repetitively until the letter `X'
+	is typed.  On some devices, the left most mouse button will be
+	associated with the keystroke `A'; the middle with `D'; and the
+	right with `X'.
+	\par 
+	Other keystroke functions are:
+	\begin{verbatim}
+    A : Display the cursor position and image intensity.
+    D : Draw to the current cursor position.
+    M : Move to the present cursor position.
+    P : Draw a point of the current symbol type.
+    S : Toggles ability to save following keys as commands.
+    X : Exit the cursor routine.
+    ? : Present this list of key commands.
+	\end{verbatim}
+\item [{\tt DATA fspec } --] opens the file ``fspec'' for reading data.\\
+	{\tt DATA} opens an external file for reading data.  The
+	file is assumed to have data in columns separated by spaces,
+	tabs or commas.  Any column can be read as x or y coordinates
+	with the {\tt XCOLUMN} and
+	{\tt YCOLUMN} commands.
+\item [{\tt DEFINE xxx } --] creates the macro xxx and enters define mode.\\
+	{\tt DEFINE} creates an entry for the macro {\tt xxx},
+	and subsequent commands (until the {\tt END}
+	command) are considered the body of the macro.  The prompt changes
+	to {\tt DEFINE}\verb+>+ to indicate the mode.  A macro is just
+	a collection of commands (or other macros) that can be executed
+	with one call statement.  A macro is invoked by using its name as
+	a command.  The contents of the macro may be listed by using the
+	macro name as an argument to the command
+	{\tt LIST}.  Macros may be saved using the
+	command {\tt WRITE} and may be played
+	back using the command {\tt PLAYBACK}.
+	Macros may be passed arguments or variables whenever they are
+	executed.  The ten tokens used inside the macro to identify the
+	macro arguments are \$1, \$2, \dots, \$9, and \$0.  These tokens may be
+	used in the body of the macro, and when the macro is invoked its
+	arguments will be substituted for these tokens.  These tokens MAY
+	NOT be redefined inside the macro (for example, using the command
+	{\tt SET}).  If an argument is not present when the macro
+	is invoked, the token is replaced with a blank space.
+\item [{\tt DELETE [N1 [N2 [MACRO]]] } --] removes the commands {\tt N1 - N2} from a macro buffer.\\
+	{\tt DELETE} removes commands from the macro listing
+	(numbered according to what is shown with the command
+	{\tt LIST}).  If no arguments are present,
+	then the last command in the command buffer (see
+	{\tt BUFFER}) is deleted.  If
+	{\tt N2} is not present, then only the command numbered
+	{\tt N1} in the command buffer
+	({\tt BUFFER}) is removed.  If both
+	{\tt N1} and {\tt N2} are present, then all commands
+	from {\tt N1} to {\tt N2} (inclusive) are deleted
+	from the command buffer ({\tt BUFFER}).
+	If the optional macro name is given, then lines {\tt N1} to
+	{\tt N2} (inclusive) are removed from {\tt MACRO}.
+	For example, to remove line 4 from a macro named "{\tt dojob}",
+	use the command {\tt delete 4 4 dojob}.
+	Note that the command buffer macro name is "{\tt BUFFER}".
+\item [{\tt DEVICE device } --] initializes output to a graphics device.\\
+	{\tt DEVICE} defines the "device specification" for the
+	plot device.  The specification is system dependent, but usually
+	has the form ``device/type'' or ``file/type''.  If the argument is a
+	question mark (``?''), the user will be prompted to supply a device
+	name after a list of the currently available devices is
+	presented.  When a new device is selected, the
+	{\tt PANEL} command is reset and the
+	{\tt COLOR},
+	{\tt EXPAND},
+	{\tt FILL},
+	{\tt FONT},
+	{\tt LSTYLE}, and
+	{\tt LWIDTH} commands are called to reset
+	each to a value of 1.  The color palette (see the command
+	{\tt PALETTE}) is also reset to
+	the default palette and the coordinate transfer function
+	({\tt TRANSFER}) is reset to linear.
+	Finally, the inquire state is turned off (see the command
+	{\tt ASK}).
+\item [{\tt DOT [X Y] } --] makes a point of the current style at the current location.\\
+	{\tt DOT} draws a point at the current location (set by
+	{\tt MOVE},
+	{\tt DRAW}, etc.)
+	(or at the position (X,Y) if provided) in the style determined by
+	the latest call to {\tt SYMBOL} or
+	{\tt PCOLUMN}.  The symbol's size is
+	governed by the last call to the command
+	{\tt EXPAND}.
+\item [{\tt DRAW X Y } --] draws a line to {\tt (X,Y)} from the current coordinate position.\\
+	{\tt DRAW} draws a line to the World (user) coordinate (X,Y)
+	from the current location (set by a previous call to
+	{\tt MOVE},
+	{\tt DRAW}, etc.).
+	{\tt DRAW} then makes (X,Y) the current position.
+\item [{\tt ECHO EXPRESSION [\dots] } --] displays the result of {\tt EXPRESSION} on the screen.\\
+	{\tt ECHO} acts just like the command
+	{\tt SET} except that rather than assigning
+	the result of the {\tt EXPRESSION} to anything it displays
+	the result on the screen.  See the command
+	{\tt SET} for an explanation of
+	{\tt EXPRESSION}.  There may be more than one
+	{\tt EXPRESSION} present, but each one should be delimited
+	by enclosing parenthesis.  Literal strings may also be displayed
+	by enclosing the text in double quotes.  String variables may be
+	displayed by listing their names.  For example, to display the
+	current cursor position, use the command:
+	{\tt echo "cx = " cx "cy = " cy}.
+\item [{\tt ECOLUMN N } --] reads error bar data from column {\tt N} of the data file.\\
+	{\tt ECOLUMN} reads column N from the data file as the
+	magnitudes of the error bar displacements from the corresponding (x,y)
+	coordinates.  Note that the command
+	{\tt LOGARITHM}
+	does not adjust the error values to logarithmic scale.
+	{\tt ECOLUMN} values are also used by the command
+	{\tt LOOKUP}.
+\item [{\tt END } --] terminates define mode, insert mode, or exits from the program.\\
+	In DEFINE mode, {\tt END} finishes the macro definition
+	and returns to EXECUTE mode.  In INSERT mode, {\tt END}
+	terminates inserting and returns to EXECUTE mode.  In EXECUTE
+	mode, {\tt END} exits from the program altogether.
+	The commands {\tt EXIT} and {\tt QUIT} may be
+	used as a substitute for the command {\tt END}.
+\item [{\tt ENVIRONMENT [X1 X2 Y1 Y2 [N [K]]] } --] sets the user limits and draws a box.\\
+	{\tt ENVIRONMENT} can clear the current page, set up the
+	World (user) limits and draw a standard box.  The first four
+	optional arguments establish the World (user) limits of the plot
+	region.  If they are not present, then the data read from the most
+	recent call to the commands {\tt XCOLUMN}
+	and {\tt YCOLUMN} is used to autoscale
+	the limits.  If the limits are present, then two other optional
+	parameters may be selected.  The first of these parameters,
+	{\tt N}, will set the scales of the X and Y axes to be equal,
+	if it is equal to 1; otherwise the two axes will be scaled
+	independently.  The final optional parameter {\tt K} will
+	determine what type of box to draw and may have the following values:
+	\begin{verbatim}
+    -2 : draw no box, axes or labels;
+    -1 : draw box only;
+     0 : draw box and label it with coordinates;
+     1 : same as K=0, but also draw the coordinate axes (X=0, Y=0);
+     2 : same as K=1, but also draw grid lines at the major
+       : increments of the coordinates;
+    10 : draw box and label X-axis logarithmically;
+    20 : draw box and label Y-axis logarithmically;
+    30 : draw box and label both axes logarithmically.
+	\end{verbatim}
+	Both {\tt N} and {\tt K} default to 0 if not provided.
+\item [{\tt ERASE } --] erases the graphics screen.\\
+	{\tt ERASE} erases the graphics screen.  If the current
+	device is a hardcopy device, {\tt ERASE} will cause the
+	plot to advance to the next page.  If {\tt ASK}
+	is set ON and the current device is not a hardcopy device, then the
+	user will be prompted before advancing to the next page.
+\item [{\tt ERRORBAR K } --] draws error bars on (x,y) pairs in the direction {\tt 90(K-1)}.\\
+	{\tt ERRORBAR} is analogous to
+	{\tt POINTS}; it draws error bars at
+	each of the (x,y) points (read by the most recent call to the
+	commands {\tt XCOLUMN} and
+	{\tt YCOLUMN}) at a length specified
+	by the points read by the command
+	{\tt ECOLUMN}.  The argument {\tt K}
+	should be 1 to put the bar along the +x direction; 2 for +y;
+	3 for -x; and 4 for -y.  If {\tt K} is 5, then error bars
+	are drawn in both the +x and -x directions.
+	Likewise, if {\tt K} is 6, then error bars
+	are drawn in both the +y and -y directions.
+	Use {\tt EXPAND}
+	to govern the size (extent) of the caps.
+	Setting the expansion to zero means no caps are drawn.
+\item [{\tt ETXT } --] erases the text from the view surface without affecting graphics.\\
+	{\tt ETXT} erases the text from the view surface (if the
+	device is capable of doing this).  This should erase text without
+	affecting the currently displayed graphics.  Nothing is done on
+	devices without this capability.
+\item [{\tt EXPAND E } --] expands all characters and points by a factor {\tt E}.\\
+	{\tt EXPAND} sets the expansion for all characters and points.
+	It is initially set to 1.0 and is reset to 1.0 whenever
+	a new device is chosen. 
+\item [{\tt FILL N [ANGLE [SEPN [PHASE]]] } --] Sets the fill area style to {\tt N}.\\
+	{\tt FILL} sets the fill type.  The fill type is
+	identified by {\tt N}, where {\tt N} refers to
+	one of the following:
+	\begin{verbatim}
+    1 : solid
+    2 : hollow
+    3 : hatched
+    4 : cross-hatched
+	\end{verbatim}
+	The fill type is initially set to 1 (solid) and is reset to 1
+	whenever a new device is chosen.  If the fill type is hatched or
+	cross-hatched, optional arguments can be supplied that affect
+	the way the hatching will be done.  Up to three additional
+	arguments may be provided.  {\tt ANGLE} specifies the
+	angle the hatch lines make with the horizontal, in degrees,
+	increasing counterclockwise.  {\tt SEPN} is the spacing
+	of the hatch lines.  The unit spacing is 1 percent of the smaller
+	of the height or width of the view surface.  {\tt PHASE}
+	is an offset value and is a real number between 0 and 1.  The
+	hatch lines are displaced by this fraction of {\tt SEPN}
+	from a fixed reference.  Adjacent regions hatched with the
+	same {\tt PHASE} have contiguous hatch lines.  To hatch
+	a region with alternating lines of two colors, fill the area
+	twice: once with {\tt PHASE=0.0} in one color and
+	{\tt PHASE=0.5} in the other color.  The default value
+	for {\tt ANGLE} is 45.0 degrees, {\tt SEPN} is 1.0,
+	and {\tt PHASE} is 0.0.
+\item [{\tt FIT style [N] [P1 P2 P3 \dots] } --] Fits a curve to the (x,y) data pairs.\\
+	{\tt FIT} will solve either for a linear fit of the form:
+	"{\tt y = a + bx}" by either the
+	(a) Least Squares method (``lsqfit''); or
+	(b) Criterion of Least Absolute Deviations (``medfit'');
+	or will solve for a Gaussian fit of the form
+	"{\tt y = a * exp(-((x - b)/c)**2)}".
+	The data that comprise the ``x'' and the ``y'' in these equations are
+	from the most recent call to the
+	{\tt XCOLUMN} and
+	{\tt YCOLUMN} commands.  For a
+	linear fit, there is only one required argument, {\tt STYLE},
+	which specifies which type of linear fit to perform.  The only
+	possible values of {\tt STYLE} are "lsqfit" and "medfit".
+	The fit coefficients and the corresponding errors in the fit are
+	displayed at the command line.  When using the ``lsqfit'' technique,
+	estimates of the measurement errors may be included by reading the
+	error values with the {\tt ECOLUMN}
+	command.  The optional parameters provide a way to assign the fits
+	and the error estimates to User Variables (see the
+	{\tt SET} command).  The "lsqfit" returns
+	(in this order) the parameters ``a'' and ``b'' along with a chi-square
+	for the fit and sigma errors on the estimates of ``a'' and ``b''.  If data
+	in the most recent call to {\tt ECOLUMN}
+	was used to specify errors on the observation points, a "goodness
+	of fit" is also returned.  If, however, no errors are specified,
+	the correlation coefficient is returned in place of the "goodness
+	of fit``.  The ''medfit" returns (in this order) the fit parameters
+	``a'' and ``b'' along with ``absdev'' (the mean absolute deviation in
+	the ``y'' direction).  As an example, the command
+	{\tt fit lsqfit \esc{0} \esc{1}}
+	will only assign the fit parameters ``a'' and ``b'' to the User
+	Variables \esc{0} and \esc{1} and the remaining items will be ignored (but
+	still displayed at the command line).
+	\par 
+	For Gaussian fits, there are two required arguments:
+	{\tt STYLE} and {\tt N}, where {\tt STYLE}
+	must be "gaussian" and {\tt N} specifies the number of
+	Gaussians to fit.  The number of optional parameters that
+	may follow is governed by the value of {\tt N}.  Optional
+	arguments should follow in groups of 3's in the following order:
+	amplitude, mean, and full width at half maximum.  Assignment of the
+	output values follows as for linear fits.  If the {\tt 3*N+1}
+	parameter is present, it is set to the chi-square of the fit.
+	Setting any parameter to it's negative holds that value fixed
+	during the fit.  For example:
+	\begin{verbatim}
+    set \1 1.0   \# Guess at amplitude.
+    set \2 5.0   \# First guess at X-position of peak.
+    set \3 -2.3  \# Input FHWM and hold this fixed during fit.
+    fit gaussian 1 \1 \2 \3 \4  \# Fit 1 Gaussian and store fit
+          \# and chi-square in \1, \2, \3, and \4, respectively.
+	\end{verbatim}
+\item [{\tt FONT N } --] Sets the font type to type {\tt N}.\\
+	{\tt FONT} sets the font type to one of the available fonts.
+	The argument {\tt N} selects the font used for subsequent
+	text plotting.  The font type is initially set to 1 (``normal'')
+	and is reset to 1 whenever a new device is chosen.  Currently,
+	four fonts are available and can be set by setting the parameter
+	{\tt N} to one of the following values:
+	\begin{verbatim}
+    1 : (default) a simple single-stoke font (``normal'' font)
+    2 : roman font
+    3 : italic font
+    4 : script font
+	\end{verbatim}
+	The font may also be temporarily changed within a text string
+	by using the escape sequences: \esc{fn}, \esc{fr}, \esc{fi}, or \esc{fs}.
+\item [{\tt FREE item1 [item2 [\dots]] } --] releases items created with the {\tt NEW} command.\\
+	{\tt FREE} will remove the user specified variable(s) from
+	WIP.  In addition, it releases (i.e. frees) the memory associated
+	with each {\tt ITEM}.  At least one {\tt ITEM} is
+	required and each {\tt ITEM} listed specifies the name of
+	the string variable, user variable, or vector (without any index)
+	to release.
+\item [{\tt GLOBE [nlong nlat] } --] draws a ``globe'' with nlong/nlat long/lat lines.\\
+	{\tt GLOBE} draws a "globe" for use in Aitoff (Hammer)
+	projections.  The ``globe'' that is drawn is an outline of the
+	entire sky centered on the position (L, b) = (0, 0).  There
+	are two optional parameters.  The first optional parameter
+	{\tt NLONG} represents the number of longitude lines
+	that are drawn and the optional parameter {\tt NLAT}
+	represents the number of latitude lines that are drawn.  If
+	these arguments are omitted, the values of {\tt NLONG = 5}
+	and {\tt NLAT = 3} will be used for defaults.
+	Also see the command {\tt AITOFF}.
+\item [{\tt HALFTONE [MIN MAX [N [BLANK]]] } --] produces a halftone plot of an image.\\
+	{\tt HALFTONE} draws a plot of the array read with the
+	{\tt IMAGE} command over the subimage
+	region selected with the {\tt SUBIMAGE}
+	command according to the coordinate transformation matrix
+	specified by the {\tt TRANSFER}
+	command and the current image transfer function (see the
+	{\tt ITF} command).
+	If the device permits, colors
+	can be preassigned to the halftone values with any of the
+	{\tt PALETTE,}
+	{\tt LOOKUP,}
+	{\tt RGB,} or
+	{\tt HLS} commands
+	(whenever a new device is selected, the palette is reset).
+	The first two optional parameters allow the user to specify the
+	intensity range for the plot.
+	If the optional parameters {\tt MIN} and
+	{\tt MAX} are not present,
+	then {\tt HALFTONE} will use the image minimum and maximum.
+	The next optional parameter, {\tt N}, if present,
+	indicates that histogram equalization should be performed using
+	{\tt N} bins.  If this parameter is present and is set to
+	zero, then the full number of color table entries will be used
+	in the binning.  If this is not present, no equalization will be done.
+	The last optional parameter {\tt BLANK} is used to
+	specify a blank value in the image to ignore when doing
+	histogram equalization.  It defaults to -99.
+	Histogram equalization is only applied to data within the
+	current subimage region and within the minimum and maximum intensity.
+	\par 
+	NOTE: Histogram equalization changes the current LUT.  The LUT
+	must be reset before calling the {\tt HALFTONE} command again.
+\item [{\tt HARDCOPY } --] causes a stored printer plot to be plotted.\\
+	If the current device selected is a hardcopy unit, then the
+	{\tt HARDCOPY} command will cause the output file to be
+	closed and the file spooled to the printer.  How the file is
+	printed is determined by the string variable ``print'' (see the
+	command {\tt SET}).  By setting "print"
+	to the string ``ignore'', automatic printing can be disabled.
+	By default, the string variable ``print'' is set to ``lpr''
+	(use the command '{\tt echo print}'
+	to display the current value of ``print'').
+\item [{\tt HEADER [XTYPE [YTYPE]] } --] loads header information of the current image.\\
+	{\tt HEADER} sets the transfer function and World (User)
+	limits of the box region for the current image.  This function
+	makes use of the current {\tt SUBIMAGE}
+	values to fix the World coordinate range.  If the optional
+	arguments {\tt XTYPE} and {\tt YTYPE} are
+	not present, they are set to the current values of the string
+	variables ``XHEADER'' and ``YHEADER'', respectively.  If only one
+	argument is present, both {\tt XTYPE} and {\tt YTYPE}
+	are set to this value.  Currently, there are 7 possible values
+	for {\tt XTYPE} and {\tt YTYPE} used to control
+	the resulting header arrangement:
+	\begin{verbatim}
+    rd : Right ascension/declination (absolute coordinates).
+    so : Arcsecond offset positions.
+    mo : Arcminute offset positions.
+    po : Pixel offset positions.
+    px : Absolute pixel positions.
+    gl : General linear coordinates.
+    go : General linear offset coordinates.
+	\end{verbatim}
+	All offset arguments are relative to the value of the user variables
+	CRVALX and CRVALY.  The option ``rd'' includes a 15*cos(dec) factor
+	applied to the right ascension term.  Incorrect options are treated
+	as if ``px'' was selected.  The options ``gl'' and ``go'' apply no
+	additional scaling factor to the header variables.  If the image
+	headers CRVAL, CRPIX, and CDELT are not present for that axis or
+	are all set to 0, the coordinate transfer function will be set to
+	its default value (see the command
+	{\tt TRANSFER}) and the world limits
+	to the image range in pixels.
+	NOTE: Currently, the conversion is
+	fixed to be from radians to arcseconds (or seconds of time) for
+	MIRIAD images; degrees to arcseconds for FITS images; and no
+	conversion for BASIC images.
+\item [{\tt HELP xxx } --] prints an explanation of the command {\tt xxx}.\\
+	Without any argument, {\tt HELP} prints a one line
+	description of every command.  With the name of a command as
+	an argument, {\tt HELP} prints more information on that
+	particular command.  The command '{\tt help ?}' will
+	provide a list of all available command and macro names.
+\item [{\tt HI2D bias [slant [center]] } --] draws a histogram of the data read by {\tt IMAGE}.\\
+	{\tt HI2D} plots a series of cross-sections of the current
+	image (see {\tt IMAGE}).  Each
+	cross-section is plotted as a hidden line histogram.  The one
+	required argument, {\tt BIAS}, specifies a bias value
+	to be applied to each successive cross-section (in order to
+	raise it above the previous one).  {\tt BIAS} is in the
+	same units as the image data.  If the optional parameter
+	{\tt SLANT} is present, it is an integer value offset to
+	be applied to each successive cross-section (in the X-direction).
+	If {\tt SLANT} is greater than 0, then the plot slants to
+	the right; less than 0, it slants to the left.  The default value
+	for {\tt SLANT} is 0 (no slant).  If the optional argument
+	{\tt CENTER} is present and equal to 1 (the default), then
+	the individual X values denote the center location of the bin;
+	otherwise, the X values denote the lower edge (in X) of the bin.
+\item [{\tt HISTOGRAM [MIN MAX [N]] } --] draws a histogram of the data read by {\tt XCOLUMN}.\\
+	{\tt HISTOGRAM} connects the coordinates read by
+	{\tt XCOLUMN} as a histogram.  If the
+	optional arguments {\tt MIN} and {\tt MAX} are present,
+	they are used to specify the minimum and maximum of the histogram.
+	Furthermore, an optional parameter {\tt N} can specify the
+	number of bins to divide up the histogram.  At present, {\tt N}
+	may not exceed 200.  By default, {\tt MIN} and {\tt MAX}
+	are set to the minimum and maximum of the data read by
+	{\tt XCOLUMN} and {\tt N} is set
+	to 5.  The user should set the limits (see the command
+	{\tt LIMITS}) of the box before calling
+	the {\tt HISTOGRAM} command.
+\item [{\tt HLS K hue light sat } --] sets the color representation using the HLS system.\\
+	{\tt HLS} sets the color representation of the color index
+	{\tt K} to the provided values of Hue-Lightness-Saturation.
+	{\tt HUE} is represented by an angle in degrees, with red
+	at 120, green at 240, and blue at 0 (or 360).  {\tt LIGHT}
+	ranges from 0 to 1, with black at lightness of 0 and white at
+	lightness 1.  {\tt SAT} ranges from 0 (gray) to 1 (pure color).
+	{\tt HUE} is irrelevant when {\tt SAT} is 0.  If
+	{\tt K} is greater than the maximum color index of the device,
+	then this call will be ignored (use the command
+	'{\tt echo cmin cmax}'
+	to display the current color range).
+\item [{\tt ID } --] puts an identification label at the bottom of a plot.\\
+	{\tt ID} puts the name of the user and the current date
+	and time at the bottom of the plot region.  If the environment
+	variable PGPLOT\_IDENT is defined and the current device is a hardcopy
+	device (the command '{\tt echo hardcopy}'
+	will return 1 if this is true), then this call is automatically
+	done when the device is finally closed (see the command
+	{\tt HARDCOPY}).
+\item [{\tt IF EXPRESSION XXX [\dots] } --] executes {\tt xxx} if {\tt EXPRESSION} is true.\\
+	{\tt IF} allows conditional execution of macros and commands.
+	The macro or command {\tt XXX} is executed only if the
+	conditional test of the expression is TRUE (non-zero).  The
+	{\tt EXPRESSION} may be a simple {\tt (X OP Y)}
+	expression where the parameters {\tt X} and {\tt Y}
+	may be any numerical value or user variable (see the
+	{\tt SET} command) and {\tt OP} is
+	the condition to test and is defined TRUE for the following:
+	\begin{verbatim}
+    op : Test
+------------------------------------------------------
+    == : X equal to Y;
+    != : X not equal to Y;
+    <  : X less than Y;
+    >  : X greater than Y;
+    <= : X less than or equal to Y;
+    >= : X greater than or equal to Y;
+    && : X and Y are non-zero;
+    || : X or Y are non-zero;
+    ^  : X or Y, but not both, are non-zero.
+	\end{verbatim}
+	If the test consists of more than just a simple {\tt (X op Y)}
+	test, then the entire expression MUST be enclosed by parenthesis.
+	As an example,
+	\begin{verbatim}
+    if ((x1 < x2) && (y1 < y2)) limits x2 x1 y1 y2
+	\end{verbatim}
+	will only execute the {\tt LIMITS}
+	command if X1 is less than X2 AND Y1 is less than Y2.  Note also
+	that this example illustrates that the usual parameters/arguments
+	may follow the macro or command name.  See the command
+	{\tt SET} for a more detailed description
+	of {\tt EXPRESSION}.
+\item [{\tt IMAGE fspec [plane [badpixel [order]]] } --] reads in an image from file ``fspec''.\\
+	{\tt IMAGE} loads an array into WIP for use with plotting
+	commands like {\tt CONTOUR} and
+	{\tt HALFTONE}.
+	Currently, WIP tests the file to determine its file type (i.e.
+	FITS, MIRIAD, BASIC, etc.) and then loads it into available memory.
+	The optional parameter {\tt PLANE} selects which plane of
+	a data cube to load.  The default value for {\tt PLANE} is 1.
+	{\tt IMAGE} trys to read available header information which
+	will be useful for setting the coordinate transformation matrix
+	(see the command {\tt TRANSFER})
+	after the image is read into memory (with the command
+	{\tt HEADER}).  The current subimage
+	values (see the command {\tt SUBIMAGE})
+	are reset to the full array size of the new image and the user
+	variables CRVALX/Y, CRPIXX/Y, and CDELTX/Y may be set to the newly
+	read header values (if they can be read).  The subimage values,
+	6 user variables, and the transformation matrix are used to
+	determine where the plot will appear.  In order to correctly
+	set the transformation matrix with the command
+	{\tt HEADER}, the values of CRVAL,
+	CRPIX, CDELT, and CTYPE must be present for the first two axes.
+	The next optional parameter {\tt BADPIXEL} may be
+	specified (after {\tt PLANE}) as the value for blanked or
+	masked pixels.
+	By default, these will be set to -99.
+	This value may be helpful for use
+	with the {\tt CONTOUR} command.
+	The final optional parameter {\tt ORDER} permits the
+	image to be smoothed on reading.  The parameter {\tt ORDER}
+	may take on a value of 0, 1, or 2 and represents the order of
+	the fit.  A value of 0 (or if it is not provided) means to apply
+	no smoothing (the default).
+	\par 
+	NOTE: Current image types include:
+	basic, Miriad, and FITS.
+	BASIC image name syntax is: filename`columnsXrows[`offset] where
+	rows and columns are in pixels and the optional offset is in
+	bytes from the beginning of the file.  The character 'X' determines
+	the size of each element and is 'b' for unsigned bytes; 's',
+	signed 2 byte integers; 'l', signed 4 byte integers; 'r', 4 byte
+	floating point; 'd', 8 byte double precision floating point.
+\item [{\tt INITIALIZE V N EXPRESSION } --] Sets {\tt V} to the result of {\tt EXPRESSION}.\\
+	{\tt INITIALIZE} evaluates the {\tt EXPRESSION}
+	(see the command {\tt SET}) and sets
+	every element of the array (vector) user variable {\tt V}
+	to the result.  If {\tt N} is less than zero, the current
+	size of the vector variable {\tt V} is used.  If
+	{\tt N} is zero, no expression is needed and the vector
+	is set to size zero (empty).  If {\tt N} is greater than
+	zero and an expression is present, the first {\tt N}
+	elements of the vector are set to the result of the expression.
+	If the expression is missing, the size of the vector will be reset.
+\item [{\tt INPUT fspec } --] reads plot commands from file ``fspec'' and executes them.\\
+	{\tt INPUT} reads plot commands from a file and treats
+	them exactly as if they were typed:  commands are executed or
+	can be inserted or macros may be defined.  Unlike interactive
+	mode, individual commands are NOT saved in the command buffer
+	(see {\tt BUFFER}).
+	NOTE: Macros are not redefined so care should be taken to
+	insure that the proper macro is being executed.
+\item [{\tt INSERT [N [macro]] } --] commands are inserted before command {\tt N} in a macro.\\
+	{\tt INSERT} enters insert mode (indicated by the
+	{\tt INSERT}\verb+>+ prompt) and
+	subsequent commands are inserted, without execution, into the
+	named macro until an {\tt END} command
+	is encountered.  Commands are numbered as shown by the command
+	{\tt LIST}.  Without any arguments,
+	{\tt INSERT} inserts commands at the end of the command
+	buffer.  If {\tt N} is present but no macro name is given,
+	then commands are inserted before line {\tt N} in the
+	command macro ({\tt BUFFER}).  With
+	the {\tt MACRO} argument, {\tt INSERT} starts
+	inserting just before line number {\tt N} in macro
+	{\tt MACRO}.
+	NOTE: The command buffer macro name is
+	{\tt BUFFER}.
+\item [{\tt ITF N } --] sets the current image transfer function to {\tt N}.\\
+	{\tt ITF} sets an internal parameter such that all subsequent
+	image drawing functions ({\tt IMAGE} and
+	{\tt WEDGE}) act on the transformed image.
+	Acceptable values for {\tt N} and their meanings follow:
+	\begin{verbatim}
+    0 : linear
+    1 : logarithmic
+    2 : square-root
+	\end{verbatim}
+	The initial value of the image transfer function is 0 and is
+	reset to 0 whenever a new device is selected.
+\item [{\tt LABEL STR } --] writes the string {\tt STR} at the current cursor position.\\
+	{\tt LABEL} writes the string {\tt STR} (which
+	starts at the current cursor position and continues to the
+	last non-space character in the label string).  The string's 
+	size and the angle it is displayed are controlled by the most
+	recent call to the commands {\tt EXPAND}
+	and {\tt ANGLE}.
+\item [{\tt LCUR [NPTS] } --] draws a line using the cursor.\\
+	{\tt LCUR} allows a polyline to be drawn using the cursor.
+	Vertices may be added or removed by locating the cursor at a
+	desired point and selecting the key 'A' (Add) or 'D' (Delete) or
+	may terminate the command with the key 'X' (eXit).  The vertices
+	are stored in the {\tt XCOLUMN} and
+	{\tt YCOLUMN} arrays and may be
+	redrawn by subsequent calls to this command.  If the optional
+	parameter {\tt NPTS} is given, it is used as the number
+	of points in the previous call to this command.  To initialize
+	the command, set {\tt NPTS} to 0.  By default,
+	{\tt NPTS} is set to the current value of the number of
+	points in the most recent call to the
+	{\tt XCOLUMN} and
+	{\tt YCOLUMN} commands.
+\item [{\tt LDEV } --] lists the devices currently available.\\
+	{\tt LDEV} lists (to standard output) the names of
+	the installed devices known to the current version of WIP.
+\item [{\tt LEVELS [L1 L2 \dots] } --] sets the contour levels for a contour plot.\\
+	{\tt LEVELS} establishes the contour values for use in a
+	contour plot.  Currently, the maximum number of levels available
+	is 40.  This array of levels may be augmented if a call to the
+	command {\tt SLEVEL} is done prior to
+	a call to the {\tt CONTOUR} command.
+\item [{\tt LIMITS [X1 X2 Y1 Y2] } --] sets the World limits of the plot.\\
+	{\tt LIMITS} sets the World (user) coordinate system of
+	the plot window.  All coordinates from
+	{\tt XCOLUMN},
+	{\tt YCOLUMN},
+	{\tt MOVE},
+	{\tt DRAW}, etc.,
+	are relative to these limits.  If no
+	arguments are present, then the data from the most recent
+	{\tt XCOLUMN} and
+	{\tt YCOLUMN}
+	commands are used to set the limits.
+\item [{\tt LINES L1 L2 } --] limits the {\tt X, Y, E,} and {\tt PCOLUMN} file read to lines {\tt L1-L2}.\\
+	{\tt LINES} sets the range of lines read from the
+	data file by the commands
+	{\tt XCOLUMN},
+	{\tt YCOLUMN},
+	{\tt ECOLUMN}, and
+	{\tt PCOLUMN}.
+	This is useful to avoid non-data lines.  The argument {\tt L1}
+	is also used to specify the line that the command
+	{\tt STRING}
+	will use to extract a string variable.
+\item [{\tt LIST [L1 [L2 [xxx]]] } --] lists the commands of macro {\tt xxx}.\\
+	{\tt LIST} lists the commands of the named macro.  If there
+	are no arguments, the macro {\tt BUFFER}
+	(the command buffer) is listed.  If one argument is given, then
+	the commands from {\tt L1} to the end of the macro
+	{\tt BUFFER} is shown.  With two
+	arguments, lines {\tt L1} to {\tt L2} are shown.
+	If the macro name {\tt xxx} is also entered as the third
+	argument, then that macro is listed over the inclusive line range
+	of {\tt L1} to {\tt L2}.  The numbers assigned to
+	commands by {\tt LIST} should be the ranges used by calls
+	to the commands {\tt DELETE} and
+	{\tt INSERT}.
+	NOTE: The command buffer macro name is
+	{\tt BUFFER}.
+\item [{\tt LOGARITHM name [scale] } --] takes the scaled logarithm of vectors and images.\\
+	{\tt LOGARITHM} takes the base 10 logarithm of either
+	vectors or images.  The argument {\tt NAME} specifies
+	either a vector name (e.g. ``x'') or an image name (currently,
+	only the name ``image'' is acceptable).  If the value of the
+	vector or image is greater than zero, the logarithm is taken
+	and this result is multiplied by the value of {\tt SCALE}.
+	If {\tt SCALE} is not present, a value of 1.0 is used.
+	{\tt SCALE} may be any valid numeric expression (see
+	the command {\tt SET}).
+	{\tt LOGARITHM} uses -50 for the logarithm
+	of 0 or negative numbers and does not scale these values.
+\item [{\tt LOOKUP [N] } --] loads a RGB color lookup table.\\
+	{\tt LOOKUP} uses the values read by the most recent call to
+	the commands {\tt XCOLUMN},
+	{\tt YCOLUMN},
+	{\tt ECOLUMN}, and
+	{\tt PCOLUMN}
+	to load values into the color lookup table.  This is a more
+	compact (and correct) method for loading an entire table than
+	the single color index commands {\tt RGB} and
+	{\tt HLS}.  All values in the
+	{\tt XCOLUMN},
+	{\tt YCOLUMN},
+	{\tt ECOLUMN}, and
+	{\tt PCOLUMN} data must be between 0 and 1.
+	The {\tt XCOLUMN} data correspond to the
+	red values, {\tt YCOLUMN} to green, and
+	{\tt ECOLUMN} to blue.  The
+	{\tt PCOLUMN} data identifies the
+	ramp intensity level for the corresponding RGB values.  Colors
+	on the ramp are linearly interpolated from neighboring levels.
+	If the optional parameter {\tt N} is present and is negative,
+	then the resulting lookup table will be flipped.  By default (if the
+	optional argument {\tt N} is missing or is positive), the
+	RGB table is loaded directly (not flipped).
+\item [{\tt LOOP count xxx [p1 p2 \dots] } --] executes the macro {\tt xxx COUNT} times.\\
+	{\tt LOOP} allows for multiple execution of a macro.
+	The macro {\tt xxx} is executed {\tt COUNT} times.
+	The optional parameters {\tt P1, P2, \dots}
+	are any arguments needed to be passed to the macro (see the
+	{\tt DEFINE} command).  The arguments
+	{\tt P1, P2, \dots} passed to the macro are NOT altered
+	during each execution of the loop.
+\item [{\tt LSTYLE N } --] sets the current line style to {\tt N}.\\
+	All subsequent lines except for points and characters are drawn
+	with line style {\tt N}, where {\tt N} refers to
+	lines of the following form:
+	\begin{verbatim}
+    1 : solid
+    2 : dashed
+    3 : dot - dash - dot - dash
+    4 : dotted
+    5 : dash - dot - dot - dot
+	\end{verbatim}
+	If {\tt N} is some number other than one of the line style
+	values above, it is set to 1.  Also, the line style is set to 1
+	initially and is reset to 1 whenever a new device is selected.
+\item [{\tt LWIDTH N } --] sets the current line width attribute to {\tt N}.\\
+	{\tt LWIDTH} sets an internal parameter such that all
+	subsequent lines, text, and graph markers are drawn with lines
+	of width {\tt N}.  This number may range from the default
+	of 1 to a maximum of 201.  Any other value is set to 1.  The
+	actual thickness drawn is device dependent, but is approximately
+	equal to 0.005 inches times the value of {\tt N}.  The
+	initial value of the line width is 1 and is reset to 1 whenever
+	a new device is selected.
+\item [{\tt MACRO filename } --] Used to define macros using an external file.\\
+	{\tt MACRO} will read the commands from the file
+	{\tt filename} and define macros exactly as if they were
+	typed interactively.  This allows macros saved from previous WIP
+	sessions (using the {\tt WRITE} command)
+	to be read into WIP and defined.  Only macro definitions are allowed.
+\item [{\tt MINMAX [N] } --] list the maximum and minimum values of the current image.\\
+	{\tt MINMAX} list the maximum and minimum values of the
+	image that has been read by the {\tt IMAGE}
+	command.  This command may be useful for setting contour levels,
+	or adjusting a halftone plot.  The minimum and maximum of the
+	current array are stored in the user variables IMMIN and IMMAX.
+	(The minimum and maximum may also be displayed using the command
+	'{\tt echo immin immax}'.)  If the
+	optional parameter {\tt N} is present and set to any value
+	greater than 0, then the minimum and maximum are explicitly
+	recalculated.  This may be useful if the minimum and maximum has
+	been found and then the logarithm of the image is computed.
+\item [{\tt MOVE X Y } --] sets the current World (user) position to {\tt (x,y).}\\
+	{\tt MOVE} sets the current World (user) location to (x,y)
+	without drawing any lines or text.  This simply provides a way to
+	specify the current position of the cursor.
+\item [{\tt MTEXT side disp coord just str } --] writes the string {\tt STR} relative to {\tt SIDE}.\\
+	{\tt MTEXT} writes text at the position specified relative
+	to a viewport side.  The parameter {\tt SIDE} specifies
+	which side of the viewport to place the string.  {\tt SIDE}
+	must be either `B', `L', `T', or `R' to specify the
+	Bottom, Left, Top, or Right side of the viewport.
+	Additionally, if {\tt SIDE} is `LV' or `RV', then the string
+	will be written perpendicular to the frame rather than parallel
+	to it.  The parameter {\tt DISP} specifies the displacement
+	from the frame edge (in character height units).  If {\tt DISP}
+	is negative, then the string is written inside the viewport.  The
+	parameter {\tt COORD} is the location of the string as a
+	fractional length of the specified edge of the viewport.
+	{\tt JUST} specifies how to justify the string relative to
+	{\tt COORD} with {\tt JUST = 0} meaning left justified;
+	0.5, centered; and 1.0, right justified.  The text {\tt STR}
+	is the (multiword) string to display.
+	As an example, ``good'' values used to place a string along the X
+	axis, the Y axis, and the top of the plot box are:
+	\begin{verbatim}
+    mtext B 3.2 0.5 0.5 Xaxis label string
+    mtext L 2.2 0.5 0.5 Yaxis label string
+    mtext T 2.0 0.5 0.5 Top label string
+	\end{verbatim}
+	The first two examples above correspond to the syntax used by
+	the commands {\tt XLABEL} and
+	{\tt YLABEL}.
+\item [{\tt NCURSE [n] } --] marks a set of points using the cursor.\\
+	{\tt NCURSE} allows a set of points to be drawn using the
+	cursor.  Points may be added or removed by locating the cursor
+	at a desired point and selecting the key `A' (Add) or `D' (Delete)
+	or may terminate the command with the key `X' (eXit).  The points
+	are stored in the {\tt XCOLUMN} and
+	{\tt YCOLUMN} arrays and may be redrawn
+	by subsequent calls to this command.  If the optional parameter
+	{\tt N} is given, it is used as the number of points in the
+	previous call to this command.  To initialize the command, set
+	{\tt N} to 0.  By default, {\tt N} is set to the
+	current number of points in the most recent call to the
+	{\tt XCOLUMN} and
+	{\tt YCOLUMN} commands.  On return,
+	the cursor points are returned in increasing order of X (unlike
+	the command {\tt OLIN}).
+\item [{\tt NEW item [\dots] } --] creates a new string variable, user variable, or vector.\\
+	{\tt NEW} creates a new variable.  If more than one
+	{\tt ITEM} is present on the command line, then each will
+	represent the name of a new variable to be created.  Each
+	{\tt ITEM} name must be unique and may not correspond
+	to a pre-defined variable or any other defined variable.  Once
+	these variables are created, they may be used just like the
+	pre-defined variables:  the command {\tt SET}
+	will permit the value to be set/changed and the command
+	{\tt ECHO} may be used to display the
+	current value.  Use the command {\tt FREE}
+	to release the memory associated with each {\tt ITEM}.  If
+	the {\tt ITEM} is enclosed in double quotes
+	(e.g. {\tt "ITEM"}), a string variable is created.  If the
+	{\tt ITEM} has an optional size argument included, a vector
+	is created.  Note that when defining a vector variable, the
+	maximum number of elements should be enclosed in brackets and
+	appear affixed to the end of the {\tt ITEM} name
+	(e.g.  {\tt array[10]}).  If {\tt ITEM} is not a
+	vector or string variable, then {\tt ITEM} represents a
+	simple user variable.
+\item [{\tt OLIN [n] } --] marks a set of points using the cursor.\\
+	{\tt OLIN} allows a set of points to be drawn using the
+	cursor.  Points may be added or removed by locating the cursor
+	at a desired point and selecting the key `A' (Add) or `D' (Delete)
+	or may terminate the command with the key `X' (eXit).  The points
+	are stored in the {\tt XCOLUMN} and
+	{\tt YCOLUMN} arrays and may be
+	redrawn by subsequent calls to this command.  If the optional
+	parameter {\tt N} is given, it is used as the number of
+	points in the previous call to this command.  To initialize the
+	command, set {\tt N} to 0.  By default, {\tt N}
+	is set to the current number of points in the most recent call
+	to the {\tt XCOLUMN}
+	and {\tt YCOLUMN} commands.  On
+	return, the cursor points are returned in the order they were
+	added (unlike the command {\tt NCURSE}).
+\item [{\tt PALETTE K [LEV] } --] Sets the color palette to entry {\tt K}.\\
+	{\tt PALETTE} sets the current image color array to a
+	known look up table (LUT).  The argument {\tt K} specifies
+	which palette is loaded and legal values are displayed below.
+	If {\tt K} is not associated with a legal palette value,
+	a warning is issued and the palette remains unchanged.  The
+	value of {\tt K} can be negative in which case, the
+	absolute value of {\tt K} is used and the sense of the LUT
+	is reversed.
+	NOTE: Not all devices have color LUTs so this
+	command may have no effect on them.  Whenever a device is
+	changed, the palette resets to the default.
+	\begin{verbatim}
+    K   Palette set to\dots
+-------------------------------
+    0 : Background to Foreground (default).
+    1 : Gray scale.
+    2 : A rainbow.
+    3 : Heat scale.
+    4 : IRAF scale.
+    5 : AIPS scale.
+    6 : PGPLOT scale.
+    7 : Saoimage A scale.
+    8 : Saoimage BB scale.
+    9 : Saoimage HE scale.
+   10 : Saoimage I8 scale.
+   11 : DS scale.
+   12 : Cyclic scale.
+	\end{verbatim}
+	The optional parameter {\tt LEV} may be provided to
+	specify the number of levels into which to squeeze the palette.
+	If {\tt LEV} is not present (or is negative), then the
+	number of levels is not changed.  If {\tt LEV} is present
+	and set to 0, the number is reset to the maximum range for the
+	current device.  If {\tt LEV} is present and positive,
+	the number of color levels is set to this value.
+\item [{\tt PANEL nx ny k } --] Sets the plot location to a subpanel.\\
+	{\tt PANEL} makes the current plot location panel
+	{\tt K}, where there are {\tt NX} panels across
+	and {\tt NY} panels vertically.  The direction the panels
+	run depends on the sign of {\tt K}.  If {\tt K} is
+	positive, then the panels are counted across from the lower left
+	and upwards ({\tt K = 1} specifies the first panel).  If
+	{\tt K} is negative, then the panels are counted across
+	from the upper left and downwards.  {\tt PANEL} retains a
+	copy of the {\tt VIEWPORT} coordinate
+	system that is present when {\tt PANEL} is first called.
+	To reset to those values, use the command {\tt panel 1 1 1};
+	this will reset the plot location to the previous
+	{\tt VIEWPORT} area (this is also
+	done automatically every time the current device is changed).
+	Be sure to also call {\tt panel 1 1 1} prior to changing
+	the plot location with any other
+	{\tt VIEWPORT} command!  The
+	separation between adjacent panels is controlled by the value of
+	{\tt EXPAND} as well as by the user
+	variables XSUBMAR and YSUBMAR (see the
+	{\tt SUBMARGIN} command for more
+	details on these variables).  If either {\tt NX} or
+	{\tt NY} is negative, then the gap between the subpanels in
+	that direction is removed.  The absolute value of {\tt NX}
+	and {\tt NY} is always used to determine the number of subpanels.
+\item [{\tt PAPER width aspect } --] change the size of the view surface.\\
+	{\tt PAPER} changes the size of the view surface to a
+	specified width (inches) and aspect ratio (height/width).  This
+	command should only be used immediately after a call to the
+	{\tt DEVICE} command.
+\item [{\tt PCOLUMN n } --] reads point type data from column {\tt N} of the current data file.\\
+	{\tt PCOLUMN} reads column {\tt N} from the data
+	file as the values of a symbol array.  The data read by
+	{\tt PCOLUMN} is used by the commands
+	{\tt POINTS} and
+	{\tt BIN} (as well as others) to
+	represent additional data information.
+\item [{\tt PHARD devname [xxx args] } --] spool a plot to an alternative device.\\
+	{\tt PHARD} allows the commands in macro {\tt xxx}
+	(or the commands in the command buffer) to be spooled to an
+	alternative device.  The one required argument {\tt DEVNAME}
+	is the name of the alternative device (see the command
+	{\tt DEVICE}).  If no other
+	arguments are present, then the commands in the command buffer
+	are played back (see the command
+	{\tt PLAYBACK});
+	otherwise, the named macro ({\tt xxx}) is called (with
+	any further arguments on the command line used as input arguments
+	to the named macro).  If the named device is a hardcopy device, the
+	{\tt HARDCOPY} command is automatically
+	executed at the end of the playback.  Finally, the current device
+	is set to the device that was present when this command was called.
+\item [{\tt PLAYBACK [xxx args] } --] replay macro {\tt xxx} or commands in the command buffer.\\
+	{\tt PLAYBACK} executes the macro {\tt xxx} without
+	storing the commands in the command buffer.  With an argument of
+	{\tt BUFFER} (or no argument),
+	{\tt PLAYBACK} replays all commands in the command buffer.
+	The optional arguments ({\tt args}) are passed to the macro.
+\item [{\tt PLOTFIT [X1 X2 [STEP]] } --] draws a plot of the most recent fit.\\
+	{\tt PLOTFIT} uses the parameters from the most recent
+	call to {\tt FIT} to display a smooth
+	curve.  The optional parameters {\tt X1} and {\tt X2}
+	can be used to limit the X-range to be plotted.  They default to
+	the full range of the window.  The other optional parameter is
+	the {\tt STEP} size of the plot.  It provides a means to
+	make the plot smoother or more coarse.  The {\tt STEP}
+	defaults to the mean of the difference between data in the
+	most recent call to the {\tt XCOLUMN}
+	command.
+\item [{\tt POINTS [K] } --] draws points of the current style at each {\tt (x,y).}\\
+	{\tt POINTS} draws points of the current style (see the command
+	{\tt SYMBOL}) and size (see the command
+	{\tt EXPAND}) at the coordinates read by the
+	commands {\tt XCOLUMN} and
+	{\tt YCOLUMN}.
+	The command {\tt PCOLUMN} may be used to
+	specify a {\tt SYMBOL} corresponding to
+	each (x,y) point plotted.  The format of the data read by the
+	{\tt PCOLUMN} command is the same as the
+	argument for the {\tt SYMBOL} command,
+	except that an optional fractional part may be added to each symbol.
+	If the entry has a fractional part, it is treated as an expansion
+	factor (fractional parts less than 0.01 gives the default expansion).
+	For example, an entry of 93.5 in a point column is the same as
+	{\tt symbol 93},
+	{\tt expand 0.5}.
+	If the optional argument {\tt K} is present, the command
+	{\tt ECOLUMN} may be used to specify a
+	color corresponding to each (x,y) point plotted.  Each item of
+	data read by {\tt ECOLUMN} corresponds
+	to a color index.
+\item [{\tt POLY } --] draws a polygon.\\
+	{\tt POLY} will draw a closed polygon based on the data
+	from the most recent call to the
+	{\tt XCOLUMN} and
+	{\tt YCOLUMN} commands.
+	{\tt POLY} will draw the polygon according to the
+	graphical characteristics such as
+	{\tt FILL} and
+	{\tt COLOR}.
+	Also see the command {\tt RECT}.
+\item [{\tt PUTLABEL just str } --] writes justified text {\tt STR} at the current location.\\
+	{\tt PUTLABEL} writes a string at the current cursor
+	location with rotation and size specified by the
+	{\tt ANGLE} and
+	{\tt EXPAND} commands
+	(exactly like {\tt LABEL}).
+	The label is justified with respect to the current
+	location according to the argument {\tt JUST}: 0 for left
+	justified; 0.5 for centered justified; and 1 for right justified.
+	If {\tt JUST} is negative, the cursor is activated and the
+	position of the cursor when any key is struck is used as the
+	current location and the absolute value of {\tt JUST} is
+	used to determine the string justification.
+	NOTE: Because -0 will be interpreted as +0 by the
+	string parser, use something like -0.001 for left justification
+	when using the cursor to locate the position.
+\item [{\tt QUARTER [N] } --] allows quick selection of a subsection of the current image.\\
+	{\tt QUARTER} is a short cut to selecting a quadrant of
+	the current image.  Rather than determining pixel ranges and
+	then calling {\tt SUBIMAGE},
+	{\tt QUARTER} allows the user to quickly set the
+	corresponding pixel range.  If the optional parameter {\tt N}
+	is present and set to 1, {\tt QUARTER} selects the lower
+	left quadrant; set to 2, the lower right; 3, the upper left;
+	and 4, the upper right.  {\tt QUARTER}, with any other
+	value for {\tt N} or if no argument is present, selects
+	the inner quarter of the current image.
+\item [{\tt RANGE [X1 X2 Y1 Y2] } --] limits the range over which to fit.\\
+	{\tt RANGE} permits a way to limit the data used by the
+	{\tt FIT} command.  By default, the
+	{\tt FIT} command uses all the data read by the most
+	recent call to the {\tt XCOLUMN}
+	and {\tt YCOLUMN} commands.
+	Specifying the limits in one direction restricts which data
+	will be used by the {\tt FIT} command.
+	If the limits in either direction are equal, then the fit is
+	unbounded in that direction.
+\item [{\tt READ fspec } --] reads plot commands from file ``fspec''.\\
+	{\tt READ} reads plot commands from a file and places
+	them in the command buffer.  Commands are not executed and macros
+	are ignored.  To execute the commands, see the command
+	{\tt PLAYBACK}; to define macros,
+	see the commands {\tt DEFINE} and
+	{\tt MACRO}.
+\item [{\tt RECT xmin xmax ymin ymax } --] draw a rectangle, using fill-area attributes.\\
+	{\tt RECT} is like the command
+	{\tt POLY} but draws a
+	rectangle bordered by the World (user) coordinate vertices
+	{\tt (XMIN, YMIN)} and {\tt (XMAX, YMAX)}.
+	{\tt RECT} uses the current
+	{\tt fill}, {\tt line style}, and
+	{\tt line color} characteristics.
+\item [{\tt RESET } --] full reset of the graphics state of the current plotting device.\\
+	{\tt RESET} executes a full reset of graphics state of the
+	current plotting device.  The coordinate transformation matrix is
+	reset to the default value (see the command
+	{\tt TRANSFER}); the current
+	angle is set to 0 (see the command
+	{\tt ANGLE}); the
+	tick mark interval and the number of minor tick marks is reset to 0
+	(see the command {\tt TICKSIZE}); the
+	image transfer function is reset to linear (see the command
+	{\tt ITF}); the text background color index
+	is set to transparent (see the command
+	{\tt BGCI}); and the
+	color, expand, fill, font, line style, and line width are all set
+	to 1 (see the commands {\tt COLOR},
+	{\tt EXPAND},
+	{\tt FILL},
+	{\tt FONT},
+	{\tt LSTYLE}, and
+	{\tt LWIDTH}).  Finally, the Palette
+	(see the command {\tt PALETTE}) is
+	reset to the default palette and the number of halftone levels is
+	reset to the maximum range possible for the current device.
+\item [{\tt RGB K red [green blue] } --] sets the color representation using the RGB system.\\
+	{\tt RGB} sets the color representation of color index
+	{\tt K} to the Red-Green-Blue values.  The range of values
+	for the color value inputs are [0 - 1], inclusive.  If only the
+	first two arguments are present, the {\tt RED} value is
+	also used to set the {\tt GREEN} and {\tt BLUE} values
+	(useful when creating just a gray scale).
+	If {\tt K} is larger than the maximum color index of the
+	device (use the command '{\tt echo cmin cmax}'
+	to display the color index range), then this call is ignored.
+\item [{\tt SCALE X [Y [K]] } --] sets the viewport size scale.\\
+	{\tt SCALE} allows the viewport (device) size scale to be
+	set based on the range of the World (user) coordinate range.  The
+	viewport is changed to the World range divided by the input scale
+	factor (i.e. {\tt X} and {\tt Y} are in World units h
+	per desired unit).  The optional parameter {\tt K} specifies
+	the desired conversion the two scale parameters will be performing
+	and scales as shown below:
+	\begin{verbatim}
+    K   X and Y are dimensioned as\dots
+---------------------------------------------------------------
+    0 : World (user) units per normalized device coordinate.
+    1 : World units per inch.
+    2 : World units per mm.
+    3 : World units per pixel.
+	\end{verbatim}
+	If {\tt K} is not present on the command line, then it is
+	set to 2.  The value of {\tt Y} may be omitted, in which
+	case it is set to the same value as {\tt X}.  However,
+	if a value other than {\tt K = 2} is desired, both
+	{\tt X} and {\tt Y} MUST be present.  If {\tt K}
+	is not one of the above accepted values, no conversion is performed.
+	Also, if either {\tt X} or {\tt Y} are less than
+	or equal to 0, no conversion is performed.  As an example,
+	if the limits of the current plot are 0 - 10 in the x-direction and
+	0 - 12 in the y-direction, {\tt scale 2 3 1} will produce
+	a viewport region 5x4 inches in size.  Hence, it is possible to
+	produce a viewport larger than the view size.
+\item [{\tt SET V EXPRESSION } --] sets the user variable {\tt V} to result of {\tt EXPRESSION}.\\
+	{\tt SET} sets the symbolic variable {\tt V} to the
+	result from evaluating the statement {\tt EXPRESSION}.
+	{\tt V} is a string variable if it is enclosed in
+	double quotes.  If {\tt V} is a string variable, then
+	{\tt EXPRESSION} represents the value to assign to the
+	variable (Example: '{\tt set "print" lpr -Pps}').  For
+	user and vector variables, {\tt EXPRESSION} may be a
+	simple syntax statement that will be evaluated.  Precedence in
+	the expression is ALWAYS left to right with the inner most set
+	of parenthesis evaluated first.  Hence
+	{\tt (5 * 3 + 2) != (2 + 3 * 5)} but {\tt ((5 * 3) + 2)}
+	does equal {\tt (2 + (3 * 5))}.  Currently, a maximum of
+	20 nested levels of parenthesis is permitted.  Also note that a
+	set of parenthesis is understood to mean ``(\,)'', ``[$\:$]'', or ``\{\,\}''.
+	At the most basic level, {\tt EXPRESSION} may just be an
+	item that is either a number, a pre-defined user variable, or a
+	vector element.  More complex {\tt EXPRESSION}'s may be
+	generated using the operators and functions listed below.  If
+	an item begins with '-', it is treated as a unary minus sign.
+	The current defined operations that act on two variables are:
+	\begin{verbatim}
+   +          add |  /         divide | max               maximum
+   -     subtract |  %  modulo divide | min               minimum
+   *     multiply |  \ integer divide |  **        exponentiation
+  ==     equal to |  >   greater than |  >= greater than or equal
+  != not equal to |  <      less than |  <=    less than or equal
+  ||   logical OR | &&    logical AND |   ^           logical XOR
+	\end{verbatim}
+	Note that {\tt min} and {\tt max} are used as
+	{\tt (a min b)} and {\tt (a max b)}.  Also, note
+	that logical operations return 1 if true; 0 if false.
+	Current pre-defined functions (i.e. f(x)) are:
+	\begin{verbatim}
+  sqrt(x)          square root |    abs(x)        absolute value
+   int(x)   integer truncation |   nint(x)           nearest int
+    ln(x)    natural logarithm |    log(x)     base-10 logarithm
+   exp(x) base-e antilogarithm |  log10(x)     base-10 logarithm
+   sin(x)      sine in radians |   sind(x)       sine in degrees
+  asin(x)   arcsine in radians |  asind(x)    arcsine in degrees
+	\end{verbatim}
+        The four types of sin functions apply just as well for the
+	four functions of cos and tan.
+	Note that either {\tt log(x)} or {\tt log10(x)}
+	may be used for the log base 10.  Many of the symbolic and user
+	variables are displayed using the {\tt SHOW}
+	command, where symbolic names are displayed in CAPS.  All other
+	variables can be displayed using the
+	{\tt ECHO} command.  All of the user
+	variable and vectors can then be used as arguments to any other
+	command.
+	NOTE: The macro arguments (\$1, \$2, \dots) may be redefined using
+	this command but only if the macro argument is a numeric user variable.
+\item [{\tt SHOW [what] } --] shows current limits and attributes.\\
+	{\tt SHOW} lists the values of some the symbolic and user
+	variables, including the current location and plot region limits
+	in World (user) and Viewport (device) coordinates, the value of
+	the expansion and angle variables, the line style and width, etc.
+	If no arguments are present, then everything below is displayed.
+	If the optional argument is present, then it represents a string
+	used to define what will be shown.  The options that are currently
+	available are:
+	\begin{verbatim}
+    B : Box attributes.
+    C : Coordinate system information.
+    D : Device, Printer, and Data file information.
+    G : Graphical attributes.
+    I : Image characteristics.
+    R : Register variables (\0 - \20).
+	\end{verbatim}
+	More than one option may be selected (e.g. '{\tt show bci}')
+	and unknown options are ignored.  The command
+	{\tt ECHO} may also be used to display
+	user variable values.
+\item [{\tt SLEVEL type [value] } --] sets the type and value used to scale contour levels.\\
+	{\tt SLEVEL} is used to change the {\tt TYPE} and
+	{\tt VALUE} used to scale the contour level array.
+	Initially, {\tt TYPE} (the user string variable "LEVTYPE")
+	is set to {\tt A} and {\tt VALUE} (the user variable
+	SLEVEL) is set to 1.0 so that no scaling is performed.
+	{\tt TYPE} may only be either {\tt A} or {\tt P}
+	(all other values are treated as {\tt A}) and defines the
+	type of contour scale factor.  If {\tt TYPE} is {\tt P},
+	then scaling is done by percentage; {\tt A} for absolute
+	scaling.  {\tt VALUE} represents how much the array will
+	be scaled.  For example, {\tt slevel P 1} will multiply
+	each contour level by 1\% of the image peak value.  Likewise,
+	{\tt slevel A 1E-4} would multiply each contour level
+	by 0.0001.  If the parameter {\tt VALUE} is not given,
+	{\tt SLEVEL} will not change.  The contour level array
+	affected is defined with the commands
+	{\tt LEVELS} or
+	{\tt AUTOLEVS}
+	and is altered internally every time the command
+	{\tt CONTOUR} is called.
+\item [{\tt STRING name [W1 [W2]] } --] sets a string variable ``name'' from a file.\\
+	{\tt STRING} allows certain string variables to be
+	redefined using data in an external file.  {\tt STRING}
+	reads one line (see the commands {\tt DATA}
+	and {\tt LINES}) and assigns the string
+	starting with word {\tt W1} and ending with {\tt W2}
+	to the string variable {\tt NAME}.  If {\tt W1} is
+	omitted or set to 0, the entire line is assigned.  If {\tt W1}
+	is greater than 0, it represents the starting word of the
+	assignment.  If {\tt W2} is not present, it is set to the
+	value of {\tt W1}.  If {\tt W2} is set to 0, it
+	corresponds to the end of the line; if it less than zero, the
+	absolute value represents the number of words to read; if it
+	is greater than zero, it specifies the last word to read.
+	\par 
+	Currently, the pre-defined string variables are: XBOX and YBOX
+	(which are the default X and Y arguments for a call to the
+	command {\tt BOX} and are initially
+	set to ``BCNST'' and ``BCNSTV'', respectively); PRINT (which is
+	the default print command to spool a plot when the command
+	{\tt HARDCOPY} or
+	{\tt PHARD} is used); and
+	HELPFILE (which is the full name of the help file).  Other
+	pre-defined string names include XHEADER and YHEADER (see
+	the command {\tt HEADER}) and LEVTYPE
+	(see the command {\tt SLEVEL}).  New
+	string variables may be defined using the
+	{\tt NEW} command, released with the
+	command {\tt FREE}, and may also be
+	assigned to using the {\tt SET} command.
+\item [{\tt SUBIMAGE xmin xmax ymin ymax } --] sets the index range of a subimage.\\
+	{\tt SUBIMAGE} allows the user to specify the indices
+	of a subimage read by the {\tt IMAGE}
+	command.  When {\tt IMAGE} reads in
+	a new image, the minimum values are set to 1 and the maximum
+	values are set to the number of pixels in the X and Y directions
+	(user variables NX and NY).  Use this command to select a subportion
+	of the image by entering the starting and ending pixels of
+	interest.  Using the command {\tt HEADER}
+	after the command {\tt SUBIMAGE} will
+	reset the limits of the plot region (World coordinates) to the
+	entire subimage region selected.
+\item [{\tt SUBMARGIN xmarg [ymarg] } --] sets the gap between individual panels.\\
+	{\tt SUBMARGIN} may be used to fix the gap size between
+	individual frames when using the command
+	{\tt PANEL}.  The gap between
+	individual panels is controlled by the user variables
+	XSUBMAR and YSUBMAR (which are initially set to 2 in character
+	height units).  This command is a convenience function to
+	facilitate setting these variables.  The arguments {\tt XMARG}
+	and {\tt YMARG} are used to set each of the two user variables.
+	If this command is called with only one argument, it is used to
+	set both XSUBMAR and YSUBMAR.
+\item [{\tt SYMBOL N } --] sets the current point symbol to {\tt N}.\\
+	{\tt SYMBOL} causes points to be drawn as the symbol
+	{\tt N}, where {\tt N} refers to the graph marker
+	or a Hershey symbol number.  The symbol number corresponds to
+	the type of symbol drawn.  If the symbol number is -1, it
+	draws a dot of the smallest possible size.  If the symbol number
+	is between 0 and 31, it corresponds to a set of pre-defined symbols;
+	between 33 and 127, it corresponds to the ASCII character in the
+	currently selected font; and larger than 127, corresponds to the
+	Hershey symbol of the same number.
+\item [{\tt TICKSIZE XTICK NXSUB YTICK NYSUB } --] sets tick intervals for the {\tt BOX} command.\\
+	{\tt TICKSIZE} determines tick intervals for the command
+	{\tt BOX}.  The argument {\tt NXSUB}
+	refers to the number of intervals between major tick marks on
+	the X-axis and {\tt XTICK} refers to the interval between
+	large ticks in World (user) coordinates.  If {\tt XTICK}
+	or {\tt NXSUB} are 0, the box routine will supply it's
+	own intervals according to the World coordinate limits (at
+	least 3 major tick marks).  Likewise for {\tt NYSUB} and
+	{\tt YTICK}, except for the Y-axis.  Setting
+	{\tt NXSUB} or {\tt NYSUB} to 1 will inhibit any
+	minor tick marks regardless of the arguments to the
+	{\tt BOX} command.
+\item [{\tt TRANSFER T1 T2 T3 T4 T5 T6 } --] specifies the image coordinate transformation.\\
+	{\tt TRANSFER} specifies the coordinate transformation
+	between indices I and J of the image array and World (user)
+	coordinates.  All two dimensional plot commands (for example,
+	{\tt CONTOUR} or
+	{\tt HALFTONE}) require a
+	coordinate transformation function to place the image on the
+	plot surface.  The World coordinates (X, Y) of the array point
+	(I, J) are related by:
+	\begin{verbatim}
+    X = T1 + (T2 * I) + (T3 * J)
+    Y = T4 + (T5 * I) + (T6 * J)
+	\end{verbatim}
+	Usually {\tt T3} and {\tt T5} are zero unless
+	the coordinate transformation involves a rotation or sheer.
+	The default transformation is (0, 1, 0, 0, 0, 1).  Calling
+	{\tt TRANSFER} with no arguments resets the array to
+	these default values.  Usually, the command
+	{\tt HEADER} is used to set the
+	transformation matrix.
+\item [{\tt VECTOR [ANGLE [VENT]] } --] Draws a vector field as a sequence of arrows.\\
+	{\tt VECTOR} draws a vector field as a number of arrows.
+	The tails of the arrows lie at points (x,y) read by
+	{\tt XCOLUMN} and
+	{\tt YCOLUMN}, the lengths of the
+	arrows "r" are read by {\tt PCOLUMN}
+	and the direction of the arrow (counter-clockwise from +X in
+	degrees) is read with {\tt ECOLUMN}.
+	See the command {\tt ARROW} for a
+	description of the optional parameters {\tt ANGLE} and
+	{\tt VENT}.
+	NOTE: The use of {\tt PCOLUMN}
+	in this context requires {\tt SYMBOL}
+	to be re-executed before plotting points.
+\item [{\tt VIEWPORT VX1 VX2 VY1 VY2 } --] sets the physical location of the plot.\\
+	The plot region is a rectangle within the coordinates allowed
+	by the plotting device (for example, the Viewport is the region
+	where the command {\tt BOX} will draw its grid).
+	Vectors and points are truncated at the edge of this plot region.
+	{\tt VIEWPORT} specifies (in normalized device coordinates)
+	where the plot region is located.  Viewport arguments for this
+	command range from 0 to 1, inclusive, in each direction for all
+	devices.  Note that the command {\tt VSTAND}
+	is called to reset the Viewport coordinates every time a new
+	device is opened.
+\item [{\tt VSIZE VX1 VX2 VY1 VY2 } --] sets the physical location of the plot in inches.\\
+	{\tt VSIZE} specifies (in inches) where the plot region
+	is located.
+	See also the {\tt VIEWPORT} command.
+\item [{\tt VSTAND } --] sets the standard (default) viewport.\\
+	{\tt VSTAND} defines the standard viewport scale.
+	Currently, this is a box with margins on each side of about
+	4 character heights.  This command is executed every time a
+	new device is chosen.
+	See also the {\tt VIEWPORT} and
+	{\tt VSIZE} commands.
+\item [{\tt WEDGE SIDE DISP THICK [MIN MAX BOXARG] } --] draws a halftone wedge.\\
+	{\tt WEDGE} illustrates the range of values drawn by
+	the halftone command.  The {\tt SIDE} argument is
+	used to specify the size and orientation of the wedge.
+	The parameter {\tt SIDE} must be either
+	`B', `L', `T', or `R' to specify the Bottom, Left, Top, or Right
+	side of the viewport.  The {\tt DISP} argument specifies
+	the displacement from the frame edge (in character height
+	units).  If {\tt DISP} is negative, then the wedge is
+	drawn inside the viewport.  The parameter {\tt THICK}
+	is the thickness of the wedge (in character height units).
+	The optional arguments {\tt MIN} and {\tt MAX}
+	allow the user to specify the intensity range of the wedge.
+	By default, {\tt MIN} and {\tt MAX} are the
+	values used by the most recent call to the
+	{\tt HALFTONE} command.
+	Providing the values of {\tt MIN} and {\tt MAX}
+	will cause {\tt WEDGE} to display a different range
+	of intensities when labeling the wedge box.  The optional
+	argument {\tt BOXARG} permits the user to control how
+	the box around the wedge is drawn (or omit it altogether).
+	By default, a simple box is drawn setting {\tt BOXARG}
+	to BCSTN/M (depending on the orientation); to eliminate the box,
+	set {\tt BOXARG} to 0 (for more information on permitted
+	box arguments, see the {\tt BOX} command).
+	The arguments from the most recent call to the
+	{\tt TICKSIZE} command are used
+	to draw a box around the wedge and numerically label it.
+	To use the optional {\tt BOXARG} argument, the
+	{\tt MIN} and {\tt MAX} arguments must be provided.
+\item [{\tt WINADJ [xmin xmax ymin ymax] } --] sets limits and viewport to same aspect ratio.\\
+	{\tt WINADJ} changes the World (user) limits and
+	adjusts the viewport so that the World coordinate scales are
+	equal in x and y.  If the four optional parameters are present,
+	they are used as the new World coordinate values; otherwise,
+	the minimum and maximum values of the
+	{\tt XCOLUMN} and
+	{\tt YCOLUMN} arrays are used.
+	Typical usage is (after an image is loaded) to rescale the
+	viewport so that the image has the proper aspect ratio.
+	For example, using the command '{\tt winadj 0 nx 0 ny}'
+	after the {\tt IMAGE} command BUT
+	before the {\tt HEADER} command
+	will produce square pixels.
+\item [{\tt WRITE fspec xxx } --] writes macro {\tt xxx} to file "fspec".\\
+	{\tt WRITE} the commands making up a macro to a file.
+	If the macro name {\tt XXX} given is {\tt all},
+	all macros currently defined and the entire command buffer
+	({\tt BUFFER}) are written to the
+	file.  If the macro name {\tt XXX} is {\tt macros},
+	then only the currently defined macros are written to the file
+	(i.e. the command buffer {\tt BUFFER}
+	is not written).  Otherwise, {\tt XXX} represents a list
+	of macro names to be written in the output file.
+	NOTE: This command will OVERWRITE any currently existing file.
+\item [{\tt XCOLUMN N } --] reads X data from column {\tt N} of the current file.\\
+	{\tt XCOLUMN} reads column {\tt N} from the
+	data file as the values of the X coordinates of the data points.
+\item [{\tt XLABEL str } --] writes the label {\tt STR} centered under the X axis.\\
+	{\tt XLABEL} writes a string centered under the
+	X axis drawn by the command {\tt BOX}.
+	Also see the command {\tt MTEXT}.
+\item [{\tt YCOLUMN N } --] reads Y data from column {\tt N} of the current file.\\
+	{\tt YCOLUMN} reads column {\tt N} from the
+	data file as the values of the Y coordinates of the data points.
+\item [{\tt YLABEL str } --] writes the label {\tt STR} centered left of the Y axis.\\
+	{\tt YLABEL} writes a string centered left of the Y axis
+	drawn by the command {\tt BOX}.  Also
+	see the command {\tt MTEXT};
+	especially if the displacement of the text is insufficient to
+	avoid the axis numbers.
