@@ -1,0 +1,12 @@
+viewport 0.2 0.8 0.3 0.8   # Set the viewport.
+data data.dat              # Open the data file.
+xcolumn 1                  # Read the x data from column 1.
+ycolumn 2                  # Read the y data from column 2.
+pcolumn 3                  # Read the symbol data from column 3.
+limits 0 10 0 20           # Set world coordinates.
+box bcnst bcnst            # Draw a box.
+xlabel (x)
+ylabel (y)
+mtext T 2 0.5 0.5 A Simple Graph
+points                     # Draw symbol for each point.
+connect                    # Connect the points.
