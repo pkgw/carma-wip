@@ -102,6 +102,13 @@
 #         : library search path of the system loader will be used.
 #         : The libraries accessed are: "-lreadline -ltermcap".
 #
+#  -ccmalloc path
+#         : The value of "path" specifies the directory of the
+#         : ccmalloc library archive.  If the ccmalloc library is
+#         : installed on your machine, it will help debugging memory
+#         : leaks. See ccmalloc for more details. Typically on linux
+#         : "-lg2c -lccmalloc -ldl"
+#
 #  -host host
 #         : The value of "host" specifies the name of the host machine.
 #         : If this option is not used, an attempt is made to find the
@@ -198,6 +205,8 @@
 #    01mar96 jm  Added -lm to hpux default.  Also changed double quotes
 #                around literals to single quotes.
 #    16aug96 jm  Added -lgl to sgi default libraries.
+#    20sep99 pjt Some more modern linux suggestions (-lg2c)
+#     2dec00 pjt ccmalloc now an optional build flag
 #--
 #
 #  Set up some "standard" defaults.
@@ -220,11 +229,13 @@ unset wipbin
 unset wipxlib
 unset wipslib
 unset readlinedir
+unset ccmallocdir
 unset wiphost
 set dodebug = 0
 unset wipobj
 set dostatic = 0
 set ccname = 'cc'
+set fcname = 'f77'
 set copts = ""
 set linkopts = ""
 #
@@ -266,9 +277,15 @@ while ($#argv > 0)
   else if ("$argv[1]" == '-cc') then
     shift
     set ccname = "$argv[1]"
+  else if ("$argv[1]" == '-fc') then
+    shift
+    set fcname = "$argv[1]"
   else if ("$argv[1]" == '-copts') then
     shift
     set copts = "$copts $argv[1]"
+  else if ("$argv[1]" == '-ccmalloc') then
+    shift
+    set ccmallocdir = "$argv[1]"
   else if ("$argv[1]" == '-linkopts') then
     shift
     set linkopts = "$linkopts $argv[1]"
@@ -280,8 +297,10 @@ while ($#argv > 0)
     echo '  -wip dir     -pgplot path    -lib dir    -bin dir    -obj dir'
     echo '  -xlib path   -slib path      -readline path'
     echo '  -copts compile_options       -linkopts link_options'
+    echo '  -ccmalloc ldirs'
     echo '  -debug       -static'
     echo '  -cc name'
+    echo '  -fc name'
     echo '  -host host'
     echo 'where host must be one of:'
     echo "${hostList}"
@@ -473,6 +492,11 @@ if ($?readlinedir != 0) then
       set moreargs = "${moreargs}:${i}"
     end
 endif
+
+if ($?ccmallocdir != 0) then
+#    set f77lib = ( $f77lib -lg2c -lccmalloc -ldl)
+    set f77lib = ( $f77lib $ccmallocdir)
+endif
 #
 #  Set up compile commands for Fortran and C code.
 #
@@ -482,7 +506,7 @@ unset theF
 set cFlags = "$copts"
 if ("$wiphost" == 'sun') then
     set doranlib = 1
-    set theM = 'f77 -xl -u'
+    set theM = "$fcname -xl -u"
     if ($dodebug > 0) then
       set theM = "$theM -g"
       set cFlags = "$cFlags -g"
@@ -491,7 +515,7 @@ if ("$wiphost" == 'sun') then
       set cFlags = "$cFlags -O"
     endif
 else if ("$wiphost" == 'solaris') then
-    set theM = 'f77 -xl -u'
+    set theM = "$fcname -xl -u"
     if ($dodebug > 0) then
       set theM = "$theM -g"
       set cFlags = "$cFlags -g"
@@ -511,7 +535,7 @@ else if ("$wiphost" == 'convex') then
       set cFlags = "$cFlags -O1 -Dconvex"
     endif
 else if ("$wiphost" == 'sgi') then
-    set theM = 'f77 -backslash -u'
+    set theM = "$fcname -backslash -u"
     set f77lib = ( $f77lib -lgl )
     if ($dodebug > 0) then
       set theM = "$theM -g"
@@ -522,10 +546,13 @@ else if ("$wiphost" == 'sgi') then
     endif
 else if ("$wiphost" == 'i386-linux') then
 #  For Linux, f77 is a shell script which runs f2c.
+#  on more modern g77 based ones you should link with g2c, not f2c 
     set doranlib = 1
     set doliblm = 1
-    set f77lib = ( $f77lib -lf2c )
-    set theM = 'f77 -u'
+#    set f77lib = ( $f77lib -lf2c )
+   set f77lib = ( $f77lib -lg2c )
+#    set f77lib = ( $f77lib -lg2c -lccmalloc -ldl)
+    set theM = "$fcname -u"
     if ($dodebug > 0) then
       set theM = "$theM -g"
       set cFlags = "$cFlags -g -Dlinux"
@@ -535,7 +562,7 @@ else if ("$wiphost" == 'i386-linux') then
     endif
 else if ("$wiphost" == 'osf') then
     set doranlib = 1
-    set theM = 'f77 -u -nofor_main'
+    set theM = "$fcname -u -nofor_main"
     if ($dodebug > 0) then
       set theM = "$theM -g"
       set cFlags = "$cFlags -g -DOSF"
