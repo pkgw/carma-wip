@@ -1,0 +1,99 @@
+<HTML>
+<HEAD>
+<TITLE>WIP Version 1.6 Changes</TITLE>
+</HEAD>
+
+<BODY>
+<H1>WIP Version 1.6 Changes</H1>
+
+This version reflects corrections and enhancements to WIP (Version 1.6):
+
+<OL>
+  <LI> The command STRING has changed its meaning.  Before version 1.6,
+     STRING set the string variable to the rest of the string.  As of
+     version 1.6, there are two methods of setting the value of string
+     variable: using the SET and STRING commands.  The SET command sets
+     the string to the rest of the of the command line (like the old
+     STRING command did) and the STRING command read N words from an
+     external file (with a possible starting offset).
+
+  <LI> The commands NEW and FREE have been modified to allow string
+     variables to be defined and released.  The syntax for creating
+     a string variable is enclose the string variable in double
+     quotes (") when declaring it in the NEW command.  String variables
+     defined this way and used in other commands (including FREE) do
+     not need the quotes.  For example, the following
+     <PRE>
+       WIP> new "mystring"
+       WIP> set mystring some sort of text
+       WIP> echo "mystring = " mystring
+       WIP> free mystring
+     </PRE>
+     are legal commands.
+
+  <LI> The command FIT has been added.  Currently, there are two methods
+     of fitting the data read by the XCOLUMN and YCOLUMN commands: the
+     least squares and median fit methods.  The parameters returned from
+     the fit may be assigned to user specified user variables.
+
+  <LI> The commands AITOFF and GLOBE have been added.  The command AITOFF
+     converts longitude (X) and latitude (Y) values into coordinates
+     useful in Aitoff projections.  The GLOBE command draws a grid
+     outline of an Aitoff globe.
+
+  <LI> A new command INITIALIZE permits vector variables to be reset to a
+     new value and (filled) size.  Setting the fill size to 0
+     effectively empties the vector array.
+
+  <LI> The IF command was modified to permit the LOOP command to be
+     executed following a truthful condition.
+
+  <LI> The POINTS command was modified to allow the values from the most
+     recent call to PCOLUMN to determine the color of each point.
+
+  <LI> A histogram routine was added as an option to the BIN command which
+     permits gaps and reverses in the data to be avoided (MCHW).
+
+  <LI> The command WEDGE was corrected so the user can specify a minimum
+     or maximum that agrees with the halftone command.  In addition, the
+     overall minimum and maximum may be set to some other value than the
+     current image's minimum and maximum.
+
+  <LI> All references (except within #ifdef TEST code) to exit() have
+     been replaced by a call to wipexit().  Now all terminal I/O resides
+     within sysdep*/inoutput.c.
+
+  <LI> A new breed of function has been added: vector argument functions.
+     This function type requires a vector variable name as its only
+     argument and acts on the entire variable.  Currently, the only
+     function is npts() which returns the number of points currently
+     defined in the vector.
+
+  <LI> Routine wippackint() was modified to allow string variables to be
+     expanded as well as user variables.
+
+  <LI> The subdirectory /variables has been modified considerably.  This
+     was done to break up the user, vectors, and string variables into
+     individual routines.  This also involved a split of the respective
+     include files.  This should make the individual items more
+     compartmental (i.e. C++-like).  This also includes the removal of
+     the file wipvarinit.c as it is no longer needed (initialization of
+     each type of variable is done whenever a type is accessed for the
+     first time).
+
+  <LI> Changed many of the routines from return type void to int where the
+     integer returned is now used as a status flag.  This removed many
+     of the LOGICAL error parameters passed.  While this may make the
+     code a bit less readable, the consistent use of this technique may
+     make just as much sense in the long run.
+
+  <LI> Error messages were improved in interact/command.c and plot/set.c.
+
+  <LI> Substantial changes to the manual including a new appendix of
+     frequently asked questions and answers.  A new example figure was
+     also added which demonstrates how to specify the Hershey symbols
+     and their corresponding numbers.
+</OL>
+
+</BODY>
+</HTML>

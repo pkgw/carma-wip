@@ -1,0 +1,77 @@
+<HTML>
+<HEAD>
+<TITLE>WIP Version 1.7 Changes</TITLE>
+</HEAD>
+
+<BODY>
+<H1>WIP Version 1.7 Changes</H1>
+
+This version reflects corrections and enhancements to WIP (Version 1.7):
+
+<OL>
+  <LI> Upgraded required PGPLOT level to 4.9G.
+
+  <LI> Modified interact.c to permit exact matches to a command/macro
+     name.  The exact match method precedes the minimum match algorithm.
+     Hence, similar macro names like `macro1' and `macro12' should now
+     be able to be separated.  (I hope I haven't opened a can of worms....)
+
+  <LI> An error associated with empty file reads in wipexecute() has been
+     fixed.  The mistake was that the number of points in an array was
+     not reset on every call so the previous value was retained.
+
+  <LI> readata.c has been modified to check for zero length files (i.e.
+     empty files).  Also, error messages have been fixed in readcol()
+     to correctly display the entire input line in error messages.
+
+  <LI> Moved definitions of HEAD/BUFFER/ENDIF in vocab.h to extern
+     declarations (i.e. allusions) and added definitions to wipinit.c.
+     This was to remove archive-time errors for MIPS.
+
+  <LI> Fixed a SEG error in ifxecute.c that was happening if the closing
+     brace was not present in the command.
+
+  <LI> Added Gaussian fitting to the FIT command.
+
+  <LI> Added LOGARITHM command and started to remove X/YLOGARITHM
+     commands.  The LOGARITHM command now operates on any vector or the
+     current image.  The X/YLOGARITHM commands still work, but print
+     a warning to the user to use the new command and warns that the
+     next release will remove these two commands.
+
+  <LI> Added code to permit optional addition of the READLINE library
+     and commands.  This also included a modification to the make script.
+
+  <LI> Fixed bug in macro definition which wasn't creating a case-independent
+     macro name (i.e. the name is now forced lower case).
+
+  <LI> Added "new" and "free" commands to list of permitted entries in
+     the user's .wipinit file.
+
+  <LI> Modified the basic number reader to be able to handle Fortran's
+     D-exponential format for double precision numbers.
+
+  <LI> Modified the number formatter (wipfpfmt) so that fractions like
+     0.1 and 0.2 (and smaller) both format the same.
+
+  <LI> Modified makewip script for use with Solaris.  Also modified the
+     makewip script to not recursively call itself.  The control flow
+     should be a bit quicker now since it does not need to create child
+     shells over and over.  Also added the READLINE, CCNAME, and WIPOBJ
+     environment variables.
+
+  <LI> Added ability to minmax command to force recalculation of the
+     min/max of images.
+
+  <LI> Rewrote all image drivers to use level 3 I/O subroutines rather
+     than the level 2 routines.
+
+  <LI> Moved opaque pointers from type (char *) to (Void *).  Void has
+     been properly typedef'd based on STDC status.
+
+  <LI> Added "-g" command line option.  Currently, this only affects
+     the image drivers.  In time this should expand.
+</OL>
+
+</BODY>
+</HTML>

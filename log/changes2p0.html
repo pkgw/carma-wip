@@ -1,0 +1,121 @@
+<HTML>
+<HEAD>
+<TITLE>WIP Version 2.0 Changes</TITLE>
+</HEAD>
+
+<BODY>
+<H1>WIP Version 2.0 Changes</H1>
+
+This version reflects corrections and enhancements to WIP (Version 2.0):
+
+<OL>
+  <LI> Upgraded; requires PGPLOT level 5.0.  This involved changes to the
+     calls to the cpg*() routines to use the (new) PGPLOT 5.0 cbindings.
+     This also includes the removal of the cpgsrc directory (and the
+     cpgsrc.h include file).
+
+  <LI> Modified vectors.c to check for a closing brace; avoids a
+     segmentation error.
+
+  <LI> Modified wipmain.c and readinput.c to permit system calls in input
+     files; also restricted macro file reader to skip them.
+
+  <LI> Fixed a bug in execute.c which limited the maximum contour level
+     array size to one less than the maximum (thanks to Scott Foster).
+
+  <LI> Fixed a bug in aitoff.c which caused the globe to appear rotated
+     by 90 degrees.
+
+  <LI> Changed name of mmath.h to wipmath.h and put #ifndef around PI
+     declartion as PI may be defined in some math.h include files
+     (thanks to Gary Fuller).
+
+  <LI> Changed the name of the first argument of process.c (and declare.h)
+     from "inline" to "cmdline" since the former is a gcc reserved word
+     (thanks to Gary Fuller).
+
+  <LI> Modified makewip to add the new hosttype i386-linux.  Since
+     Linux does not have a Fortran compiler, f77 needs to be defined
+     as a shell script which runs f2c.  Also needs to link with the
+     f2c libraries (thanks to Gary Fuller).
+
+  <LI> Fixed a few bugs in the gaussian fitting portion of linefit.c.
+     The command was expecting "gaussfit" but the help file said
+     "gaussian" should be input.  The input now agrees with help file
+     (i.e. "gaussian").  Also, the amplitude was always suppose to be
+     fit; a bug was trapping the width, not the amplitude.  Also, a
+     bug that would cause an infinite loop has been fixed.  The routine
+     still has difficulty with input arrays of very large amplitude
+     numbers; scaling the numbers on input would help but this would
+     impact the input array unless additional storage is reserved.
+
+  <LI> Modified getimage() in image.c to notify user if the requested plane
+     number is not in the range [1,NZ] and what plane will be used instead.
+
+  <LI> Modified inoutput.c to use variable arguments eliminating the need
+     for more than one wipoutput*() routine.  This meant the addition of
+     the stdarg/varargs include files in wipdefs.h.  The other wipoutput*()
+     routines have been replaced by calls to wipoutput() and the other
+     routines have been removed.
+
+  <LI> Added the command line options '-r' and '-b'.  Both are used only
+     when WIP is compiled with the READLINE option.  The '-r' flag can
+     be used to suppress the writing of the READLINE history file.  The
+     '-b' flag dynamically suppresses the READLINE functionality altogether.
+     This required modifications to inoutput.c to reflect the addition
+     of the command line options.
+
+  <LI> Removed obsolete commands xlogarithm/ylogarithm (these were replaced
+     by the commands "logarithm x" and "logarithm y", respectively).
+
+  <LI> Modified the call to the bar command to permit user specified limits.
+     One limit, when present, replaces the box edge as the threshold of
+     the bar.  The other replaces the "width" as the mean between
+     adjacent points to the user specified value.
+
+  <LI> Modified phard() to set and reset the "hardcopy" variable.
+
+  <LI> Modified wipdevice() to reset the transfer function to the default.
+     This fixes a bug that created errors in halftones (fatal in
+     PostScript) if the transfer was not set by the user before calling
+     the halftone command.
+
+  <LI> Modified lookup function to call new color table interpolating
+     routine (PGCTAB.F).
+
+  <LI> Added new function palette to select a color table.  This also
+     permits the number of colors to be specified to be used when
+     displaying palette.
+
+  <LI> Added new functions bgci and itf to set the text background color
+     index and the image transfer function, respectively.
+
+  <LI> Added new variable cursmode which controls the type of rubber band
+     drawing function used in cursor mode.
+
+  <LI> Complete rewrite of makewip script removing need for environment
+     variables; these values have been changed to command line arguments.
+     Also removed "-o file" directive since this should really only be
+     used to redirect the final executable.
+
+  <LI> Macros can now be overwritten; this is now the default if someone
+     redefines a macro.  A message is sent to the screen when a macro is
+     redefined.  Only exact matches are overwritten.
+
+  <LI> Command name errors within macro definitions are now complained about.
+
+  <LI> Wedge command rewritten to use new PGPLOT routine.  It now uses the
+     same window positioning as the mtext command.
+
+  <LI> Modified readata.c to allow infinitely large tmp files and changed
+     how LINE2 is defined; so if it is 0, it uses the array's maximum size.
+
+  <LI> Added IEEE byte swapping to unpack.c.  This permits images with
+     (at least) the Linux and Alpha machines.
+
+  <LI> Modified spool routine to return immediately (don't issure any
+     system command) if the print string is empty or is equal to "ignore".
+</OL>
+
+</BODY>
+</HTML>

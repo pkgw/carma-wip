@@ -1,0 +1,83 @@
+<HTML>
+<HEAD>
+<TITLE>WIP Version 1.5 Changes</TITLE>
+</HEAD>
+
+<BODY>
+<H1>WIP Version 1.5 Changes</H1>
+
+This version primarily reflects corrections and enhancements to WIP:
+
+<OL>
+  <LI> The commands NEW and FREE have been enhanced to allow multiple user
+     variables to appear in one command.  This means that NEW vectors
+     are defined as "NEW VEC[SIZE]" rather than as "NEW VEC [SIZE]"
+     (ie. the size is still enclosed in brackets, but now is not a
+     separate argument but appended on the end of the name).  These
+     commands have also been changed so that they are automatically
+     inserted into the command BUFFER.  This is because if a user
+     created a new variable interactively and then called FREE and then
+     PLAYBACK, the variable would no longer exist and cause an error.
+
+  <LI> The command ECHO have been enhanced to permit multiple user
+     variables to be displayed on the same line.  In addition, arbitrary
+     strings may also be displayed along with the user variables.
+     Arbitrary strings are delimited by a set of double quotes.
+
+  <LI> The command HEADER was modified to expand the pixel range by 1/2
+     in each direction along each axis.  This is to account for pixel
+     size and to make sure that the entire pixel is displayed.  By doing
+     this, when an entire image is displayed, the contour lines will not
+     reach the edges of the box.
+
+<P>
+     The command HEADER was also modified to get the header information
+     from user variables rather than the image header.  When an image is
+     loaded, the header items CRVALX/Y, CRPIXX/Y, and CDELTX/Y are read
+     from the header (if possible) and are then stored as user variables
+     of the same name.  For BASIC images (or images with no header
+     information), the user may use the command SET to assign values to
+     these variables and then call HEADER to properly set up the
+     transfer function and the World limits.
+</P>
+
+  <LI> The command ARC was drawing in different directions depending on
+     the orientation of the World coordinates.  There was no easy way to
+     always make the angle increase counter-clockwise, so it has been
+     changed to use the following convention:  All angles are presented
+     in degrees and are defined as zero along the POSITIVE X-axis and
+     increases towards the POSITIVE Y-axis.
+
+  <LI> A new command WEDGE has been added which will fill the entire
+     viewport with a halftone ramp.  Commands such as BOX may follow
+     this command to annotate the ramp.
+
+  <LI> A new command SLEV, new user variable SLEVEL, and new string
+     variable LEVTYPE have been added to permit contour level scaling.
+     The scaling does not affect the array filled by the commands LEVELS
+     and AUTOLEVS.  Instead, when the command CONTOUR is called, a local
+     array is filled with the LEVELS array scaled properly and this
+     array is passed to the contour routine.
+
+  <LI> A new user variable called HARDCOPY has been added which is 1 if
+     the current device is a hardcopy unit; 0 if it is interactive.
+     This variable is set every time the command DEVICE is called and
+     is provided to test the type of device.
+
+  <LI> Whenever a device is changed, the command PANEL is reset.  This was
+     done to make sure that the next call to PANEL would not use the
+     previous device's viewport range.
+
+  <LI> A new command HI2D has been added.  This stacks histograms of an
+     image.  Not much to look at.  A better routine would be a surface plot.
+
+  <LI> The command SHOW was modified to accept an optional string argument
+     that will control what is shown.  This helps to control what is
+     shown on the display to what is actually needed.  If this becomes
+     widely used, then some sort of string variable will probably be
+     needed to act as a default.  Currently, no argument is the same as
+     the old SHOW (show everything).
+</OL>
+
+</BODY>
+</HTML>
