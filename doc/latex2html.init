@@ -1,0 +1,162 @@
+#
+#  This removes the machine dependent nature of the return address.
+#
+$ADDRESS = "<I>morgan\@astro.umd.edu<BR>\n$address_data[2]</I>";
+
+#
+#  This keeps wip.sty from being included (it has some TeX stuff in it).
+#
+$DONT_INCLUDE .= ":wip";
+
+#
+# The call to prefigs is done to increase the split depth so
+# sections are added to the appendix listing.
+#
+# Because verbatim entries are also written to the TMP file, I
+# need the call to postfigs to flush out the associated array %verbatim.
+#
+sub do_cmd_prefigs {
+    ++$MAX_SPLIT_DEPTH;
+    ''; # So the value of MAX_SPLIT_DEPTH are ignored....
+}
+
+sub do_cmd_postfigs {
+    &read_mydb(*verbatim, "verbatim");
+    ''; # So the contents of read_mydb are ignored....
+}
+
+# Uses $texfilepath defined in sub driver
+sub get_real_filename {
+    local($infile) = @_;
+    local($fullfile);
+    local($path, $file) = &get_full_path($infile);
+
+    if (-f "$path/$file") {
+       $fullfile = "$path/$file";
+    } elsif (-f "$texfilepath/$infile") {
+       $fullfile = "$texfilepath/$infile";
+    } else {
+       $fullfile = "$infile";
+    }
+    $fullfile;
+}
+
+#  Calls sub pre_process and slurp_input.
+#  Uses $next_pair_pr_rx.
+sub do_cmd_fileverbatim {
+    local($_) = @_;
+    local($rest) = $_;
+    local($fullfile, $string);
+
+    $rest =~ s/$next_pair_pr_rx//o;
+    $fullfile = &get_real_filename($2);
+
+    if (-e $fullfile) {
+       print "\nReading Verbatim file $fullfile ...";
+
+       $string = "\\begin{rawhtml}\n<PRE>\n";
+       $string .= &slurp_input($fullfile);
+       $string .= "</PRE>\n\\end{rawhtml}\n";
+       $_ = $string;
+       &pre_process;
+       join('',$_,$rest);
+    } else {
+       $rest;
+    }
+}
+
+#  Uses $next_pair_pr_rx.
+sub do_cmd_esc {
+    local($_) = @_;
+    local($rest) = $_;
+    $rest =~ s/$next_pair_pr_rx//o;
+    join('',"\\",$&,$rest);
+}
+
+#  Calls sub do_cmd_label.
+sub do_cmd_mylabel {
+    &do_cmd_label(@_);
+}
+
+#  Uses $next_pair_pr_rx.
+#  Calls sub mark_string.
+sub do_cmd_wipplot {
+    local($_) = @_;
+    local($rest) = $_;
+    local($arg, $fullfile);
+
+    $rest =~ s/$next_pair_pr_rx//o;
+    $arg = $2;
+    $fullfile = &get_real_filename("Examples/$arg.ps");
+
+    if (-e $fullfile) {
+      $_ = "\\epsfbox{$fullfile}";
+    } else {
+      $_ = <<'EOS';
+\begin{center}
+To generate this plot, move to the examples directory \\
+({\tt {\em \wip main}/doc/Examples}) and use the command: \\
+\% {\tt \wip .csh FILEARG}
+\end{center}
+EOS
+      s/FILEARG/$arg/o;
+    }
+
+    &mark_string;
+    join('',$_,$rest);
+}
+#
+#  This is just like &do_env_description() except it provides a default
+#  label and forces COMPACT.
+#
+sub do_env_wiplist {
+    local($_) = @_;
+    $* = 1;               # Multiline matching ON
+    s/$item_description_rx/<DT>$1\n<DD>/g;
+    # and just in case the description is empty ...
+    s/\\item$delimiter_rx/<DT>WIP;SPM_gt;<DD>$1/g;
+    $* = 0;               # Multiline matching OFF
+    "<DL COMPACT>$_ \n </DL>";
+}
+
+#
+#  The following makes latex2html ignore these spacing commands.
+#
+&ignore_commands(<<_IG_CMDS_);
+nonstopmode
+cleardoublepage
+clearevenpage
+wip # \$_ = join('','WIP',\$_)
+wipp # \$_ = join('','WIP&gt; ',\$_)
+wipd # \$_ = join('','DEFINE&gt; ',\$_)
+wipi # \$_ = join('','INSERT&gt; ',\$_)
+wipinit # \$_ = join('',"<CODE>\.wipinit <\/CODE>",\$_)
+eg # \$_ = join('',"<EM>e\.g\. <\/EM>",\$_)
+ie # \$_ = join('',"<EM>i\.e\. <\/EM>",\$_)
+myfile # {}
+newif
+ifdebug
+debugfalse
+debugtrue
+ifdoplot
+doplottrue
+doplotfalse
+hfill # \$_ = join('','&nbsp;&nbsp;&nbsp;&nbsp;',\$_)
+samepage # \$_ = join('',' ',\$_)
+_IG_CMDS_
+
+#
+#  This next item limits the main tree to parts and chapters.
+#  It is increased just before figures are included in the appendix.
+#  The scale factors keep the inserted items from being too different
+#  from the surrounding text.  The last item includes part and section
+#  numbers.  This keeps the hypertext closely related to the printed
+#  stuff (especially since some references use section numbers as refs).
+#
+$MAX_SPLIT_DEPTH = 2;
+$MATH_SCALE_FACTOR = 1.0;
+$FIGURE_SCALE_FACTOR = 1.0;
+$SHOW_SECTION_NUMBERS = 1;
+
+#  This next line must be the last command!
+1;
