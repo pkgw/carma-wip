@@ -1,0 +1,70 @@
+%!PS-Adobe-3.0
+%%Title: wipcover.ps
+%%Creator: Jim Morgan
+%%CreationDate: 25 October 1996
+%%BoundingBox: 0 0 612 792
+%%LanguageLevel: 1
+%%Orientation: Portrait
+%%PageOrder: Ascend
+%%Pages: 2
+%%Version 1 0
+%%DocumentNeededResources: font Times-Roman Times-Bold
+%%EndComments
+%%BeginProlog
+/TM 775 def  % Top margin
+/BM -12 def  % Bottom
+/LM   0 def  % Left
+/RM 612 def  % Right
+/newline {LM currentpoint exch pop 13 sub moveto} bind def
+/nlIfNec {currentpoint pop RM gt {newline} if} bind def  % Newline if beyond RM
+/fillpage {/str exch def
+  LM TM moveto 0.7 setgray
+  { {pop pop nlIfNec} str kshow currentpoint exch pop BM lt {exit} if } loop
+} bind def
+/SetFont {findfont exch scalefont setfont} bind def
+/CenterString {RM LM add exch stringwidth pop sub 2 div} bind def
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Times-Bold
+%%EndSetup
+
+% First, do the front cover page.
+%%Page: Cover 1
+%%BeginPageSetup
+/PageSave save def
+%%EndPageSetup
+
+10 /Times-Bold SetFont ( WIP ) fillpage
+
+100 /Times-Roman SetFont
+0 setgray
+gsave
+(WIP) CenterString % Center the Title
+20 add 500 translate
+0.95 -0.025 0 {setgray 0 0 moveto (WIP) show -1 0.5 translate } for
+0.5 setgray 0 0 moveto (WIP) show
+grestore
+
+50 /Times-Roman SetFont
+(User's Manual) dup CenterString 380 moveto show
+
+20 /Times-Roman SetFont
+(Version 2.1) dup CenterString 100 moveto show
+(October 1996) dup CenterString 70 moveto show
+
+PageSave restore
+showpage
+
+% Do the back cover page.
+%%Page: Back 2
+%%BeginPageSetup
+/PageSave save def
+%%EndPageSetup
+
+10 /Times-Bold SetFont ( WIP ) fillpage
+
+PageSave restore
+showpage
+
+%%Trailer
+%%EOF
