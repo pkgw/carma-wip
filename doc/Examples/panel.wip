@@ -1,0 +1,27 @@
+define mybox   # mybox $1=panel-# $2=xbox $3=ybox $4=lstyle $5=boxarg.
+set \0 lstyle  # Save current line style.
+panel 2 2 $1   # Select panel.
+box $2 $3      # Draw box with input arguments.
+lstyle 0$4     # Select a line style (0 if $4 is not present).
+box g$5 g$5    # Draw a grid ($5 is l if logarithmic).
+lstyle \0      # Reset previous line style.
+end
+
+viewport 0.2 0.9 0.3 0.8   # Set the viewport.
+expand 1.1                 # Set the character size.
+lstyle 1                   # Set line style to a solid line.
+data data.dat              # Open data file.
+limits -0.1 6.4 -1.3 1.3   # Set the window limits.
+mybox 1 bcn bncv 4         # Draw lower left box.
+ticksize 1 5 0.3 3         # Fix tick step size.
+mybox 2 bcn bncv 2         # Draw lower right box.
+ticksize 0 0 0 0           # Reset ticks to default value.
+limits -1 1 -1 0.3         # Set up logarithm limits.
+mybox 3 bcnl bncvl 4 l     # Draw upper left box.
+xcolumn 1                  # Store the first column of numbers in X[].
+logarithm x                # Take the log base 10 of the X[] data.
+ycolumn 2                  # Store the second column of numbers in Y[].
+logarithm y                # Take the log base 10 of the Y[] data.
+symbol 16                  # Set current symbol to a filled square.
+points                     # Draw the points.
+mybox 4 bcnl bncvl 3 l     # Draw the upper right box.
