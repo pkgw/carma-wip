@@ -1,0 +1,52 @@
+<HTML>
+<HEAD>
+<TITLE>WIP Version 2.3 Changes</TITLE>
+</HEAD>
+
+<BODY>
+<H1>WIP Version 2.3 Changes</H1>
+
+This version reflects corrections and enhancements to WIP (Version 2.3):
+
+<OL>
+  <LI> Zeroed the tolerance factor (TOL) in polyfit.c routine so the
+     diagonal elements will not be zeroed unnecessarily.
+
+  <LI> Added a MAIN__ routine for Linux machines in wipmain.c to
+     suppress the warning message caused by the mix of Fortran and C.
+     If it ever reaches that routine (it should not), WIP exits with
+     a warning.
+
+  <LI> Added a warning to the data reader (<CODE>wipreadcol()</CODE>)
+     so the user is notified when the number of points to be read is
+     truncated to the internal array maximum.
+
+  <LI> Added a check for and removal of any include file TRUE/FALSE
+     definitions.  Apparently, some gcc (under Linux) compilers
+     (incorrectly) define these variables.
+
+  <LI> Used an #ifdef to temporarily remove the Debug code in heq.c.
+     This block should remain removed until PGPLOT 5.1.0 code is the
+     earliest version required by WIP.  WIP should also be generalized
+     so that this second device could be specified by the user.
+
+  <LI> Created makewip.com for use with VMS machines.  As a result,
+     a few changes were needed in the source code:
+     <OL>
+       <LI> The keyword readonly is reserved by VMS.  So it was changed
+            to justread in wipmain.c, inoutput.c, and declare.h
+       <LI> The inoutput.c routine was modified to write an additional
+            newline when the message is sent to stderr.  This keeps the
+            error message from being overwritten by the next prompt.
+       <LI> The unpack.c routine was missing some trailing semi-colons.
+       <LI> The spool.c file was modified to handle the way VMS treats
+            system calls.
+       <LI> Definitions of WIPINIT (in wipinit.c) and historyFile
+            (in inoutput.c) needed to be ifdef'd for WIPVMS.
+     </OL>
+     Thanks to Lieven Vandevelde for testing the makewip.com script and
+     for pointing out these changes.
+</OL>
+
+</BODY>
+</HTML>
