@@ -1,0 +1,74 @@
+%% This file is to be included by latex in wip.tex
+%
+% Chapter:  Glossary
+%
+\mylabel{a:glossary}
+\myfile{glossary.tex}
+
+The following is a loose list of terms used throughout the \wip\ manual,
+and perhaps not always explained in detail.
+
+\begin{description}
+  \item[{\bf ASCII --}]\index{ASCII} A numeric code standard for characters.
+    Literally, ASCII stands for American Standard Code
+    for Information Interchange.
+    This is the most common character to integer translation code.
+  \item[{\bf BASIC --}]\index{Images!image formats!Basic} An
+    image type used by \wip\ to reflect many different image formats.
+    The Basic image file is generally a binary file with an optional
+    header section followed by the packed data.
+    The image name used with the {\tt image}\index{Commands!{\tt image}}%
+    \index{Images!commands!{\tt image}} command generally describes
+    the format of the data and the size of the optional header section.
+  \item[{\bf BIMA}] \htmladdnormallink{The Berkeley-Illinois-Maryland Association.}{http://bima.astro.umd.edu/}
+  \item[{\bf C-shell --}] In UNIX, this is one of the
+    possible shells that can be used to communicate with UNIX.
+    Other shells are {\tt tcsh} (the T-shell), {\tt sh} (the Bourne Shell),
+    and {\tt bash} (the GNU Shell).
+  \item[{\bf FITS --}]\index{FITS}\index{Images!image formats!FITS}
+    This stands for the
+    \htmladdnormallink{Flexible Image Transport System}{http://fits.cv.nrao.edu/}
+    and is a standard data format used to interchange and archive data
+    between different computers.
+    It can be used for image as well as other types of data.
+  \item[{\bf host --}] Your local computer.
+    The term {\it host} is often used as in 
+    {\it host interpreter} and {\it host commands}, and is really meant to
+    warn you that in this context commands may differ depending on which
+    host/machine (often VMS versus UNIX) you work.
+  \item[{\bf Miriad --}]\index{Images!image formats!Miriad}
+    The \htmladdnormallink{Multichannel Image Reconstruction, Image Analysis
+    and Display}{http://bima.astro.umd.edu/programmer.html}
+    data reduction package is developed by the BIMA group and is used
+    here to refer to the format of the images generated with that package.
+  \item[{\bf PGPLOT --}]\index{PGPLOT}
+    A graphics subroutine package developed by Tim Pearson at Caltech used
+    to generate publication quality graphics on various graphic display devices.
+    \htmladdnormallink{The PGPLOT subroutines}{http://astro.caltech.edu/~tjp/pgplot/}
+    are the graphics routines used by \wip.
+  \item[{\bf PostScript file --}] \index{PostScript} An ASCII\index{ASCII}
+    text file in the PostScript language.  PostScript is a page
+    description language, and has become an industry standard
+    for printing high quality text and graphics.  There are
+    PGPLOT\index{PGPLOT} device drivers which can create a PostScript
+    file.  This file can be sent to a printer to get hardcopy output.
+  \item[{\bf READLINE --}] The
+    Readline Library\index{Readline Library}\index{Commands!readline!editing}%
+    \index{Commands!readline!recall}
+    is a set of routines for providing {\tt Emacs} style line input
+    distributed by the Free Software Foundation.
+    The library is not included within the \wip\ distribution.
+    If, however, it is present on the system when \wip\ is built,
+    then a compile time option can incorporate the library into
+    the user interface of \wip\ providing {\tt Emacs} style command line
+    recall and editing.
+  \item[{\bf shell --}] A supposedly easier to handle
+    front-end command processor used to communicate with a lower level,
+    and often more difficult to handle program or operating system.
+  \item[{\bf WIPHELP --}] \index{Help!on-line help file!\$WIPHELP}
+    The name of the on-line help file.
+    This environment variable defines the full directory path and file name
+    of the file used by \wip\ to present on-line help.
+  \item[{\bf X-WINDOWS --}] \index{X-Windows} The name of a windowing
+    environment developed by MIT and available (free) via anonymous ftp.
+\end{description}

@@ -1,0 +1,167 @@
+%% This file is to be included by latex in wip.tex
+%
+% Chapter:  How to User This Manual
+%
+\mylabel{c:howto}
+\myfile{howto.tex}
+
+This manual serves as a reference guide and cookbook for the
+\wip\ interactive graphics package.
+The manual is split into three parts.
+The first part introduces you to
+the \wip\ package and its general concepts.
+The next part explains more advanced plotting techniques.
+The last part of this manual
+contains appendices with a variety of details
+as well as some plotting examples.
+
+Part~\ref{p:intro} is a general introduction.
+It contains
+Chapter~\ref{c:iface} which describes
+the interactive user interface and how to start up \wip.
+Chapter~\ref{c:concepts}
+describes some general plotting concepts.
+Chapter~\ref{c:basic} describes some of the commands used to
+generate simple plots and Chapter~\ref{c:images}
+explains the commands associated with images\index{Images}.
+
+Part~\ref{p:advanced} describes
+more advanced plotting techniques.
+Chapter~\ref{c:fit}
+illustrates how to perform various fits on data and then display the results.
+Chapter~\ref{c:macros}
+describes how to define and edit macros\index{Macros}.
+Chapter~\ref{c:uservar}
+explains user variables\index{User Variables}\index{String Variables}
+and how to use them.
+Finally, Chapter~\ref{c:flow}
+shows how to have more control over which
+commands are executed.
+
+Lastly, Part~\ref{p:appendix} contains the appendices.
+Appendix~\ref{a:wipinit} describes how to set up a file which
+can be used to customize your \wip\ environment.
+Appendix~\ref{a:cmdline} discusses the
+options that may be specified on the command line\index{Command Line}
+when starting \wip.
+Appendix~\ref{a:glossary} is a glossary which 
+describes and defines often-used terms for easy reference.
+Appendix~\ref{a:cmdname} lists, in alphabetical order,
+the commands \wip\ currently understands.
+Next, Appendix~\ref{a:samples} contains
+several examples of command files used to create the
+accompanying plots.
+And, finally, Appendix~\ref{a:faq} presents a list of frequently asked
+questions along with explanations and solutions.
+
+\section*{Notation:}
+In the examples throughout this manual the
+prompt from \wip\ is shown.
+In most examples this is
+done symbolically by the string \wipp followed by the
+text typed by the user.
+For example:
+\begin{wiplist}%
+  \index{Commands!{\tt device}}
+  \item {\tt device myfile.ps/vps}
+\end{wiplist}
+illustrates the use of the \wip\ prompt followed by the
+\wip\ command to define a new device.
+When trying this example out, the user should not type the characters of
+the prompt; just the text that follows it.
+When the example is illustrating a command issued at the operating
+system level, it will always be done with the percent sign.
+For example, the command:
+\begin{wiplist}%
+  \item [\%] {\tt wip -d /tek}
+\end{wiplist}
+shows how to start \wip\ with a device other than the default.
+
+In addition, almost every example illustrates one important feature of \wip:
+the use of comments\index{Comments}.
+While not required, comments are quite useful in \wip\ plot files,
+especially several weeks or months later when you return to adopt a plot
+file for use in another plot.
+Comments begin with the comment character
+(\#)\index{Comments!comment character(\#)}
+and continue to the end of the current line.
+Comments may appear anywhere except on command lines that require a text
+string as an argument.
+In this case, comments should not be included as they will be
+incorporated into the text string.
+
+\section*{There's always {\tt help}:}
+As mentioned previously,\index{Help}
+Appendix~\ref{a:cmdname} lists all the commands currently understood by \wip.
+This listing is the same as the listing generated on-line by the command
+{\tt help xxx}\index{Commands!{\tt help}}%
+\index{Help!commands!{\tt help}}
+where {\tt xxx} is any \wip\ command
+name (see Section~\ref{s:help}).
+Many times in this manual, a list of commands
+will appear relevant to a particular style of plotting.
+Rather than go into great detail in these sections
+about command arguments and options,
+the reader should investigate the command syntax presented
+in Appendix~\ref{a:cmdname}.
+Additionally, command arguments or options are more likely to change
+with improvements to \wip\ while their general concepts will not.
+For this reason, the discussions about individual commands will, in
+general, be postponed until Appendix~\ref{a:cmdname} where individual
+commands will be kept up to date.
+If ever a discrepancy exists between this manual and the on-line
+{\tt help} command, the on-line version is to be taken as correct.
+
+Other useful sources of help in this manual include examples of
+actual \wip\ commands accompanied by the generated plot and
+a list of frequently asked questions about \wip.
+The examples can be found in Appendix~\ref{a:samples}.
+The frequently asked questions, as well as answers and examples,
+can be found in Appendix~\ref{a:faq}.
+
+\section*{READLINE:}
+The \wip\ user interface has been written in such a way that,
+if it exists,
+the Readline library\index{Readline Library}%
+\index{Commands!readline!editing}\index{Commands!readline!recall}
+of routines can be linked into \wip\ when it is compiled.
+Doing this gives \wip\ the command line recall and editing
+characteristic of {\tt Emacs}.
+By default, this capability is not present.
+However, if it is present, a message will appear each time \wip\ is
+started identifying which command listing file is being read.
+These commands will not be executed but will be available to be recalled
+and edited.
+This name is also the file which \wip\ will, on exiting, write the
+history of commands executed.
+Even if this option is added when \wip\ is compiled,
+it can be dynamically ignored via command line\index{Command Line} options
+(see Appendix~\ref{a:cmdline}).
+
+\section*{PGPLOT:}
+The lower level work of \wip\ is done primarily by a collection of graphical
+subroutines (developed by Tim Pearson) called PGPLOT\index{PGPLOT}.
+\htmladdnormallink{The PGPLOT subroutines}{http://astro.caltech.edu/~tjp/pgplot/}
+may be obtained free--of--charge because the software was written
+under Unites States government support, although it is copyrighted by
+California Institute of Technology.
+PGPLOT is provided ``as is'' and carries no promise that it
+will work in your configuration, but all source code is included.
+Information/questions about PGPLOT should be addressed care of:
+\begin{verbatim}
+Tim Pearson
+Astronomy Dept 105-24, Caltech, Pasadena, California 91125, USA
+Internet:          tjp@astro.caltech.edu or Pearson_T@caltech.edu
+NSI-Decnet (SPAN): Deimos::TJP or 15237::TJP
+Telephone:         +1 818 395-4980
+WWW:               "http://astro.caltech.edu/~tjp/pgplot/"
+\end{verbatim}
+
+\section*{World Wide Web:}
+The
+\htmladdnormallinkfoot{\wip\ User Manual}{http://bima.astro.umd.edu/wip/manual/wip.html}
+can also be viewed via the World Wide Web (WWW).
+There is also
+\htmladdnormallinkfoot{the \wip\ home page}{http://bima.astro.umd.edu/wip/}
+which contains general information about \wip\ as well as information on
+how to obtain the latest \wip\ distribution.
