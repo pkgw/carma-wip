@@ -1,0 +1,94 @@
+% WIP.STY -- a proposed uniform document style option for the WIP Manual
+% Use with:
+% \documentstyle[wip]{article}
+%
+% History:
+%   12-jun-91 jm  Created for WIP.
+%   30-sep-92 jm  Added verbtim file and clearevenpage macros.
+%   06-jun-95 jm  Added html stuff; also added insertplot macros.
+%
+% Exit if the style file is already loaded
+\ifx \wipstyloaded\relax \endinput\else\let\wipstyloaded\relax\fi
+%
+%  If html stuff has not been loaded, do some needed definitions here.
+%
+\ifx \htmlstyloaded\relax \else
+  \newcommand{\htmladdnormallinkfoot}[2]{#1\footnote{#2}} 
+  \newcommand{\htmladdnormallink}[2]{#1} 
+\fi
+%
+%  The following assumes comment.sty has been loaded.  It ignores
+%  everything between \begin{htmlonly} and \end{htmlonly} and
+%  everything between \begin{rawhtml} and \end{rawhtml} but processes
+%  everything between \begin{latexonly} and \end{latexonly}.
+%  The opposite will be true when latex2html is run.
+%
+\excludecomment{htmlonly}
+\excludecomment{rawhtml}
+\includecomment{latexonly}
+%
+% If debug is true, then add some extra labels.
+%
+\ifdebug
+  \def\mylabel#1{\index{label!#1} \label{#1}}  % Debug version (label index).
+  \def\myfile#1{\index{myfile!#1}}             % Create index for filename.
+\else
+  \def\mylabel#1{\label{#1}}                   % Final version.
+  \def\myfile#1{}                              % Ignore file.
+\fi
+%
+\newcommand{\wip}{{\rm WIP}}
+\newcommand{\wprompt}{{\verb+> +}}
+\newcommand{\wipp}{{\wip\wprompt}}
+\newcommand{\wipd}{{\rm DEFINE\wprompt}}
+\newcommand{\wipi}{{\rm INSERT\wprompt}}
+\newcommand{\wipinit}{{\tt .wipinit\ }}
+%
+%  Some definitions to please latex2html.
+\newcommand{\prefigs}{}
+\newcommand{\postfigs}{}
+%
+\newcommand{\eg}{{\it e.g.\ }}
+\newcommand{\ie}{{\it i.e.\ }}
+\newcommand{\esc}[1]{{$\backslash$#1}}
+%
+\newlength{\tabentrylen} % Used to specify the width of a table entry.
+%
+\newenvironment{wiplist}{\begin{list}{\wipp}{\labelwidth\z@
+\parsep=0pt \itemsep=0pt}}{\end{list}}
+%
+%  Macro from Chris Rowley's (ca_rowley@uk.ac.open.acs.vax) verbatimfiles.sty
+%  Note that the precise layout of line breaks in this macro is important!
+%  -- renamed to fileverbatim and added exist test so I could use it in
+%  -- the latex2html conversion.
+%
+\newcommand{\fileverbatim}[1]{\edef\@tempa{#1}\ifx\@tempa\empty\else
+  \begingroup
+  \@verbatim \frenchspacing \@vobeyspaces
+  \input#1 \endgroup\fi
+}
+%
+%  The following macro is identical to LaTeX's cleardoublepage except
+%  that it clears to the next current page that is an even number
+%  (LaTeX's cleardoublepage makes the next page a right-hand, or
+%  odd-numbered page).
+%
+\newcommand{\clearevenpage}{\clearpage\if@twoside \ifodd\c@page%%\else
+    \hbox{}\newpage\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+%
+\newcommand{\wipplot}[1]{%
+    \ifdoplot
+      \hspace*{\fill}
+      \epsfbox{Examples/#1.ps}
+      \hspace*{\fill}
+    \else
+      \vspace{3.0in}
+       \begin{center}
+        To generate this plot, move to the examples directory \\
+        ({\tt {\em \wip main}/doc/Examples}) and use the command: \\
+        \% {\tt \wip .csh #1}
+      \end{center}
+      \vspace{3.0in}
+    \fi
+}
+\endinput
