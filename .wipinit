@@ -1,0 +1,4 @@
+set device   /xs
+set xbox     BCNST
+set ybox     BCNSTV
+set print    lpr

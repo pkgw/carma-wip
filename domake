@@ -1,0 +1,12 @@
+#!/bin/csh -f
+#
+# All the options for makewip (and explanations for these options) are
+# explained in detail in the script makewip.
+#
+# set options = ""
+# if ($?MIRDEBUG != 0) set options = "$options -debug"
+# if (-e $MIRLIB/libreadline.a) set options = "$options -readline $MIRLIB"
+# $MIR/borrow/wip/makewip -wip $MIR/borrow/wip -pgplot $MIRLIB -lib $MIRLIB \
+#   -bin $MIRBIN -xlib "$MIRXLIB" -host $MIRHOST $options $*
+#
+makewip -wip /home/wip -pgplot $MIRLIB -xlib "$MIRXLIB" -cc "gcc -ansi"
