@@ -1,0 +1,607 @@
+%% This file is to be included by latex in wip.tex
+%
+% FAQ.
+%
+\mylabel{a:faq}
+\myfile{faq.tex}
+
+This Appendix presents many frequently asked questions about \wip\ and
+\wip\ commands.
+These questions have come from users from their usage of \wip.
+Hopefully, this list will address most of the questions
+that novice users may encounter and present solutions to problems that
+others may find useful as they become more experienced and attempt more
+complicated plots.
+Each topic will first present the problem or question and then a
+solution will begin following the `$\Diamond$' character.
+This list of questions should also be the most volatile of the entire
+manual as more users submit questions and solutions to various problems.
+
+\subsubsection*         {Lack of Printer Output}
+\mylabel{sss:hardcopy}
+
+When I run my plot file on my screen, everything looks great.
+But when I send it to the printer, nothing shows up.
+Here are the commands I execute:
+\begin{wiplist}%
+  \index{Commands!{\tt device}}
+  \index{Commands!{\tt input}}
+  \index{Commands!{\tt end}}
+  \item [\%] {\tt wip}
+\samepage
+  \item {\tt input myfile.wip}\hfill\# Plots okay on the screen.
+  \item {\tt device myfile.ps/vps}\hfill\# Get a printing device.
+  \item {\tt input myfile.wip}\hfill\# Play through the commands again.
+  \item {\tt end}\hfill\# All finished.
+  \item [\%] {\tt lpr myfile.ps}
+\end{wiplist}
+The light on the printer flashes for a few minutes and then stops and
+does not produce a plot.
+What's wrong?
+
+\indent$\Diamond$
+Whenever you send a plot to a printing device, you should
+terminate the plot by using either the
+{\tt hardcopy}\index{Commands!{\tt hardcopy}} command or
+another call to the {\tt device}\index{Commands!{\tt device}} command.
+These commands inform
+the plot that there is not going to be any further information
+coming and it should
+insert device specific closing commands.  In the case of the
+printing device `/vps' shown above, the commands that are
+inserted instruct the printer to print and eject the page it has
+been generating.
+Without these inserted commands,
+the plot file is (internally) read by the printer and then ignored
+because it is never told to eject the page.
+
+An alternative to the example above is to use
+the {\tt phard}\index{Commands!{\tt phard}} command.
+This command initiates a (temporarily) new, user specified device
+and then plays back all the commands issued and then performs
+the {\tt hardcopy} command to close the plot file.  The final
+operation of the {\tt phard} command is to reinstate the device
+that was active when this command was called.  To illustrate,
+the commands shown previously, can be replaced with the following:
+\begin{wiplist}%
+  \index{Commands!{\tt input}}
+  \index{Commands!{\tt phard}}
+  \index{Commands!{\tt end}}
+  \item [\%] {\tt wip}
+\samepage
+  \item {\tt input myfile.wip}\hfill\# Plots okay on the screen.
+  \item {\tt phard myfile.ps/vps}\hfill\# Spool it to the printing device.
+  \item {\tt end}\hfill\# All finished.
+\end{wiplist}
+If the {\tt print} user variable has its default value,
+the plot will automatically be spooled to the printer.
+
+Finally, this plot could also be sent by using the single command line:
+\begin{wiplist}%
+  \item [\%] {\tt wip -x -d myfile.ps/vps myfile.wip}
+\end{wiplist}
+See Appendix~\ref{a:cmdline} for an explanation of the command
+line options and their meanings.
+
+\subsubsection*         {{\tt erase} Command Troubles}
+\mylabel{sss:erasehard}
+
+I have a macro defined as follows:
+\begin{wiplist}%
+  \index{Commands!{\tt define}}
+  \index{Commands!{\tt erase}}
+  \index{Commands!{\tt expand}}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt loop}}
+  \index{Commands!{\tt end}}
+  \item {\tt define doloop}\hfill\# \$1=Passed counter.
+\samepage
+  \item [\wipd] {\tt erase}\hfill\# Erase the screen.
+  \item [\wipd] {\tt expand 0.5}\hfill\# Initialize the expansion.
+  \item [\wipd] {\tt set \esc{0} -1}\hfill\# Initialize a counter.
+  \item [\wipd] {\tt loop 16 mymacro \esc{0} \$1}\hfill\# Call another macro.
+  \item [\wipd] {\tt end}\hfill\# End of macro definition.
+\end{wiplist}
+which I use to plot multi-page panel plots
+({\tt panel}\index{Commands!{\tt panel}} commands appear
+in {\tt mymacro} macro).
+When I call this macro as follows:
+\begin{wiplist}%
+  \index{Commands!{\tt device}}
+  \index{Commands!{\tt hardcopy}}
+  \item {\tt device myfile.ps/vps}\hfill\# Set up the printer file.
+\samepage
+  \item {\tt doloop 1}\hfill\# Do the first page.
+  \item {\tt hardcopy}\hfill\# Send it to the printer.
+  \item {\tt doloop 2}\hfill\# Do the second page.
+  \item {\tt hardcopy}\hfill\# Send it to the printer.
+  \item {\tt doloop 3}\hfill\# Do the third page.
+  \item {\tt hardcopy}\hfill\# Send it to the printer.
+\end{wiplist}
+I get the following error messages:
+\begin{wiplist}%
+  \item [\ ] {\tt Trouble setting expand value.}
+\samepage
+  \item [\ ] {\tt Saving expand as 1.000000.}
+  \item [\ ] {\tt Trouble setting expand value.}
+  \item [\ ] {\tt Saving expand as 1.000000.}
+\end{wiplist}
+I am calling {\tt expand} with a proper argument; what is wrong?
+
+\indent$\Diamond$
+The error message is not so much to do with the macro, per say, as
+to what it is going on in the macro.  Every time the command
+{\tt hardcopy} is called,
+the device that was used to do the drawing is closed.
+However, the
+next command to be executed is to enter the macro again and the first
+"graphical command" is to set the expansion size.
+\wip\ checks that the requested expand size matches the returned value
+from PGPLOT.
+If the two do not match, a warning message is sent
+(which is the message that was displayed).
+Now, PGPLOT interprets {\tt erase} commands as a new page request.
+For printing devices, this is basically the same as the {\tt hardcopy}
+command except that it does not close the device.
+Because the macro doloop above
+has the {\tt erase} command at the top of it,
+a suggested alternative to the commands above would be
+(the macros may stay the same):
+\begin{wiplist}%
+  \index{Commands!{\tt device}}
+  \index{Commands!{\tt hardcopy}}
+  \item {\tt device myfile.ps/vps}\hfill\# Set up the printer file.
+\samepage
+  \item {\tt doloop 1}\hfill\# Do the first page.
+  \item {\tt doloop 2}\hfill\# Do the second page.
+  \item {\tt doloop 3}\hfill\# Do the third page.
+  \item {\tt hardcopy}\hfill\# Send it to the printer.
+\end{wiplist}
+The erase command will automatically switch to a new page of paper for
+hardcopy (printing) devices (and all drawing will appear in the same file)
+or erase the screen for interactive devices.
+
+\subsubsection*         {Offset Positions}
+\mylabel{sss:offsets}
+
+I often need an offset to move away from my current position.
+Is there (or can there be) a command like ``shift'' that moves
+the pointer relative to the previous move or draw end position?
+
+\indent$\Diamond$
+A general offset command would be quite difficult to create due
+to the possible range and direction of world coordinates.
+If you want a macro that would do it for a particular orientation
+and scale (\eg RA/dec plots), consider the following macro definition:
+\begin{wiplist}%
+  \index{Commands!{\tt define}}
+  \index{Commands!{\tt new}}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt move}}
+  \index{Commands!{\tt free}}
+  \index{Commands!{\tt end}}
+  \index{User Variables!commands!{\tt new}}
+  \index{User Variables!commands!{\tt free}}
+  \item {\tt define doshift}\hfill\# \$1=delx; \$2=dely.
+\samepage
+  \item [\wipd] {\tt new offx offy}\hfill\# Creates offx and offy.
+  \item [\wipd] {\tt set offx cx + \$1}\hfill\# Set up $x$-offset.
+  \item [\wipd] {\tt set offy cy + \$2}\hfill\# Set up $y$-offset.
+  \item [\wipd] {\tt move offx offy}\hfill\# Move to the offset position.
+  \item [\wipd] {\tt free offx offy}\hfill\# Release offx and offy.
+  \item [\wipd] {\tt end}
+\end{wiplist}
+and commands:
+\begin{wiplist}%
+  \index{Commands!{\tt move}}
+  \index{Commands!{\tt draw}}
+  \item {\tt move 5000 50000}\hfill\# Some command that sets position.
+\samepage
+  \item {\tt doshift 30 300}\hfill\# Shift the position.
+  \item {\tt draw 5100 49000}\hfill\# Another set position command.
+  \item {\tt doshift 30 500}\hfill\# Shift the position.
+\end{wiplist}
+
+The {\tt move} or {\tt draw} commands could be folded into
+the {\tt doshift} macro by adding another 3 arguments, as in:
+\begin{wiplist}%
+  \index{Commands!{\tt define}}
+  \index{Commands!{\tt new}}
+  \index{Commands!{\tt move}}
+  \index{Commands!{\tt draw}}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt free}}
+  \index{Commands!{\tt end}}
+  \index{User Variables!commands!{\tt new}}
+  \index{User Variables!commands!{\tt free}}
+  \item {\tt define mdshift}\hfill\# \$1/2=delx/y; \$3/4=x/y; \$5=m/d.
+\samepage
+  \item [\wipd] {\tt new offx offy}\hfill\# Creates offx and offy.
+  \item [\wipd] {\tt if (0\$5 == 0) move \$3 \$4}\hfill\# Move if (\$5 == 0).
+  \item [\wipd] {\tt if (0\$5 == 1) draw \$3 \$4}\hfill\# Draw if (\$5 == 1).
+  \item [\wipd] {\tt set offx cx + \$1}\hfill\# Set up $x$-offset.
+  \item [\wipd] {\tt set offy cy + \$2}\hfill\# Set up $y$-offset.
+  \item [\wipd] {\tt move offx offy}\hfill\# Move to the offset position.
+  \item [\wipd] {\tt free offx offy}\hfill\# Release offx and offy.
+  \item [\wipd] {\tt end}
+\end{wiplist}
+Then, you can use it as:
+\begin{wiplist}%
+  \item {\tt mdshift 30 300 5000 50000 0}
+\samepage
+  \item {\tt mdshift 30 500 5100 49000 1}
+\end{wiplist}
+
+\subsubsection*         {Writing Numbers as Text}
+\mylabel{sss:textnumbers}
+
+I have been using \wip\ to make a macro for doing multi-panel
+plots with velocity labeling all automatically grabbed
+from the image header, or at least attempting to do so.
+I have made good progress but I am having trouble dealing with
+changing numbers into characters and having the various text
+writing command believe in text variables.\index{Labels!user variables in}
+For example if I calculate the velocity of a channel in a macro,
+how do I load that value into a text variable and get
+it printed to the screen without doing it one symbol at a time?
+
+\indent$\Diamond$
+This is illustrated in section~\ref{p:symbol}.
+
+\subsubsection*         {Box Label is Incorrect}
+\mylabel{sss:boxy}
+
+I am trying to display an image with Right Ascension and
+Declination coordinates.  When I use the command
+\begin{wiplist}%
+  \index{Commands!{\tt box}}
+  \item {\tt box bcnstz bcnstvz}
+\end{wiplist}
+with my image,
+the $y$-coordinate values appear incorrect.
+The {\tt header}\index{Commands!{\tt header}} command appears to be 
+getting the parameters okay
+(using the `{\tt show i}'\index{Commands!{\tt show}} command).
+
+\indent$\Diamond$
+What is happening is that the second argument to the {\tt box} command
+is missing the {\tt y} character.
+This character tells the time labeling routine not to break up the label
+at the 24 hour mark (\ie do not do any day formatting).
+To correctly display declination, you must include both the {\tt y} and
+the {\tt z} character in the second argument to {\tt box}.
+Another alternative is to include in the second argument the {\tt d} option
+(and the {\tt h} in the first argument)
+which will add unit superscripts.
+The {\tt d} option implicitly implies the {\tt y} option.
+For more details about these and other characters and what duties they perform,
+see Table~\ref{t:box}.
+
+\subsubsection*         {FITS Images}
+\mylabel{sss:fitsimages}
+
+I have loaded a FITS\index{FITS} image,
+retrieved the header, and displayed and boxed the image in \wip\ as follows:
+\begin{wiplist}%
+  \index{Commands!{\tt image}}
+  \index{Commands!{\tt header}}
+  \index{Commands!{\tt halftone}}
+  \index{Commands!{\tt box}}
+  \item {\tt image myimage.fits}
+\samepage
+  \item {\tt header rd}
+  \item {\tt halftone}
+  \item {\tt box bcnsthz bcnstvdzy}
+\end{wiplist}
+No halftone is present and the box is label incorrectly.
+I have displayed this image in IRAF before making a FITS file
+with no problems; why can't \wip\ display it?
+
+\indent$\Diamond$
+Some FITS image writers omit keywords.
+Make sure that the image header keywords required by \wip\ are present
+in the FITS image.
+In order to properly read header information and use it to display
+the coordinates with the {\tt box} command, the optional header keywords
+should also be present.
+See the FITS image description in Section~\ref{s:imfile} for a list of
+required and requested keywords.
+Also see Section~\ref{p:image} for a sample FITS header.
+
+\subsubsection*         {Fortran Callable}
+\mylabel{sss:fortran}
+
+Is it possible to call various \wip\ routines from a Fortran program?
+
+\indent$\Diamond$
+No.
+\wip\ is a collection of routines designed to act as a user interface to
+the PGPLOT graphics routines.
+Fortran programmers should call the individual PGPLOT routines directly.
+
+\subsubsection*         {Panel Movements with Images}
+\mylabel{sss:paneladjust}
+
+I am using the {\tt panel} command to display multiple images side by side.
+I want to have the individual boxes butt up against each other.
+However, every time I call {\tt panel} with negative arguments (even
+after calling {\tt submargin 0 0}),
+there is still a gap between the boxes.
+
+\indent$\Diamond$
+This is dealt with in Section~\ref{s:imwinadj}.
+
+\subsubsection*         {User Interaction with Prompts}
+\mylabel{sss:prompting}
+
+This problem concerns writing instructions to users inside
+the \wip\ command window.
+For example, a macro
+allows the user to select where in a frame
+to place a label using the cursor.
+But, if this macro is to be generally usable,
+it really should write to the
+command window a message telling the user what the macro is expecting at
+each cursor prompt.
+Can this be done simply in \wip ?
+
+\indent$\Diamond$
+This is quite easy to do with the
+{\tt echo}\index{Commands!{\tt echo}}
+command.
+The following simple macro shows how to prompt just before a cursor call.
+\begin{wiplist}%
+  \index{Commands!{\tt define}}
+  \index{Macros!commands!{\tt define}}
+  \index{Commands!{\tt echo}}
+  \index{Commands!{\tt cursor}}
+  \index{Commands!{\tt label}}
+  \index{Commands!{\tt end}}
+  \index{Macros!commands!{\tt end}}
+  \item {\tt define doprompt}\hfill\# \$1-\$0 used for the label.
+\samepage
+  \item [\wipd] {\tt echo "Find the desired position"}\hfill\# Prompt the user.
+  \item [\wipd] {\tt echo "and then hit any key."}
+  \item [\wipd] {\tt cursor}\hfill\# Move to the desired position.
+  \item [\wipd] \hfill\# Put the label at the cursor position.
+  \item [\wipd] {\tt label \$1 \$2 \$3 \$4 \$5 \$6 \$7 \$8 \$9 \$0}
+  \item [\wipd] {\tt end}\hfill\# End of macro definition.
+\end{wiplist}
+
+\subsubsection*         {Overlapping Y-Axis Labels}
+\mylabel{sss:vertlabs}
+
+When I chose vertical tick labels along the $y$-axis of the box,
+the $y$-axis text label overlaps them (especially if the numbers
+at a major tick interval is 3 or more digits).
+
+\indent$\Diamond$
+Vertical labeling is a problem for large value coordinates (like declination).
+The default {\tt ylabel}\index{Commands!{\tt ylabel}} command is
+actually an alias for the {\tt mtext}\index{Commands!{\tt mtext}} command.
+In fact, the following two commands are identical:
+\begin{wiplist}%
+  \item [\wipd] {\tt mtext L 2.2 0.5 0.5 Yaxis label string}
+\samepage
+  \item [\wipd] {\tt ylabel Yaxis label string}
+\end{wiplist}
+To use labels along the $y$-axis without overlapping the tick labels,
+use the {\tt mtext} command with a larger displacement (\ie use 3 or 4
+instead of 2.2).
+Also be careful to make sure that the left viewport value is large enough
+that it does not clip the tick labels.
+
+\subsubsection*         {Logarithmic Error Bars}
+\mylabel{sss:logerrs}
+
+I want to plot error bars on a log plot.
+Is there a simple way to do this?
+I've tried using the {\tt logarithm err} command but can't seem to get
+it to work.
+Any suggestions?
+
+\indent$\Diamond$
+Logarithmic plots with error bars is a bit tricky because the values in
+the {\bf ERR} array are offset values rather than the actual error values.
+To solve this, either modify the data outside of \wip\ or write
+a macro to do the math internally.
+Examples of both are shown below.
+In both examples, it is assumed that the {\bf X, Y}, and {\bf ERR}
+data in {\tt data.lis} are found in columns 1, 2, and 3, respectively.
+For UNIX users, the {\tt awk} command:
+\begin{wiplist}%
+  \item [\%] {\tt awk '\{print \$0,(\$2+\$3)/\$2,\$2/(\$2-\$3)\}' data.lis $>$ d2.lis}
+\end{wiplist}
+will generate a new file called {\tt d2.lis} which has the same
+contents as the old file plus new values in the fourth and fifth columns.
+Using {\tt d2.lis}, the following \wip\ commands should work:
+\begin{wiplist}%
+  \index{Commands!{\tt xcolumn}}
+  \index{Commands!{\tt ycolumn}}
+  \index{Commands!{\tt ecolumn}}
+  \index{Commands!{\tt logarithm}}
+  \index{Commands!{\tt points}}
+  \index{Commands!{\tt errorbar}}
+  \item {\tt data d2.lis}
+  \samepage
+  \item {\tt xcolumn 1}
+  \item {\tt ycolumn 2}
+  \item {\tt ecolumn 4}
+  \item {\tt logarithm y}
+  \item {\tt logarithm err}
+  \item {\tt points}
+  \item {\tt errorbar 2}
+  \item {\tt ecolumn 5}
+  \item {\tt logarithm err}
+  \item {\tt errorbar 4}
+\end{wiplist}
+or, within \wip, one can use:
+\begin{wiplist}%
+  \index{Commands!{\tt define}}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt xcolumn}}
+  \index{Commands!{\tt ycolumn}}
+  \index{Commands!{\tt ecolumn}}
+  \index{Commands!{\tt logarithm}}
+  \index{Commands!{\tt points}}
+  \index{Commands!{\tt errorbar}}
+  \index{Commands!{\tt loop}}
+  \item {\tt define eplus}
+  \item [\wipd] {\tt set \$1 \$1 + 1}
+  \item [\wipd] {\tt set err[\$1] log((y[\$1] + err[\$1]) / y[\$1])}
+  \item [\wipd] {\tt end}
+  \item {\tt define eminus}
+  \item [\wipd] {\tt set \$1 \$1 + 1}
+  \item [\wipd] {\tt set err[\$1] log(y[\$1] / (y[\$1] - err[\$1]))}
+  \item [\wipd] {\tt end}
+  \item {\tt data data.lis}
+  \item {\tt xcolumn 1}
+  \item {\tt ycolumn 2}
+  \item {\tt ecolumn 3}
+  \item {\tt set \esc{0} 0}
+  \item {\tt loop npts(err) eplus \esc{0}}
+  \item {\tt logarithm y}
+  \item {\tt points}
+  \item {\tt errorbar 2}
+  \item {\tt ycolumn 2}
+  \item {\tt ecolumn 3}
+  \item {\tt set \esc{0} 0}
+  \item {\tt loop npts(err) eminus \esc{0}}
+  \item {\tt logarithm y}
+  \item {\tt points}
+  \item {\tt errorbar 4}
+\end{wiplist}
+
+\subsubsection*         {Aspect Ratio Without Images}
+\mylabel{sss:aspect}
+
+I have tried to plot the spatial distribution of stars
+(\ie dots on Right Ascension -- Declination plot)
+but I can't get the aspect ratio of the map right.
+The star positions are read in from a text file.
+I know that {\tt winadj}\index{Commands!{\tt winadj}}%
+\index{Coordinate System!commands!{\tt winadj}}
+works for images but when I use it for a simple plot with individual points,
+it didn't seem to understand that the Right Ascension unit
+is 15 times smaller than the Declination unit. 
+Am I missing something?
+
+\indent$\Diamond$
+In order to get the spatial distribution correct, you will have to
+help \wip\ out.
+You are correct that \wip\ doesn't know that Right Ascension is about
+15 times smaller than the Declination axis.
+This is because the world coordinate
+system\index{World Units}\index{Coordinate System!World}
+has no units associated with it.
+The best solution is use {\tt winadj} with the spatial
+extent arguments provided in the same units.
+For example, if your plot
+runs in Right Ascension from $5^h 37^m$ to $5^h 29^m$
+and Declination from $-5^\circ$ to $-8^\circ$, you might use the following:
+\begin{wiplist}%
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt winadj}}
+  \index{Commands!{\tt limits}}
+  \index{Commands!{\tt box}}
+  \index{User Variables!commands!{\tt set}}
+  \index{Coordinate System!commands!{\tt limits}}
+  \index{Coordinate System!commands!{\tt winadj}}
+  \index{Boxes!commands!{\tt box}}
+  \item {\tt set \esc{1} (5 * 3600) + (37 * 60)}
+  \item {\tt set \esc{2} (5 * 3600) + (29 * 60)}
+  \item {\tt set \esc{3} -8 * 3600}
+  \item {\tt set \esc{4} -5 * 3600}
+  \item {\tt set \esc{5} (\esc{1} - \esc{2}) * 15}
+  \item {\tt set \esc{6} \esc{4} - \esc{3}}
+  \item {\tt winadj 0 \esc{5} 0 \esc{6}}
+  \item {\tt limits \esc{1} \esc{2} \esc{3} \esc{4}}
+  \item {\tt box bcnsthz bcnstvdzy}
+\end{wiplist}
+This will generate the proper 2:3 aspect ratio and also label the coordinates
+correctly.
+
+\subsubsection*         {Strange Hardcopy Output}
+\mylabel{sss:badcopy}
+
+Suppose I have two \wip\ plotting command files and do the following:
+\begin{wiplist}%
+  \index{Commands!{\tt input}}
+  \index{Commands!{\tt phard}}
+  \index{Hardcopy!commands!{\tt phard}}
+  \item {\tt input first.wip}\hfill\# Plots out OK on the workstation.
+  \samepage
+  \item {\tt phard /ps}\hfill\# Plots out OK on the PostScript printer.
+  \item {\tt input second.wip}\hfill\# Plots out OK on the workstation.
+  \item {\tt phard /ps}\hfill\# Plots both first and second figures!
+\end{wiplist}
+Why does the second PostScript file contain both figures?
+
+\indent$\Diamond$
+What you are actually getting out in the second PostScript file
+is the combination of both {\tt input} commands.
+This is because the {\tt input} command stays on the playback
+stack and the {\tt phard} command plays back all commands
+on the stack.
+Hence, the second {\tt phard} command will call {\tt input first.wip}
+followed by {\tt input second.wip}.
+
+\subsubsection*         {Changing the Number of Digits Displayed}
+\mylabel{sss:nsig}
+
+I wish to do something quite simple: have a number like 1.234
+(which is generated within a \wip\ macro) be part of a plot label.
+Is this possible?
+If so, there a way to control the number of significant
+figures for this purpose?
+
+\indent$\Diamond$
+The answer to both questions is yes.
+Any label with the construct {\tt \esc{[{\em x}]}}
+will actually be plotted as if the current value of the user variable {\em x}
+was used in the command.
+See Section~\ref{s:text} and Table~\ref{t:text} for more details on how
+to insert user variables in a text command.
+
+To control the number of significant digits,
+change the value of the user variable {\tt nsig}.
+By default, it is set to 3;
+specifying a larger value will cause more digits to be displayed.
+
+\subsubsection*         {Leaving Loops Early}
+\mylabel{sss:loops}
+
+Is it possible to break out of a {\tt loop} command early
+(\ie before the total number of iterations are reached)
+based on some condition within that macro?
+
+\indent$\Diamond$
+The only way to do this is (not very elegant) to add a
+conditional to the macro and have the macro exit when
+the condition is met.
+This will still mean the macro is called the requested number of times,
+but each time it is called with the counter greater than the
+conditional value, it will just exit.
+A trivial example follows that will only print out the first ten numbers
+even though the loop is being executed twenty times:
+\begin{wiplist}%
+  \index{Commands!{\tt define}}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt if}}
+  \index{Commands!{\tt echo}}
+  \index{Commands!{\tt end}}
+  \index{Commands!{\tt loop}}
+  \index{Macros!commands!{\tt define}}
+  \index{Macros!commands!{\tt end}}
+  \index{Macros!commands!{\tt if}}
+  \index{Macros!commands!{\tt loop}}
+  \index{User Variables!commands!{\tt set}}
+  \item {\tt define dummy}\hfill\# \$1=counter.
+  \samepage
+  \item [\wipd] {\tt set \$1 \$1 + 1}\hfill\# Increment the counter.
+  \item [\wipd] {\tt if (\$1 $>$ 10) end}\hfill\# Exit if condition is true.
+  \item [\wipd] {\tt echo \$1}\hfill\# Write out the current value.
+  \item [\wipd] {\tt end}\hfill\#  End the macro definition.
+  \item {\tt set \esc{0} 0}\hfill\# Initialize the counter.
+  \item {\tt loop 20 dummy \esc{0}}\hfill\# Loop through the macro.
+\end{wiplist}

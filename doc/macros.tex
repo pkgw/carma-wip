@@ -1,0 +1,507 @@
+%% This file is to be included by latex in wip.tex
+%
+% Macros.
+%
+\mylabel{c:macros}
+\myfile{macros.tex}
+
+\section		{General Concepts}
+\mylabel{s:macgeneral}
+\index{Macros!general concepts}
+
+Macros provide a way to execute a list of \wip\ commands
+repetitively.
+In much the same way,
+a programmer defines a subroutine
+which will do a particular task for different programs or different
+aspects of the same program.
+Hence, macros provide an easy way to tie together several plotting
+instructions under one name.
+Whenever this defined name is called,
+the commands associated with it are executed.
+Macros in \wip\ may be defined, edited, executed, and deleted.
+In fact, there always exists at least one defined macro:
+the command buffer\index{Macros!buffer}.
+
+Most of the commands that the user types are saved in a macro called the
+command buffer.
+There are a few commands, however, which do not typically need to be saved
+(\eg {\tt echo}\index{Commands!{\tt echo}},
+{\tt show}\index{Commands!{\tt show}},
+and {\tt help}\index{Commands!{\tt help}}%
+\index{Help!commands!{\tt help}}).
+These commands are generally used diagnostically and not graphically.
+For the most part, \wip\ ``knows'' which commands to save and which to
+not save in the command buffer.
+If a command is not saved, it may still be stored in the command
+buffer by explicitly entering it using the
+{\tt insert}\index{Commands!{\tt insert}}%
+\index{Macros!commands!{\tt insert}}
+command (see Section~\ref{s:macedit}).
+
+As an example of which commands are typically saved and which commands are not,
+suppose that during a typical \wip\ interactive session a user typed
+the following commands:
+\begin{wiplist}%
+  \index{Commands!{\tt device}}
+  \index{Commands!{\tt limits}}
+  \index{Commands!{\tt box}}
+  \index{Commands!{\tt show}}
+  \index{Commands!{\tt xlabel}}
+  \index{Commands!{\tt ylabel}}
+  \index{Commands!{\tt erase}}
+  \index{Commands!{\tt move}}
+  \index{Commands!{\tt draw}}
+  \item {\tt device /xwindow}
+  \item {\tt limits 0 10 0 5}
+  \item {\tt box bcnst bcnstv}
+  \item {\tt show c}
+  \item {\tt xlabel time (sec)}
+  \item {\tt ylabel Number}
+  \item {\tt erase}
+  \item {\tt box bcnst bcnstv}
+  \item {\tt move 0 2}
+  \item {\tt draw 0 3}
+  \item {\tt draw 2 3}
+\end{wiplist}
+At this point, if the user issued the \wip\ command
+{\tt list},\index{Commands!{\tt list}}%
+\index{Macros!commands!{\tt list}}
+only the following commands would appear:
+\begin{wiplist}%
+  \index{Commands!{\tt list}}
+  \index{Commands!{\tt limits}}
+  \index{Commands!{\tt box}}
+  \index{Commands!{\tt xlabel}}
+  \index{Commands!{\tt ylabel}}
+  \index{Commands!{\tt move}}
+  \index{Commands!{\tt draw}}
+  \item [\wipp] {\tt list}
+\samepage
+  \begin{enumerate}\itemsep=0pt
+  \item {\tt limits 0 10 0 5}
+  \item {\tt box bcnst bcnstv}
+  \item {\tt xlabel time (sec)}
+  \item {\tt ylabel Number}
+  \item {\tt box bcnst bcnstv}
+  \item {\tt move 0 2}
+  \item {\tt draw 0 3}
+  \item {\tt draw 2 3}
+  \end{enumerate}
+  \item [\wipp] \ %
+\end{wiplist}
+Note that the {\tt device}, {\tt show}, and {\tt erase} commands are
+not present in the listing.
+This ``listing'' actually holds the contents of the command buffer or, more
+precisely, the macro named {\em buffer}\index{Macros!buffer}.
+
+The sections that follow will explain 
+how to define macros; pass arguments into the macros; edit,
+execute, and remove macros.
+In Chapter~\ref{c:flow}, more advanced use of macros will be illustrated.
+Appendix~\ref{a:wipinit} presents how to have macros automatically
+defined whenever \wip\ is started.
+Finally, Appendix~\ref{a:samples} illustrates several
+examples of macro definitions and their uses.
+
+\section		{Creating Macros}
+\mylabel{s:macdefine}
+\index{Macros!how to create}
+
+Macros are created using the
+{\tt define}\index{Commands!{\tt define}}%
+\index{Macros!commands!{\tt define}}
+command.
+The {\tt define} command has only one required argument: the macro name.
+Macros may have any name as long as it does not conflict with any \wip\
+command or any other previously defined macro.
+Macro names
+are case insensitive (\ie {\tt MyLabel} is considered the same macro
+name as {\tt mylabel}).
+All valid commands entered after the {\tt define} command are
+inserted into the named macro.
+When \wip\ receives a proper {\tt define} command, the prompt changes to
+{\rm DEFINE\verb+>+} to remind the user they are in definition mode,
+and this prompt remains until the next
+{\tt end}\index{Commands!{\tt end}}\index{Macros!commands!{\tt end}}
+command terminates the definition.
+
+Each command entered as part of the definition of a macro
+is checked that it is either a valid command or another defined macro
+and is then stored for later use.
+For this reason, macros may not reference other macros that have not yet
+been defined.\footnote{This is to prevent macros from calling themselves.}
+Of course, previously defined macros may be used within
+another macro definition.
+
+If a macro already exists with the same name as the macro being defined
+a warning is issued to the user and the previous definition is removed.
+The warning is issued to indicate to the user that a conflict of names
+exists and that the user should be careful that the proper macro is
+going to be used in the plot file.
+
+\section		{Macro Arguments}
+\mylabel{s:macarguments}
+\index{Macros!passing arguments}
+
+There are 10 special arguments that may be used within the definition of
+a macro: \$1, \$2, \ldots, \$9, and \$0.
+When a macro is executed, any parameters following the macro name are
+assigned, in order, to the ten variables.
+Whenever a command in the macro references one of these variables,
+the command line parameter is substituted in its place.
+The input arguments to a macro are specified in the same fashion as when
+providing arguments to a command:
+tokens separated by white space or commas.
+And, as usual, arguments may be either numbers or text strings.
+If a requested argument is not found, the special argument is skipped.
+As an example of how to define a macro with arguments, consider
+the following example (remember the \# character denotes the beginning
+of a comment that lasts until the end of the line):
+\begin{wiplist}%
+  \index{Commands!{\tt define}}
+  \index{Commands!{\tt move}}
+  \index{Commands!{\tt label}}
+  \index{Commands!{\tt end}}
+  \index{Commands!{\tt limits}}
+  \item [\wipp] {\tt define mylabel}\hfill\# Use as mylabel x y label
+\samepage
+  \item [\wipd] {\tt move~~~~\$1~~~\$2}\hfill\# Move to position (x, y).
+  \item [\wipd] {\tt label \$3 \$4 \$5 \$6}
+  \item [\wipd] {\tt end}\hfill\# End of macro definition.
+  \item [\wipp] {\tt limits 0 10 0 10}\hfill\# Set the world coordinates.
+  \item [\wipp] {\tt mylabel 1~~~4 A~~~ string\ \ to~~~present.}\hfill
+    \# Call the macro.
+  \item [\wipp] {\tt mylabel 1 8 6th~~~~argument omitted.}\hfill\# Pass
+    only 5 args.
+  \item [\wipp] {\tt mylabel 4 5 A string of 5 elements.}\hfill\# Pass
+    too many args.
+\end{wiplist}
+In short, {\tt mylabel} moves to the specified position and writes a label
+consisting of up to four words separated by single spaces.
+Notice that the second time the {\tt mylabel} macro is called,
+it is only called with five arguments.
+In this case, the sixth argument is being ignored and has no effect
+on the text labeled.
+When the macro is executed, the command parser will substitute the
+command line arguments.
+When the parser does not find a requested argument (in this example, the
+sixth), it silently ignores it.
+The last time the macro is called, too many arguments are passed into it.
+Unneeded arguments to macros are ignored.
+So, in this example, the string that will actually appear will only
+consist of ``A string of 5''; the word ``elements'' will be discarded.
+
+Note also that, in the above example,
+the number of spaces separating the arguments
+in the first two calls to the macro does not matter.
+This is also true of the {\tt move} command in the macro definition.
+However, in the {\tt label} command, the spacing and location of the
+arguments is important!
+The macro command
+\begin{wiplist}%
+  \index{Commands!{\tt label}}
+  \item [\wipd] {\tt label \$3\ \$4\ \$5\ \$6}
+\end{wiplist}
+will produce quite different results from the statement
+\begin{wiplist}%
+  \index{Commands!{\tt label}}
+  \item [\wipd] {\tt label \$3\$4\$5\$6}
+\end{wiplist}
+This distinction may be quite useful when defining a macro.
+In particular, a macro command like
+\begin{wiplist}%
+  \index{Commands!{\tt set}}
+  \item [\wipd] {\tt set \esc{0} 0\$1}
+\end{wiplist}
+will set the user variable\index{User Variables} \esc{0} to 0 if the
+macro is called without any arguments.
+This is because the macro argument {\tt \$1} will be skipped if no arguments
+are present and the resulting command will be the same as if the command
+typed was:
+\begin{wiplist}%
+  \index{Commands!{\tt set}}
+  \item [\wipd] {\tt set \esc{0} 0}
+\end{wiplist}
+
+An advanced feature of macro arguments is that of returned values.
+If used properly, a macro argument may be set in a macro and the new
+value ``returned'' at the end.
+In this way, internal counters for the
+{\tt loop}\index{Commands!{\tt loop}} command (see section~\ref{s:loop})
+can be updated.
+Several examples of this technique are shown in the section
+containing sample plot files and figures (Appendix~\ref{a:samples}).
+It is important to
+note that the macro argument that is used (and returned) is always
+a user variable (see Chapter~\ref{c:uservar})
+and never a literal value or string.
+
+Notice that comments\index{Comments} are used whenever possible
+in the macro definition,
+but are not present at the end of any text labeling command.
+A useful convention to follow is to identify the arguments to a macro
+in the definition of the macro and identify which
+user variables\index{User Variables},
+if any, are changed or used by the macro.
+When working interactively, comments are ignored and are not saved in
+the command buffer.
+Working in {\rm INSERT}\index{Macros!commands!{\tt insert}} mode,
+as well as when plot files are created
+external to \wip\ in an editor, will, however, retain what comments are typed.
+Hence if you define a macro externally or modify the plot file in an editor,
+you can place comments and label the inputs to the macro.
+This will greatly help you at a later time when you return to this macro
+and try to figure out what it does and what the inputs should be when
+calling it.
+Neither comments or identification of arguments are required, but like
+good programming, they are extremely valuable.
+
+\section		{Editing Macros}
+\mylabel{s:macedit}
+\index{Macros!editing}
+
+All macros, including the command buffer\index{Macros!buffer}
+may be edited.
+The three commands used to edit a macro and the command buffer are
+described in the sections that follow.
+It should be understood that whenever the word macro is used in the
+discussions that follow, it includes all user defined macros {\em and}
+the command buffer.
+
+\subsection*		{List}
+\mylabel{ss:maclist}
+\index{Commands!{\tt list}}\index{Macros!commands!{\tt list}}
+
+Whenever a user edits a macro,
+the edit command usually requires a line number as an argument.
+The line number tells the edit command where in the macro to begin to edit.
+These line numbers are associated with the numbers presented
+whenever the macro is listed.
+The {\tt list} command provides a way to display the contents of a macro.
+
+Without any arguments, {\tt list} will display the entire contents of
+the command buffer.
+Each command will be proceeded by a number representing the order it
+is executed.
+As the number of commands in a macro increases,
+this may make it difficult to ``see'' all
+the commands on your display.
+
+If only one argument is given to the {\tt list} command,
+it is assumed to be the starting command line number.
+All commands, including the one specified, are displayed until the end
+of the buffer.
+So, the command
+\begin{wiplist}%
+  \index{Commands!{\tt list}}
+  \item [\wipp] {\tt list 5}
+\end{wiplist}
+will list the fifth command in the command buffer, then the sixth, and
+so on, until the end of the command buffer.
+
+If a second argument is present, it is the line number at which the listing
+will stop.
+This is useful when the user only wants to display the first few lines
+of a macro.
+If this second number is greater than the number of commands in the buffer,
+then the {\tt list} command will present all commands from the starting
+line number to the end of the buffer.
+In this way, the command
+\begin{wiplist}%
+  \index{Commands!{\tt list}}
+  \item [\wipp] {\tt list 5 10000}
+\end{wiplist}
+will present every command in the command buffer starting with the fifth.
+(This is identical to the command shown before.)
+
+Finally, a third argument, if present, will inform the {\tt list}
+command which macro to list.
+If the user wishes to display the entire macro, then the command
+\begin{wiplist}%
+  \index{Commands!{\tt list}}
+  \item [\wipp] {\tt list 1 10000 mymacro}
+\end{wiplist}
+will surely be sufficient to cover the entire listing
+of the macro {\tt mymacro}.
+Small sections of the macro may be specified by judicious selection of
+the input line number arguments.
+
+\subsection*		{Insert}
+\mylabel{ss:macins}
+\index{Commands!{\tt insert}}\index{Macros!commands!{\tt insert}}
+
+Commands are never typed in the way we want them on the
+first time through a plot.
+Often, a color change or line style adjustment extends further
+in the plot file than we first expected.
+Another command is needed just a few lines prior to the current command.
+Or perhaps we have, too hastly, finished a definition of
+a macro and forgot to include an important command.
+These situations can be quite easily fixed with the {\tt insert} command.
+The {\tt insert} command may have up to two optional arguments
+(discussed below).
+
+When the {\tt insert} command is called, it places the user into insert mode.
+This is demarked by the prompt changing to {\rm INSERT\verb+>+}.
+All commands typed at this point are checked that they are valid
+commands (if not, they are ignored) and are inserted in the
+proper order (without being executed).
+Insert mode is terminated by entering the {\tt end} command.
+
+Without any arguments, {\tt insert} starts inserting commands at the end
+of the command buffer.
+This is the same as interactive mode except that the commands typed are
+not executed.
+If one argument is present, it is considered the insert line number and
+all commands will be inserted {\em before} that line in the macro.
+Hence, if the command buffer has three commands currently in it and the
+user types
+\begin{wiplist}%
+  \index{Commands!{\tt insert}}
+  \item [\wipp] {\tt insert 10000}
+\end{wiplist}
+the effect will be the same as if the user had typed
+\begin{wiplist}%
+  \index{Commands!{\tt insert}}
+  \item [\wipp] {\tt insert 4}
+\end{wiplist}
+or just
+\begin{wiplist}%
+  \index{Commands!{\tt insert}}
+  \item [\wipp] {\tt insert}
+\end{wiplist}
+If two arguments are present, then the first argument specifies
+which line number to insert commands before (as above) and the second
+argument is the name of the macro in which commands will be inserted.
+As an example, if the user has a macro defined called {\tt mymacro},
+then the command
+\begin{wiplist}%
+  \index{Commands!{\tt insert}}
+  \item [\wipp] {\tt insert 1 mymacro}
+\end{wiplist}
+will allow the user to insert commands at the beginning of the named macro.
+
+\subsection*		{Delete}
+\mylabel{ss:macdel}
+\index{Macros!removing}\index{Macros!commands!{\tt delete}}
+\index{Commands!{\tt delete}}
+
+Just as users may wish to insert commands in either the command buffer
+or their own macros,
+they will want to remove certain commands.
+The {\tt delete} command permits the user to specify lines of commands
+or even entire macros to be deleted.
+A macro is automatically deleted whenever the number of commands
+it contains reaches zero.\footnote{The command buffer is never removed;
+even if there are no commands in it.}
+Deleting an entire macro is sometimes useful if the user wishes to define
+another macro with the same name.
+
+The {\tt delete} command may have up to three optional arguments.
+With no arguments present, it removes the last line in the command buffer.
+The first two arguments are considered as command line numbers.
+With only one argument, the specified command line in the command buffer
+is removed.
+If the line number is greater than the number of commands present in the
+macro, the last command is removed.
+If two arguments are present, then the inclusive range of commands are
+removed from the command buffer.
+Finally, if all three optional arguments are present, then the lines
+removed are from the named macro.
+Hence, the command
+\begin{wiplist}%
+  \index{Commands!{\tt delete}}
+  \item [\wipp] {\tt delete 4 4 mymacro}
+\end{wiplist}
+will remove only the forth line from the macro {\tt mymacro}.
+The command
+\begin{wiplist}%
+  \index{Commands!{\tt delete}}
+  \item [\wipp] {\tt delete 1000 1000 mymacro}
+\end{wiplist}
+will remove only the last command from the macro {\tt mymacro} (if there
+are fewer than 1000 commands in the macro).
+
+\section		{Executing Macros}
+\mylabel{s:maccall}
+\index{Macros!calling}
+\index{Macros!executing}
+
+Once a macro has been defined, it is executed just like any
+of the other \wip\ commands.
+To execute a macro, just call it by name.
+The macro name may also be followed by any required or
+optional arguments as is necessary.
+
+In addition, a macro may be executed without being
+saved in the command buffer.
+This is accomplished with the
+{\tt playback}\index{Commands!{\tt playback}}%
+\index{Macros!commands!{\tt playback}}
+command.
+Without any arguments,
+{\tt playback} executes the commands in the command buffer.
+This is an extremely useful command when the constructed plot
+begins to become quite complicated.
+The optional arguments to {\tt playback} is the name of the macro
+to be executed and any arguments needed by the macro.
+Since the {\tt playback} command is not saved in the command buffer,
+this permits a user the opportunity to test their macros.
+However, the real usefulness of the {\tt playback} command is in
+repeating the plot file constructed.
+
+\section		{Saving and Recalling Macros}
+\mylabel{s:macwrite}
+\index{Macros!saving}
+
+Once a user has defined a useful macro, they will undoubtedly wish to
+save them to a file for use again.
+This is accomplished with the
+{\tt write}\index{Commands!{\tt write}}
+\index{Macros!commands!{\tt write}}
+command.
+The {\tt write} command permits named macros and the command buffer to
+be written to an ASCII\index{ASCII} text file.
+The only required argument to the {\tt write} command
+is the name of the output file.
+With no other arguments, the command buffer is written to the named file.
+If any other arguments are present after the file name,
+they are considered to be the macros to be saved and these named macros
+are written to the specified file.
+Multiple macros may be written to the same file with only one
+{\tt write} command.
+If the macro name listed is ``all'', then all macros currently defined
+{\em and} the command buffer will be written to the named file.
+
+To retrieve macro definitions, \wip\ provides three
+commands\index{Macros!recalling}.
+Each command treats the input file differently and are explained in
+brief detail in the following list.
+\begin{description}
+  \item [{macro {\em filename} --}]
+    \index{Commands!{\tt macro}}\index{Macros!commands!{\tt macro}}
+    Used to define macros.
+    Only macro definitions are read in; any other commands are ignored.
+    The macro is not executed but is now available for further execution.
+  \item [{read {\em filename} --}]
+    \index{Commands!{\tt read}}\index{Macros!commands!{\tt read}}
+    Used to read in plot commands into the command buffer\index{Macros!buffer}.
+    Commands are placed into the command buffer without executing them
+    (this is similar to the {\tt insert}
+    \index{Commands!{\tt insert}}%
+    \index{Macros!commands!{\tt insert}}%
+    command).
+    If the file contains macro definitions,
+    they will be not placed into the command buffer or
+    defined; they must be entered using the {\tt macro} command.
+  \item [{input {\em filename} --}]
+    \index{Commands!{\tt input}}\index{Macros!commands!{\tt input}}
+    Commands are executed just as if they were typed in interactive mode
+    but are not saved in the command buffer.
+    Macro definitions are acceptable but will overwrite (redefine)
+    the macro.  A message is printed when a macro is redefined.
+    Only exact matches to the macro name are overwritten.
+    Because of this, care should be taken to insure that
+    the proper macro is being executed.
+\end{description}
