@@ -1,0 +1,979 @@
+% This file is to be included by latex in ug.tex
+%
+% General Task Concepts
+%
+\mylabel{c:concepts}
+\myfile{concepts.tex}
+
+This chapter describes the general graphical concepts of \wip.
+Many of \wip's commands are used to set the device type,
+the device's environment,
+location and limits of the border,
+and annotate the plot with labels.
+Most of these commands are called only one time; others several times.
+These concepts and some of the commands needed to put them to use are
+described in the sections that follow.
+
+\section{Graphical Devices}
+\mylabel{s:devices}
+\index{Devices}
+
+Plotting devices in \wip\ provide the destination for the plot.
+In this sense, any graphics device, whether a computer terminal,
+a high resolution laser printer, or even a file
+may be considered a \wip\ device.
+An initial device is selected when \wip\ first begins but
+new devices may be
+selected at any time during the interactive session.
+
+There are several ways that the initial device may be chosen
+when starting \wip.
+The following list indicates the different ways an
+initial \wip\ device is selected:
+\begin{enumerate}
+  \item An initial device command has been set up to be
+    \index{Commands!{\tt device}}\index{Devices!device-type!/xwindow}%
+    {\tt device /xwindow}.
+    This initial device was fixed when \wip\ was compiled.
+  \item If a default device is provided in
+    your \wipinit\index{wipinit@\wipinit} file
+    (see Appendix~\ref{a:wipinit} on the use of this file),
+    it is loaded in place of the hard coded device.
+  \item If the ``{\tt -d device}'' flag appears on the command line
+    (see Appendix~\ref{a:cmdline} for a further description of
+    command line options),
+    it will always override any other initial device selected.
+\end{enumerate}
+
+A new device may be selected at any time in \wip.
+To specify a new device interactively,
+use the command {\tt device}\index{Commands!{\tt device}}
+with the new device name as its argument.
+For example, the command
+\begin{wiplist}%
+  \item {\tt device /ps}
+\end{wiplist}
+selects the landscape version of the PostScript driver as the new device.
+
+Devices have a standard PGPLOT format of
+``file-name/device-type'' or ``device-name/device-type''.
+If the `file-name' or `device-name' contains a slash (/), it should be
+enclosed in double quotation marks.
+For example, the command
+\begin{wiplist}%
+  \item {\tt device "/dev/tty"/tek}
+\end{wiplist}
+sets the current device to a Tektronix terminal and sends the output to
+the device named ``/dev/tty''.
+Usually there exists a default `file-name' or `device-name'
+(see Table~\ref{t:devices}).
+The part after the slash (required)
+identifies the plotter device type (`device-type').
+This could be,
+for example, ``{\tt /tek}'' for plotting on a Tektronix terminal,
+or ``{\tt /ps}'' to generate a PostScript output file.
+If the {\tt device} command argument is ``?'' (no preceding slash),
+then \wip\ generates a list of
+all currently recognized device types.
+The command
+{\tt ldev}\index{Commands!{\tt ldev}}\index{Devices!commands!{\tt ldev}}
+will also
+generate the list of the currently recognized device types.
+Table~\ref{t:devices} lists a few of the typically recognized devices
+and a short description about each.
+\begin{table}[htb]
+  \caption{A Sample of Available Plotting Devices}
+  \mylabel{t:devices}
+  \index{Devices}
+  \index{Devices!?}
+  \index{Devices!device-type!/null}
+  \index{Devices!device-type!/tek}
+  \index{Devices!device-type!/retro}
+  \index{Devices!device-type!/xterm}
+  \index{Devices!device-type!/xwindow}
+  \index{Devices!device-type!/xserve}
+  \index{Devices!device-type!/ps}
+  \index{Devices!device-type!/vps}
+  \index{Devices!device-type!/cps}
+  \index{Devices!device-type!/vcps}
+  \centering
+  \settowidth{\tabentrylen}{A null device.  Useful for error testing of scripts.\ }
+  \begin{tabular}{|c|p{\tabentrylen}|} \hline\hline
+   Device & Description \\ \hline
+          & \\
+ ?        & Interactive help to list all available devices. \\
+ /null    & A null device.  Useful for error testing of scripts. \\
+ /tek     & A Tektronix terminal. \\
+ /retro   & A VT100 with RETRO graphics card. \\
+ /xterm   & The Tektronix window associated with an xterm window. \\
+ {\em [[id]@][display]}/xwindow
+          & A X-window display.  Multiple windows may be
+            started on one display by using a unique {\em id} number.
+            The default {\em id} is 0, which selects an inactive window
+            if available, or creates a new one.  A display may
+            also be specified to override the default (which is
+            to use the {\tt DISPLAY} environment variable). \\
+ {\em [[id]@][display]}/xserve
+          & A persistent version of the {\tt /xwindow} server.
+            In addition, this device may be dynamically resized
+            during various \wip\ sessions. \\
+ {\em file}/ps
+          & File in PostScript printer format (landscape).
+            The default name for the {\em file} is pgplot.ps. \\
+ {\em file}/vps
+          & File in PostScript printer format (portrait).
+            The default name for the {\em file} is pgplot.ps. \\
+ {\em size}/cps
+          & The same as {\tt /ps} except in color. \\
+ {\em size}/vcps
+          & The same as {\tt /vps} except in color. \\
+          & \\ \hline\hline
+  \end{tabular}
+\end{table}
+
+{\sc Note:}
+The {\tt /retro} and {\tt /tek4010} devices may have some
+problems with the cursor when used interactively
+(especially over a network) -- this is currently being investigated.
+
+{\sc Note:}
+The {\tt /xwindow} and {\tt /xserve} devices behave differently than
+other devices.
+These plotting devices start a server independently of \wip\ which is
+used to communicate with each plotting window.  The server will stay
+present on the display long after a \wip\ session is complete.
+The difference between the {\tt /xwindow} and {\tt /xserve} drivers is
+that the {\tt /xserve} remains on the screen after a \wip\ session.
+There may be multiple {\tt /xserve} windows on a single display,
+each having a unique id number associated with it.
+The id number is used to identify the proper window to \wip.
+As with many X-window applications, the server associated with these two
+devices has several application defaults which may be set up in
+your X-resource file.
+These resources, acceptable values, and default values are shown in
+listing that follows.
+To target options at specific windows, replace the {\tt Win}
+component of the specification with {\tt win\#}, where {\tt \#}
+is the id number of the window.
+\begin{description}
+  \index{Devices}
+  \index{Devices!device-type!/xwindow}
+  \index{Devices!device-type!/xserve}
+  \item[pgxwin.Win.acceptQuit: ] Either True or False; the default is False.
+    If true, it allows the window manager to provide a way to destroy
+    the window; even while being used.
+  \item[pgxwin.Win.iconize: ] Either True or False; the default is False.
+    By default, the /xserve window remains mapped when \wip\ finishes.
+    If this option is true, the window will become iconic until opened
+    by another \wip\ session.
+  \item[pgxwin.Win.maxColors: ] Any number; the default is 100.
+    This sets the maximum number of colors to try to allocate
+    on startup.  Useful for stopping ``colormap flashing''.
+  \item[pgxwin.Win.minColors: ] Any number; the default is 16.
+    Rejects colormaps with fewer than this number of color entries.
+  \item[pgxwin.Win.visual: ] Any one of: default, monochrome, PseudoColor,
+    DirectColor, StaticColor, TrueColor, GrayScale, or StaticGray.
+    The default value is default (any visual will do).
+    This resource indicates the visual that should be tried first.
+  \item[pgxwin.Win.crosshair: ] Either True or False; the default is False.
+    If true, this sets the default active cursor to cross hairs.
+  \item[pgxwin.server.visible: ] Either True or False; the default is True.
+    If false, the server window will be hidden.
+  \item[pgxwin.server.iconGeometry: ] An icon geometry format:
+    {\tt +X+Y} that specifies where the server icon should appear.
+  \item[pgxwin.Win.iconGeometry: ] An icon geometry format:
+    {\tt +X+Y} that specifies where the window icon should appear.
+  \item[pgxwin.Win.geometry: ] A window geometry format:
+    {\tt WIDTHxHEIGHT+X+Y}.
+    The default is something like 867x670.
+\end{description}
+
+Files created for hardcopy\index{Hardcopy} devices must be
+spooled to the printer.
+Two commands and one string variable exist to simplify this for the user.
+The commands that spool a plot to a hardcopy device are
+{\tt hardcopy}\index{Commands!{\tt hardcopy}}%
+\index{Hardcopy!commands!{\tt hardcopy}}
+and {\tt phard}\index{Commands!{\tt phard}}%
+\index{Hardcopy!commands!{\tt phard}}.
+The string variable {\em print}\index{String Variables!variables!{\em print}}%
+\index{Hardcopy!the {\em print} string}
+is used to control {\it how} the plot file will be spooled to the printer.
+
+The command
+{\tt hardcopy}\index{Commands!{\tt hardcopy}}
+\index{Hardcopy!commands!{\tt hardcopy}}
+is used when the current device is a hardcopy (\ie non-interactive) device
+and you are finished generating output to that device.
+This command closes the output file and releases it to be printed by \wip.
+Alternatively, the command {\tt phard}\index{Commands!{\tt phard}} may be
+used when the current device is an interactive device and the user
+desires to playback the list of current commands to a hardcopy device
+and then resume plotting on the initial interactive device.
+Both commands use the string variable {\em print} to describe how to
+spool the resulting plot file.
+
+Since the method needed to spool the file to the selected printer
+is site and device specific, a flexible method was needed to allow users
+to spool their plots.
+Generally, the command to send a plot to a printer is quite simple and
+may be specified by a single statement.
+The string variable {\em print}\index{String Variables!variables!{\em print}}
+contains the command needed for the system to plot the file `file-name'
+and overrides the initial default value set when \wip\ was compiled.
+For example, the default value for
+{\em print}\index{String Variables!variables!{\em print}}
+on a Unix system is ``{\tt lpr \%s}'' where the ``{\tt \%s}''
+represents a variable that is used
+as a placeholder for the value of the plot file name.
+The value for {\em print} may be customized for every instance of \wip\ if
+it is defined in your \wipinit\index{wipinit@\wipinit} file
+(see Appendix~\ref{a:wipinit} on how to set up this command in this file).
+Alternatively, the command
+\begin{wiplist}%
+  \item {\tt set print myprog \%s \verb+|+ lpr}
+\end{wiplist}
+illustrates how a particular instance for the value of
+{\em print}\index{String Variables!variables!{\em print}}
+may be defined by using the command {\tt set}\index{Commands!{\tt set}}.
+Chapter~\ref{c:uservar} provides more details about the use the
+{\tt set} command.
+In this example, the string variable {\em print} has been defined to
+run the program {\tt myprog} with the plot file as its only
+argument and then pipe the result to the standard printer.
+Note the use of the {\tt \%s} variable to insure that the file is passed
+to the program {\tt myprog} rather than appended to the end of the command.
+If the {\tt \%s} was not used, the resulting command would have been
+the same as if the user typed:
+\begin{wiplist}%
+  \item {\tt set print myprog \verb+|+ lpr \%s}
+\end{wiplist}
+
+Sometimes, it is useful to do everything except spool the file to a
+printer.  This might happen when generating color PostScript files
+and it is desired to screen preview the file before shipping them off to
+the printer.
+To override the printing command, set the {\em print} string to ``ignore''
+as in the example:
+\begin{wiplist}%
+  \item {\tt set print ignore}
+\end{wiplist}
+This will cause the {\tt spool} and {\tt hardcopy} commands to perform
+all of the post-processing on the hardcopy file but to ignore the print
+statement.
+Setting the {\em print} variable to an empty string will
+have the same effect.
+
+\section{Help, Echo, and Show}
+\mylabel{s:help}
+\index{Help}
+
+Help is available on-line in \wip.
+The location and name of the on-line help file is set when \wip\ is compiled.
+Generally, this should never need to change.
+However, there are two ways the location or name of this file can
+be reassigned without having to recompile \wip.
+The first is to set the environment variable
+``WIPHELP''\index{Help!on-line help file!\$WIPHELP}.
+The other way is for the user to do this via their \wipinit file
+(see Appendix~\ref{a:wipinit} for details).
+
+In addition to this manual, there are three modes of help
+that are available within the interactive mode of \wip.
+The command {\tt help} has an optional argument that, depending on its
+use and whether or not it is present, provides three different styles of help.
+They are:
+\begin{description}
+\index{Commands!{\tt help}}\index{Help!commands!{\tt help}}
+  \item [{help ? --}] Lists the names of all currently available
+\samepage
+    commands and the names of the currently defined macros.
+  \item [{help --}] Lists each command along with a one line
+    description of what the command is suppose to do and the
+    necessary and/or optional arguments.
+  \item [{help {\em cmd} --}] Provides a complete description of the 
+    command {\em cmd}.  Appendix~\ref{a:cmdname} provides the
+    equivalent of this option for every available command.
+  \end{description}
+
+In addition to the on-line help, \wip\ also provides a way to see the
+current value of many
+of the attributes\index{Graphical Attributes},
+coordinate system positions\index{Coordinate System},
+user variables\index{User Variables}, and
+image\index{Images} characteristics\index{Images!image characteristics}.
+This may be done with either the command
+{\tt echo}\index{Commands!{\tt echo}} or the command
+{\tt show}\index{Commands!{\tt show}}.
+The command {\tt echo} enables the user to display, at the command line,
+the current value of almost any item available to \wip.
+The {\tt echo} command will also evaluate expressions and print literal text.
+Multiple items may also be presented using only one {\tt echo} command.
+Throughout the rest of this manual, several examples of the command {\tt echo}
+will be presented.
+The command {\tt show} displays not only many of the items listed above,
+but also the user variable ``name'' (shown in upper case) that
+is associated with their values
+(see the topics described in the Chapters of Part~\ref{p:advanced}
+for a more detailed description on how to make use of these names).
+
+\section{Coordinate Systems}
+\mylabel{s:coord}
+\index{Coordinate System}
+
+There are two distinct coordinate systems in \wip.
+They are the
+{\em Device}\index{Device Coordinates|see{Viewport}}\index{Viewport}
+and the
+{\em World}\index{World Units}\index{Coordinate System!World}%
+\index{User Limits|see {World Units}}
+coordinates.
+The device, or {\em viewport}, coordinates represent positions on the
+device and are always in units that range between (0 -- 1).
+The {\em world} coordinates represent what the
+user usually associates as the limits or range of the plot.
+For example, a plot of height versus weight might have
+the abscissa ($x$-coordinate) represent weight
+and the ordinate ($y$-coordinate) height.
+The actual values of weight and height represent
+the {\em world} coordinates.
+Where these values map onto the device represent
+the {\em device} coordinates.
+
+This rectangular region of the {\em world} coordinate space
+(termed the {\em window}\index{Window}\index{Coordinate System!Window})
+is mapped onto a specified rectangle
+(termed the {\em viewport}\index{Viewport}\index{Coordinate System!Viewport})
+on the 
+{\em view surface}\index{View Surface}\index{Coordinate System!View Surface}
+(the screen of an interactive display or a sheet of paper on a hardcopy
+plotter).
+The following list of commands affect either the
+{\em world} coordinate system or the position and size of the {\em viewport}.
+
+\begin{itemize}
+  \item World coordinates
+  \begin{description}
+    \item [{environment --}]\index{Commands!{\tt environment}}
+      \index{Coordinate System!commands!{\tt environment}}
+      sets the world coordinates based on the input arguments or
+      the extreme minimum and maximum of the current X and Y arrays.
+    \item [{header --}]\index{Commands!{\tt header}}
+      \index{Coordinate System!commands!{\tt header}}
+      reads header information from the current image file and
+      uses the header values to set the world coordinates.
+      This command expands the world limits by, effectively,
+      the width of half a pixel in each direction.
+    \item [{limits --}]\index{Commands!{\tt limits}}
+      \index{Coordinate System!commands!{\tt limits}}
+      sets the World coordinates based on the input arguments or
+      the limits of the current X and Y arrays.
+    \item [{winadj --}]\index{Commands!{\tt winadj}}
+      \index{Coordinate System!commands!{\tt winadj}}
+      sets the world coordinates (as with {\tt limits})
+      and then adjusts the viewport
+      values to have the same aspect ratio.
+  \end{description}
+
+  \item Viewport coordinates
+  \begin{description}
+    \item [{panel --}]\index{Commands!{\tt panel}}
+      \index{Coordinate System!commands!{\tt panel}}
+      selects a sub-region within the current viewport
+      as a new, {\it temporary} viewport.  The gap between the panels
+      created with this command may be adjusted using the command
+      {\tt submargin}\index{Commands!{\tt submargin}}.
+    \item [{paper --}]\index{Commands!{\tt paper}}
+      \index{Coordinate System!commands!{\tt paper}}
+      changes the size of the view surface to a specified width
+      (in inches) and height (based on the input aspect ratio).
+      This, in turn, sets the size of the viewport.
+    \item [{scale --}]\index{Commands!{\tt scale}}
+      \index{Coordinate System!commands!{\tt scale}}
+      sets the viewport size scale based on the range
+      of the world coordinates and the scaling factor given as input arguments.
+    \item [{viewport --}]\index{Commands!{\tt viewport}}
+      \index{Coordinate System!commands!{\tt viewport}}
+      sets the viewport size with arguments given in viewport
+      coordinates (ranging from 0 to 1 in all directions for all devices).
+    \item [{viewsize --}]\index{Commands!{\tt viewsize}}
+      \index{Coordinate System!commands!{\tt viewsize}}
+      sets the viewport size with arguments given in inches.
+    \item [{vstand --}]\index{Commands!{\tt vstand}}
+      \index{Coordinate System!commands!{\tt vstand}}
+      sets the viewport size to the full area of the view surface less a
+      margin of 4 character heights on each side.
+    \item [{winadj --}]\index{Commands!{\tt winadj}}
+      \index{Coordinate System!commands!{\tt winadj}}
+      sets the world coordinates (as with {\tt limits})
+      and then adjusts the viewport
+      values to have the same aspect ratio.
+  \end{description}
+\end{itemize}
+
+\section{Attributes}
+\mylabel{s:attrib}
+\index{Graphical Attributes}
+
+There are several graphic characteristics of \wip\ that may be set by either the
+program or by the user.
+These have the special behavior that they will remain in effect
+until either the end of the plot or until they are changed again by the user.
+These characteristics include the color index, text font, line style
+and width, fill type, and character size expansion to name a few.
+Table~\ref{t:attrib} contains a list of the attributes,
+their default values,
+and the commands used in \wip\ to modify them.
+The values of the attributes listed in Table~\ref{t:attrib} remain intact
+until changed by another call to the controlling command with one exception:
+attributes identified with a `Yes' in the Reset column are reset
+to their default value every time a new device is selected or the user
+issues the {\tt reset}\index{Commands!{\tt reset}} command.
+The examples in Appendix~\ref{a:samples} illustrate how to use
+several of these graphical attributes
+and Figure~\ref{p:symbol} displays the first 32 graphical markers used
+by the command {\tt symbol}\index{Commands!{\tt symbol}}.
+\begin{table}
+  \caption{Graphical Attributes}
+  \mylabel{t:attrib}
+  \index{Graphical Attributes!table of}
+  \index{Commands!{\tt angle}}
+  \index{Commands!{\tt ask}}
+  \index{Commands!{\tt color}}
+  \index{Commands!{\tt expand}}
+  \index{Commands!{\tt fill}}
+  \index{Commands!{\tt font}}
+  \index{Commands!{\tt lstyle}}
+  \index{Commands!{\tt lwidth}}
+  \index{Commands!{\tt symbol}}
+  \index{Symbols}
+  \centering
+  \begin{tabular}{|l|c|l|l|} \hline\hline
+    \multicolumn{1}{|c}{Attribute} & \multicolumn{1}{|c}{Reset} &
+    \multicolumn{1}{|c}{Default value} & \multicolumn{1}{|c|}{Command} \\ \hline
+    &&& \\
+    Angle          & No  & 0 (No rotation -- degrees)      & ANGLE $D$  \\
+    Prompting      & Yes & 0 (No new page prompting)       & ASK $n$    \\
+    Color Index    & Yes & 1 (Foreground color index)      & COLOR $n$  \\
+    Character Size & Yes & 1 (In character height units)   & EXPAND $n$ \\
+    Fill Type      & Yes & 1 (Solid fill)                  & FILL $n$   \\
+    Font Style     & Yes & 1 (Normal simple font)          & FONT $n$   \\
+    Line Style     & Yes & 1 (Full line)                   & LSTYLE $n$ \\
+    Line Width     & Yes & 1 (One stroke)                  & LWIDTH $n$ \\
+    Current Symbol & No  & 0 (Open square)                 & SYMBOL $n$ \\
+    &&& \\ \hline\hline
+  \end{tabular}
+\end{table}
+
+Table~\ref{t:colors} presents the predefined colors representations
+along with the corresponding Red-Green-Blue (RGB) and
+Hue-Lightness-Saturation (HLS) intensities.
+All but one of the color intensities have values that are in
+the inclusive range of 0.0 -- 1.0, with 1.0 being the maximum intensity.
+The exception is Hue which is a cyclic quantity expressed as an angle in
+degrees and has the inclusive range of 0 -- 360.
+If the three RGB intensities are the same, the color is a shade of gray.
+\begin{table}[htb]
+  \caption{Default Color Representations}
+  \mylabel{t:colors}
+  \index{Colors!default colors!table of}
+  \centering
+  \begin{tabular}{|c|l|r|r|} \hline\hline
+    \multicolumn{1}{|c|}{Index} & \multicolumn{1}{c|}{Color} &
+    \multicolumn{1}{|c|}{(H, L, S)} & \multicolumn{1}{c|}{(R, G, B)} \\ \hline
+    &&& \\
+     0 & Black (background)    &   0, 0.00, 0.00  &  0.00, 0.00, 0.00 \\
+     1 & White (foreground)    &   0, 1.00, 0.00  &  1.00, 1.00, 1.00 \\
+     2 & Red                   & 120, 0.50, 1.00  &  1.00, 0.00, 0.00 \\
+     3 & Green                 & 240, 0.50, 1.00  &  0.00, 1.00, 0.00 \\
+     4 & Blue                  &   0, 0.50, 1.00  &  0.00, 0.00, 1.00 \\
+     5 & Cyan (Blue + Green)   & 300, 0.50, 1.00  &  0.00, 1.00, 1.00 \\
+     6 & Magenta (Red + Blue)  &  60, 0.50, 1.00  &  1.00, 0.00, 1.00 \\
+     7 & Yellow (Red + Green)  & 180, 0.50, 1.00  &  1.00, 1.00, 0.00 \\
+     8 & Orange (Red + Yellow) & 150, 0.50, 1.00  &  1.00, 0.50, 0.00 \\
+     9 & Green + Yellow        & 210, 0.50, 1.00  &  0.50, 1.00, 0.00 \\
+    10 & Green + Cyan          & 270, 0.50, 1.00  &  0.00, 1.00, 0.50 \\
+    11 & Blue + Cyan           & 330, 0.50, 1.00  &  0.00, 0.50, 1.00 \\
+    12 & Blue + Magenta        &  30, 0.50, 1.00  &  0.50, 0.00, 1.00 \\
+    13 & Red + Magenta         &  90, 0.50, 1.00  &  1.00, 0.00, 0.50 \\
+    14 & Dark Gray             &   0, 0.33, 0.00  &  0.33, 0.33, 0.33 \\
+    15 & Light Gray            &   0, 0.66, 0.00  &  0.66, 0.66, 0.66 \\
+    16-255 & Undefined & & \\
+    &&& \\ \hline\hline
+\end{tabular}
+\end{table}
+
+\section{Boxes}
+\mylabel{s:box}
+\index{Boxes}
+
+Fundamental to the display of graphics in \wip\ is an item called a box.
+Boxes are constructs that border a plot and may identify the scale along
+a particular axis.
+There are several possible arrangements of the arguments
+to the command
+{\tt box}\index{Commands!{\tt box}}\index{Boxes!commands!{\tt box}}
+that will lead to very different borders.
+Many of the attributes listed in section~\ref{s:attrib}
+also affect the resulting appearance of the box.
+
+Prior to calling the {\tt box} command, the {\em world} coordinates,
+or limits, should be set.
+Refer to section~\ref{s:coord} for a collection of  commands which
+allow the user to specify the
+{\em world}\index{World Units}\index{Coordinate System!World}
+coordinates of the plot.
+
+Two other characteristics of the border may be specified prior to a call to
+{\tt box}:
+the major tick mark interval and the number of minor tick marks per major tick.
+Use the command {\tt ticksize}\index{Boxes!commands!{\tt ticksize}}%
+\index{Commands!{\tt ticksize}}%
+\index{Commands!{\tt ticksize}!arguments}
+to input the major interval and number of minor ticks for each axis.
+If the major tick mark interval is specified as 0 (the default),
+then {\tt box} will calculate its own interval.
+Likewise, if the number of minor tick marks per major tick mark is set
+to 0 (the default), then {\tt box} will attempt to calculate
+a ``nice'' interval.
+Setting the number of minor tick marks to 1 will inhibit any minor tick
+marks (except for
+logarithm) regardless of the arguments to the command {\tt box}.
+The units of the arguments to {\tt ticksize} are the same used to
+specify the limits of the {\em world} coordinates.
+
+There are two arguments to the command {\tt box} which determine
+how \wip\ will display the border.
+Each argument consists of one or more letters (case independent; no
+intervening spaces) which tell \wip\ how to construct the box.
+The current letters (and their meanings) used to construct
+an argument to {\tt box} are shown in Table~\ref{t:box}.
+\begin{table}
+  \caption{Box Option Characters}
+  \mylabel{t:box}
+  \index{Commands!{\tt box}}
+  \index{Commands!{\tt box}!arguments}
+  \index{Commands!{\tt limits}}
+  \index{Commands!{\tt ticksize}}
+  \index{Commands!{\tt ticksize}!arguments}
+  \centering
+  \setlength{\tabentrylen}{\textwidth}
+  \addtolength{\tabentrylen}{-1.0in}
+  \begin{tabular}{|c|p{\tabentrylen}|} \hline\hline
+    \multicolumn{1}{|c}{Option}
+   & \multicolumn{1}{|c|}{What It Produces} \\ \hline
+   & \\
+ A & Draw Axis line (X axis is a horizontal line at Y=0, Y axis is
+     a vertical line at X=0). \\
+ B & Draw Bottom (X) or Left (Y) edge of the frame. \\
+ C & Draw Top (X) or Right (Y) edge of the frame. \\
+ D & Include the superscript symbols ${}^\circ$, $'$, and $''$.
+     If this option is used, the option `Y' is implicitly implied. \\
+ F & Write only the last part of the label for the first time (left or
+     bottom most) tick on the axis (see option `Z').
+     (\eg if the full first label is 17 42 34.4, then only write 34.4.) \\
+ G & Draw a Grid of vertical (X) or horizontal (Y) lines at each of
+     the major tick mark positions. \\
+ H & Include the superscript symbols `d', `h', `m', and `s'. \\
+ I & Invert the tick marks; \ie\ draw them outside the viewport
+     instead of on the inside. \\
+ L & Label the axis Logarithmically.  If option `Z' is used, then this
+     option is ignored.  The major tick interval is {\em always} 1.0; the
+     number of minor ticks is {\em always} 8.  The numeric label is $10^{x}$,
+     where $x$ is the world coordinate at the tick mark. \\
+ M & Write Numeric labels in the unconventional location Above (X)
+     or to the Right (Y) of the viewport. \\
+ N & Write Numeric labels in the conventional location Below (X)
+     or to the Left (Y) of the viewport. \\
+ O & Omit leading zeros in numbers $< 10$ in time labels
+     (\eg $3^h 3^m 1.^s2$ will be written rather than $03^h 03^m 01.^s2$).
+     The day field is not affected by this option and this option is
+     ignored unless used with the `Z' option. This option is ignored
+     when used with the `V' option as it makes it impossible to align
+     the labels nicely.
+     This option is useful to help save space on the X-axis. \\
+ P & Extend (``Project'') the major tick marks outside the box
+     (ignored if the option `I' is also specified). \\
+ S & Draw Minor Tick marks (Subticks). \\
+ T & Draw Major Tick marks at the major coordinate interval. \\
+ V & Orient numeric labels Vertically. This is only applicable to the
+     Y axis.  The default is to write the Y-labels parallel to the axis. \\
+ Y & Do not include the day field in time labeling.  This means that
+     labels are ``HH MM SS.S'' rather than ``DD HH MM SS.S''.
+     The hours will accumulate beyond 24, if necessary, in this case. \\
+ Z & Use time labeling ((DD) HH MM SS style).  The World
+     coordinates of the box (see {\tt limits}) and the tick mark increments
+     (see {\tt ticksize}) should be given in units of seconds. \\
+ 1 & Force decimal labeling, instead of automatic choice. \\
+ 2 & Force exponential labeling, instead of automatic. \\
+ 0 & By itself, a zero produces a null-operation argument; useful
+     to produce a box along only one axis. \\
+   & \\ \hline\hline
+  \end{tabular}
+\end{table}
+Unrecognized letters are quietly ignored as are any
+multiple occurrences of letters.
+To call {\tt box} with arguments for only one axis, use the null
+argument (0); this will suppress any drawing along the unused axis.
+For example, to produce a standard box but only along the $y$-axis, use
+\begin{wiplist}%
+  \item {\tt box 0 bcnstv}\hfill\# Draw only a $y$-axis box.
+\end{wiplist}
+
+By calling {\tt box} with one group of arguments, then changing one
+or more attributes, and then calling {\tt box} again with different arguments,
+one can produce a box with considerable variation.
+The following list of commands provides such an example.
+\begin{wiplist}%
+  \item {\tt limits 0 10 0 100}\hfill\# Set the World coordinates.
+  \item {\tt lstyle 1}\hfill\# Set the line style to a solid line.
+  \item {\tt color 2}\hfill\# Set the color index to red.
+  \item {\tt box bcst bcst}\hfill\# Draw the sides and tick marks.
+  \item {\tt color 4}\hfill\# Set the color index to blue.
+  \item {\tt box n nv}\hfill\# Numerically label the tick marks.
+  \item {\tt color 14}\hfill\# Set the color index to dark gray.
+  \item {\tt lstyle 2}\hfill\# Set the line style to a dashed line.
+  \item {\tt box g g}\hfill\# Draw grid lines at each tick mark.
+\end{wiplist}
+As another example, the command
+\begin{wiplist}%
+  \item {\tt box bcnsthz bcnstvdyz}
+\end{wiplist}
+illustrates how to use the {\tt box} command with astronomical coordinates
+(\ie right ascension for the $x$ axis and declination for the $y$ axis).
+The first argument ({\tt bcnsthz}) tells {\tt box} to draw the bottom
+and top edge of the frame, draw minor and major tick marks, and
+numerically label the tick marks using time labeling and
+hour, minute, and second superscripts.
+The second argument ({\tt bcnstvdyz}) is the same as the first except that
+it suppresses any day formatting, orients the label vertically, and
+requests time labeling with degree, minute, and second superscripts.
+
+Two string\index{String Variables}
+variables associated with the $x$ and $y$ axis
+arguments of {\tt box} are
+{\em xbox}\index{String Variables!variables!{\em xbox}} and
+{\em ybox}\index{String Variables!variables!{\em ybox}}, respectively.
+If the {\tt box} command is called without any arguments,
+these strings are substituted in their place.
+Appendix~\ref{a:wipinit} shows how to have these strings loaded
+as the defaults every time \wip\ is run.
+
+\section{Text}
+\mylabel{s:text}
+\index{Labels|(}
+
+\wip\ provides many commands which will display a string of characters.
+Strings may be altered dramatically by judicious use of many of the
+graphical attributes shown in Table~\ref{t:attrib}.
+The commands that are used to write labels or titles on the plot are
+shown in the list below along with a brief description.
+Use {\tt help cmd}\index{Commands!{\tt help}} (where {\tt cmd} is one of
+the following commands) or see Appendix~\ref{a:cmdname}
+for a more detailed description of each of the following commands.
+
+\begin{description}
+  \item [{id --}]\index{Commands!{\tt id}}\index{Labels!commands!{\tt id}}
+    displays identification information at the bottom of the current plot page.
+  \item [{label --}]\index{Commands!{\tt label}}
+    \index{Labels!commands!{\tt label}}
+    writes a string at the current pen position.
+  \item [{mtext --}]\index{Commands!{\tt mtext}}
+    \index{Labels!commands!{\tt mtext}}
+    writes a string relative to a side of the viewport.
+  \item [{putlabel --}]\index{Commands!{\tt putlabel}}
+    \index{Labels!commands!{\tt putlabel}}
+    writes a string at the current pen position but justified
+    by a requested amount.  If this amount is negative,
+    the cursor\index{Cursor!commands!{\tt putlabel}} is used to
+    specify a new current pen position (see Section~\ref{s:cursor}).
+  \item [{xlabel --}]\index{Commands!{\tt xlabel}}
+    \index{Labels!commands!{\tt xlabel}}
+    writes a centered string below the bottom of the current box.
+  \item [{ylabel --}]\index{Commands!{\tt ylabel}}
+    \index{Labels!commands!{\tt ylabel}}
+    writes a centered string left of the left edge of the current
+    box.\footnote{Using {\tt ylabel} along with an annotated box generated
+    using the ``Z'' option may not produce an optimally placed label.
+    Try using
+    {\tt mtext L 3.5 0.5 0.5 {\em ylabel-text}} instead of {\tt ylabel}
+    (as shown in Example~\ref{p:image}).}
+\end{description}
+
+All of the text commands above (except {\tt id}) require a label as an argument.
+This label may be modified by any of the escape sequences shown in
+Table~\ref{t:text}.
+\begin{table}[htb]
+  \caption{Label Escape Sequences}
+  \mylabel{t:text}
+  \index{Labels!escape sequences!table of}
+  \index{User Variables}
+  \index{Symbols!markers}
+  \index{Symbols!Hershey symbols}
+  \centering
+  \setlength{\tabentrylen}{\textwidth}
+  \addtolength{\tabentrylen}{-1.25in}
+  \begin{tabular}{|c|p{\tabentrylen}|} \hline\hline
+ Escape Sequence & \multicolumn{1}{|c|}{What It Produces} \\ \hline
+ & \\
+ {\bf \esc{u}} & Either starts a superscript or ends a subscript. \\
+ {\bf \esc{d}} & Either starts a subscript or ends a superscript. \\
+               & ({\sc Note}: {\bf \esc{u}} and {\bf \esc{d}}
+                  must always appear in pairs). \\
+ {\bf \esc{b}} & Backspace (\ie do not advance the text pointer
+                 after plotting the previous character). \\
+ {\bf {$\backslash\backslash$}}
+               & The backslash (escape) character (\esc{\,}). \\
+ {\bf \esc{x}} & The multiplication sign. \\
+ {\bf \esc{A}} & {\AA}ngstr\"{o}m symbol (\AA). \\
+ {\bf \esc{m{\em n}}}
+               & The graph marker {\em n} ({\em n} may be 1 or 2 digits). \\
+ {\bf \esc{g{\em x}}}
+               & Greek letter corresponding to the roman letter {\em x}. \\
+ {\bf \esc{fn}} & Switch to Normal font (1). \\
+ {\bf \esc{fr}} & Switch to Roman  font (2). \\
+ {\bf \esc{fi}} & Switch to Italic font (3). \\
+ {\bf \esc{fs}} & Switch to Script font (4). \\
+ {\bf \esc{({\em n})}}
+               & Hershey number {\em n} (1 to 4 decimal digits); the closing
+                 parenthesis may be omitted if the next character is
+                 neither a digit nor `)'.  This makes a number of special
+                 characters (\eg mathematical, musical, astronomical,
+                 and cartographical) available.  See section~\ref{p:hershey}
+                 to see how to display the Hershey symbols available. \\
+ {\bf \esc{[{\em x}]}}
+               & User variable {\em x} (see Section~\ref{c:uservar}).
+                 The current value of the specified user variable is
+                 substituted into the string. The closing bracket may
+                 be omitted only if the user variable is the last item
+                 in the string. \\
+ & \\ \hline\hline
+  \end{tabular}
+\end{table}
+About half of the escape sequences listed in Table~\ref{t:text} remain in
+effect until the end of the string or until another escape sequence
+terminates its scope.
+The following list of commands illustrates the use of a few of the text
+commands along with several escape sequences.
+\begin{wiplist}%
+  \index{Commands!{\tt xlabel}}
+  \index{Commands!{\tt label}}
+  \index{Commands!{\tt mtext}}
+  \item {\tt xlabel \esc{ga} (1950)}\hfill\# Labels $x$ axis as $\alpha$ (1950).
+\samepage
+  \item {\tt label HC\esc{d3}\esc{u}N}\hfill\# Makes the label HC${}_3$N.
+  \item {\tt mtext t 2 .5 .5 Title}\hfill\# Label at top center of the panel.
+\end{wiplist}
+
+By far, the most flexible text command is
+{\tt mtext}.\index{Commands!{\tt mtext}}%
+\index{Labels!commands!{\tt mtext}}
+The first four arguments to {\tt mtext} specify where the label will
+appear on the viewport;
+the remaining arguments represent the label to display.
+The first argument is a character describing along which viewport side
+the label will appear.
+The character must be either `b', `l', `t', or `r' to specify,
+respectively, the bottom, left, top, or right viewport side.
+In addition, an optional character `v' may be appended (as in `lv' or
+`rv') to the left or right character to specify that the label be
+presented perpendicular to the viewport side.
+The second argument to {\tt mtext} is a displacement
+(in character height units) away from the viewport edge.
+Positive values position the label ``away'' from the edge; negative values
+move the label ``inside'' the viewport.
+The next two arguments (arguments three and four to {\tt mtext})
+specify the justification of the label.
+The first of these two arguments specifies
+a position along the viewport.
+This position is a value relative to the total extent of the viewport edge
+(\ie running from 0 to 1 left to right and bottom to top).
+The second of these two arguments specifies how to justify the
+label relative to this position with a value of 0 indicating
+left justified; 0.5 centered; and 1 right justified.%
+\index{Labels|)}
+
+\section{Data Files}
+\mylabel{s:data}
+\index{Data Files}
+
+Data files are simple ASCII text files that can be read to generate
+point and line graphics (\ie 1-dimensional plots).
+The command 
+{\tt data}\index{Commands!{\tt data}}%
+\index{Data Files!commands!{\tt data}}
+opens a file and prepares it for reading.
+The data is assumed to be column ordered
+with any two columns separated by a comma or blank space (or both).
+Currently, there is no restriction on the
+contents of the data in each column except that
+lines beginning with
+the comment character (\#)\index{Comments!comment character(\#)}
+are ignored.
+Non-existent and empty data files are warned about and then ignored.
+
+Data is usually read in by column format into \wip\ with the commands
+{\tt xcolumn}\index{Commands!{\tt xcolumn}}%
+\index{Data Files!commands!{\tt xcolumn}}
+and
+{\tt ycolumn}\index{Commands!{\tt ycolumn}}%
+\index{Data Files!commands!{\tt ycolumn}}.
+The required argument to these commands is the column number from which
+to read the data
+(\ie each line read is parsed into words and the command
+evaluates only the selected word).
+Incorrect data lines are usually printed out with a warning message.
+
+Which lines are actually read from the data file may be restricted by the user.
+The command 
+{\tt lines}\index{Commands!{\tt lines}}
+\index{Data Files!commands!{\tt lines}}
+limits the range that the input data file is read from line {\em L1} to
+{\em L2}, where {\em L1} and {\em L2} are the two required
+arguments given with the command.
+If the data file has fewer than {\em L2\/} lines, reading is stopped at
+the end of the file.
+
+In addition to the {\bf X} and {\bf Y} arrays discussed above,
+there are presently two other predefined arrays:
+the {\bf ERR} and {\bf PSTYLE} arrays.
+The {\bf ERR} array is used to store error bar distances from the corresponding
+{\bf X} and {\bf Y} positions
+(see the command {\tt errorbar} in Section~\ref{s:onevarplts})
+and
+the {\bf PSTYLE} array is used to hold a symbol number for
+each {\bf X} and {\bf Y} position
+(see the command {\tt points} in Section~\ref{s:onevarplts}).
+The {\bf ERR} and {\bf PSTYLE} arrays are used by other commands for other
+purposes too; these usage variations will be identified when the
+specific commands are discussed later.
+
+Another use of the data files is to assign strings to
+string variables\index{String Variables}.
+String variables are a type of User Variable\index{User Variables}
+and will be introduced in Chapter~\ref{c:uservar}.
+The command {\tt string}\index{Commands!{\tt string}}
+can be used to assign a word or a string to a string variable.
+The only line read in the data file is defined by the value of
+{\em L1} (see above) and which (space separated) words are assigned to
+the string variable is determined by the arguments to the command.
+Use {\tt help string}\index{Commands!{\tt help}}
+or see Appendix~\ref{a:cmdname}
+for a detailed description of the arguments to this command.
+
+\subsection*{Dynamic Data Files}
+\mylabel{ss:dynamicdata}
+\index{Data Files!dynamic data}
+
+There is a straightforward way to input data directly on the command
+line within \wip.
+If the argument to the {\tt data} command is {\tt stdin},
+then the current mode is switched to a data input mode.
+\wip\ will stay in that
+mode until the string {\tt enddata} appears on a line by itself.
+While in data input mode, every line is treated as input to this
+dynamic data set.
+When the input mode is terminated, the data may be read using any of
+the techniques described above.
+The data set created will remain active until either another data set is
+opened (with the {\tt data} command) or the user exits from \wip.
+
+\section{Cursor Interaction}
+\mylabel{s:cursor}
+\index{Cursor}
+
+The command {\tt cursor}\index{Commands!{\tt cursor}}
+\index{Cursor!commands!{\tt cursor}}
+permits a simple means of interacting with the plot.
+Several keys have been assigned to the {\tt cursor} command
+which allow complicated plotting commands to be easily constructed.
+Each command typed while interactively using the cursor can be saved in the
+command buffer\index{Macros!buffer} (see Chapter~\ref{c:macros} for a
+general description of macros and the command buffer)
+and may be edited\index{Macros!editing} (using
+the techniques described in section~\ref{s:macedit}) or
+re-executed (with the command
+{\tt playback}\index{Commands!{\tt playback}}).
+The keystroke commands that are currently recognized are shown
+in the list below and are {\em not} case sensitive.
+
+\begin{description}
+\index{Cursor!keystroke commands}
+  \item [{A --}] Display the present cursor position and,
+    if an image is loaded, the image intensity at that position,
+  \item [{D --}] Draw to the current cursor position.
+  \item [{M --}] Move to the present cursor position.
+  \item [{P --}] Draw a point of the current symbol type at the present
+    cursor position.
+  \item [{S --}] Toggle the ability to save the keystrokes
+    that follow as commands.
+  \item [{X --}] Exit the interactive cursor routine.
+  \item [{? --}] Present the list of current keystroke commands
+    (this is the same as the command {\tt help cursor}).
+\end{description}
+
+There are a few commands in \wip\ which use the cursor to specify the
+location where the command is to act.
+Most significant is the command
+{\tt putlabel},\index{Commands!{\tt putlabel}}
+\index{Labels!commands!{\tt putlabel}}
+which takes two arguments:
+a justification value and a string to write.
+The justification value ranges from 0 -- 1 where 0 means left
+justification relative to the current cursor position, 1 means right
+justification, and 0.5 means center the text on the cursor position.
+However, \wip\ allows negative justifications.
+Negative justifications signal \wip\ to
+activate the cursor prior to displaying the text so that the user may
+specify a new current cursor position.
+The minus sign is just a flag to \wip, the justification that will
+eventually reach the text displaying routine will still range
+between 0 -- 1 (\ie abs(justification)).\footnote{Note that to
+left justify the text {\em and} activate the cursor,
+the justification argument should be something like -0.001.}
+As an example, suppose a user were to type the command
+\begin{wiplist}%
+  \index{Commands!{\tt putlabel}}
+  \item[\wipp] {\tt putlabel -0.5 A string to center}
+\end{wiplist}
+The cursor would then become active and allow the user to move to any
+position on the screen.
+Now, suppose the user
+moved the cursor to the position (5,~8) and hit any key.
+In this case, the keystroke commands are ``turned off'' and the first
+key hit by the user terminates the cursor routine.
+The string entered would appear centered at the position (5,~8)
+just as if the user had typed the following two lines:
+\begin{wiplist}%
+  \index{Commands!{\tt move}}
+  \index{Commands!{\tt putlabel}}
+  \item {\tt move 5 8}
+\samepage
+  \item {\tt putlabel 0.5 A string to center}.
+\end{wiplist}
+In fact, if this command were typed interactively (or when reading an
+input file off the command line\index{Command Line!input files}),
+these latter two commands are exactly what would be saved in
+the user's command buffer\index{Macros!buffer}.
+
+There are a few instances, however, when the cursor command
+will not function interactively (as shown in the previous example).
+In these cases,
+the cursor will only be used to return the cursor position selected;
+the keystroke commands will be ignored.
+These instances are when either of the
+commands {\tt cursor}\index{Commands!{\tt cursor}}%
+\index{Cursor!non-interactive}
+or
+{\tt putlabel}\index{Commands!{\tt putlabel}}%
+\index{Labels!commands!{\tt putlabel}}%
+\index{Cursor!commands!{\tt putlabel}}
+are (i) executed from inside a macro\index{Macros};
+(ii) entered into the command buffer\index{Macros!buffer} with the
+command {\tt insert}\index{Commands!{\tt insert}}%
+\index{Macros!commands!{\tt insert}}\index{Macros!editing};
+or (iii) executed using the
+command {\tt input}\index{Commands!{\tt input}}.
+For these special cases,
+the cursor will only return the current cursor position
+and ignore any subsequent keystrokes.
