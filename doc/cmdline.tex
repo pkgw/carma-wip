@@ -1,0 +1,151 @@
+%% This file is to be included by latex in wip.tex
+%
+% The Command Line Interface
+%
+\mylabel{a:cmdline}
+\myfile{cmdline.tex}
+
+\wip\ can always be run by specifying
+parameters and plot files on the command line.
+The command line interface is quite appropriate for
+command procedures and shell scripts.\footnote{If you are not
+familiar with these terms, don't worry,
+they refer to advanced VMS and UNIX concepts you can learn about.
+Check with someone more experienced than you or
+with a system manager to learn more.}
+It is also very useful for getting a plot command file loaded into \wip.
+
+The format for calling \wip\ from the command line is
+\begin{wiplist}%
+  \item [\% ] {\tt wip  [optionalArgs] [plotfile \ldots ] [-e wipcmd]}
+\end{wiplist}
+where {\tt optionalArgs} includes the following options:
+\begin{wiplist}%
+  \item [\ ] {\tt [-d device] [--] [-x] [-r] [-b] [-g] [-q] [-h] [-?]}
+\end{wiplist}
+Except for the {\tt -e} option (discussed below),
+the \wip\ options are, by convention,
+placed before any of the plot file names.
+The options may, however,
+appear anywhere on the command line (after the \wip\ command);
+but they are {\em always} evaluated before reading any of the plot files.
+
+All items enclosed in square brackets ([\ldots ]) are optional.
+The following list explains the command line arguments and
+what function they perform.
+\begin{description}
+\index{Command Line!switches}
+  \item [{\tt -d {\em device-type}} --] Sets the initial graphics
+    device\index{Devices} to {\em device-type}.
+    This option overrides the default device {\em and}
+    any device specified in the user's \wipinit\index{wipinit@\wipinit} file.
+    See Section~\ref{s:devices} on how to specify the {\em device-type}.
+  \item [{\tt --} --]  Specifies {\tt stdin} as an input plot file.
+    This may have some use when using \wip\ in a script.  Note that this
+    option also forces the {\tt -x} option because input ends when all
+    of data from stdin has arrived.
+  \item [{\tt -x} --]  Effectively ``turns off'' the interactive
+    state of \wip.
+    After \wip\ has processed all of the plot files on the command line,
+    a close plot command is issued and \wip\ exits.
+    If the current graphics device is a hardcopy\index{Hardcopy} device,
+    then the {\tt hardcopy}\index{Commands!{\tt hardcopy}}
+    \index{Hardcopy!commands!{\tt hardcopy}}
+    command is issued when the last plot file has finished.
+  \item [{\tt -r} --]  If \wip\ has been compiled with the {\tt READLINE}
+    library, then each time a user exits from \wip,
+    a history file is written which contains all of the commands typed.
+    This history file is read in by
+    the {\tt READLINE} routines when a user enters \wip\ again and the
+    commands are available for recalling, editing, and executing.
+    Use of this option suppresses the writing of the history file when
+    the user exits from \wip.
+    Any previous commands will still be available for recall and the
+    {\tt READLINE} editing capabilities will still exist.
+  \item [{\tt -b} --]  This option completely disables the {\tt READLINE}
+    capabilities.  This option may be useful for terminals that do not
+    permit the escape sequences to be passed to the {\tt READLINE} routines.
+  \item [{\tt -g} --]  Opens \wip\ in debug mode.  This is not generally
+    useful to the user but might provide some additional comments in
+    cases where the usual diagnostic messages don't help.
+  \item [{\tt -q} --]  Turns off all informational messages from \wip.
+    This is useful when the selected output file for the device is {\tt stdout}.
+    This option is disabled, however, when \wip\ enters interactive mode.
+  \item [{\tt -h} or {\tt -?} --]  Writes a usage statement listing all
+    of the command line options available within \wip\ and then
+    immediately exits.  No plotting is done.
+\end{description}
+
+The remaining optional arguments to the \wip\ command
+(up to the optional {\tt -e} flag) are the names of either
+macro\index{Macros} or plot command files\index{Command Line!input files}.
+These files are only
+read\footnote{Files on the command line are read in the order in which
+they are typed on the command line (left to right) and are
+read until either an error occurs or until the interactive state terminates
+(an {\tt end} command not associated with either a
+{\tt define} or {\tt insert} command).}\index{Commands!{\tt end}}
+\index{Commands!{\tt define}}\index{Macros!commands!{\tt define}}%
+\index{Commands!{\tt insert}}\index{Macros!commands!{\tt insert}}%
+after the \wipinit\index{wipinit@\wipinit}
+file has been read, the command line arguments set, and the initial device
+(if any) has been opened.
+The remaining arguments are then processed just as if the user had
+typed the command lines interactively.
+When the last file is finished being read, \wip\ moves into interactive
+mode (unless the ``{\tt -x}'' option is used).
+All macros defined in the input files are now defined in \wip\ and all plot
+commands are present in the command buffer\index{Macros!buffer}.
+
+As an example of how to use the command line arguments, consider the
+following command:
+\begin{wiplist}%
+  \item [\%] {\tt wip -x -d myfile.ps/vps myfile.wip}
+\end{wiplist}
+The file {\tt myfile.wip} is a simple ASCII text file of commands
+(similar to the listings that appear in this manual
+or those saved with the {\tt write}\index{Commands!{\tt write}} command).
+This type of file is a useful way to insert a plot command listing,
+for playing back commands (say to another device),
+or for defining commonly used macros.
+The argument {\tt -d myfile.ps/vps} is the command line
+switch that \wip\ uses to redefine the initial device.
+This example illustrates how to specify a file name ({\tt myfile.ps})
+and associate with a hardcopy device ({\tt /vps}).
+For more details on graphical devices, see Section~\ref{s:devices}.
+Finally, the {\tt -x} flag tells \wip\ to exit when it is finished
+reading all of the command files on the command line
+(in this case, just the file {\tt myfile.wip}).
+
+Therefore, this command line example illustrates a quick way to spool a plot off
+to the printer without having to enter the interactive mode of \wip.
+This might be useful, perhaps, when putting together a paper
+where there are figures that will be used are generated at different
+times in the analysis stage.
+The plot commands can be saved
+to a file (like {\tt myfile.wip}) as they are created.
+And then later, when the paper is ready to go out,
+they can be easily spooled off to the printer.
+Users familiar with Unix shell scripts will discover that
+this option can be quite useful (and welcome).
+
+Finally, if the {\tt -e} optional flag is present, it signals that the
+next and any remaining arguments are a single command to be issued inside \wip.
+That command can be any internal \wip\ command or a defined macro.
+The command is executed after all of the files on the command line have
+been loaded.
+If \wip\ is to be run interactively, this command is executed just
+before \wip\ enters interactive mode.
+
+The usefulness of this option is seen as a generalization of the example
+above.
+Suppose the file {\tt myfile.wip} defined a plot but required a file
+name as an argument.
+Rather than editing {\tt myfile.wip} for each file, \wip\ can be called
+with the {\tt -e} option and each file can be passed on the command line.
+For example, if the file {\tt myfile.wip} defines a macro called
+{\tt dojob}, then multiple files could be input as follows:
+\begin{wiplist}%
+  \item [\%] {\tt wip -x -d file1.ps/vps myfile.wip -e dojob file1}
+  \item [\%] {\tt wip -x -d file2.ps/vps myfile.wip -e dojob file2}
+\end{wiplist}
