@@ -3,7 +3,8 @@
 # All the options for makewip (and explanations for these options) are
 # explained in detail in the script makewip.
 #
-# set options = ""
+#setenv MIRDEBUG 1
+#set options = ""
 # if ($?MIRDEBUG != 0) set options = "$options -debug"
 # if (-e $MIRLIB/libreadline.a) set options = "$options -readline $MIRLIB"
 # $MIR/borrow/wip/makewip -wip $MIR/borrow/wip -pgplot $MIRLIB -lib $MIRLIB \
