@@ -1,0 +1,231 @@
+% LATEX document.
+%
+% HISTORY:
+%   xx-xxx-88   rjs Original version
+%   xx-jul-90   mjs 
+%   19-feb-91   pjt assembled together from previous versions
+%   22-feb-91   pjt included cookbook stuff
+%    1-mar-91   pjt glossary and many more fixes
+%    6-mar-91   pjt various user suggested improvements - added \newif's
+%   17-apr-91   pjt final version for the Spring 91 Release
+%   10-jun-91    jm Converted for use with WIP Version 1.0 (July 1991).
+%   11-feb-92    jm Updated for WIP Version 1.5 (March 1992).
+%   01-oct-92    jm Updated for WIP Version 1.6 (October 1992).
+%   08-nov-93    jm Updated for WIP Version 1.7 (November 1993).
+%   12-oct-94    jm Updated for WIP Version 1.8 (October 1994).
+%   12-jun-95    jm Updated for WIP Version 2.0 (June 1995).
+%   10-oct-96    jm Updated for WIP Version 2.1 (October 1996).
+%
+\nonstopmode	             % Keeps LaTeX running despite certain errors....
+%
+%% Use a few TeX tricks to conditionally compile the manual.
+%% Define variables {var} needed in this document as: \{var}true or \{var}false
+%% DEBUG:   If true, margins contain index, as well as label stuff.
+%% DOPLOT:  If true, implicitly insert PostScript commands for plots.
+%%          doplottrue should only be used with Radical Eye Software's dvips!
+%%  For final copy, all should be true (except debug).
+%% These variables are all handled by wip.sty.
+%
+\newif\ifdebug  \debugfalse
+\newif\ifdoplot \doplottrue
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% To print this LaTeX document (wip.tex):
+%%
+%%	latex name		(2 or 3 times to get page numbers right)
+%%	makeindex name.idx 	(convert index file)
+%%	latex name		(2 or 3 times, includes the .ind file)
+%%	dvips name -o		(create the PostScript version)
+%%
+%%      Note: If you don't have makeindex, created a zero-length file
+%%            named wip.ind or remove the makeidx option and \makeindex
+%%            and \printindex from this document.
+%%
+%%                              James Morgan
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Optional commands and style files needed:
+%    wip.sty     : The main collection of WIP style modifications
+%                : needed for this manual (a provided sty file).
+%    twoside     : This option triggers two-side mode inside report.
+%    makeidx     : This option puts the index at the end of the file
+%                : (a generic LaTeX sty file).
+%    comment     : This option permits creation of comment environments
+%                : that can be ignored (a generic LaTeX sty file).
+%    epsf        : This option permits insertion of PostScript figures
+%                : (a misc LaTeX sty file).
+%    html        : This option permits insertion of HTML links
+%                : (a local LaTeX sty file).
+%    report      : A generic LaTeX document style file.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\documentstyle[twoside,makeidx,comment,epsf,html,wip]{report}
+\makeindex
+%
+\title{\wip\\ User's Manual}
+%
+\author{James A. Morgan\\
+        and \\
+   \and
+        Radio Astronomy Laboratory, University of California at Berkeley \\
+   \and
+        Laboratory for Astronomical Imaging, University of Illinois \\
+   \and
+        Laboratory for Millimeter Astronomy, University of Maryland
+}
+%
+\date{Version 2.1 \\
+   October 1996 \\
+   Printed: \today
+}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2.5mm}
+%
+\addtolength{\textwidth}{1.5in}
+\addtolength{\evensidemargin}{-0.75in}
+\addtolength{\oddsidemargin}{-0.75in}
+%
+%  The following macro provides a way to insert figures and
+%  captions in a uniform way.  The macro insertplot requires
+%  five arguments:
+%  \insertplot{Section Title}{PS file root}{caption}%
+%     {data file title}{verbatim data file name}
+%  The last two arguments can be empty.  The WIP include file
+%  should have the same name as the PostScript file except for
+%  a different suffix.
+%
+%  I have included this definition here instead of inside wip.sty
+%  because I also want latex2html to be able to access it early
+%  (because of the \section commands) in the conversion process.
+%
+\newcommand{\insertplot}[5]{
+  \section{#1}
+  \small
+  \fileverbatim{Examples/#2.wip}
+  \normalsize
+  \subsection*{#4}
+  \footnotesize
+  \fileverbatim{#5}
+  \normalsize
+  \begin{figure}[p]
+    \wipplot{#2}
+    \caption{#3}
+    \mylabel{p:#2}
+  \end{figure}
+}
+
+\begin{document}
+\pagenumbering{roman}
+%
+\maketitle            % Make the title page.
+%
+%  Backside of cover page is a disclaimer (in smaller roman font).
+%
+\newpage
+\pagestyle{empty}
+\footnotesize\rm
+\input disclaimer
+\normalsize
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  The various content pages.
+\cleardoublepage
+\pagestyle{headings}
+\addcontentsline{toc}{chapter}{Table of Contents}
+\tableofcontents
+%
+\newpage
+\addcontentsline{toc}{chapter}{List of Tables}
+\listoftables
+%
+\newpage
+\addcontentsline{toc}{chapter}{List of Figures}
+\listoffigures
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  The start of the main part of the manual.
+\cleardoublepage
+\pagenumbering{arabic}
+\part{General Concepts}\mylabel{p:intro}
+%
+\chapter{How to Use This Manual}
+\input howto
+%
+\chapter{The User Interface}
+\input iface
+%
+\chapter{General Graphics Concepts}
+\input concepts
+%
+\chapter{Basic Plotting}
+\input basic
+%
+\chapter{Images}
+\index{Images|(}
+\input images
+\index{Images|)}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Advanced Concepts}\mylabel{p:advanced}
+%
+\chapter{Data Fitting}
+\index{Fitting|(}
+\input fit
+\index{Fitting|)}
+%
+\chapter{Macros}
+\index{Macros|(}
+\input macros
+\index{Macros|)}
+%
+\chapter{User Variables}
+\index{User Variables|(}
+\input uservar
+\index{User Variables|)}
+%
+\chapter{Control Flow}
+\input flow
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+\part{Appendices}\mylabel{p:appendix}
+%
+\chapter{The \wipinit File}
+\index{wipinit@\wipinit|(}
+\input wipinit
+\index{wipinit@\wipinit|)}
+%
+\chapter{Command Line Interface}
+\input cmdline
+%
+\chapter{Glossary}
+\input glossary
+%
+\chapter{Table of Current Command Names}
+\input cmdname
+%
+\prefigs
+\chapter{Sample Plots}
+\input samples
+\postfigs
+%
+\chapter{Frequently Asked Questions}
+\input faq
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  End of the document.  The rest is index stuff.
+%
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+%
+\typeout{### Type: makeindex wip.idx}
+\typeout{###   To create the .ind file from the .idx file}
+\typeout{###   in case the index file needs to be regenerated}
+%
+\end{document}
