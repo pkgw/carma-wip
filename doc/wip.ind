@@ -1,0 +1,424 @@
+\begin{theindex}
+
+  \item ASCII, 26, 53, 78, 79
+
+  \indexspace
+
+  \item Boxes, 14, 65
+    \subitem commands
+      \subsubitem {\tt box}, 14, 22, 59, 66, 72, 100, 135
+      \subsubitem {\tt ticksize}, 14, 57
+    \subitem the {\em xbox} string, 59, 74
+    \subitem the {\em ybox} string, 59, 74
+  \item Byte-swapped Images, 29
+
+  \indexspace
+
+  \item Colors
+    \subitem CMAX, 39
+    \subitem CMIN, 39
+    \subitem color index range, 39
+    \subitem default colors
+      \subsubitem table of, 15
+    \subitem HLS, 23
+    \subitem Lookup Table, 23
+    \subitem RGB, 24
+  \item Command Line, 3, 5, 72
+    \subitem input files, 21, 76
+    \subitem switches, 72, 75
+  \item Commands
+    \subitem {\tt aitoff}, 23, 25
+    \subitem {\tt angle}, 14, 58
+    \subitem {\tt arc}, 22
+    \subitem {\tt arrow}, 22
+    \subitem {\tt ask}, 14, 23
+    \subitem {\tt autolevs}, 23, 32, 58, 66
+    \subitem {\tt bar}, 25
+    \subitem {\tt beam}, 23, 39, 40
+    \subitem {\tt bgci}, 58
+    \subitem {\tt bin}, 25
+    \subitem {\tt box}, 14, 16, 22, 35, 37, 47, 48, 59, 66--68, 72, 100, 
+		132, 135
+      \subsubitem arguments, 16
+    \subitem {\tt color}, 14, 24, 58
+    \subitem {\tt connect}, 24, 25
+    \subitem {\tt contour}, 37, 38, 66
+    \subitem {\tt cursor}, 20, 21, 57, 133
+    \subitem {\tt data}, 19, 34, 55, 59
+    \subitem {\tt define}, 7, 31, 35, 48, 49, 64, 66, 67, 69, 76, 
+		129--131, 133, 134, 136
+    \subitem {\tt delete}, 24, 52, 53
+    \subitem {\tt device}, 4, 8, 23, 47, 59, 128--130
+    \subitem {\tt dot}, 23, 24
+    \subitem {\tt draw}, 6, 23, 24, 47, 48, 67, 131
+    \subitem {\tt echo}, 12, 39, 47, 59, 133, 136
+    \subitem {\tt ecolumn}, 34, 58, 134
+    \subitem {\tt end}, 6, 24, 31, 35, 48, 49, 64, 66, 69, 76, 128--131, 
+		133, 136
+    \subitem {\tt environment}, 6, 13
+    \subitem {\tt erase}, 23, 24, 47, 129
+    \subitem {\tt errorbar}, 25, 26, 134
+    \subitem {\tt expand}, 14, 58, 129
+    \subitem {\tt fill}, 14, 22, 25, 58
+    \subitem {\tt fit}, 23, 43
+    \subitem {\tt font}, 14, 58
+    \subitem {\tt free}, 31, 63, 64, 74, 130, 131
+    \subitem {\tt globe}, 23
+    \subitem {\tt halftone}, 33, 35, 37, 39, 132
+    \subitem {\tt hardcopy}, 11, 23, 76, 128--130
+    \subitem {\tt header}, 13, 30, 32, 34, 35, 37, 40, 57--59, 132
+    \subitem {\tt help}, 4, 12, 17, 19, 25, 47
+    \subitem {\tt hi2d}, 39
+    \subitem {\tt histogram}, 25
+    \subitem {\tt hls}, 23
+    \subitem {\tt id}, 17
+    \subitem {\tt if}, 64--69, 136
+    \subitem {\tt image}, 27, 29, 35--37, 40, 57, 59, 66, 78, 132
+    \subitem {\tt input}, 21, 23, 24, 54, 128, 129, 135
+    \subitem {\tt insert}, 7, 21, 47, 51, 52, 54, 76
+    \subitem {\tt itf}, 33, 58
+    \subitem {\tt label}, 17, 18, 49, 133
+    \subitem {\tt lcur}, 25
+    \subitem {\tt ldev}, 9, 23
+    \subitem {\tt levels}, 23, 32, 37, 58
+    \subitem {\tt limits}, 13, 16, 24, 30, 31, 35, 37, 47--49, 55, 57, 
+		135
+    \subitem {\tt lines}, 19, 23
+    \subitem {\tt list}, 48, 50, 51
+    \subitem {\tt logarithm}, 25, 134
+    \subitem {\tt lookup}, 23, 34, 39
+    \subitem {\tt loop}, 50, 68, 69, 101, 129, 134, 136
+    \subitem {\tt lstyle}, 14, 38, 58, 67
+    \subitem {\tt lwidth}, 14, 58
+    \subitem {\tt macro}, 23, 54, 73, 74
+    \subitem {\tt minmax}, 23
+    \subitem {\tt move}, 6, 21, 23, 24, 40, 47--49, 64, 67, 130, 131
+    \subitem {\tt mtext}, 17, 18, 33, 35, 36, 133
+    \subitem {\tt ncurse}, 25
+    \subitem {\tt new}, 31, 59, 63, 64, 74, 130, 131
+    \subitem {\tt olin}, 25
+    \subitem {\tt palette}, 23, 33, 39
+    \subitem {\tt panel}, 13, 24, 35, 36, 65, 66, 101, 129
+    \subitem {\tt paper}, 13
+    \subitem {\tt pcolumn}, 34, 58
+    \subitem {\tt phard}, 11, 23, 24, 129, 135
+    \subitem {\tt playback}, 20, 23, 24, 53
+    \subitem {\tt plotfit}, 23, 46
+    \subitem {\tt points}, 24--26, 134
+    \subitem {\tt poly}, 25
+    \subitem {\tt putlabel}, 17, 20, 21
+    \subitem {\tt quarter}, 31, 32
+    \subitem {\tt range}, 46
+    \subitem {\tt read}, 23, 54
+    \subitem {\tt rect}, 23, 24
+    \subitem {\tt reset}, 14, 23
+    \subitem {\tt rgb}, 24
+    \subitem {\tt scale}, 13
+    \subitem {\tt set}, 11, 24, 31, 32, 36, 37, 50, 56--60, 63, 64, 66, 
+		68, 69, 72--74, 129--131, 134--136
+    \subitem {\tt show}, 12, 24, 47, 57--59, 132
+    \subitem {\tt slev}, 24, 32, 57--59, 66
+    \subitem {\tt string}, 19, 24, 59, 63
+    \subitem {\tt subimage}, 31, 32, 57
+    \subitem {\tt submargin}, 13, 24
+    \subitem {\tt symbol}, 14, 24, 26, 100
+    \subitem {\tt ticksize}, 14, 16, 57
+      \subsubitem arguments, 14, 16
+    \subitem {\tt transfer}, 30, 31, 35, 58
+    \subitem {\tt vector}, 25
+    \subitem {\tt viewport}, 13, 35--37, 57
+    \subitem {\tt viewsize}, 13
+    \subitem {\tt vstand}, 13
+    \subitem {\tt wedge}, 24
+    \subitem {\tt winadj}, 13, 35--37, 135
+    \subitem {\tt write}, 24, 53, 76
+    \subitem {\tt xcolumn}, 19, 34, 55, 58, 134
+    \subitem {\tt xlabel}, 17, 18, 35, 36, 47, 48
+    \subitem {\tt ycolumn}, 19, 34, 55, 58, 134
+    \subitem {\tt ylabel}, 17, 47, 48, 133
+    \subitem readline
+      \subsubitem editing, 5, 79
+      \subsubitem recall, 5, 79
+    \subitem simple plots, 22
+    \subitem single variable plot, 25
+  \item Comments, 4, 7, 50, 73, 100
+    \subitem comment character(\#), 4, 7, 19, 73, 100
+  \item Contour Plots, 38, 65
+    \subitem commands
+      \subsubitem {\tt contour}, 38
+    \subitem setting levels, 23, 24, 32, 58
+      \subsubitem {\tt autolevs}, 23, 32
+      \subsubitem {\tt levels}, 23, 32
+      \subsubitem {\tt slev}, 24, 32, 57, 59
+  \item Coordinate System, 12
+    \subitem commands
+      \subsubitem {\tt environment}, 13
+      \subsubitem {\tt header}, 13
+      \subsubitem {\tt limits}, 13, 30, 57, 135
+      \subsubitem {\tt panel}, 13, 65
+      \subsubitem {\tt paper}, 13
+      \subsubitem {\tt scale}, 13
+      \subsubitem {\tt viewport}, 13, 57
+      \subsubitem {\tt viewsize}, 13
+      \subsubitem {\tt vstand}, 13
+      \subsubitem {\tt winadj}, 13, 35, 135
+    \subitem View Surface, 12
+    \subitem Viewport, 12, 34--36
+    \subitem Window, 12, 34
+    \subitem World, 7, 12, 14, 30--32, 34--37, 135
+  \item Cross Section Plots, 39
+  \item Cursor, 20
+    \subitem commands
+      \subsubitem {\tt cursor}, 20, 26, 57
+      \subsubitem {\tt lcur}, 25
+      \subsubitem {\tt ncurse}, 25
+      \subsubitem {\tt olin}, 25
+      \subsubitem {\tt putlabel}, 17, 21
+    \subitem keystroke commands, 20
+    \subitem non-interactive, 21
+
+  \indexspace
+
+  \item Data Files, 19
+    \subitem commands
+      \subsubitem {\tt data}, 19, 59
+      \subsubitem {\tt ecolumn}, 58
+      \subsubitem {\tt input}, 23
+      \subsubitem {\tt lines}, 19, 23
+      \subsubitem {\tt macro}, 23
+      \subsubitem {\tt pcolumn}, 58
+      \subsubitem {\tt read}, 23
+      \subsubitem {\tt write}, 24
+      \subsubitem {\tt xcolumn}, 19, 58
+      \subsubitem {\tt ycolumn}, 19, 58
+    \subitem dynamic data, 20
+  \item Device Coordinates, \see{Viewport}{12}
+  \item Devices, 8--10, 23, 72, 75
+    \subitem ?, 10
+    \subitem commands
+      \subsubitem {\tt ldev}, 9, 23
+    \subitem device-type
+      \subsubitem /cps, 10
+      \subsubitem /null, 10
+      \subsubitem /ps, 10
+      \subsubitem /retro, 10
+      \subsubitem /tek, 10, 72
+      \subsubitem /vcps, 10
+      \subsubitem /vps, 10
+      \subsubitem /xserve, 9, 10, 73
+      \subsubitem /xterm, 10
+      \subsubitem /xwindow, 8--10, 59, 72, 74
+    \subitem the {\em device} string, 59, 73, 74
+
+  \indexspace
+
+  \item FITS, 28, 78, 101, 132
+  \item Fitting, 43--46
+    \subitem an example, 120
+    \subitem commands
+      \subsubitem {\tt beam}, 23
+      \subsubitem {\tt fit}, 23, 43--45
+      \subsubitem {\tt plotfit}, 23, 46
+      \subsubitem {\tt range}, 46
+    \subitem Limiting A Fit, 46
+    \subitem Methods
+      \subsubitem Least Absolute Deviations, 44
+      \subsubitem Least Squares, 44
+      \subsubitem Legendre Polynomials, 45
+      \subsubitem Multiple Gaussians, 45
+      \subsubitem Simple Polynomials, 45
+    \subitem Plotting A Fit, 46
+
+  \indexspace
+
+  \item Graphical Attributes, 12, 13, 58
+    \subitem table of, 14
+  \item Gray-Scale Plots, 39
+    \subitem commands
+      \subsubitem {\tt halftone}, 33, 39
+      \subsubitem {\tt hi2d}, 39
+      \subsubitem {\tt itf}, 33
+      \subsubitem {\tt lookup}, 34, 39
+      \subsubitem {\tt palette}, 33, 39
+      \subsubitem {\tt wedge}, 24, 32
+
+  \indexspace
+
+  \item Hardcopy, 11, 76
+    \subitem commands
+      \subsubitem {\tt hardcopy}, 11, 23, 76
+      \subsubitem {\tt phard}, 11, 23, 135
+    \subitem the {\em print} string, 11, 74
+  \item Help, 4, 7, 12, 80
+    \subitem commands
+      \subsubitem {\tt help}, 4, 12, 22, 47, 67, 80
+      \subsubitem {\tt if}, 67
+    \subitem on-line help file
+      \subsubitem \$WIPHELP, 12, 59, 74, 79
+      \subsubitem the {\em helpfile} string, 59, 74
+
+  \indexspace
+
+  \item Images, 3, 12, 27--40
+    \subitem beam, 39
+    \subitem byte-swapped, 29
+    \subitem CD matrix, 30
+    \subitem color palette, 33
+    \subitem commands
+      \subsubitem {\tt autolevs}, 23, 32, 58
+      \subsubitem {\tt beam}, 23, 39
+      \subsubitem {\tt contour}, 38
+      \subsubitem {\tt halftone}, 33, 39
+      \subsubitem {\tt header}, 30, 32, 34, 35, 40, 57--59
+      \subsubitem {\tt hi2d}, 39
+      \subsubitem {\tt image}, 27, 29, 40, 57, 59, 78
+      \subsubitem {\tt itf}, 33
+      \subsubitem {\tt levels}, 23, 32, 58
+      \subsubitem {\tt limits}, 35
+      \subsubitem {\tt lookup}, 34, 39
+      \subsubitem {\tt minmax}, 23
+      \subsubitem {\tt palette}, 33, 39
+      \subsubitem {\tt quarter}, 31, 32
+      \subsubitem {\tt slev}, 24, 32, 57--59
+      \subsubitem {\tt subimage}, 31, 32, 57
+      \subsubitem {\tt transfer}, 30, 35, 58
+      \subsubitem {\tt wedge}, 24, 32
+    \subitem coordinate transfer function, 30, 32
+    \subitem header files, 32, 74
+    \subitem image characteristics, 12, 29
+    \subitem image files, 27
+    \subitem image formats
+      \subsubitem Basic, 29, 78
+      \subsubitem FITS, 28, 78, 101
+      \subsubitem Miriad, 28, 78
+    \subitem image plots, 38
+      \subsubitem contour, 38
+      \subsubitem cross section, 39
+      \subsubitem gray-scale, 39
+    \subitem image transfer function, 33
+    \subitem overlaid images, 37
+    \subitem selecting subregions, 31
+    \subitem setting contour levels, 32, 74
+    \subitem transfer function, 30
+    \subitem user variables
+      \subsubitem table of, 57
+    \subitem wedge displays, 32
+    \subitem window adjustment, 35
+      \subsubitem with panels, 35
+    \subitem window dimensions, 34
+
+  \indexspace
+
+  \item Labels, 17--19
+    \subitem case sensitive, 6
+    \subitem commands
+      \subsubitem {\tt id}, 17
+      \subsubitem {\tt label}, 17
+      \subsubitem {\tt mtext}, 17, 18, 33
+      \subsubitem {\tt putlabel}, 17, 20, 21
+      \subsubitem {\tt xlabel}, 17
+      \subsubitem {\tt ylabel}, 17
+    \subitem escape sequences
+      \subsubitem table of, 18
+    \subitem user variables in, 131
+
+  \indexspace
+
+  \item Macros, 3, 21, 47--54, 65, 68, 73, 74, 76, 100, 101
+    \subitem buffer, 20, 21, 23, 24, 47, 48, 50, 54, 76
+    \subitem calling, 53
+    \subitem commands
+      \subsubitem {\tt define}, 48, 76, 133, 136
+      \subsubitem {\tt delete}, 52
+      \subsubitem {\tt end}, 48, 133, 136
+      \subsubitem {\tt if}, 65, 69, 136
+      \subsubitem {\tt input}, 23, 54
+      \subsubitem {\tt insert}, 21, 47, 50, 51, 54, 76
+      \subsubitem {\tt list}, 48, 50
+      \subsubitem {\tt loop}, 68, 69, 136
+      \subsubitem {\tt macro}, 23, 54, 73, 74
+      \subsubitem {\tt playback}, 23, 53
+      \subsubitem {\tt read}, 23, 54
+      \subsubitem {\tt write}, 24, 53
+    \subitem editing, 20, 21, 50
+    \subitem executing, 53
+    \subitem general concepts, 47
+    \subitem how to create, 48
+    \subitem iterative counters, 69
+    \subitem passing arguments, 49, 68, 69
+    \subitem recalling, 53
+    \subitem removing, 52
+    \subitem saving, 53
+
+  \indexspace
+
+  \item PGPLOT, 5, 79
+  \item PostScript, 79
+
+  \indexspace
+
+  \item Readline Library, 5, 79
+
+  \indexspace
+
+  \item String Variables, 3, 17, 19, 63, 72, 74
+    \subitem commands
+      \subsubitem {\tt set}, 24, 63
+      \subsubitem {\tt string}, 24, 63
+    \subitem table of, 59
+    \subitem variables
+      \subsubitem {\em device}, 74
+      \subsubitem {\em helpfile}, 74
+      \subsubitem {\em levtype}, 74
+      \subsubitem {\em print}, 11, 63, 74
+      \subsubitem {\em xbox}, 17, 72, 74
+      \subsubitem {\em xheader}, 74
+      \subsubitem {\em ybox}, 17, 72, 74
+      \subsubitem {\em yheader}, 74
+  \item Symbols, 14, 100, 115
+    \subitem ASCII characters, 26
+    \subitem dots, 26
+    \subitem Hershey symbols, 18, 26, 100, 117
+    \subitem markers, 18, 26, 100
+    \subitem polygons, 26
+    \subitem symbol numbers, 26
+
+  \indexspace
+
+  \item User Limits, \see {World Units}{12}
+  \item User Variables, 3, 12, 18, 19, 30, 32, 35, 44, 50, 55--64, 66, 
+		73, 74, 101
+    \subitem accessing, 59
+    \subitem commands
+      \subsubitem {\tt free}, 31, 63, 64, 74, 130, 131
+      \subsubitem {\tt new}, 31, 59, 63, 64, 74, 130, 131
+      \subsubitem {\tt set}, 32, 57--59, 73, 135, 136
+      \subsubitem {\tt string}, 59, 63
+    \subitem defining new variables, 63
+    \subitem general concepts, 55
+    \subitem lifetime of new variables, 64
+    \subitem operations
+      \subsubitem table of one variable, 62
+      \subsubitem table of two variable, 61
+    \subitem pre-defined variables, 56
+      \subsubitem {\tt maxarray}, 56, 58
+    \subitem removing user variables, 63
+    \subitem table of, 57--59
+    \subitem user defined variables, 63, 74
+
+  \indexspace
+
+  \item View Surface, 12, 65
+  \item Viewport, 12, 34, 35
+
+  \indexspace
+
+  \item Window, 12, 34
+  \item \wipinit, 6, 8, 11, 56, 63, 72--73, 75, 76
+  \item World Units, 7, 12, 14, 30, 32, 34, 35, 37, 135
+
+  \indexspace
+
+  \item X-Windows, 79
+
+\end{theindex}

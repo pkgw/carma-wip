@@ -1,0 +1,1063 @@
+\indexentry{Images}{3}
+\indexentry{Macros}{3}
+\indexentry{User Variables}{3}
+\indexentry{String Variables}{3}
+\indexentry{Command Line}{3}
+\indexentry{Commands!{\tt device}}{4}
+\indexentry{Comments}{4}
+\indexentry{Comments!comment character(\#)}{4}
+\indexentry{Help}{4}
+\indexentry{Commands!{\tt help}}{4}
+\indexentry{Help!commands!{\tt help}}{4}
+\indexentry{Readline Library}{5}
+\indexentry{Commands!readline!editing}{5}
+\indexentry{Commands!readline!recall}{5}
+\indexentry{Command Line}{5}
+\indexentry{PGPLOT}{5}
+\indexentry{wipinit@\wipinit}{6}
+\indexentry{Labels!case sensitive}{6}
+\indexentry{Commands!{\tt move}}{6}
+\indexentry{Commands!{\tt draw}}{6}
+\indexentry{Commands!{\tt end}}{6}
+\indexentry{Commands!{\tt environment}}{6}
+\indexentry{Coordinate System!World}{7}
+\indexentry{World Units}{7}
+\indexentry{Commands!{\tt define}}{7}
+\indexentry{Commands!{\tt insert}}{7}
+\indexentry{Comments}{7}
+\indexentry{Comments!comment character(\#)}{7}
+\indexentry{Help}{7}
+\indexentry{Devices}{8}
+\indexentry{Commands!{\tt device}}{8}
+\indexentry{Devices!device-type!/xwindow}{8}
+\indexentry{wipinit@\wipinit}{8}
+\indexentry{Commands!{\tt device}}{8}
+\indexentry{Commands!{\tt ldev}}{9}
+\indexentry{Devices!commands!{\tt ldev}}{9}
+\indexentry{Devices}{9}
+\indexentry{Devices!device-type!/xwindow}{9}
+\indexentry{Devices!device-type!/xserve}{9}
+\indexentry{Devices}{10}
+\indexentry{Devices!?}{10}
+\indexentry{Devices!device-type!/null}{10}
+\indexentry{Devices!device-type!/tek}{10}
+\indexentry{Devices!device-type!/retro}{10}
+\indexentry{Devices!device-type!/xterm}{10}
+\indexentry{Devices!device-type!/xwindow}{10}
+\indexentry{Devices!device-type!/xserve}{10}
+\indexentry{Devices!device-type!/ps}{10}
+\indexentry{Devices!device-type!/vps}{10}
+\indexentry{Devices!device-type!/cps}{10}
+\indexentry{Devices!device-type!/vcps}{10}
+\indexentry{Hardcopy}{11}
+\indexentry{Commands!{\tt hardcopy}}{11}
+\indexentry{Hardcopy!commands!{\tt hardcopy}}{11}
+\indexentry{Commands!{\tt phard}}{11}
+\indexentry{Hardcopy!commands!{\tt phard}}{11}
+\indexentry{String Variables!variables!{\em print}}{11}
+\indexentry{Hardcopy!the {\em print} string}{11}
+\indexentry{Commands!{\tt hardcopy}}{11}
+\indexentry{Hardcopy!commands!{\tt hardcopy}}{11}
+\indexentry{Commands!{\tt phard}}{11}
+\indexentry{String Variables!variables!{\em print}}{11}
+\indexentry{String Variables!variables!{\em print}}{11}
+\indexentry{wipinit@\wipinit}{11}
+\indexentry{String Variables!variables!{\em print}}{11}
+\indexentry{Commands!{\tt set}}{11}
+\indexentry{Help}{12}
+\indexentry{Help!on-line help file!\$WIPHELP}{12}
+\indexentry{Commands!{\tt help}}{12}
+\indexentry{Help!commands!{\tt help}}{12}
+\indexentry{Graphical Attributes}{12}
+\indexentry{Coordinate System}{12}
+\indexentry{User Variables}{12}
+\indexentry{Images}{12}
+\indexentry{Images!image characteristics}{12}
+\indexentry{Commands!{\tt echo}}{12}
+\indexentry{Commands!{\tt show}}{12}
+\indexentry{Coordinate System}{12}
+\indexentry{Device Coordinates|see{Viewport}}{12}
+\indexentry{Viewport}{12}
+\indexentry{World Units}{12}
+\indexentry{Coordinate System!World}{12}
+\indexentry{User Limits|see {World Units}}{12}
+\indexentry{Window}{12}
+\indexentry{Coordinate System!Window}{12}
+\indexentry{Viewport}{12}
+\indexentry{Coordinate System!Viewport}{12}
+\indexentry{View Surface}{12}
+\indexentry{Coordinate System!View Surface}{12}
+\indexentry{Commands!{\tt environment}}{13}
+\indexentry{Coordinate System!commands!{\tt environment}}{13}
+\indexentry{Commands!{\tt header}}{13}
+\indexentry{Coordinate System!commands!{\tt header}}{13}
+\indexentry{Commands!{\tt limits}}{13}
+\indexentry{Coordinate System!commands!{\tt limits}}{13}
+\indexentry{Commands!{\tt winadj}}{13}
+\indexentry{Coordinate System!commands!{\tt winadj}}{13}
+\indexentry{Commands!{\tt panel}}{13}
+\indexentry{Coordinate System!commands!{\tt panel}}{13}
+\indexentry{Commands!{\tt submargin}}{13}
+\indexentry{Commands!{\tt paper}}{13}
+\indexentry{Coordinate System!commands!{\tt paper}}{13}
+\indexentry{Commands!{\tt scale}}{13}
+\indexentry{Coordinate System!commands!{\tt scale}}{13}
+\indexentry{Commands!{\tt viewport}}{13}
+\indexentry{Coordinate System!commands!{\tt viewport}}{13}
+\indexentry{Commands!{\tt viewsize}}{13}
+\indexentry{Coordinate System!commands!{\tt viewsize}}{13}
+\indexentry{Commands!{\tt vstand}}{13}
+\indexentry{Coordinate System!commands!{\tt vstand}}{13}
+\indexentry{Commands!{\tt winadj}}{13}
+\indexentry{Coordinate System!commands!{\tt winadj}}{13}
+\indexentry{Graphical Attributes}{13}
+\indexentry{Graphical Attributes!table of}{14}
+\indexentry{Commands!{\tt angle}}{14}
+\indexentry{Commands!{\tt ask}}{14}
+\indexentry{Commands!{\tt color}}{14}
+\indexentry{Commands!{\tt expand}}{14}
+\indexentry{Commands!{\tt fill}}{14}
+\indexentry{Commands!{\tt font}}{14}
+\indexentry{Commands!{\tt lstyle}}{14}
+\indexentry{Commands!{\tt lwidth}}{14}
+\indexentry{Commands!{\tt symbol}}{14}
+\indexentry{Symbols}{14}
+\indexentry{Commands!{\tt reset}}{14}
+\indexentry{Commands!{\tt symbol}}{14}
+\indexentry{Boxes}{14}
+\indexentry{Commands!{\tt box}}{14}
+\indexentry{Boxes!commands!{\tt box}}{14}
+\indexentry{World Units}{14}
+\indexentry{Coordinate System!World}{14}
+\indexentry{Boxes!commands!{\tt ticksize}}{14}
+\indexentry{Commands!{\tt ticksize}}{14}
+\indexentry{Commands!{\tt ticksize}!arguments}{14}
+\indexentry{Colors!default colors!table of}{15}
+\indexentry{Commands!{\tt box}}{16}
+\indexentry{Commands!{\tt box}!arguments}{16}
+\indexentry{Commands!{\tt limits}}{16}
+\indexentry{Commands!{\tt ticksize}}{16}
+\indexentry{Commands!{\tt ticksize}!arguments}{16}
+\indexentry{String Variables}{17}
+\indexentry{String Variables!variables!{\em xbox}}{17}
+\indexentry{String Variables!variables!{\em ybox}}{17}
+\indexentry{Labels|(}{17}
+\indexentry{Commands!{\tt help}}{17}
+\indexentry{Commands!{\tt id}}{17}
+\indexentry{Labels!commands!{\tt id}}{17}
+\indexentry{Commands!{\tt label}}{17}
+\indexentry{Labels!commands!{\tt label}}{17}
+\indexentry{Commands!{\tt mtext}}{17}
+\indexentry{Labels!commands!{\tt mtext}}{17}
+\indexentry{Commands!{\tt putlabel}}{17}
+\indexentry{Labels!commands!{\tt putlabel}}{17}
+\indexentry{Cursor!commands!{\tt putlabel}}{17}
+\indexentry{Commands!{\tt xlabel}}{17}
+\indexentry{Labels!commands!{\tt xlabel}}{17}
+\indexentry{Commands!{\tt ylabel}}{17}
+\indexentry{Labels!commands!{\tt ylabel}}{17}
+\indexentry{Labels!escape sequences!table of}{18}
+\indexentry{User Variables}{18}
+\indexentry{Symbols!markers}{18}
+\indexentry{Symbols!Hershey symbols}{18}
+\indexentry{Commands!{\tt xlabel}}{18}
+\indexentry{Commands!{\tt label}}{18}
+\indexentry{Commands!{\tt mtext}}{18}
+\indexentry{Commands!{\tt mtext}}{18}
+\indexentry{Labels!commands!{\tt mtext}}{18}
+\indexentry{Labels|)}{19}
+\indexentry{Data Files}{19}
+\indexentry{Commands!{\tt data}}{19}
+\indexentry{Data Files!commands!{\tt data}}{19}
+\indexentry{Comments!comment character(\#)}{19}
+\indexentry{Commands!{\tt xcolumn}}{19}
+\indexentry{Data Files!commands!{\tt xcolumn}}{19}
+\indexentry{Commands!{\tt ycolumn}}{19}
+\indexentry{Data Files!commands!{\tt ycolumn}}{19}
+\indexentry{Commands!{\tt lines}}{19}
+\indexentry{Data Files!commands!{\tt lines}}{19}
+\indexentry{String Variables}{19}
+\indexentry{User Variables}{19}
+\indexentry{Commands!{\tt string}}{19}
+\indexentry{Commands!{\tt help}}{19}
+\indexentry{Data Files!dynamic data}{20}
+\indexentry{Cursor}{20}
+\indexentry{Commands!{\tt cursor}}{20}
+\indexentry{Cursor!commands!{\tt cursor}}{20}
+\indexentry{Macros!buffer}{20}
+\indexentry{Macros!editing}{20}
+\indexentry{Commands!{\tt playback}}{20}
+\indexentry{Cursor!keystroke commands}{20}
+\indexentry{Commands!{\tt putlabel}}{20}
+\indexentry{Labels!commands!{\tt putlabel}}{20}
+\indexentry{Commands!{\tt putlabel}}{20}
+\indexentry{Commands!{\tt move}}{21}
+\indexentry{Commands!{\tt putlabel}}{21}
+\indexentry{Command Line!input files}{21}
+\indexentry{Macros!buffer}{21}
+\indexentry{Commands!{\tt cursor}}{21}
+\indexentry{Cursor!non-interactive}{21}
+\indexentry{Commands!{\tt putlabel}}{21}
+\indexentry{Labels!commands!{\tt putlabel}}{21}
+\indexentry{Cursor!commands!{\tt putlabel}}{21}
+\indexentry{Macros}{21}
+\indexentry{Macros!buffer}{21}
+\indexentry{Commands!{\tt insert}}{21}
+\indexentry{Macros!commands!{\tt insert}}{21}
+\indexentry{Macros!editing}{21}
+\indexentry{Commands!{\tt input}}{21}
+\indexentry{Commands!{\tt box}}{22}
+\indexentry{Boxes!commands!{\tt box}}{22}
+\indexentry{Commands!simple plots}{22}
+\indexentry{Help!commands!{\tt help}}{22}
+\indexentry{Commands!{\tt arc}}{22}
+\indexentry{Commands!{\tt fill}}{22}
+\indexentry{Commands!{\tt arrow}}{22}
+\indexentry{Commands!{\tt fill}}{22}
+\indexentry{Commands!{\tt autolevs}}{23}
+\indexentry{Images!commands!{\tt autolevs}}{23}
+\indexentry{Contour Plots!setting levels}{23}
+\indexentry{Contour Plots!setting levels!{\tt autolevs}}{23}
+\indexentry{Commands!{\tt beam}}{23}
+\indexentry{Images!commands!{\tt beam}}{23}
+\indexentry{Fitting!commands!{\tt beam}}{23}
+\indexentry{Commands!{\tt dot}}{23}
+\indexentry{Commands!{\tt draw}}{23}
+\indexentry{Commands!{\tt erase}}{23}
+\indexentry{Commands!{\tt ask}}{23}
+\indexentry{Commands!{\tt globe}}{23}
+\indexentry{Commands!{\tt aitoff}}{23}
+\indexentry{Commands!{\tt hardcopy}}{23}
+\indexentry{Hardcopy!commands!{\tt hardcopy}}{23}
+\indexentry{Devices}{23}
+\indexentry{Commands!{\tt hls}}{23}
+\indexentry{Colors!HLS}{23}
+\indexentry{Commands!{\tt input}}{23}
+\indexentry{Data Files!commands!{\tt input}}{23}
+\indexentry{Macros!commands!{\tt input}}{23}
+\indexentry{Commands!{\tt ldev}}{23}
+\indexentry{Devices!commands!{\tt ldev}}{23}
+\indexentry{Commands!{\tt device}}{23}
+\indexentry{Commands!{\tt levels}}{23}
+\indexentry{Images!commands!{\tt levels}}{23}
+\indexentry{Contour Plots!setting levels}{23}
+\indexentry{Contour Plots!setting levels!{\tt levels}}{23}
+\indexentry{Commands!{\tt lines}}{23}
+\indexentry{Data Files!commands!{\tt lines}}{23}
+\indexentry{Commands!{\tt lookup}}{23}
+\indexentry{Colors!Lookup Table}{23}
+\indexentry{Commands!{\tt macro}}{23}
+\indexentry{Data Files!commands!{\tt macro}}{23}
+\indexentry{Macros!commands!{\tt macro}}{23}
+\indexentry{Commands!{\tt move}}{23}
+\indexentry{Commands!{\tt minmax}}{23}
+\indexentry{Images!commands!{\tt minmax}}{23}
+\indexentry{Commands!{\tt palette}}{23}
+\indexentry{Colors!Lookup Table}{23}
+\indexentry{Commands!{\tt phard}}{23}
+\indexentry{Hardcopy!commands!{\tt phard}}{23}
+\indexentry{Commands!{\tt playback}}{23}
+\indexentry{Macros!commands!{\tt playback}}{23}
+\indexentry{Macros!buffer}{23}
+\indexentry{Commands!{\tt plotfit}}{23}
+\indexentry{Fitting!commands!{\tt plotfit}}{23}
+\indexentry{Fitting!commands!{\tt fit}}{23}
+\indexentry{Commands!{\tt fit}}{23}
+\indexentry{Commands!{\tt read}}{23}
+\indexentry{Data Files!commands!{\tt read}}{23}
+\indexentry{Macros!commands!{\tt read}}{23}
+\indexentry{Commands!{\tt rect}}{23}
+\indexentry{Commands!{\tt reset}}{23}
+\indexentry{Commands!{\tt rgb}}{24}
+\indexentry{Colors!RGB}{24}
+\indexentry{Commands!{\tt set}}{24}
+\indexentry{String Variables!commands!{\tt set}}{24}
+\indexentry{Commands!{\tt show}}{24}
+\indexentry{Commands!{\tt slev}}{24}
+\indexentry{Images!commands!{\tt slev}}{24}
+\indexentry{Contour Plots!setting levels}{24}
+\indexentry{Contour Plots!setting levels!{\tt slev}}{24}
+\indexentry{Commands!{\tt string}}{24}
+\indexentry{String Variables!commands!{\tt string}}{24}
+\indexentry{Commands!{\tt submargin}}{24}
+\indexentry{Commands!{\tt panel}}{24}
+\indexentry{Commands!{\tt wedge}}{24}
+\indexentry{Gray-Scale Plots!commands!{\tt wedge}}{24}
+\indexentry{Images!commands!{\tt wedge}}{24}
+\indexentry{Commands!{\tt write}}{24}
+\indexentry{Data Files!commands!{\tt write}}{24}
+\indexentry{Macros!commands!{\tt write}}{24}
+\indexentry{Macros!buffer}{24}
+\indexentry{Commands!{\tt limits}}{24}
+\indexentry{Commands!{\tt color}}{24}
+\indexentry{Commands!{\tt rect}}{24}
+\indexentry{Commands!{\tt move}}{24}
+\indexentry{Commands!{\tt draw}}{24}
+\indexentry{Commands!{\tt symbol}}{24}
+\indexentry{Commands!{\tt dot}}{24}
+\indexentry{Commands!{\tt erase}}{24}
+\indexentry{Commands!{\tt playback}}{24}
+\indexentry{Commands!{\tt write}}{24}
+\indexentry{Commands!{\tt delete}}{24}
+\indexentry{Commands!{\tt input}}{24}
+\indexentry{Commands!{\tt phard}}{24}
+\indexentry{Commands!{\tt end}}{24}
+\indexentry{Commands!{\tt points}}{24}
+\indexentry{Commands!{\tt connect}}{24}
+\indexentry{Commands!single variable plot}{25}
+\indexentry{Commands!{\tt help}}{25}
+\indexentry{Commands!{\tt aitoff}}{25}
+\indexentry{Commands!{\tt bar}}{25}
+\indexentry{Commands!{\tt bin}}{25}
+\indexentry{Commands!{\tt connect}}{25}
+\indexentry{Commands!{\tt errorbar}}{25}
+\indexentry{Commands!{\tt histogram}}{25}
+\indexentry{Commands!{\tt lcur}}{25}
+\indexentry{Cursor!commands!{\tt lcur}}{25}
+\indexentry{Commands!{\tt logarithm}}{25}
+\indexentry{Commands!{\tt ncurse}}{25}
+\indexentry{Cursor!commands!{\tt ncurse}}{25}
+\indexentry{Commands!{\tt olin}}{25}
+\indexentry{Cursor!commands!{\tt olin}}{25}
+\indexentry{Commands!{\tt points}}{25}
+\indexentry{Commands!{\tt poly}}{25}
+\indexentry{Commands!{\tt vector}}{25}
+\indexentry{Commands!{\tt fill}}{25}
+\indexentry{Commands!{\tt errorbar}}{26}
+\indexentry{Commands!{\tt points}}{26}
+\indexentry{Symbols!symbol numbers}{26}
+\indexentry{Commands!{\tt symbol}}{26}
+\indexentry{Symbols!polygons}{26}
+\indexentry{Symbols!dots}{26}
+\indexentry{Symbols!markers}{26}
+\indexentry{ASCII}{26}
+\indexentry{Symbols!ASCII characters}{26}
+\indexentry{Symbols!Hershey symbols}{26}
+\indexentry{Commands!{\tt points}}{26}
+\indexentry{Cursor!commands!{\tt cursor}}{26}
+\indexentry{Images|(}{27}
+\indexentry{Images!image files}{27}
+\indexentry{Commands!{\tt image}}{27}
+\indexentry{Images!commands!{\tt image}}{27}
+\indexentry{Images!image formats!Miriad}{28}
+\indexentry{FITS}{28}
+\indexentry{Images!image formats!FITS}{28}
+\indexentry{Images!image formats!Basic}{29}
+\indexentry{Commands!{\tt image}}{29}
+\indexentry{Images!commands!{\tt image}}{29}
+\indexentry{Images!byte-swapped}{29}
+\indexentry{Byte-swapped Images}{29}
+\indexentry{Images!image characteristics}{29}
+\indexentry{Images!coordinate transfer function}{30}
+\indexentry{Coordinate System!World}{30}
+\indexentry{Commands!{\tt transfer}}{30}
+\indexentry{Images!commands!{\tt transfer}}{30}
+\indexentry{Commands!{\tt limits}}{30}
+\indexentry{Coordinate System!commands!{\tt limits}}{30}
+\indexentry{Coordinate System!World}{30}
+\indexentry{World Units}{30}
+\indexentry{Commands!{\tt header}}{30}
+\indexentry{Images!commands!{\tt header}}{30}
+\indexentry{User Variables}{30}
+\indexentry{Commands!{\tt transfer}}{30}
+\indexentry{Images!commands!{\tt transfer}}{30}
+\indexentry{Images!transfer function}{30}
+\indexentry{Images!CD matrix}{30}
+\indexentry{Commands!{\tt define}}{31}
+\indexentry{Commands!{\tt new}}{31}
+\indexentry{Commands!{\tt set}}{31}
+\indexentry{Commands!{\tt transfer}}{31}
+\indexentry{Commands!{\tt limits}}{31}
+\indexentry{Commands!{\tt subimage}}{31}
+\indexentry{Commands!{\tt free}}{31}
+\indexentry{Commands!{\tt end}}{31}
+\indexentry{User Variables!commands!{\tt new}}{31}
+\indexentry{User Variables!commands!{\tt free}}{31}
+\indexentry{Images!selecting subregions}{31}
+\indexentry{Commands!{\tt subimage}}{31}
+\indexentry{Images!commands!{\tt subimage}}{31}
+\indexentry{Commands!{\tt quarter}}{31}
+\indexentry{Images!commands!{\tt quarter}}{31}
+\indexentry{Coordinate System!World}{31}
+\indexentry{Images!setting contour levels}{32}
+\indexentry{Commands!{\tt levels}}{32}
+\indexentry{Images!commands!{\tt levels}}{32}
+\indexentry{Contour Plots!setting levels}{32}
+\indexentry{Contour Plots!setting levels!{\tt levels}}{32}
+\indexentry{Commands!{\tt autolevs}}{32}
+\indexentry{Images!commands!{\tt autolevs}}{32}
+\indexentry{Contour Plots!setting levels}{32}
+\indexentry{Contour Plots!setting levels!{\tt autolevs}}{32}
+\indexentry{Commands!{\tt slev}}{32}
+\indexentry{Images!commands!{\tt slev}}{32}
+\indexentry{Contour Plots!setting levels!{\tt slev}}{32}
+\indexentry{Commands!{\tt levels}}{32}
+\indexentry{Commands!{\tt slev}}{32}
+\indexentry{Commands!{\tt slev}}{32}
+\indexentry{Commands!{\tt autolevs}}{32}
+\indexentry{Images!header files}{32}
+\indexentry{Commands!{\tt header}}{32}
+\indexentry{Images!commands!{\tt header}}{32}
+\indexentry{Images!coordinate transfer function}{32}
+\indexentry{Coordinate System!World}{32}
+\indexentry{World Units}{32}
+\indexentry{User Variables}{32}
+\indexentry{Commands!{\tt subimage}}{32}
+\indexentry{Images!commands!{\tt subimage}}{32}
+\indexentry{Commands!{\tt quarter}}{32}
+\indexentry{Images!commands!{\tt quarter}}{32}
+\indexentry{Commands!{\tt set}}{32}
+\indexentry{User Variables!commands!{\tt set}}{32}
+\indexentry{Images!wedge displays}{32}
+\indexentry{Gray-Scale Plots!commands!{\tt wedge}}{32}
+\indexentry{Images!commands!{\tt wedge}}{32}
+\indexentry{Commands!{\tt mtext}}{33}
+\indexentry{Labels!commands!{\tt mtext}}{33}
+\indexentry{Gray-Scale Plots!commands!{\tt halftone}}{33}
+\indexentry{Images!commands!{\tt halftone}}{33}
+\indexentry{Commands!{\tt halftone}}{33}
+\indexentry{Images!image transfer function}{33}
+\indexentry{Gray-Scale Plots!commands!{\tt itf}}{33}
+\indexentry{Images!commands!{\tt itf}}{33}
+\indexentry{Commands!{\tt itf}}{33}
+\indexentry{Images!color palette}{33}
+\indexentry{Gray-Scale Plots!commands!{\tt palette}}{33}
+\indexentry{Images!commands!{\tt palette}}{33}
+\indexentry{Commands!{\tt palette}}{33}
+\indexentry{Gray-Scale Plots!commands!{\tt lookup}}{34}
+\indexentry{Images!commands!{\tt lookup}}{34}
+\indexentry{Commands!{\tt lookup}}{34}
+\indexentry{Commands!{\tt data}}{34}
+\indexentry{Commands!{\tt xcolumn}}{34}
+\indexentry{Commands!{\tt ycolumn}}{34}
+\indexentry{Commands!{\tt ecolumn}}{34}
+\indexentry{Commands!{\tt pcolumn}}{34}
+\indexentry{Commands!{\tt lookup}}{34}
+\indexentry{Images!window dimensions}{34}
+\indexentry{Coordinate System!World}{34}
+\indexentry{World Units}{34}
+\indexentry{Coordinate System!Viewport}{34}
+\indexentry{Viewport}{34}
+\indexentry{Coordinate System!Window}{34}
+\indexentry{Window}{34}
+\indexentry{Commands!{\tt header}}{34}
+\indexentry{Images!commands!{\tt header}}{34}
+\indexentry{Images!window adjustment}{35}
+\indexentry{Commands!{\tt winadj}}{35}
+\indexentry{Coordinate System!commands!{\tt winadj}}{35}
+\indexentry{Commands!{\tt header}}{35}
+\indexentry{Images!commands!{\tt header}}{35}
+\indexentry{Commands!{\tt image}}{35}
+\indexentry{Commands!{\tt winadj}}{35}
+\indexentry{Commands!{\tt header}}{35}
+\indexentry{Commands!{\tt halftone}}{35}
+\indexentry{Images!commands!{\tt header}}{35}
+\indexentry{User Variables}{35}
+\indexentry{Commands!{\tt header}}{35}
+\indexentry{Images!commands!{\tt header}}{35}
+\indexentry{Commands!{\tt transfer}}{35}
+\indexentry{Images!commands!{\tt transfer}}{35}
+\indexentry{Commands!{\tt limits}}{35}
+\indexentry{Images!commands!{\tt limits}}{35}
+\indexentry{Coordinate System!Viewport}{35}
+\indexentry{Viewport}{35}
+\indexentry{Coordinate System!World}{35}
+\indexentry{World Units}{35}
+\indexentry{Images!window adjustment!with panels}{35}
+\indexentry{Commands!{\tt panel}}{35}
+\indexentry{Commands!{\tt define}}{35}
+\indexentry{Commands!{\tt panel}}{35}
+\indexentry{Commands!{\tt image}}{35}
+\indexentry{Commands!{\tt winadj}}{35}
+\indexentry{Commands!{\tt header}}{35}
+\indexentry{Commands!{\tt halftone}}{35}
+\indexentry{Commands!{\tt box}}{35}
+\indexentry{Commands!{\tt end}}{35}
+\indexentry{Commands!{\tt viewport}}{35}
+\indexentry{Commands!{\tt xlabel}}{35}
+\indexentry{Commands!{\tt mtext}}{35}
+\indexentry{Commands!{\tt panel}}{36}
+\indexentry{Coordinate System!World}{36}
+\indexentry{Coordinate System!Viewport}{36}
+\indexentry{Commands!{\tt viewport}}{36}
+\indexentry{Commands!{\tt image}}{36}
+\indexentry{Commands!{\tt set}}{36}
+\indexentry{Commands!{\tt winadj}}{36}
+\indexentry{Commands!{\tt panel}}{36}
+\indexentry{Commands!{\tt xlabel}}{36}
+\indexentry{Commands!{\tt mtext}}{36}
+\indexentry{Images!overlaid images}{37}
+\indexentry{Coordinate System!World}{37}
+\indexentry{World Units}{37}
+\indexentry{Commands!{\tt viewport}}{37}
+\indexentry{Commands!{\tt image}}{37}
+\indexentry{Commands!{\tt winadj}}{37}
+\indexentry{Commands!{\tt header}}{37}
+\indexentry{Commands!{\tt set}}{37}
+\indexentry{Commands!{\tt halftone}}{37}
+\indexentry{Commands!{\tt box}}{37}
+\indexentry{Commands!{\tt limits}}{37}
+\indexentry{Commands!{\tt levels}}{37}
+\indexentry{Commands!{\tt contour}}{37}
+\indexentry{Coordinate System!World}{37}
+\indexentry{World Units}{37}
+\indexentry{Images!image plots}{38}
+\indexentry{Contour Plots}{38}
+\indexentry{Images!image plots!contour}{38}
+\indexentry{Commands!{\tt contour}}{38}
+\indexentry{Images!commands!{\tt contour}}{38}
+\indexentry{Contour Plots!commands!{\tt contour}}{38}
+\indexentry{Commands!{\tt lstyle}}{38}
+\indexentry{Gray-Scale Plots}{39}
+\indexentry{Images!image plots!gray-scale}{39}
+\indexentry{Commands!{\tt halftone}}{39}
+\indexentry{Images!commands!{\tt halftone}}{39}
+\indexentry{Gray-Scale Plots!commands!{\tt halftone}}{39}
+\indexentry{Commands!{\tt palette}}{39}
+\indexentry{Images!commands!{\tt palette}}{39}
+\indexentry{Gray-Scale Plots!commands!{\tt palette}}{39}
+\indexentry{Commands!{\tt lookup}}{39}
+\indexentry{Images!commands!{\tt lookup}}{39}
+\indexentry{Gray-Scale Plots!commands!{\tt lookup}}{39}
+\indexentry{Commands!{\tt echo}}{39}
+\indexentry{Colors!color index range}{39}
+\indexentry{Colors!CMIN}{39}
+\indexentry{Colors!CMAX}{39}
+\indexentry{Cross Section Plots}{39}
+\indexentry{Images!image plots!cross section}{39}
+\indexentry{Commands!{\tt hi2d}}{39}
+\indexentry{Images!commands!{\tt hi2d}}{39}
+\indexentry{Gray-Scale Plots!commands!{\tt hi2d}}{39}
+\indexentry{Images!beam}{39}
+\indexentry{Commands!{\tt beam}}{39}
+\indexentry{Images!commands!{\tt beam}}{39}
+\indexentry{Commands!{\tt beam}}{39}
+\indexentry{Commands!{\tt move}}{40}
+\indexentry{Commands!{\tt beam}}{40}
+\indexentry{Commands!{\tt image}}{40}
+\indexentry{Commands!{\tt header}}{40}
+\indexentry{Images!commands!{\tt image}}{40}
+\indexentry{Images!commands!{\tt header}}{40}
+\indexentry{Images|)}{40}
+\indexentry{Fitting|(}{43}
+\indexentry{Commands!{\tt fit}}{43}
+\indexentry{Fitting!commands!{\tt fit}}{43}
+\indexentry{User Variables}{44}
+\indexentry{Fitting!commands!{\tt fit}}{44}
+\indexentry{Fitting!Methods!Least Squares}{44}
+\indexentry{Fitting!commands!{\tt fit}}{44}
+\indexentry{Fitting!Methods!Least Absolute Deviations}{44}
+\indexentry{Fitting!commands!{\tt fit}}{45}
+\indexentry{Fitting!Methods!Simple Polynomials}{45}
+\indexentry{Fitting!commands!{\tt fit}}{45}
+\indexentry{Fitting!Methods!Legendre Polynomials}{45}
+\indexentry{Fitting!commands!{\tt fit}}{45}
+\indexentry{Fitting!Methods!Multiple Gaussians}{45}
+\indexentry{Fitting!commands!{\tt range}}{46}
+\indexentry{Fitting!Limiting A Fit}{46}
+\indexentry{Commands!{\tt range}}{46}
+\indexentry{Fitting!commands!{\tt plotfit}}{46}
+\indexentry{Fitting!Plotting A Fit}{46}
+\indexentry{Commands!{\tt plotfit}}{46}
+\indexentry{Fitting|)}{46}
+\indexentry{Macros|(}{47}
+\indexentry{Macros!general concepts}{47}
+\indexentry{Macros!buffer}{47}
+\indexentry{Commands!{\tt echo}}{47}
+\indexentry{Commands!{\tt show}}{47}
+\indexentry{Commands!{\tt help}}{47}
+\indexentry{Help!commands!{\tt help}}{47}
+\indexentry{Commands!{\tt insert}}{47}
+\indexentry{Macros!commands!{\tt insert}}{47}
+\indexentry{Commands!{\tt device}}{47}
+\indexentry{Commands!{\tt limits}}{47}
+\indexentry{Commands!{\tt box}}{47}
+\indexentry{Commands!{\tt show}}{47}
+\indexentry{Commands!{\tt xlabel}}{47}
+\indexentry{Commands!{\tt ylabel}}{47}
+\indexentry{Commands!{\tt erase}}{47}
+\indexentry{Commands!{\tt move}}{47}
+\indexentry{Commands!{\tt draw}}{47}
+\indexentry{Commands!{\tt list}}{48}
+\indexentry{Macros!commands!{\tt list}}{48}
+\indexentry{Commands!{\tt list}}{48}
+\indexentry{Commands!{\tt limits}}{48}
+\indexentry{Commands!{\tt box}}{48}
+\indexentry{Commands!{\tt xlabel}}{48}
+\indexentry{Commands!{\tt ylabel}}{48}
+\indexentry{Commands!{\tt move}}{48}
+\indexentry{Commands!{\tt draw}}{48}
+\indexentry{Macros!buffer}{48}
+\indexentry{Macros!how to create}{48}
+\indexentry{Commands!{\tt define}}{48}
+\indexentry{Macros!commands!{\tt define}}{48}
+\indexentry{Commands!{\tt end}}{48}
+\indexentry{Macros!commands!{\tt end}}{48}
+\indexentry{Macros!passing arguments}{49}
+\indexentry{Commands!{\tt define}}{49}
+\indexentry{Commands!{\tt move}}{49}
+\indexentry{Commands!{\tt label}}{49}
+\indexentry{Commands!{\tt end}}{49}
+\indexentry{Commands!{\tt limits}}{49}
+\indexentry{Commands!{\tt label}}{49}
+\indexentry{Commands!{\tt label}}{49}
+\indexentry{Commands!{\tt set}}{50}
+\indexentry{User Variables}{50}
+\indexentry{Commands!{\tt set}}{50}
+\indexentry{Commands!{\tt loop}}{50}
+\indexentry{Comments}{50}
+\indexentry{User Variables}{50}
+\indexentry{Macros!commands!{\tt insert}}{50}
+\indexentry{Macros!editing}{50}
+\indexentry{Macros!buffer}{50}
+\indexentry{Commands!{\tt list}}{50}
+\indexentry{Macros!commands!{\tt list}}{50}
+\indexentry{Commands!{\tt list}}{51}
+\indexentry{Commands!{\tt list}}{51}
+\indexentry{Commands!{\tt list}}{51}
+\indexentry{Commands!{\tt insert}}{51}
+\indexentry{Macros!commands!{\tt insert}}{51}
+\indexentry{Commands!{\tt insert}}{52}
+\indexentry{Commands!{\tt insert}}{52}
+\indexentry{Commands!{\tt insert}}{52}
+\indexentry{Commands!{\tt insert}}{52}
+\indexentry{Macros!removing}{52}
+\indexentry{Macros!commands!{\tt delete}}{52}
+\indexentry{Commands!{\tt delete}}{52}
+\indexentry{Commands!{\tt delete}}{53}
+\indexentry{Commands!{\tt delete}}{53}
+\indexentry{Macros!calling}{53}
+\indexentry{Macros!executing}{53}
+\indexentry{Commands!{\tt playback}}{53}
+\indexentry{Macros!commands!{\tt playback}}{53}
+\indexentry{Macros!saving}{53}
+\indexentry{Commands!{\tt write}}{53}
+\indexentry{Macros!commands!{\tt write}}{53}
+\indexentry{ASCII}{53}
+\indexentry{Macros!recalling}{53}
+\indexentry{Commands!{\tt macro}}{54}
+\indexentry{Macros!commands!{\tt macro}}{54}
+\indexentry{Commands!{\tt read}}{54}
+\indexentry{Macros!commands!{\tt read}}{54}
+\indexentry{Macros!buffer}{54}
+\indexentry{Commands!{\tt insert}}{54}
+\indexentry{Macros!commands!{\tt insert}}{54}
+\indexentry{Commands!{\tt input}}{54}
+\indexentry{Macros!commands!{\tt input}}{54}
+\indexentry{Macros|)}{54}
+\indexentry{User Variables|(}{55}
+\indexentry{User Variables!general concepts}{55}
+\indexentry{Commands!{\tt limits}}{55}
+\indexentry{Commands!{\tt data}}{55}
+\indexentry{Commands!{\tt xcolumn}}{55}
+\indexentry{Commands!{\tt ycolumn}}{55}
+\indexentry{Commands!{\tt limits}}{55}
+\indexentry{User Variables!pre-defined variables}{56}
+\indexentry{User Variables!pre-defined variables!{\tt maxarray}}{56}
+\indexentry{wipinit@\wipinit}{56}
+\indexentry{wipinit@\wipinit}{56}
+\indexentry{Commands!{\tt set}}{56}
+\indexentry{User Variables!pre-defined variables!{\tt maxarray}}{56}
+\indexentry{User Variables!table of}{57}
+\indexentry{User Variables!commands!{\tt set}}{57}
+\indexentry{Commands!{\tt set}}{57}
+\indexentry{Commands!{\tt limits}}{57}
+\indexentry{Commands!{\tt viewport}}{57}
+\indexentry{Commands!{\tt cursor}}{57}
+\indexentry{Commands!{\tt ticksize}}{57}
+\indexentry{Commands!{\tt show}}{57}
+\indexentry{Coordinate System!commands!{\tt limits}}{57}
+\indexentry{Coordinate System!commands!{\tt viewport}}{57}
+\indexentry{Cursor!commands!{\tt cursor}}{57}
+\indexentry{Boxes!commands!{\tt ticksize}}{57}
+\indexentry{User Variables!table of}{57}
+\indexentry{User Variables!commands!{\tt set}}{57}
+\indexentry{Commands!{\tt set}}{57}
+\indexentry{Commands!{\tt header}}{57}
+\indexentry{Commands!{\tt image}}{57}
+\indexentry{Commands!{\tt subimage}}{57}
+\indexentry{Commands!{\tt slev}}{57}
+\indexentry{Images!commands!{\tt header}}{57}
+\indexentry{Images!commands!{\tt image}}{57}
+\indexentry{Images!commands!{\tt slev}}{57}
+\indexentry{Images!commands!{\tt subimage}}{57}
+\indexentry{Images!user variables!table of}{57}
+\indexentry{Contour Plots!setting levels!{\tt slev}}{57}
+\indexentry{User Variables!table of}{58}
+\indexentry{User Variables!commands!{\tt set}}{58}
+\indexentry{Commands!{\tt set}}{58}
+\indexentry{Commands!{\tt angle}}{58}
+\indexentry{Commands!{\tt bgci}}{58}
+\indexentry{Commands!{\tt expand}}{58}
+\indexentry{Commands!{\tt color}}{58}
+\indexentry{Commands!{\tt fill}}{58}
+\indexentry{Commands!{\tt font}}{58}
+\indexentry{Commands!{\tt itf}}{58}
+\indexentry{Commands!{\tt lstyle}}{58}
+\indexentry{Commands!{\tt lwidth}}{58}
+\indexentry{Commands!{\tt show}}{58}
+\indexentry{Graphical Attributes}{58}
+\indexentry{User Variables!pre-defined variables!{\tt maxarray}}{58}
+\indexentry{User Variables!table of}{58}
+\indexentry{Commands!{\tt xcolumn}}{58}
+\indexentry{Commands!{\tt ycolumn}}{58}
+\indexentry{Commands!{\tt ecolumn}}{58}
+\indexentry{Commands!{\tt pcolumn}}{58}
+\indexentry{Commands!{\tt transfer}}{58}
+\indexentry{Commands!{\tt header}}{58}
+\indexentry{Commands!{\tt levels}}{58}
+\indexentry{Commands!{\tt autolevs}}{58}
+\indexentry{Commands!{\tt slev}}{58}
+\indexentry{Data Files!commands!{\tt xcolumn}}{58}
+\indexentry{Data Files!commands!{\tt ycolumn}}{58}
+\indexentry{Data Files!commands!{\tt ecolumn}}{58}
+\indexentry{Data Files!commands!{\tt pcolumn}}{58}
+\indexentry{Images!commands!{\tt header}}{58}
+\indexentry{Images!commands!{\tt transfer}}{58}
+\indexentry{Images!commands!{\tt levels}}{58}
+\indexentry{Images!commands!{\tt autolevs}}{58}
+\indexentry{Images!commands!{\tt slev}}{58}
+\indexentry{Contour Plots!setting levels}{58}
+\indexentry{User Variables!pre-defined variables!{\tt maxarray}}{58}
+\indexentry{User Variables!table of}{59}
+\indexentry{User Variables!commands!{\tt set}}{59}
+\indexentry{User Variables!commands!{\tt string}}{59}
+\indexentry{String Variables!table of}{59}
+\indexentry{Commands!{\tt set}}{59}
+\indexentry{Commands!{\tt string}}{59}
+\indexentry{Commands!{\tt device}}{59}
+\indexentry{Commands!{\tt data}}{59}
+\indexentry{Commands!{\tt image}}{59}
+\indexentry{Commands!{\tt box}}{59}
+\indexentry{Commands!{\tt header}}{59}
+\indexentry{Commands!{\tt slev}}{59}
+\indexentry{Help!on-line help file!\$WIPHELP}{59}
+\indexentry{Help!on-line help file!the {\em helpfile} string}{59}
+\indexentry{Devices!device-type!/xwindow}{59}
+\indexentry{Devices!the {\em device} string}{59}
+\indexentry{Data Files!commands!{\tt data}}{59}
+\indexentry{Images!commands!{\tt image}}{59}
+\indexentry{Images!commands!{\tt header}}{59}
+\indexentry{Images!commands!{\tt slev}}{59}
+\indexentry{Boxes!commands!{\tt box}}{59}
+\indexentry{Boxes!the {\em xbox} string}{59}
+\indexentry{Boxes!the {\em ybox} string}{59}
+\indexentry{Contour Plots!setting levels!{\tt slev}}{59}
+\indexentry{User Variables!accessing}{59}
+\indexentry{Commands!{\tt set}}{59}
+\indexentry{Commands!{\tt string}}{59}
+\indexentry{Commands!{\tt echo}}{59}
+\indexentry{Commands!{\tt show}}{59}
+\indexentry{Commands!{\tt set}}{59}
+\indexentry{User Variables!commands!{\tt set}}{59}
+\indexentry{Commands!{\tt new}}{59}
+\indexentry{User Variables!commands!{\tt new}}{59}
+\indexentry{Commands!{\tt set}}{59}
+\indexentry{User Variables!commands!{\tt set}}{59}
+\indexentry{Commands!{\tt set}}{60}
+\indexentry{Commands!{\tt set}}{60}
+\indexentry{Commands!{\tt set}}{60}
+\indexentry{User Variables!operations!table of two variable}{61}
+\indexentry{User Variables!operations!table of one variable}{62}
+\indexentry{Commands!{\tt string}}{63}
+\indexentry{User Variables!commands!{\tt string}}{63}
+\indexentry{String Variables|(}{63}
+\indexentry{Commands!{\tt set}}{63}
+\indexentry{String Variables!variables!{\em print}}{63}
+\indexentry{String Variables!commands!{\tt set}}{63}
+\indexentry{wipinit@\wipinit}{63}
+\indexentry{String Variables!commands!{\tt string}}{63}
+\indexentry{String Variables|)}{63}
+\indexentry{User Variables!defining new variables}{63}
+\indexentry{User Variables!removing user variables}{63}
+\indexentry{Commands!{\tt new}}{63}
+\indexentry{User Variables!user defined variables}{63}
+\indexentry{User Variables!commands!{\tt new}}{63}
+\indexentry{Commands!{\tt free}}{63}
+\indexentry{User Variables!user defined variables}{63}
+\indexentry{User Variables!commands!{\tt free}}{63}
+\indexentry{Commands!{\tt define}}{64}
+\indexentry{Commands!{\tt new}}{64}
+\indexentry{Commands!{\tt set}}{64}
+\indexentry{Commands!{\tt if}}{64}
+\indexentry{Commands!{\tt move}}{64}
+\indexentry{Commands!{\tt free}}{64}
+\indexentry{Commands!{\tt end}}{64}
+\indexentry{User Variables!commands!{\tt new}}{64}
+\indexentry{User Variables!commands!{\tt free}}{64}
+\indexentry{User Variables!lifetime of new variables}{64}
+\indexentry{User Variables|)}{64}
+\indexentry{Macros}{65}
+\indexentry{Commands!{\tt if}}{65}
+\indexentry{Commands!{\tt if}}{65}
+\indexentry{Macros!commands!{\tt if}}{65}
+\indexentry{View Surface}{65}
+\indexentry{Boxes}{65}
+\indexentry{Macros}{65}
+\indexentry{Commands!{\tt panel}}{65}
+\indexentry{Coordinate System!commands!{\tt panel}}{65}
+\indexentry{View Surface}{65}
+\indexentry{Contour Plots}{65}
+\indexentry{Commands!{\tt define}}{66}
+\indexentry{Commands!{\tt set}}{66}
+\indexentry{Commands!{\tt panel}}{66}
+\indexentry{Commands!{\tt image}}{66}
+\indexentry{Commands!{\tt contour}}{66}
+\indexentry{Commands!{\tt box}}{66}
+\indexentry{Commands!{\tt if}}{66}
+\indexentry{Commands!{\tt end}}{66}
+\indexentry{Commands!{\tt autolevs}}{66}
+\indexentry{Commands!{\tt slev}}{66}
+\indexentry{User Variables}{66}
+\indexentry{Commands!{\tt set}}{66}
+\indexentry{Commands!{\tt set}}{66}
+\indexentry{Commands!{\tt box}}{66}
+\indexentry{Boxes!commands!{\tt box}}{66}
+\indexentry{Commands!{\tt if}}{67}
+\indexentry{Help!commands!{\tt help}}{67}
+\indexentry{Help!commands!{\tt if}}{67}
+\indexentry{Commands!{\tt if}}{67}
+\indexentry{Commands!{\tt box}}{67}
+\indexentry{Commands!{\tt lstyle}}{67}
+\indexentry{Commands!{\tt move}}{67}
+\indexentry{Commands!{\tt draw}}{67}
+\indexentry{Commands!{\tt define}}{67}
+\indexentry{Commands!{\tt box}}{67}
+\indexentry{Commands!{\tt lstyle}}{67}
+\indexentry{Commands!{\tt move}}{67}
+\indexentry{Commands!{\tt draw}}{67}
+\indexentry{Commands!{\tt if}}{67}
+\indexentry{Commands!{\tt if}}{68}
+\indexentry{Commands!{\tt set}}{68}
+\indexentry{Commands!{\tt if}}{68}
+\indexentry{Commands!{\tt box}}{68}
+\indexentry{Commands!{\tt if}}{68}
+\indexentry{Commands!{\tt box}}{68}
+\indexentry{Commands!{\tt if}}{68}
+\indexentry{Commands!{\tt loop}}{68}
+\indexentry{Macros!commands!{\tt loop}}{68}
+\indexentry{Macros}{68}
+\indexentry{Macros!passing arguments}{68}
+\indexentry{Commands!{\tt set}}{69}
+\indexentry{Commands!{\tt loop}}{69}
+\indexentry{Commands!{\tt if}}{69}
+\indexentry{Macros!commands!{\tt if}}{69}
+\indexentry{Commands!{\tt loop}}{69}
+\indexentry{Macros!commands!{\tt loop}}{69}
+\indexentry{Macros!passing arguments}{69}
+\indexentry{Macros!iterative counters}{69}
+\indexentry{Commands!{\tt define}}{69}
+\indexentry{Commands!{\tt set}}{69}
+\indexentry{Commands!{\tt end}}{69}
+\indexentry{Commands!{\tt set}}{69}
+\indexentry{wipinit@\wipinit|(}{72}
+\indexentry{Devices}{72}
+\indexentry{Devices!device-type!/tek}{72}
+\indexentry{Devices!device-type!/xwindow}{72}
+\indexentry{Command Line}{72}
+\indexentry{Command Line!switches}{72}
+\indexentry{Commands!{\tt set}}{72}
+\indexentry{Commands!{\tt box}}{72}
+\indexentry{Boxes!commands!{\tt box}}{72}
+\indexentry{String Variables!variables!{\em xbox}}{72}
+\indexentry{String Variables!variables!{\em ybox}}{72}
+\indexentry{String Variables}{72}
+\indexentry{String Variables!variables!{\em xbox}}{72}
+\indexentry{String Variables!variables!{\em ybox}}{72}
+\indexentry{Commands!{\tt set}}{72}
+\indexentry{Commands!{\tt set}}{73}
+\indexentry{Macros}{73}
+\indexentry{Commands!{\tt macro}}{73}
+\indexentry{Macros!commands!{\tt macro}}{73}
+\indexentry{User Variables}{73}
+\indexentry{Commands!{\tt set}}{73}
+\indexentry{Commands!{\tt macro}}{73}
+\indexentry{Comments}{73}
+\indexentry{Comments!comment character(\#)}{73}
+\indexentry{Commands!{\tt set}}{73}
+\indexentry{User Variables}{73}
+\indexentry{Commands!{\tt set}}{73}
+\indexentry{Commands!{\tt macro}}{73}
+\indexentry{User Variables!commands!{\tt set}}{73}
+\indexentry{Devices!device-type!/xserve}{73}
+\indexentry{Devices!the {\em device} string}{73}
+\indexentry{wipinit@\wipinit|)}{73}
+\indexentry{Commands!{\tt set}}{74}
+\indexentry{Macros!commands!{\tt macro}}{74}
+\indexentry{Macros}{74}
+\indexentry{Commands!{\tt macro}}{74}
+\indexentry{User Variables}{74}
+\indexentry{String Variables}{74}
+\indexentry{String Variables!variables!{\em print}}{74}
+\indexentry{String Variables!variables!{\em xbox}}{74}
+\indexentry{String Variables!variables!{\em ybox}}{74}
+\indexentry{String Variables!variables!{\em xheader}}{74}
+\indexentry{String Variables!variables!{\em yheader}}{74}
+\indexentry{String Variables!variables!{\em levtype}}{74}
+\indexentry{String Variables!variables!{\em device}}{74}
+\indexentry{String Variables!variables!{\em helpfile}}{74}
+\indexentry{Devices!device-type!/xwindow}{74}
+\indexentry{Devices!the {\em device} string}{74}
+\indexentry{Hardcopy!the {\em print} string}{74}
+\indexentry{Boxes!the {\em xbox} string}{74}
+\indexentry{Boxes!the {\em ybox} string}{74}
+\indexentry{Images!header files}{74}
+\indexentry{Images!setting contour levels}{74}
+\indexentry{Help!on-line help file!the {\em helpfile} string}{74}
+\indexentry{Help!on-line help file!\$WIPHELP}{74}
+\indexentry{Commands!{\tt new}}{74}
+\indexentry{Commands!{\tt free}}{74}
+\indexentry{User Variables!commands!{\tt new}}{74}
+\indexentry{User Variables!commands!{\tt free}}{74}
+\indexentry{User Variables!user defined variables}{74}
+\indexentry{Command Line!switches}{75}
+\indexentry{Devices}{75}
+\indexentry{wipinit@\wipinit}{75}
+\indexentry{Hardcopy}{76}
+\indexentry{Commands!{\tt hardcopy}}{76}
+\indexentry{Hardcopy!commands!{\tt hardcopy}}{76}
+\indexentry{Macros}{76}
+\indexentry{Command Line!input files}{76}
+\indexentry{Commands!{\tt end}}{76}
+\indexentry{Commands!{\tt define}}{76}
+\indexentry{Macros!commands!{\tt define}}{76}
+\indexentry{Commands!{\tt insert}}{76}
+\indexentry{Macros!commands!{\tt insert}}{76}
+\indexentry{wipinit@\wipinit}{76}
+\indexentry{Macros!buffer}{76}
+\indexentry{Commands!{\tt write}}{76}
+\indexentry{ASCII}{78}
+\indexentry{Images!image formats!Basic}{78}
+\indexentry{Commands!{\tt image}}{78}
+\indexentry{Images!commands!{\tt image}}{78}
+\indexentry{FITS}{78}
+\indexentry{Images!image formats!FITS}{78}
+\indexentry{Images!image formats!Miriad}{78}
+\indexentry{PGPLOT}{79}
+\indexentry{PostScript}{79}
+\indexentry{ASCII}{79}
+\indexentry{PGPLOT}{79}
+\indexentry{Readline Library}{79}
+\indexentry{Commands!readline!editing}{79}
+\indexentry{Commands!readline!recall}{79}
+\indexentry{Help!on-line help file!\$WIPHELP}{79}
+\indexentry{X-Windows}{79}
+\indexentry{Help}{80}
+\indexentry{Help!commands!{\tt help}}{80}
+\indexentry{Comments}{100}
+\indexentry{Comments!comment character(\#)}{100}
+\indexentry{Commands!{\tt box}}{100}
+\indexentry{Boxes!commands!{\tt box}}{100}
+\indexentry{Macros}{100}
+\indexentry{Symbols!markers}{100}
+\indexentry{Commands!{\tt symbol}}{100}
+\indexentry{Symbols}{100}
+\indexentry{Symbols!Hershey symbols}{100}
+\indexentry{Macros}{101}
+\indexentry{Commands!{\tt panel}}{101}
+\indexentry{Commands!{\tt loop}}{101}
+\indexentry{FITS}{101}
+\indexentry{Images!image formats!FITS}{101}
+\indexentry{User Variables}{101}
+\indexentry{Symbols}{115}
+\indexentry{Symbols!Hershey symbols}{117}
+\indexentry{Fitting!an example}{120}
+\indexentry{Commands!{\tt device}}{128}
+\indexentry{Commands!{\tt input}}{128}
+\indexentry{Commands!{\tt end}}{128}
+\indexentry{Commands!{\tt hardcopy}}{128}
+\indexentry{Commands!{\tt device}}{128}
+\indexentry{Commands!{\tt phard}}{129}
+\indexentry{Commands!{\tt input}}{129}
+\indexentry{Commands!{\tt phard}}{129}
+\indexentry{Commands!{\tt end}}{129}
+\indexentry{Commands!{\tt define}}{129}
+\indexentry{Commands!{\tt erase}}{129}
+\indexentry{Commands!{\tt expand}}{129}
+\indexentry{Commands!{\tt set}}{129}
+\indexentry{Commands!{\tt loop}}{129}
+\indexentry{Commands!{\tt end}}{129}
+\indexentry{Commands!{\tt panel}}{129}
+\indexentry{Commands!{\tt device}}{129}
+\indexentry{Commands!{\tt hardcopy}}{129}
+\indexentry{Commands!{\tt device}}{130}
+\indexentry{Commands!{\tt hardcopy}}{130}
+\indexentry{Commands!{\tt define}}{130}
+\indexentry{Commands!{\tt new}}{130}
+\indexentry{Commands!{\tt set}}{130}
+\indexentry{Commands!{\tt move}}{130}
+\indexentry{Commands!{\tt free}}{130}
+\indexentry{Commands!{\tt end}}{130}
+\indexentry{User Variables!commands!{\tt new}}{130}
+\indexentry{User Variables!commands!{\tt free}}{130}
+\indexentry{Commands!{\tt move}}{131}
+\indexentry{Commands!{\tt draw}}{131}
+\indexentry{Commands!{\tt define}}{131}
+\indexentry{Commands!{\tt new}}{131}
+\indexentry{Commands!{\tt move}}{131}
+\indexentry{Commands!{\tt draw}}{131}
+\indexentry{Commands!{\tt set}}{131}
+\indexentry{Commands!{\tt free}}{131}
+\indexentry{Commands!{\tt end}}{131}
+\indexentry{User Variables!commands!{\tt new}}{131}
+\indexentry{User Variables!commands!{\tt free}}{131}
+\indexentry{Labels!user variables in}{131}
+\indexentry{Commands!{\tt box}}{132}
+\indexentry{Commands!{\tt header}}{132}
+\indexentry{Commands!{\tt show}}{132}
+\indexentry{FITS}{132}
+\indexentry{Commands!{\tt image}}{132}
+\indexentry{Commands!{\tt header}}{132}
+\indexentry{Commands!{\tt halftone}}{132}
+\indexentry{Commands!{\tt box}}{132}
+\indexentry{Commands!{\tt echo}}{133}
+\indexentry{Commands!{\tt define}}{133}
+\indexentry{Macros!commands!{\tt define}}{133}
+\indexentry{Commands!{\tt echo}}{133}
+\indexentry{Commands!{\tt cursor}}{133}
+\indexentry{Commands!{\tt label}}{133}
+\indexentry{Commands!{\tt end}}{133}
+\indexentry{Macros!commands!{\tt end}}{133}
+\indexentry{Commands!{\tt ylabel}}{133}
+\indexentry{Commands!{\tt mtext}}{133}
+\indexentry{Commands!{\tt xcolumn}}{134}
+\indexentry{Commands!{\tt ycolumn}}{134}
+\indexentry{Commands!{\tt ecolumn}}{134}
+\indexentry{Commands!{\tt logarithm}}{134}
+\indexentry{Commands!{\tt points}}{134}
+\indexentry{Commands!{\tt errorbar}}{134}
+\indexentry{Commands!{\tt define}}{134}
+\indexentry{Commands!{\tt set}}{134}
+\indexentry{Commands!{\tt xcolumn}}{134}
+\indexentry{Commands!{\tt ycolumn}}{134}
+\indexentry{Commands!{\tt ecolumn}}{134}
+\indexentry{Commands!{\tt logarithm}}{134}
+\indexentry{Commands!{\tt points}}{134}
+\indexentry{Commands!{\tt errorbar}}{134}
+\indexentry{Commands!{\tt loop}}{134}
+\indexentry{Commands!{\tt winadj}}{135}
+\indexentry{Coordinate System!commands!{\tt winadj}}{135}
+\indexentry{World Units}{135}
+\indexentry{Coordinate System!World}{135}
+\indexentry{Commands!{\tt set}}{135}
+\indexentry{Commands!{\tt winadj}}{135}
+\indexentry{Commands!{\tt limits}}{135}
+\indexentry{Commands!{\tt box}}{135}
+\indexentry{User Variables!commands!{\tt set}}{135}
+\indexentry{Coordinate System!commands!{\tt limits}}{135}
+\indexentry{Coordinate System!commands!{\tt winadj}}{135}
+\indexentry{Boxes!commands!{\tt box}}{135}
+\indexentry{Commands!{\tt input}}{135}
+\indexentry{Commands!{\tt phard}}{135}
+\indexentry{Hardcopy!commands!{\tt phard}}{135}
+\indexentry{Commands!{\tt define}}{136}
+\indexentry{Commands!{\tt set}}{136}
+\indexentry{Commands!{\tt if}}{136}
+\indexentry{Commands!{\tt echo}}{136}
+\indexentry{Commands!{\tt end}}{136}
+\indexentry{Commands!{\tt loop}}{136}
+\indexentry{Macros!commands!{\tt define}}{136}
+\indexentry{Macros!commands!{\tt end}}{136}
+\indexentry{Macros!commands!{\tt if}}{136}
+\indexentry{Macros!commands!{\tt loop}}{136}
+\indexentry{User Variables!commands!{\tt set}}{136}
