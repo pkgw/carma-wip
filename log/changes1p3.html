@@ -1,0 +1,66 @@
+<HTML>
+<HEAD>
+<TITLE>WIP Version 1.3 Changes</TITLE>
+</HEAD>
+
+<BODY>
+<H1>WIP Version 1.3 Changes</H1>
+
+This version has introduced two new concepts to WIP:
+
+<OL>
+  <LI> Multiple image formats are now acceptable.  WIP silently probes the
+     image type and if an appropriate type is found, the image is loaded.
+     As a result, more image formats may be easily added by mimicing the
+     call format of the other image drivers.  Additionally, the image
+     driver code is isolated from the rest of WIP such that drivers may
+     be skipped if a particular site does not want to support it.
+
+  <LI> The addition of the commands NEW, FREE, and ECHO.  These commands
+     allow the user to define new user variables, release them, and
+     print their current value.  These commands have come as a result of
+     modifying the command SET to allow more than 3 operational arguments.
+     Now, SET works somewhat like a TI calculator (but with Left-to-Right
+     precedence only).
+
+<P>
+     As a result of this change, WIP is now NOT backward compatible with
+     macros that used functions.  As an example, if the user had the command:
+       <CODE>set \0 \0 abs</CODE>
+     (s)he should change it to the following:
+       <CODE>set \0 abs(\0)</CODE>
+     The advantage of this syntax (as well as the TI format) is that
+     many of the macros that were multilined due to multiple SET
+     commands may now be reduced in size and should become more readable.
+</P>
+
+<P>
+     Additionally, the NEW and FREE commands allow macros to define local
+     scope variables.  This should reduce the likelyhood of crosstalk
+     between user variables.
+</P>
+
+<P>
+     The command ECHO permits the user to display the result of a SET-like
+     expression (or value of a user variable) on the work display.
+</P>
+
+  <LI> As a result of the modifications to this version, the following
+     changes need to be made prior to rebuilding WIP:
+     <OL>
+       <LI> Remove the current library libwip.a.
+       <LI> Remove the obsolete script mir.wip1.
+       <LI> Remove the following obsolete files:
+         <UL>
+            <LI> wip/wipsrc/plot/variable.c
+            <LI> wip/wipsrc/sysdepunix/fillinit.c
+            <LI> wip/wipsrc/include/arrays.h
+            <LI> wip/wipsrc/include/conf.h
+            <LI> wip/wipsrc/include/files.h
+            <LI> wip/wipsrc/include/plot.h
+         </UL>
+     </OL>
+</OL>
+
+</BODY>
+</HTML>
