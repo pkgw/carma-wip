@@ -1,0 +1,107 @@
+%% This file is to be included by latex in wip.tex
+%
+% The User Interface
+%
+\mylabel{c:iface}
+\myfile{iface.tex}
+
+There are, at present, two ways to create plots with \wip: interactively
+or by reading plot command files from the command line.
+Command line plotting is an efficient way to spool plots to a printer or
+to load plot command files and macros when starting \wip.
+Command line plotting will be discussed more fully in Appendix~\ref{a:cmdline}.
+Interactive plotting consists of typing the
+commands that generate the plot, one at a time, and seeing the results.
+This chapter describes the user interface used by \wip.
+
+When \wip\ is started, certain commands and parameters
+are defined by the program as well as by the user
+(see Appendix~\ref{a:wipinit}\index{wipinit@\wipinit}
+for details on creating your own initialization file).
+The user is then presented with the standard \wip\ prompt (\wip\verb+>+)
+and commands may be then entered one per line.
+Command lines in \wip\ consist of one or more ``words'' that are
+separated by some combination of either spaces or commas.
+These ``words'' may be alphabetic, numeric, or a combination of both and
+represent the command names and their respective arguments.
+Command names in \wip\ are case insensitive (\ie commands may be entered in
+either lower case, upper case,
+or a mixture of both).
+Arguments to a command that will be displayed
+(\eg a string of characters that will appear in a
+label\index{Labels!case sensitive}) does, however, remain case sensitive.
+Command names in \wip\ may also be abbreviated to uniqueness.
+If a command typed by the user is not unique, \wip\ will issue a warning
+and ignore the ambiguous command.
+The exception to this rule is exact matches;
+a complete command name will always match.
+
+As an example of how to type commands in interactive mode, suppose a
+user wanted to draw a single line from one position to another.
+The following listing illustrates the commands the user would type
+and an example of \wip's response to an ambiguously stated command:
+\begin{wiplist}%
+  \index{Commands!{\tt move}}
+  \index{Commands!{\tt draw}}
+  \index{Commands!{\tt end}}
+  \index{Commands!{\tt environment}}
+  \item {\tt move 0 0}
+\samepage
+  \item {\tt draw 1 1}
+  \item {\tt en}
+  \item [\ ] {\tt Ambiguous command name, choices are:}
+  \item [\ ] {\tt end ~~~ environment}
+  \item {\tt end}
+\end{wiplist}
+
+Some of \wip's commands have a number of arguments which must be specified.
+If a command requires a certain number of arguments to function properly
+and an insufficient number of arguments are given with the command,
+then \wip\ will issue a warning to the user.
+For example, if the user typed the {\tt move} command without the two
+required arguments, \wip\ would warn the user:
+\begin{wiplist}%
+  \item {\tt move}
+\samepage
+  \item [\ ] {\tt Insufficient number of arguments provided. 2 required.}
+\end{wiplist}
+Other commands, however, have optional parameters which will operate
+with default values if they are not supplied by the user.
+In other words, a command may have a number of arguments that may be
+optionally left for the program to determine.
+Optional parameters allow the user to alter the default action
+of these commands.
+For example, the command {\tt limits} has four arguments
+that specify the extreme values for the
+world coordinates.\index{Coordinate System!World}\index{World Units}
+If the user issues the command with no arguments,
+\wip\ will determine an acceptable range based on the data currently
+loaded into the {\bf X} and {\bf Y} arrays.
+
+We have already introduced the main \wip\ prompt (\wipp).
+There are two other prompts in \wip:  \wipd\ and \wipi.
+These prompts appear in response to the commands
+{\tt define}\index{Commands!{\tt define}}
+and {\tt insert}\index{Commands!{\tt insert}},
+respectively, and are discussed further in Section~\ref{s:macedit}.
+
+Comments\index{Comments}
+may be entered along with \wip\ commands.
+The comment character is
+the pound sign (\#)\index{Comments!comment character(\#)}
+and everything from this
+character to the end of the input line is ignored by \wip.
+One exception to this are commands involving labels (see Section~\ref{s:text}).
+Since there is no easy way for \wip\ to determine whether the comment
+character is part of the string or not,
+it generally is assumed to be part of the text and is passed
+to the command as part of the text to label.
+Hence, comment characters should not be used with these commands.
+In most of the examples shown in this manual, comments are used to
+describe the command or specify arguments in the definition of macros.
+If you are trying these examples interactively, you need not type the
+comment character nor any of the text that follows it.
+
+Last, but certainly not least, \wip\ provides the user with three
+different types of on-line help\index{Help}.
+See Section~\ref{s:help} for a description of each of these types of help.
