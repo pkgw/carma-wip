@@ -1,0 +1,719 @@
+#!/bin/csh -f
+# 
+#* makewip - A script to build the WIP task from source code.
+#& jm
+#: system operation
+#+
+#  Build the WIP task.
+#
+#    Usage:  makewip [options] file directory
+#
+#  where:
+#    options   Are optional parameters used to control how the
+#              tasks are compiled and linked.  A list of permitted
+#              options appears below.
+#
+#    file      The file name of WIP source code to be (re)loaded
+#              into the subroutine library.
+#
+#    directory The name of any WIP source code directories.  All
+#              source code in the specified directories will be
+#              (re)loaded into the subroutine library.
+#
+#    Individual file names may be given alone or in combination with
+#    directories.  For example, the command: "makewip find.c plot"
+#    will compile every source file within directory "plot", along
+#    with the file "find.c" in whichever directory that file may be
+#    located.  Files not found are ignored.
+#
+#    If there are no arguments (aside from the options), all of the
+#    source code within all of the WIP source directories will be
+#    compiled and loaded into the archive.
+#
+#    The main program is always loaded whenever this script is run.
+#
+#    In the option list presented below, the argument "path" may be
+#    either a single directory path or a list of (space separated)
+#    directories.  For the later case, the argument list should be
+#    enclosed in quotes!  The argument "dir" must ALWAYS be a single
+#    directory.
+#
+#    Optional arguments include:
+# ----------------------------------------------------------------------
+#
+#  -wip dir
+#         : The value of "dir" specifies the full directory path
+#         : that points to where the WIP directories and scripts
+#         : (like this file) are kept.  This directory must contain
+#         : the directory entry src.  The current directory is
+#         : used if this option is not provided.
+#
+#  -pgplot path
+#         : The value of "path" specifies the directory path
+#         : where the local PGPLOT library archive resides.  It
+#         : should also specify the location of the cpgplot.h
+#         : file (which is needed for compilation).  If the PGPLOT
+#         : library was built as a sharable library, WIP will
+#         : attempt to use it (see -static below if a static binary
+#         : is desired).  If this is not present, the standard
+#         : library directories are searched.  In MOST cases, this
+#         : option SHOULD be specified.
+#
+#  -lib dir
+#         : The value of "dir" specifies the directory where the
+#         : WIP library will reside.  If this is not present or
+#         : is set to a empty string (ie. ""), then it defaults
+#         : to the directory specified by the -wip option.
+#
+#  -bin dir
+#         : The value of "dir" specifies the directory where the
+#         : WIP binary will reside.  If this is not present or is
+#         : set to a empty string (ie. ""), then it defaults to
+#         : the directory specified by the -wip option.  The
+#         : resulting name of the executable will be "dir"/wip.
+#
+#  -xlib path
+#         : The value of "path" specifies the directory of the
+#         : local X11 archive.  By default, the X-library is NOT
+#         : installed.  If this option is used and "path" is set
+#         : to an empty string (ie. ""), the default library
+#         : search path of the system loader will be used to add
+#         : the X-library.  The library accessed is: "-lX11".
+#
+#  -slib path
+#         : The value of "path" specifies the directory of the
+#         : local SunView archive.  By default, the SunView library
+#         : is NOT installed.  If this option is used and "path" is
+#         : set to an empty string (ie. ""), the default library
+#         : search path of the system loader will be used to add
+#         : the SunView libraries.  The libraries used are:
+#         : "-lsuntool -lsunwindow -lpixrect".
+#
+#  -readline path
+#         : The value of "path" specifies the directory of the
+#         : readline library archive.  If the readline library is
+#         : installed on your machine, and it is desired to include
+#         : this capability (command line options to WIP permit this
+#         : to be turned off by the user), make sure this variable
+#         : is set to the directory containing the archive.
+#         : If this option is not used, then the readline commands
+#         : and capabilities will be ignored.  If this option is
+#         : defined but set to an empty string (ie. ""), the default
+#         : library search path of the system loader will be used.
+#         : The libraries accessed are: "-lreadline -ltermcap".
+#
+#  -host host
+#         : The value of "host" specifies the name of the host machine.
+#         : If this option is not used, an attempt is made to find the
+#         : proper host type.  If that fails or the input value is not
+#         : known, this routine exits.  Currently acceptable hosts are:
+#         : sun (for both sun3 and sun4); solaris; sgi; u2; convex;
+#         : osf (OSF/1 Alpha); i386-linux; aix; or hpux (HP-UX, for
+#         : example: HP9000 series machines).
+#
+#  -debug
+#         : If this is present, the source code will be compiled
+#         : with the debug option.  If it is NOT present, the
+#         : default action is to compile with optimization.
+#
+#  -obj dir
+#         : The value of "dir" specifies the directory that will
+#         : hold the object files until they are loaded in the
+#         : library.  If this is not present or is set to a empty
+#         : string (ie. ""), then it defaults to the directory
+#         : specified by the -lib option.
+#
+#  -static
+#         : If this is present, the source code will be compiled with
+#         : static binding.  If it is NOT used, the default action is
+#         : to link dynamically (i.e. try using shared libraries).
+#
+#  -cc name
+#         : The value of "name" specifies the command to be used
+#         : to compile the C code.  By default, "cc" is used.
+#         : Some command line options to the compiler are always
+#         : added, however, this option allows others to be user
+#         : defined (be sure to quote space separated arguments):
+#         :   -cc "acc -v"
+#         : Compiler options may also be specified with the -copts
+#         : flag (described below).
+#         :
+#         : If the gcc compiler is chosen, make sure the -ansi
+#         : compile options is also included.  You might also need
+#         : to make sure that the path to the gcc library is included
+#         : (it can be added to one of the library path options above).
+#         : The "-lgcc -lm" will automatically be included.
+#
+#  -copts options
+#         : The value of "options" specifies command line options
+#         : to be passed to the C compiler.  If more than one option
+#         : is needed, then each can be passed by multiple calls to
+#         : this or by enclosing the list in quotes.  By default, no
+#         : extra options are added except as needed for each host.
+#
+#  -linkopts options
+#         : The value of "options" specifies command line options to
+#         : be passed to the program linker.  If more than one option
+#         : is needed, then each can be passed by multiple calls to
+#         : this or by enclosing the list in quotes.  By default, no
+#         : extra options are added except as needed for each host.
+#
+#--
+#
+#  Local variables defined in this script which may need some adjustment
+#  for different directory structures or systems:
+#
+# $bin     : The resulting (full) binary name.
+# $srcdir  : Directory where source code resides.
+# $objdir  : Directory where the object code will be put.
+# $wiplib  : Full path of the WIP library archive.
+# $f77lib  : A string for old Sun Fortran compilers (f77 v1.2).
+# $helpfile: Location of the default help file.
+# $dodebug : Is '1' in debug mode; '0' otherwise.
+#--
+#  History:
+#    01Mar92 jm  Version 1.5
+#    01Oct92 jm  Version 1.6.  Changed requirement that WIPXLIB and
+#                WIPSLIB be set to "(none)" if it is desired to not
+#                have these libraries included in the load step.  If
+#                either is not defined or set to empty strings, the
+#                system default is used.  Also added a check for the
+#                required environment variables.
+#    10nov93 jm  Version 1.7.  Added environment variables CCNAME,
+#                WIPOBJ, and READLINELIB variables to allow the caller
+#                to change which C compiler to use, where the object
+#                files will reside, and to include the readline library
+#                code, respectively.  Also, a complete restructure of
+#                the control logic; there is no longer any recursive
+#                calling of this routine (which should speed it up).
+#    12dec94 jm  Version 2.0.  Converted all environment variables to
+#                command line options.  Major revision of system
+#                declarations for the compile section.  Also changed
+#                how unknown host types are found to using uname.
+#    11jul95 jm  Version 2.1.  Added copts and linkopts options.  Also
+#                added host AIX.
+#    08sep95 jm  Added more support for gcc.
+#    08dec95 jm  Changed alpha host name to osf.  Also, now force the
+#                host name to lowercase.
+#    01mar96 jm  Added -lm to hpux default.  Also changed double quotes
+#                around literals to single quotes.
+#    16aug96 jm  Added -lgl to sgi default libraries.
+#--
+#
+#  Set up some "standard" defaults.
+#
+set f77lib = ( )
+# set f77lib = ( -F77 -I77 -lU77 -F77 -I77 -lU77 )
+#  The above definition is only needed for Sun f77 compilers V1.2 and older.
+#
+#  The following is a list of acceptable hosts (all lowercase).
+#
+set hostList = (sun solaris sgi u2 convex osf i386-linux aix hpux)
+#
+#  Set up the defaults for the command line options.
+#
+set inputList = ()
+set wipdir = $cwd
+unset pgplotdir
+unset libdir
+unset wipbin
+unset wipxlib
+unset wipslib
+unset readlinedir
+unset wiphost
+set dodebug = 0
+unset wipobj
+set dostatic = 0
+set ccname = 'cc'
+set copts = ""
+set linkopts = ""
+#
+#  Parse the command line options.  It is assumed that all files and
+#  directories appear after all of the options.
+#
+while ($#argv > 0)
+  if ("$argv[1]" == '-wip') then
+    shift
+    set wipdir = "$argv[1]"
+  else if ("$argv[1]" == '-pgplot') then
+    shift
+    set pgplotdir = "$argv[1]"
+  else if ("$argv[1]" == '-lib') then
+    shift
+    set libdir = "$argv[1]"
+  else if ("$argv[1]" == '-bin') then
+    shift
+    set wipbin = "$argv[1]"
+  else if ("$argv[1]" == '-xlib') then
+    shift
+    set wipxlib = "$argv[1]"
+  else if ("$argv[1]" == '-slib') then
+    shift
+    set wipslib = "$argv[1]"
+  else if ("$argv[1]" == '-readline') then
+    shift
+    set readlinedir = "$argv[1]"
+  else if ("$argv[1]" == '-host') then
+    shift
+    set wiphost = "$argv[1]"
+  else if ("$argv[1]" == '-debug') then
+    set dodebug = 1
+  else if ("$argv[1]" == '-obj') then
+    shift
+    set wipobj = "$argv[1]"
+  else if ("$argv[1]" == '-static') then
+    set dostatic = 1
+  else if ("$argv[1]" == '-cc') then
+    shift
+    set ccname = "$argv[1]"
+  else if ("$argv[1]" == '-copts') then
+    shift
+    set copts = "$copts $argv[1]"
+  else if ("$argv[1]" == '-linkopts') then
+    shift
+    set linkopts = "$linkopts $argv[1]"
+  else if ("$argv[1]" == '-help') then
+    echo "Usage:  $0 [options] [file] [directory]"
+    echo 'where file and directory identify items to compile (the'
+    echo 'default is the entire WIP distribution).'
+    echo 'and where options include:'
+    echo '  -wip dir     -pgplot path    -lib dir    -bin dir    -obj dir'
+    echo '  -xlib path   -slib path      -readline path'
+    echo '  -copts compile_options       -linkopts link_options'
+    echo '  -debug       -static'
+    echo '  -cc name'
+    echo '  -host host'
+    echo 'where host must be one of:'
+    echo "${hostList}"
+    exit 0
+  else
+    set inputList = ($inputList $argv[1])
+  endif
+  shift
+end
+#
+#  Check and adjust parameters depending on what was optionally selected.
+#
+#  If wiphost is not set, try to find out what it is.  If that doesn't
+#  work, notify the user and quit.
+#
+if ($?wiphost == 0) then
+    set v_uname = `uname -a`
+    if ($v_uname[1] == 'SunOS') then
+      if ($v_uname[3] =~ 5.*) then
+        set wiphost = 'solaris'
+      else if ($v_uname[5] =~ sun4*) then
+        set wiphost = 'sun'
+      else if ($v_uname[5] =~ sun3*) then
+        set wiphost = 'sun'
+      else
+        set wiphost = 'sun'
+      endif
+    else if ($v_uname[1] == 'ConvexOS') then
+      set wiphost = 'convex'
+    else if ($v_uname[1] == 'IRIX') then
+      set wiphost = 'sgi'
+    else if ($v_uname[1] == 'Linux') then
+      set wiphost = 'i386-linux'
+    else if ($v_uname[1] == 'AIX') then
+      set wiphost = 'aix'
+    else if ($v_uname[1] == 'OSF1') then
+      if ($v_uname[5] =~ alpha*) then
+        set wiphost = 'osf'
+      else
+        set wiphost = 'osf'
+      endif
+    else if ($v_uname[1] == 'HP-UX') then
+      set wiphost = 'hpux'
+    else
+      set wiphost = "$v_uname[1]"
+    endif
+    unset v_uname
+    echo "Host name set to ${wiphost}."
+endif
+#  Fatal to get inside here.
+if ($?wiphost == 0) then
+    echo '### Could not set the host type.  Please use the -host option.'
+    echo '### Host option argument must be one of:'
+    echo "### $hostList"
+    exit 1
+endif
+#
+#  First, look for acceptable substitutions, then make sure that
+#  the host name is valid!
+#
+set wiphost = `echo "$wiphost" | tr '[A-Z]' '[a-z]'`
+if ("$wiphost" ==    'sun5') set wiphost = 'solaris'
+if ("$wiphost" == 'sun4sol') set wiphost = 'solaris'
+if ("$wiphost" ==    'sun4') set wiphost = 'sun'
+if ("$wiphost" ==    'sun3') set wiphost = 'sun'
+if ("$wiphost" ==    'mips') set wiphost = 'sgi'
+if ("$wiphost" ==   'linux') set wiphost = 'i386-linux'
+#
+set hostmatch = 0
+foreach host ($hostList)
+    if ("$wiphost" == "$host") then
+      @ hostmatch++
+    endif
+end
+if ($hostmatch != 1) then
+    echo "### Invalid Host type: [${wiphost}]."
+    echo '### Host argument must be one of:'
+    echo "### $hostList"
+    exit 1
+endif
+#
+#  Set up a variable that points to the main source directory and test it.
+#
+set srcdir = ${wipdir}/src
+if ((-d ${wipdir}) == 0) then
+    echo "### The directory pointed to by '-wip ${wipdir}' does not exist."
+    exit 1
+else if ((-d ${srcdir}) == 0) then
+    echo "### The directory pointed to by '-wip ${wipdir}' does not look"
+    echo '### like it contains the WIP distribution.'
+    exit 1
+endif
+#
+#  Set up the help file definition and test that it exists.
+#
+set helpfile = -DHELPFILE=\"${wipdir}/wiphelp.dat\"
+if ((-e ${wipdir}/wiphelp.dat) == 0) then
+    echo "### The directory pointed to by '-wip ${wipdir}' does not have"
+    echo '### the WIP help file in it.  No default help file will be included.'
+    set helpfile = -DHELPFILE=\"wiphelp.dat\"
+endif
+#
+#  Identify the output executable.
+#
+if ($?wipbin != 0) then
+    set bin = ${wipbin}/wip
+else
+    set bin = ${wipdir}/wip
+endif
+#
+#  Set up the locations for the library archive and the object files.
+#
+if ($?libdir != 0) then
+    set wiplib = ${libdir}/libwip.a
+    set objdir = ${libdir}
+else
+    set wiplib = ${wipdir}/libwip.a
+    set objdir = ${wipdir}
+endif
+#
+#  If requested, override where the object files will be located.
+#
+if ($?wipobj != 0) then
+    set objdir = ${wipobj}
+endif
+#
+#  Depending on the host type, override some system parameters.
+#
+unset theFloatValue
+if ("$wiphost" != 'convex') then
+    if ($?FLOAT_OPTION != 0) then
+      set theFloatValue = $FLOAT_OPTION
+      unsetenv FLOAT_OPTION
+    endif
+endif
+#
+unset theNoclobber
+if ($?noclobber != 0) then
+    set theNoclobber = $noclobber
+    unset noclobber
+endif
+#
+#  Identify the include file directories (variable moreargs is only
+#  used by Solaris).
+#
+set graphdir = ""
+set graphlib = '-lcpgplot -lpgplot'
+set moreargs = '/opt/SUNWspro/lib'
+set theI = "-I${srcdir}/include"
+#
+#  Set up arguments needed for the final compilation (loading) command.
+#  This consists mainly of setting up the library tags necessary.
+#
+if ($?pgplotdir != 0) then
+    foreach i ( $pgplotdir )
+      set graphdir = "$graphdir -L${i}"
+      set moreargs = "${moreargs}:${i}"
+      set theI = "$theI -I${i}"
+    end
+endif
+#
+#  Add the X Windows library, if requested.
+#
+if ($?wipxlib != 0) then
+    set graphlib = "$graphlib -lX11"
+    foreach i ( $wipxlib )
+      set graphdir = "$graphdir -L${i}"
+      set moreargs = "${moreargs}:${i}"
+    end
+endif
+#
+#  Add the SunWindow libraries, if requested.
+#
+if ($?wipslib != 0) then
+    set graphlib = "$graphlib -lsuntool -lsunwindow -lpixrect"
+    foreach i ( $wipslib )
+      set graphdir = "$graphdir -L${i}"
+      set moreargs = "${moreargs}:${i}"
+    end
+endif
+#
+#  Check to see if the GNU readline library commands should be defined.
+#
+if ($?readlinedir != 0) then
+    set theI = "$theI -DREADLINE"
+    set graphlib = "$graphlib -lreadline -ltermcap"
+    foreach i ( $readlinedir )
+      set graphdir = "$graphdir -L${i}"
+      set moreargs = "${moreargs}:${i}"
+    end
+endif
+#
+#  Set up compile commands for Fortran and C code.
+#
+set doranlib = 0
+set doliblm = 0
+unset theF
+set cFlags = "$copts"
+if ("$wiphost" == 'sun') then
+    set doranlib = 1
+    set theM = 'f77 -xl -u'
+    if ($dodebug > 0) then
+      set theM = "$theM -g"
+      set cFlags = "$cFlags -g"
+    else
+      set theM = "$theM -O"
+      set cFlags = "$cFlags -O"
+    endif
+else if ("$wiphost" == 'solaris') then
+    set theM = 'f77 -xl -u'
+    if ($dodebug > 0) then
+      set theM = "$theM -g"
+      set cFlags = "$cFlags -g"
+    else
+      set theM = "$theM -O"
+      set cFlags = "$cFlags -O"
+    endif
+else if ("$wiphost" == 'convex') then
+    set dostatic = 0
+    set doranlib = 1
+    set theM = 'fc'
+    if ($dodebug > 0) then
+      set theM = "$theM -g"
+      set cFlags = "$cFlags -g -Dconvex"
+    else
+      set theM = "$theM -O3"
+      set cFlags = "$cFlags -O1 -Dconvex"
+    endif
+else if ("$wiphost" == 'sgi') then
+    set theM = 'f77 -backslash -u'
+    set f77lib = ( $f77lib -lgl )
+    if ($dodebug > 0) then
+      set theM = "$theM -g"
+      set cFlags = "$cFlags -g"
+    else
+      set theM = "$theM -O2"
+      set cFlags = "$cFlags -O2"
+    endif
+else if ("$wiphost" == 'i386-linux') then
+#  For Linux, f77 is a shell script which runs f2c.
+    set doranlib = 1
+    set doliblm = 1
+    set f77lib = ( $f77lib -lf2c )
+    set theM = 'f77 -u'
+    if ($dodebug > 0) then
+      set theM = "$theM -g"
+      set cFlags = "$cFlags -g -Dlinux"
+    else
+      set theM = "$theM -O"
+      set cFlags = "$cFlags -O -Dlinux"
+    endif
+else if ("$wiphost" == 'osf') then
+    set doranlib = 1
+    set theM = 'f77 -u -nofor_main'
+    if ($dodebug > 0) then
+      set theM = "$theM -g"
+      set cFlags = "$cFlags -g -DOSF"
+    else
+      set theM = "$theM -O"
+      set cFlags = "$cFlags -O -DOSF"
+    endif
+else if ("$wiphost" == 'aix') then
+    set theM = 'xlf'
+    if ($dodebug > 0) then
+      set theM = "$theM -g"
+      set cFlags = "$cFlags -g"
+    else
+      set theM = "$theM -O"
+      set cFlags = "$cFlags -O"
+    endif
+else if ("$wiphost" == 'hpux') then
+    set doliblm = 1
+    set theM = 'fort77'
+    if ("${ccname}" == 'cc') set ccname = 'c89'
+    if ($dodebug > 0) then
+      set theM = "$theM -g"
+      set cFlags = "$cFlags -g"
+    else
+      set theM = "$theM -O"
+      set cFlags = "$cFlags -O"
+    endif
+else if ("$wiphost" == 'u2') then
+    set dostatic = 0
+    set theF = 'cf77'
+    set theM = 'ldr'
+    set cFlags = '-Dunicos -Dcray2 -h nofastmd,noinline'
+    if ($dodebug > 0) then
+      set theF = "$theF -g"
+      set cFlags = "$cFlags -g"
+    endif
+endif
+#
+#  Modify the f77lib to handle C code compiled with GNU C.
+#
+if (`echo ${ccname} | grep -c "gcc"` > 0) then
+    set doliblm = 1
+    set f77lib = ( $f77lib -lgcc )
+    if (`echo ${ccname} ${cFlags} | grep -c "ansi"` < 1) then
+      echo '### The gcc compiler should be called with the -ansi flag.'
+    endif
+endif
+#
+#  Include the math library on those machines that need it.
+#
+if ($doliblm > 0) then
+    set f77lib = ( $f77lib -lm )
+endif
+#
+#  Complete the compiling commands.
+#
+if ($dostatic > 0) set theM = ($theM -Bstatic)
+if ($?theF == 0) set theF = "$theM"
+set theC = "${ccname} ${cFlags} ${theI} ${helpfile}"
+set theM = "${theM} ${linkopts}"
+#
+#  One last item: additional libraries and processing are
+#  necessary for Solaris.  These libraries must be dynamic!
+#
+if ("$wiphost" == 'solaris') then
+  if ($dostatic > 0) set graphlib = "$graphlib -Bdynamic"
+  set graphlib = "$graphlib -lsocket -lnsl"
+  set graphdir = "-R ${moreargs} $graphdir"
+endif
+#
+#  Begin processing the command line arguments and compile the code.
+#
+echo '----- ----- ----- ----- ----- ----- ----- -----'
+echo "Begin WIP compilation procedure on $wiphost."
+echo "Date: `date`"
+echo "Output library is named $wiplib."
+echo '----- ----- ----- ----- ----- ----- ----- -----'
+#
+set theDirs = ( branch drivers fit images interact plot sysdep variables )
+#
+if ($#inputList < 1) then
+    set inputList = ( $theDirs )
+endif
+#
+cd $objdir
+set objList = ()
+foreach arg ( $inputList )
+    set theList = ()
+    set item = ${arg:t}
+    if (-d $srcdir/$item) then
+      set theList = ( $srcdir/$item/*.f  $srcdir/$item/*.c )
+    else
+      foreach i ($theDirs)
+        if (-f $srcdir/$i/$item) then
+          set theList = ( $theList $srcdir/$i/$item )
+        endif
+      end
+    endif
+#
+    if ($#theList < 1) then
+      echo ' '
+      echo "### Item [$arg] not found; it will be ignored."
+      continue
+    endif
+#
+    foreach i ( $theList )
+      set ifile = ${i:t}
+      set ofile = ${ifile:r}.o
+      echo ""
+      switch ($ifile)
+        case wipmain.c:
+          breaksw
+        case *.f:
+          echo "$theF -c $i"
+          $theF -c $i
+          set objList = ( $objList $ofile )
+          breaksw 
+        case *.c:
+          echo "$theC -c $i"
+          $theC -c $i
+          set objList = ( $objList $ofile )
+          breaksw
+        default:
+          echo "$i ignored."
+          breaksw
+      endsw
+    end
+end
+#
+#  Store the compiled files in the library.
+#
+if ($#objList > 0) then
+    echo ""
+    echo '----- ----- ----- ----- ----- ----- ----- -----'
+    echo "Adding files to the archive $wiplib"
+    echo '----- ----- ----- ----- ----- ----- ----- -----'
+    echo ""
+    if ("$wiphost" == 'u2') then
+      echo "bld r $wiplib $objList"
+      bld r $wiplib $objList
+    else
+      echo "ar ru $wiplib $objList"
+      ar ru $wiplib $objList
+      if ($doranlib > 0) then
+        echo "ranlib $wiplib"
+        ranlib $wiplib
+      endif
+    endif
+    rm -fr $objList >& /dev/null
+endif
+#
+echo ""
+echo '----- ----- ----- ----- ----- ----- ----- -----'
+echo 'Begin processing wipmain.c (main program)'
+echo '----- ----- ----- ----- ----- ----- ----- -----'
+echo ""
+#
+echo "$theC -c $srcdir/branch/wipmain.c"
+      $theC -c $srcdir/branch/wipmain.c
+#
+echo "$theM -o ${bin} wipmain.o $wiplib $graphdir $graphlib $f77lib"
+      $theM -o ${bin} wipmain.o $wiplib $graphdir $graphlib $f77lib
+rm -fr wipmain.o >& /dev/null
+echo ""
+ls -l ${bin}
+echo ""
+echo '----- ----- ----- ----- ----- ----- ----- -----'
+echo 'Finished processing wipmain.c (main program)'
+echo '----- ----- ----- ----- ----- ----- ----- -----'
+echo "`date`"
+echo "Finished loading the WIP program on $wiphost."
+echo '----- ----- ----- ----- ----- ----- ----- -----'
+#
+if ($?theNoclobber != 0) then
+  set noclobber $theNoclobber
+endif
+if ($?theFloatValue != 0) then
+    setenv FLOAT_OPTION $theFloatValue
+endif
+#
+exit 0
