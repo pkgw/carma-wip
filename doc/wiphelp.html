@@ -1,0 +1,2225 @@
+<HTML>
+<HEADER>
+<TITLE>WIP Commands: Arguments and Descriptions</TITLE>
+<H1>WIP Commands: Arguments and Descriptions</H1>
+</HEADER>
+<BODY>
+
+<!-- "WIP BEGIN Index list" -->
+<HR>
+<A HREF=#AITOFF>AITOFF</A> -
+<A HREF=#ANGLE>ANGLE</A> -
+<A HREF=#ARC>ARC</A> -
+<A HREF=#ARROW>ARROW</A> -
+<A HREF=#ASK>ASK</A> -
+<A HREF=#AUTOLEVS>AUTOLEVS</A> -
+<A HREF=#BAR>BAR</A> -
+<A HREF=#BEAM>BEAM</A> -
+<A HREF=#BGCI>BGCI</A> -
+<A HREF=#BIN>BIN</A> -
+<A HREF=#BOX>BOX</A> -
+<A HREF=#BUFFER>BUFFER</A> -
+<A HREF=#COLOR>COLOR</A> -
+<A HREF=#CONNECT>CONNECT</A> -
+<A HREF=#CONTOUR>CONTOUR</A> -
+<A HREF=#CURSOR>CURSOR</A> -
+<A HREF=#DATA>DATA</A> -
+<A HREF=#DEFINE>DEFINE</A> -
+<A HREF=#DELETE>DELETE</A> -
+<A HREF=#DEVICE>DEVICE</A> -
+<A HREF=#DOT>DOT</A> -
+<A HREF=#DRAW>DRAW</A> -
+<A HREF=#ECHO>ECHO</A> -
+<A HREF=#ECOLUMN>ECOLUMN</A> -
+<A HREF=#END>END</A> -
+<A HREF=#ENVIRONMENT>ENVIRONMENT</A> -
+<A HREF=#ERASE>ERASE</A> -
+<A HREF=#ERRORBAR>ERRORBAR</A> -
+<A HREF=#ETXT>ETXT</A> -
+<A HREF=#EXPAND>EXPAND</A> -
+<A HREF=#FILL>FILL</A> -
+<A HREF=#FIT>FIT</A> -
+<A HREF=#FONT>FONT</A> -
+<A HREF=#FREE>FREE</A> -
+<A HREF=#GLOBE>GLOBE</A> -
+<A HREF=#HALFTONE>HALFTONE</A> -
+<A HREF=#HARDCOPY>HARDCOPY</A> -
+<A HREF=#HEADER>HEADER</A> -
+<A HREF=#HELP>HELP</A> -
+<A HREF=#HI2D>HI2D</A> -
+<A HREF=#HISTOGRAM>HISTOGRAM</A> -
+<A HREF=#HLS>HLS</A> -
+<A HREF=#ID>ID</A> -
+<A HREF=#IF>IF</A> -
+<A HREF=#IMAGE>IMAGE</A> -
+<A HREF=#INITIALIZE>INITIALIZE</A> -
+<A HREF=#INPUT>INPUT</A> -
+<A HREF=#INSERT>INSERT</A> -
+<A HREF=#ITF>ITF</A> -
+<A HREF=#LABEL>LABEL</A> -
+<A HREF=#LCUR>LCUR</A> -
+<A HREF=#LDEV>LDEV</A> -
+<A HREF=#LEVELS>LEVELS</A> -
+<A HREF=#LIMITS>LIMITS</A> -
+<A HREF=#LINES>LINES</A> -
+<A HREF=#LIST>LIST</A> -
+<A HREF=#LOGARITHM>LOGARITHM</A> -
+<A HREF=#LOOKUP>LOOKUP</A> -
+<A HREF=#LOOP>LOOP</A> -
+<A HREF=#LSTYLE>LSTYLE</A> -
+<A HREF=#LWIDTH>LWIDTH</A> -
+<A HREF=#MACRO>MACRO</A> -
+<A HREF=#MINMAX>MINMAX</A> -
+<A HREF=#MOVE>MOVE</A> -
+<A HREF=#MTEXT>MTEXT</A> -
+<A HREF=#NCURSE>NCURSE</A> -
+<A HREF=#NEW>NEW</A> -
+<A HREF=#OLIN>OLIN</A> -
+<A HREF=#PALETTE>PALETTE</A> -
+<A HREF=#PANEL>PANEL</A> -
+<A HREF=#PAPER>PAPER</A> -
+<A HREF=#PCOLUMN>PCOLUMN</A> -
+<A HREF=#PHARD>PHARD</A> -
+<A HREF=#PLAYBACK>PLAYBACK</A> -
+<A HREF=#PLOTFIT>PLOTFIT</A> -
+<A HREF=#POINTS>POINTS</A> -
+<A HREF=#POLY>POLY</A> -
+<A HREF=#PUTLABEL>PUTLABEL</A> -
+<A HREF=#QUARTER>QUARTER</A> -
+<A HREF=#RANGE>RANGE</A> -
+<A HREF=#READ>READ</A> -
+<A HREF=#RECT>RECT</A> -
+<A HREF=#RESET>RESET</A> -
+<A HREF=#RGB>RGB</A> -
+<A HREF=#SCALE>SCALE</A> -
+<A HREF=#SET>SET</A> -
+<A HREF=#SHOW>SHOW</A> -
+<A HREF=#SLEVEL>SLEVEL</A> -
+<A HREF=#STRING>STRING</A> -
+<A HREF=#SUBIMAGE>SUBIMAGE</A> -
+<A HREF=#SUBMARGIN>SUBMARGIN</A> -
+<A HREF=#SYMBOL>SYMBOL</A> -
+<A HREF=#TICKSIZE>TICKSIZE</A> -
+<A HREF=#TRANSFER>TRANSFER</A> -
+<A HREF=#VECTOR>VECTOR</A> -
+<A HREF=#VIEWPORT>VIEWPORT</A> -
+<A HREF=#VSIZE>VSIZE</A> -
+<A HREF=#VSTAND>VSTAND</A> -
+<A HREF=#WEDGE>WEDGE</A> -
+<A HREF=#WINADJ>WINADJ</A> -
+<A HREF=#WRITE>WRITE</A> -
+<A HREF=#XCOLUMN>XCOLUMN</A> -
+<A HREF=#XLABEL>XLABEL</A> -
+<A HREF=#YCOLUMN>YCOLUMN</A> -
+<A HREF=#YLABEL>YLABEL</A>
+<!-- "WIP END Index list" -->
+
+<DL>
+<HR><A NAME=AITOFF>
+<DT>
+AITOFF [L B] - converts L-b coordinate values to equivalent x-y positions.
+<DD>
+	<CODE>AITOFF</CODE> will convert the X values (longitude) from
+	the most recent <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A>
+	command and the Y values (latitude) from the most recent
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> command and convert them
+	to the equivalent x-y positions for use in an Aitoff (more
+	precisely, a Hammer) projection.  The <CODE>AITOFF</CODE>
+	command MUST be called every time new data is inserted either
+	with the <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> or
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> commands.  If the
+	optional arguments <CODE>L</CODE> and <CODE>B</CODE> are present,
+	they are converted to the equivalent x-y positions for use in
+	an Aitoff projection.  For the equivalent Aitoff "box", see the
+	<A HREF=#GLOBE><CODE>GLOBE</CODE></A> command.
+
+<HR><A NAME=ANGLE>
+<DT>
+ANGLE D or ANGLE X1 X2 Y1 Y2 - sets angle of text or points to D degrees.
+<DD>
+	<CODE>ANGLE</CODE> will cause text from
+	<A HREF=#LABEL><CODE>LABEL</CODE></A> and
+	<A HREF=#PUTLABEL><CODE>PUTLABEL</CODE></A> commands to be
+	presented at <CODE>D</CODE> degrees counterclockwise from the
+	horizontal (+x direction).  Alternatively, if there are four
+	arguments present, then they are taken to be the World (user)
+	coordinates of two positions and the <CODE>ANGLE</CODE> is set
+	to the slope of the line.
+
+<HR><A NAME=ARC>
+<DT>
+ARC MAJX MAJY [ANG [STARTANG]] - draws an arc with major axes <CODE>MAJX</CODE>, <CODE>MAJY</CODE>.
+<DD>
+	<CODE>ARC</CODE> draws an arc at the current cursor position
+	with major axes <CODE>MAJX</CODE> and <CODE>MAJY</CODE> (in World
+	coordinate units).  The curve is drawn as a polygon with the
+	characteristics specified by the command
+	<A HREF=#FILL><CODE>FILL</CODE></A>.  The number of points used to
+	generate the curve can be controlled by adjusting the value of
+	the character expansion
+	(see the command <A HREF=#EXPAND><CODE>EXPAND</CODE></A>).
+	The optional parameter <CODE>ANG</CODE> defines the angular extent
+	of the arc in degrees (set to 360 degrees if not given).
+	An additional optional parameter, <CODE>STARTANG</CODE>,
+	may be used to determine an initial offset angle of the arc relative to
+	<CODE>MAJX</CODE> (this defaults to 0 degrees if this parameter is
+	not present).  Use the command <A HREF=#ANGLE><CODE>ANGLE</CODE></A>
+	to set the rotation of <CODE>MAJX</CODE> with respect to the
+	positive x-axis.  All angles are in units of degrees and are
+	defined to be zero toward the right of the viewport
+	(regardless of the direction of the World Coordinate system)
+	and increasing counter-clockwise.
+	See also the <A HREF=#BEAM><CODE>BEAM</CODE></A> command.
+	NOTE: If the World Coordinate system
+	is currently RA and DEC, a rotated arc may not plot correctly.
+	Use <A HREF=#HEADER><CODE>'header px px'</CODE></A> or
+	<A HREF=#HEADER><CODE>'header so so'</CODE></A>
+	(or some other equivalent offset option) to set the coordinate
+	system to something comparable in scale.
+
+<HR><A NAME=ARROW>
+<DT>
+ARROW X Y [ANGLE [VENT]] - Draws an arrow.
+<DD>
+	<CODE>ARROW</CODE> draws an arrow from the current cursor
+	position to the World (user) coordinate (<CODE>X,Y</CODE>).
+	The acute angle of the arrow point, in degrees, is specified by
+	the optional input <CODE>ANGLE</CODE>; angles in the range
+	20.0 to 90.0 give reasonable results.  If <CODE>ANGLE</CODE> is
+	not present on the command line, a value of 45.0 degrees is used.
+	The fraction of the triangular arrow-head that is cut away from the
+	back is specified by the optional parameter <CODE>VENT</CODE>.
+	A value of 0.0 gives a triangular wedge arrow-head; 1.0 gives
+	an open &gt;.  Values of 0.3 to 0.7 give reasonable results.  The
+	default value for VENT (if it is not present) is 0.3.
+	<A HREF=#EXPAND><CODE>EXPAND</CODE></A> can be used to vary
+	the length of the arrowhead.  For
+	<A HREF=#EXPAND><CODE>EXPAND</CODE></A> set to 1.0, the default
+	size of the arrowhead is 1/40th of the smaller of the width or
+	height of the view surface.
+
+<HR><A NAME=ASK>
+<DT>
+ASK K - Changes the current device prompt state.
+<DD>
+	The command <CODE>ASK</CODE> will set the prompt state to ON if
+	<CODE>K</CODE> is set to 1 and the current device selected is
+	interactive; otherwise, <CODE>ASK</CODE> will set the prompt
+	state to OFF.  If <CODE>ASK</CODE> is set ON, then every command
+	that erases the page will prompt the user before clearing the
+	screen.  The default state of this is OFF; also, every time a new
+	device is selected (see <A HREF=#DEVICE><CODE>DEVICE</CODE></A>),
+	<CODE>ASK</CODE> is set to OFF.
+
+<HR><A NAME=AUTOLEVS>
+<DT>
+AUTOLEVS NLEV [TYPE [MIN [MAX]]] - sets up the contour levels automatically.
+<DD>
+	<CODE>AUTOLEVS</CODE> will fill an internal contour level array
+	with <CODE>NLEV</CODE> contours between the values <CODE>MIN</CODE>
+	and <CODE>MAX</CODE>.  <CODE>NLEV</CODE> must be input, but the
+	rest of the parameters are optional.  If either of or both
+	<CODE>MIN</CODE> and <CODE>MAX</CODE> are not given, they are
+	default to the minimum and maximum of the current array loaded
+	using the command <A HREF=#IMAGE><CODE>IMAGE</CODE></A>.  The
+	optional parameter <CODE>TYPE</CODE> is a string of characters
+	specifying the type of contour levels to generate.  If
+	<CODE>TYPE</CODE> is <CODE>LIN</CODE>, then the contour levels
+	are linearly spaced (this is the default if <CODE>TYPE</CODE>
+	is not present); if <CODE>TYPE</CODE> is <CODE>LOG</CODE>, then
+	the levels are spaced evenly in the logarithm.
+
+<HR><A NAME=BAR>
+<DT>
+BAR K [THRESH [GAP]] - draws bar graphs on (x,y) pairs in direction <CODE>90(K-1)</CODE>.
+<DD>
+	<CODE>BAR</CODE> is analogous to the command
+	<A HREF=#BIN><CODE>BIN</CODE></A> except that it will draw a
+	bar graph on all (x,y) coordinates read by
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> in the direction
+	specified by the argument <CODE>K</CODE>.  Set the argument
+	<CODE>K</CODE> to 1 to put the bar extending towards the +X
+	direction; 2 for +Y; 3 for -X; and 4 for -Y.  The values read
+	by the most recent call to <A HREF=#ECOLUMN><CODE>ECOLUMN</CODE></A>
+	determine which color to draw individual bars.  If this array is
+	empty, the current color index is used.  The optional argument
+	<CODE>THRESH</CODE> may be used to specify the "bottom" of the
+	bar.  If this optional argument is present, then it is used to
+	anchor the beginning of the bar graph and should be entered in
+	the units of that axis.  If this optional argument is not
+	present, the box edge opposite the direction the bar extends
+	acts as the threshold.  An additional optional argument
+	<CODE>GAP</CODE> may be used to specify the "width" of the bar.
+	If this is not present, the width is defined as the difference
+	between the mean of the current point and the next point and the
+	mean of the current point and the previous point.  If
+	<CODE>GAP</CODE> is present, it should be in entered in units of
+	that axis (i.e.  for <CODE>K == 2</CODE>, <CODE>GAP</CODE>
+	should be in the units of the X-axis) and the bar will be
+	centered on the point with half the width on either side.
+
+<HR><A NAME=BEAM>
+<DT>
+BEAM MAJ MIN PA [OFFX OFFY [SCALE [FILLCOLOR [BGRECT]]]] - draws a beam.
+<DD>
+	<CODE>BEAM</CODE> draws a beam at the current cursor position
+	outlined using the current color and line width properties.
+	It has a major axis <CODE>MAJ</CODE> and minor axis
+	<CODE>MIN</CODE> and is rotated by a position angle <CODE>PA</CODE>
+	(which is in units of degrees defined as zero along the positive
+	Y-axis (regardless of the current World Coordinate system) and
+	increasing counter-clockwise).  The optional parameters
+	<CODE>OFFX</CODE> and <CODE>OFFY</CODE> (which both default to 0)
+	define the offset of the center of the beam from the current
+	cursor position.  These offsets are in units of the width or
+	height of the box that bounds the beam.  The beam will first be
+	drawn solid using the optional input <CODE>FILLCOLOR</CODE> and is
+	then drawn hollow with the current color.  If <CODE>FILLCOLOR</CODE>
+	is not provided, it defaults to color index 15.
+	By default, the axes will be scaled as if <CODE>header rd rd</CODE>
+	has been previously called.  This means that the X-axis will be
+	scaled by 15*cos(declination).  To override this scaling, the optional
+	input <CODE>SCALE</CODE> can be provided and set to whatever
+	scaling is desired (no scaling can be achieved by setting
+	<CODE>SCALE</CODE> to 1).  If <CODE>SCALE</CODE> is set to any
+	negative value (or is not present), then RA-Dec type scaling will be
+	done.  The major and minor axes of the beam should be in the same
+	units as the two axes.  This means if <CODE>SCALE</CODE> is set
+	to anything but 1, then they should both be in the same units
+	as the Y-axis.
+	If the optional argument <CODE>BGRECT</CODE> is provided
+	(it defaults to 0) and is not negative, then a solid rectangle
+	will be drawn in that color (color index <CODE>BGRECT</CODE>) first.
+	The rectangle will only be as large as the width and height of the beam.
+
+<HR><A NAME=BGCI>
+<DT>
+BGCI N - sets the text background color index to <CODE>N</CODE>.
+<DD>
+	<CODE>BGCI</CODE> sets the text background color index for
+	subsequent text.  By default, text does not obscure underlying
+	graphics.  If the text background color index is positive,
+	however, text is opaque:  the bounding box of the text is
+	filled with the color specified by the value of <CODE>N</CODE>
+	before drawing the text characters.  Use color index 0 to erase
+	underlying graphics before drawing text.  If <CODE>N</CODE> is
+	less than 0, the text will be transparent; if greater than or
+	equal to 0, the text will be drawn on an opaque background with
+	color index <CODE>N</CODE>.  The initial value of the text
+	background color index is -1 (transparent) and is reset to -1
+	whenever a new device is selected.
+
+<HR><A NAME=BIN>
+<DT>
+BIN [K [GAP] ] - draws a histogram of (x,y) pairs.
+<DD>
+	<CODE>BIN</CODE> connects the coordinates read by
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> as a histogram.  If
+	the optional argument <CODE>K</CODE> is present and equal to 0,
+	then the individual X values denote the lower left edge (in X)
+	of the bin.  If <CODE>K</CODE> is set to 1 or is not present,
+	then the individual X values denote the center location of the
+	bin.  If the optional parameter <CODE>GAP</CODE> is present, it
+	represents the distance (in X axis units) that signals a gap in
+	the histogram not to be connected.  This is useful for histograms
+	with irregular spacing or directional changes.  A good value
+	for <CODE>GAP</CODE> is 2.
+
+<HR><A NAME=BOX>
+<DT>
+BOX [x [y] ] - makes a box labeled according to <CODE>LIMITS</CODE> and <CODE>TICKSIZE</CODE>.
+<DD>
+	<CODE>BOX</CODE> annotates the viewport with a frame, axes,
+	numeric labels, etc.  The two arguments <CODE>X</CODE> and
+	<CODE>Y</CODE> are strings of options that determine the type
+	of box and the labeling that will be drawn.  The option letters
+	may be in any order and do not depend on case.  If either
+	parameter is omitted, the missing parameter is given the
+	default value set by the string variables XBOX and YBOX (see
+	the command <A HREF=#SET><CODE>SET</CODE></A>).  If none of the
+	letters `A', `B', or `C' are specified, then tick marks will
+	not be drawn.  The options currently available
+<!-- "WIP: t:box are found in Table" -->
+<!-- "WIP BEGIN Table" -->
+	are:
+	<PRE>
+  A : Draw Axis line (X axis is a horizontal line at Y=0, Y axis
+      is a vertical line at X=0).
+  B : Draw Bottom (X) or Left (Y) edge of the frame.
+  C : Draw Top (X) or Right (Y) edge of the frame.
+  D : Include the superscript symbols 'o', ''', and '"'.
+      If this option is used, the option `Y' is implicitly implied.
+  F : Write only the last part of the label for the first time
+      (left or bottom most) tick on the axis (see Z).  For example,
+      if the full first label is 17 42 34.4, then only write 34.4.
+      This option is useful for sub-panels that join each other.
+      Care is needed because first label carries sign as well.
+  G : Draw a Grid of vertical (X) or horizontal (Y) lines at each of
+      the major tick mark positions.
+  H : Include the superscript symbols 'd', 'h', 'm', and 's'.
+  I : Invert the tick marks; i.e. draw them outside the viewport
+      instead of on the inside.
+  L : Label axis Logarithmically.  If option `Z' is used, then this
+      option is ignored.  The major tick interval is ALWAYS 1.0;
+      the number of minor ticks is ALWAYS 8.  The numeric label is
+      10**(x) where x is the world coordinate at the tick mark.
+  M : Write Numeric labels in the unconventional location Above (X)
+      or to the Right (Y) of the viewport.
+  N : Write Numeric labels in the conventional location Below (X)
+      or to the Left (Y) of the viewport.
+  O : Omit leading zeros in numbers < 10 in time labels.  For
+      example, the label 3h 3m 1.2s will be written rather than
+      03h 03m 01.2s.  The day field is not affected by this option
+      and this option is ignored unless used with the `Z' option.
+      This option is ignored when used with the `V' option as it
+      makes it impossible to align the labels nicely.  This option
+      is useful to help save space on the X-axis.
+  P : Extend ("Project") the major tick marks outside the box.  This
+      option will be ignored if option `I' is also specified.
+  S : Draw Minor Tick marks (Subticks).
+  T : Draw Major Tick marks at the major coordinate interval.
+  V : Orient numeric labels Vertically.  This is only applicable
+      to the Y axis.  The default is to write the Y-labels parallel
+      to the axis.
+  Y : Do not include the day field in time labeling.  This means
+      that labels are "HH MM SS.S" rather than "DD HH MM SS.S".
+      The hours will accumulate beyond 24, if necessary, in this case.
+  Z : Use time labeling ((DD) HH MM SS style).  The World
+      coordinates of the box (see LIMITS) and the tick mark increments
+      (see TICKSIZE) should be given in units of seconds.
+  1 : Force decimal labeling, instead of automatic choice.
+  2 : Force exponential labeling, instead of automatic.
+  0 : By itself, a zero produces a null operation argument; useful
+      to produce a box along only one axis.
+	</PRE>
+<!-- "WIP END Table" -->
+
+<HR><A NAME=BUFFER>
+<DT>
+BUFFER - predefined macro name that refers to the entire command buffer.
+<DD>
+	Typing <CODE>BUFFER</CODE> will execute the contents of the
+	command buffer (the same as the command
+	"<A HREF=#PLAYBACK><CODE>playback</CODE></A>" or
+	"<A HREF=#PLAYBACK><CODE>playback buffer</CODE></A>").
+	<CODE>BUFFER</CODE> may also be used as an argument for commands
+	requiring a macro name (e.g.  <A HREF=#LIST><CODE>LIST</CODE></A>
+	and <A HREF=#WRITE><CODE>WRITE</CODE></A>).
+
+<HR><A NAME=COLOR>
+<DT>
+COLOR N - select color for lines and characters.
+<DD>
+	<CODE>COLOR</CODE> defines the current color index used for
+	filling polygons, drawing lines, and labeling characters for
+	the selected device.  <CODE>COLOR</CODE> is originally set to 1
+	and is reset to this value whenever a new device is selected.
+	The number of colors available is device dependent (the range
+	can be displayed with the command
+	'<A HREF=#ECHO><CODE>echo cmin cmax</CODE></A>').  If the
+	requested color index is not available on the selected device,
+	a color index 1 will be substituted.  The first 16 colors
+	usually have predefined values.  Additional values are device
+	dependent.  Each color associated with the color index
+	<CODE>N</CODE> is listed in
+<!-- "WIP: t:colors Table" -->
+<!-- "WIP BEGIN Table" -->
+	the following table:
+	<PRE>
+   n    Color                     n     Color
+--------------------------------------------------------------
+   0    Black (background)        8     Orange (Red + Yellow)
+   1    White (foreground)        9     Green + Yellow
+   2    Red                      10     Green + Cyan
+   3    Green                    11     Blue + Cyan
+   4    Blue                     12     Blue + Magenta
+   5    Cyan (Blue + Green)      13     Red + Magenta
+   6    Magenta (Red + Blue)     14     Dark Gray
+   7    Yellow (Red + Green)     15     Light Gray
+                                 16-255 Undefined
+	</PRE>
+<!-- "WIP END Table" -->
+
+<HR><A NAME=CONNECT>
+<DT>
+CONNECT - connects (x,y) pairs with line segments.
+<DD>
+	<CODE>CONNECT</CODE> draws line segments connecting the
+	coordinates read by <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A>
+	and <A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A>.  The lines are
+	drawn using the current line style (set by the command
+	<A HREF=#LSTYLE><CODE>LSTYLE</CODE></A>), in the current color
+	(set by the command <A HREF=#COLOR><CODE>COLOR</CODE></A>), and
+	the current thickness (set by the command
+	<A HREF=#LWIDTH><CODE>LWIDTH</CODE></A>).
+
+<HR><A NAME=CONTOUR>
+<DT>
+CONTOUR [N [BLANK [MIN]]] - makes a contour plot of an array read with <CODE>IMAGE</CODE>.
+<DD>
+	<CODE>CONTOUR</CODE> makes a contour plot of an array read with
+	the <A HREF=#IMAGE><CODE>IMAGE</CODE></A> command at the
+	contour levels set using either the
+	<A HREF=#LEVELS><CODE>LEVELS</CODE></A> or
+	<A HREF=#AUTOLEVS><CODE>AUTOLEVS</CODE></A> commands.  The contour
+	levels MUST be set before a call to <CODE>CONTOUR</CODE>.  The
+	contour level array will be modified according to the current
+	value of the user variable SLEVEL and the string variable
+	LEVTYPE (also see the command <A HREF=#SLEVEL><CODE>SLEVEL</CODE></A>)
+	before calling any of the contour methods below.
+	<P>
+	Currently, there are four contour routines available.  The
+	optional parameter <CODE>N</CODE> allows the user to select
+	which of four contour drawing methods will be used to generate
+	the plot.  If <CODE>N</CODE> is the character `s', then the
+	command will produce a fast contour plot (this is the default
+	if <CODE>N</CODE> is not present); if <CODE>N</CODE> is `t',
+	then a smoother contour is produced; if <CODE>N</CODE> is `b',
+	then the same contour plot as with `s' is produced but with
+	blanking; and `l' produces the same contour plot as with `t',
+	but with contour level labeling.
+	<P>
+	For <CODE>N</CODE> set to `b', an optional argument
+	<CODE>BLANK</CODE> may be given to specify the blanking value
+	such that array elements equal in value to <CODE>BLANK</CODE>
+	are ignored (blanked).  For <CODE>N</CODE> set to `l', the
+	optional argument <CODE>BLANK</CODE> defines the spacing along
+	the contour between labels (in grid cells) and the optional
+	parameter <CODE>MIN</CODE> specifies the minimum number of
+	cells that must be crossed before drawing the first contour
+	label.  The default value for <CODE>BLANK</CODE> is 0.0 when
+	<CODE>N</CODE> = `b' and 16 for <CODE>N</CODE> = `l';
+	<CODE>MIN</CODE> defaults to 8.  The optional parameters are
+	ignored by the contour options <CODE>N</CODE> = `s' and `t'.
+	<P>
+	By default, each contour line is drawn with the current line
+	attributes (color index, line style, and line width).  However,
+	for options `t' and `l', the default is to draw negative contours
+	values with dashed and positive contours values with solid lines.
+	If, however, the parameter <CODE>N</CODE> is set to `-t'
+	(option `t' prepended with a minus sign), then negative contours
+	values will be drawn with the same line style as positive
+	contours values.
+
+<HR><A NAME=CURSOR>
+<DT>
+CURSOR [x y] - enables cursor and returns x-y location and the key pressed.
+<DD>
+	<CODE>CURSOR</CODE> enables the graphics cursor and returns the
+	x-y position of the cursor along with the key pressed.
+	<CODE>CURSOR</CODE> may also display the image value of the
+	selected position if an array is currently loaded (see the
+	<A HREF=#IMAGE><CODE>IMAGE</CODE></A> command) and the cursor
+	position lies within the scope of the image region (see the
+	command <A HREF=#TRANSFER><CODE>TRANSFER</CODE></A>).  The two
+	optional arguments may be used to determine the starting
+	position of the cursor.  If both parameters are given, they are
+	used as the World (user) coordinates for the starting
+	position.  If only one parameter is present, it is used as the
+	X starting position and the Y position is set as the current
+	cursor position.  Finally, if no arguments are present, the
+	current cursor position is used as a starting position.
+	<P>
+	If <CODE>CURSOR</CODE> is called inside a macro (see the command
+	<A HREF=#DEFINE><CODE>DEFINE</CODE></A>), with the command
+	<A HREF=#PLAYBACK><CODE>PLAYBACK</CODE></A>, or is executed inside
+	a file via the command <A HREF=#INPUT><CODE>INPUT</CODE></A>, then
+	only one keystroke is allowed and no saving of commands will be
+	done.  If, on the other hand, <CODE>CURSOR</CODE> is called
+	interactively, then <CODE>CURSOR</CODE> may perform several
+	functions, depending on the character typed.  Internal calls to
+	<CODE>CURSOR</CODE> will occur repetitively until the letter `X'
+	is typed.  On some devices, the left most mouse button will be
+	associated with the keystroke `A'; the middle with `D'; and the
+	right with `X'.
+	<P>
+	Other keystroke functions are:
+	<PRE>
+    A : Display the cursor position and image intensity.
+    D : Draw to the current cursor position.
+    M : Move to the present cursor position.
+    P : Draw a point of the current symbol type.
+    S : Toggles ability to save following keys as commands.
+    X : Exit the cursor routine.
+    ? : Present this list of key commands.
+	</PRE>
+
+<HR><A NAME=DATA>
+<DT>
+DATA fspec - opens the file "fspec" for reading data.
+<DD>
+	<CODE>DATA</CODE> opens an external file for reading data.  The
+	file is assumed to have data in columns separated by spaces,
+	tabs or commas.  Any column can be read as x or y coordinates
+	with the <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> commands.
+
+<HR><A NAME=DEFINE>
+<DT>
+DEFINE xxx - creates the macro xxx and enters define mode.
+<DD>
+	<CODE>DEFINE</CODE> creates an entry for the macro <CODE>xxx</CODE>,
+	and subsequent commands (until the <A HREF=#END><CODE>END</CODE></A>
+	command) are considered the body of the macro.  The prompt changes
+	to <CODE>DEFINE</CODE>&gt; to indicate the mode.  A macro is just
+	a collection of commands (or other macros) that can be executed
+	with one call statement.  A macro is invoked by using its name as
+	a command.  The contents of the macro may be listed by using the
+	macro name as an argument to the command
+	<A HREF=#LIST><CODE>LIST</CODE></A>.  Macros may be saved using the
+	command <A HREF=#WRITE><CODE>WRITE</CODE></A> and may be played
+	back using the command <A HREF=#PLAYBACK><CODE>PLAYBACK</CODE></A>.
+	Macros may be passed arguments or variables whenever they are
+	executed.  The ten tokens used inside the macro to identify the
+	macro arguments are $1, $2, ..., $9, and $0.  These tokens may be
+	used in the body of the macro, and when the macro is invoked its
+	arguments will be substituted for these tokens.  These tokens MAY
+	NOT be redefined inside the macro (for example, using the command
+	<CODE>SET</CODE>).  If an argument is not present when the macro
+	is invoked, the token is replaced with a blank space.
+
+<HR><A NAME=DELETE>
+<DT>
+DELETE [N1 [N2 [MACRO]]] - removes the commands <CODE>N1 - N2</CODE> from a macro buffer.
+<DD>
+	<CODE>DELETE</CODE> removes commands from the macro listing
+	(numbered according to what is shown with the command
+	<A HREF=#LIST><CODE>LIST</CODE></A>).  If no arguments are present,
+	then the last command in the command buffer (see
+	<A HREF=#BUFFER><CODE>BUFFER</CODE></A>) is deleted.  If
+	<CODE>N2</CODE> is not present, then only the command numbered
+	<CODE>N1</CODE> in the command buffer
+	(<A HREF=#BUFFER><CODE>BUFFER</CODE></A>) is removed.  If both
+	<CODE>N1</CODE> and <CODE>N2</CODE> are present, then all commands
+	from <CODE>N1</CODE> to <CODE>N2</CODE> (inclusive) are deleted
+	from the command buffer (<A HREF=#BUFFER><CODE>BUFFER</CODE></A>).
+	If the optional macro name is given, then lines <CODE>N1</CODE> to
+	<CODE>N2</CODE> (inclusive) are removed from <CODE>MACRO</CODE>.
+	For example, to remove line 4 from a macro named "<CODE>dojob</CODE>",
+	use the command <CODE>delete 4 4 dojob</CODE>.
+	Note that the command buffer macro name is "<CODE>BUFFER</CODE>".
+
+<HR><A NAME=DEVICE>
+<DT>
+DEVICE device - initializes output to a graphics device.
+<DD>
+	<CODE>DEVICE</CODE> defines the "device specification" for the
+	plot device.  The specification is system dependent, but usually
+	has the form "device/type" or "file/type".  If the argument is a
+	question mark ("?"), the user will be prompted to supply a device
+	name after a list of the currently available devices is
+	presented.  When a new device is selected, the
+	<A HREF=#PANEL><CODE>PANEL</CODE></A> command is reset and the
+	<A HREF=#COLOR><CODE>COLOR</CODE></A>,
+	<A HREF=#EXPAND><CODE>EXPAND</CODE></A>,
+	<A HREF=#FILL><CODE>FILL</CODE></A>,
+	<A HREF=#FONT><CODE>FONT</CODE></A>,
+	<A HREF=#LSTYLE><CODE>LSTYLE</CODE></A>, and
+	<A HREF=#LWIDTH><CODE>LWIDTH</CODE></A> commands are called to reset
+	each to a value of 1.  The color palette (see the command
+	<A HREF=#PALETTE><CODE>PALETTE</CODE></A>) is also reset to
+	the default palette and the coordinate transfer function
+	(<A HREF=#TRANSFER><CODE>TRANSFER</CODE></A>) is reset to linear.
+	Finally, the inquire state is turned off (see the command
+	<A HREF=#ASK><CODE>ASK</CODE></A>).
+
+<HR><A NAME=DOT>
+<DT>
+DOT [X Y] - makes a point of the current style at the current location.
+<DD>
+	<CODE>DOT</CODE> draws a point at the current location (set by
+	<A HREF=#MOVE><CODE>MOVE</CODE></A>,
+	<A HREF=#DRAW><CODE>DRAW</CODE></A>, etc.)
+	(or at the position (X,Y) if provided) in the style determined by
+	the latest call to <A HREF=#SYMBOL><CODE>SYMBOL</CODE></A> or
+	<A HREF=#PCOLUMN><CODE>PCOLUMN</CODE></A>.  The symbol's size is
+	governed by the last call to the command
+	<A HREF=#EXPAND><CODE>EXPAND</CODE></A>.
+
+<HR><A NAME=DRAW>
+<DT>
+DRAW X Y - draws a line to <CODE>(X,Y)</CODE> from the current coordinate position.
+<DD>
+	<CODE>DRAW</CODE> draws a line to the World (user) coordinate (X,Y)
+	from the current location (set by a previous call to
+	<A HREF=#MOVE><CODE>MOVE</CODE></A>,
+	<A HREF=#DRAW><CODE>DRAW</CODE></A>, etc.).
+	<CODE>DRAW</CODE> then makes (X,Y) the current position.
+
+<HR><A NAME=ECHO>
+<DT>
+ECHO EXPRESSION [...] - displays the result of <CODE>EXPRESSION</CODE> on the screen.
+<DD>
+	<CODE>ECHO</CODE> acts just like the command
+	<A HREF=#SET><CODE>SET</CODE></A> except that rather than assigning
+	the result of the <CODE>EXPRESSION</CODE> to anything it displays
+	the result on the screen.  See the command
+	<A HREF=#SET><CODE>SET</CODE></A> for an explanation of
+	<CODE>EXPRESSION</CODE>.  There may be more than one
+	<CODE>EXPRESSION</CODE> present, but each one should be delimited
+	by enclosing parenthesis.  Literal strings may also be displayed
+	by enclosing the text in double quotes.  String variables may be
+	displayed by listing their names.  For example, to display the
+	current cursor position, use the command:
+	<BR><CODE>echo "cx = " cx "cy = " cy</CODE>.
+
+<HR><A NAME=ECOLUMN>
+<DT>
+ECOLUMN N - reads error bar data from column <CODE>N</CODE> of the data file.
+<DD>
+	<CODE>ECOLUMN</CODE> reads column N from the data file as the
+	magnitudes of the error bar displacements from the corresponding (x,y)
+	coordinates.  Note that the command
+	<A HREF=#LOGARITHM><CODE>LOGARITHM</CODE></A>
+	does not adjust the error values to logarithmic scale.
+	<CODE>ECOLUMN</CODE> values are also used by the command
+	<A HREF=#LOOKUP><CODE>LOOKUP</CODE></A>.
+
+<HR><A NAME=END>
+<DT>
+END - terminates define mode, insert mode, or exits from the program.
+<DD>
+	In DEFINE mode, <CODE>END</CODE> finishes the macro definition
+	and returns to EXECUTE mode.  In INSERT mode, <CODE>END</CODE>
+	terminates inserting and returns to EXECUTE mode.  In EXECUTE
+	mode, <CODE>END</CODE> exits from the program altogether.
+	The commands <CODE>EXIT</CODE> and <CODE>QUIT</CODE> may be
+	used as a substitute for the command <CODE>END</CODE>.
+
+<HR><A NAME=ENVIRONMENT>
+<DT>
+ENVIRONMENT [X1 X2 Y1 Y2 [N [K]]] - sets the user limits and draws a box.
+<DD>
+	<CODE>ENVIRONMENT</CODE> can clear the current page, set up the
+	World (user) limits and draw a standard box.  The first four
+	optional arguments establish the World (user) limits of the plot
+	region.  If they are not present, then the data read from the most
+	recent call to the commands <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A>
+	and <A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> is used to autoscale
+	the limits.  If the limits are present, then two other optional
+	parameters may be selected.  The first of these parameters,
+	<CODE>N</CODE>, will set the scales of the X and Y axes to be equal,
+	if it is equal to 1; otherwise the two axes will be scaled
+	independently.  The final optional parameter <CODE>K</CODE> will
+	determine what type of box to draw and may have the following values:
+	<PRE>
+    -2 : draw no box, axes or labels;
+    -1 : draw box only;
+     0 : draw box and label it with coordinates;
+     1 : same as K=0, but also draw the coordinate axes (X=0, Y=0);
+     2 : same as K=1, but also draw grid lines at the major
+       : increments of the coordinates;
+    10 : draw box and label X-axis logarithmically;
+    20 : draw box and label Y-axis logarithmically;
+    30 : draw box and label both axes logarithmically.
+	</PRE>
+	Both <CODE>N</CODE> and <CODE>K</CODE> default to 0 if not provided.
+
+<HR><A NAME=ERASE>
+<DT>
+ERASE - erases the graphics screen.
+<DD>
+	<CODE>ERASE</CODE> erases the graphics screen.  If the current
+	device is a hardcopy device, <CODE>ERASE</CODE> will cause the
+	plot to advance to the next page.  If <A HREF=#ASK><CODE>ASK</CODE></A>
+	is set ON and the current device is not a hardcopy device, then the
+	user will be prompted before advancing to the next page.
+
+<HR><A NAME=ERRORBAR>
+<DT>
+ERRORBAR K - draws error bars on (x,y) pairs in the direction <CODE>90(K-1)</CODE>.
+<DD>
+	<CODE>ERRORBAR</CODE> is analogous to
+	<A HREF=#POINTS><CODE>POINTS</CODE></A>; it draws error bars at
+	each of the (x,y) points (read by the most recent call to the
+	commands <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A>) at a length specified
+	by the points read by the command
+	<A HREF=#ECOLUMN><CODE>ECOLUMN</CODE></A>.  The argument <CODE>K</CODE>
+	should be 1 to put the bar along the +x direction; 2 for +y;
+	3 for -x; and 4 for -y.  If <CODE>K</CODE> is 5, then error bars
+	are drawn in both the +x and -x directions.
+	Likewise, if <CODE>K</CODE> is 6, then error bars
+	are drawn in both the +y and -y directions.
+	Use <A HREF=#EXPAND><CODE>EXPAND</CODE></A>
+	to govern the size (extent) of the caps.
+	Setting the expansion to zero means no caps are drawn.
+
+<HR><A NAME=ETXT>
+<DT>
+ETXT - erases the text from the view surface without affecting graphics.
+<DD>
+	<CODE>ETXT</CODE> erases the text from the view surface (if the
+	device is capable of doing this).  This should erase text without
+	affecting the currently displayed graphics.  Nothing is done on
+	devices without this capability.
+
+<HR><A NAME=EXPAND>
+<DT>
+EXPAND E - expands all characters and points by a factor <CODE>E</CODE>.
+<DD>
+	<CODE>EXPAND</CODE> sets the expansion for all characters and points.
+	It is initially set to 1.0 and is reset to 1.0 whenever
+	a new device is chosen. 
+
+<HR><A NAME=FILL>
+<DT>
+FILL N [ANGLE [SEPN [PHASE]]] - Sets the fill area style to <CODE>N</CODE>.
+<DD>
+	<CODE>FILL</CODE> sets the fill type.  The fill type is
+	identified by <CODE>N</CODE>, where <CODE>N</CODE> refers to
+	one of the following:
+	<PRE>
+    1 : solid
+    2 : hollow
+    3 : hatched
+    4 : cross-hatched
+	</PRE>
+	The fill type is initially set to 1 (solid) and is reset to 1
+	whenever a new device is chosen.  If the fill type is hatched or
+	cross-hatched, optional arguments can be supplied that affect
+	the way the hatching will be done.  Up to three additional
+	arguments may be provided.  <CODE>ANGLE</CODE> specifies the
+	angle the hatch lines make with the horizontal, in degrees,
+	increasing counterclockwise.  <CODE>SEPN</CODE> is the spacing
+	of the hatch lines.  The unit spacing is 1 percent of the smaller
+	of the height or width of the view surface.  <CODE>PHASE</CODE>
+	is an offset value and is a real number between 0 and 1.  The
+	hatch lines are displaced by this fraction of <CODE>SEPN</CODE>
+	from a fixed reference.  Adjacent regions hatched with the
+	same <CODE>PHASE</CODE> have contiguous hatch lines.  To hatch
+	a region with alternating lines of two colors, fill the area
+	twice: once with <CODE>PHASE=0.0</CODE> in one color and
+	<CODE>PHASE=0.5</CODE> in the other color.  The default value
+	for <CODE>ANGLE</CODE> is 45.0 degrees, <CODE>SEPN</CODE> is 1.0,
+	and <CODE>PHASE</CODE> is 0.0.
+
+<HR><A NAME=FIT>
+<DT>
+FIT style [N] [P1 P2 P3 ...] - Fits a curve to the (x,y) data pairs.
+<DD>
+	<CODE>FIT</CODE> will solve either for a linear fit of the form:
+	"<CODE>y = a + bx</CODE>" by either the
+	(a) Least Squares method ("lsqfit"); or
+	(b) Criterion of Least Absolute Deviations ("medfit");
+	or will solve for a Gaussian fit of the form
+	"<CODE>y = a * exp(-((x - b)/c)**2)</CODE>".
+	The data that comprise the "x" and the "y" in these equations are
+	from the most recent call to the
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> commands.  For a
+	linear fit, there is only one required argument, <CODE>STYLE</CODE>,
+	which specifies which type of linear fit to perform.  The only
+	possible values of <CODE>STYLE</CODE> are "lsqfit" and "medfit".
+	The fit coefficients and the corresponding errors in the fit are
+	displayed at the command line.  When using the "lsqfit" technique,
+	estimates of the measurement errors may be included by reading the
+	error values with the <A HREF=#ECOLUMN><CODE>ECOLUMN</CODE></A>
+	command.  The optional parameters provide a way to assign the fits
+	and the error estimates to User Variables (see the
+	<A HREF=#SET><CODE>SET</CODE></A> command).  The "lsqfit" returns
+	(in this order) the parameters "a" and "b" along with a chi-square
+	for the fit and sigma errors on the estimates of "a" and "b".  If data
+	in the most recent call to <A HREF=#ECOLUMN><CODE>ECOLUMN</CODE></A>
+	was used to specify errors on the observation points, a "goodness
+	of fit" is also returned.  If, however, no errors are specified,
+	the correlation coefficient is returned in place of the "goodness
+	of fit".  The "medfit" returns (in this order) the fit parameters
+	"a" and "b" along with "absdev" (the mean absolute deviation in
+	the "y" direction).  As an example, the command
+	<CODE>fit lsqfit \0 \1</CODE>
+	will only assign the fit parameters "a" and "b" to the User
+	Variables \0 and \1 and the remaining items will be ignored (but
+	still displayed at the command line).
+	<P>
+	For Gaussian fits, there are two required arguments:
+	<CODE>STYLE</CODE> and <CODE>N</CODE>, where <CODE>STYLE</CODE>
+	must be "gaussian" and <CODE>N</CODE> specifies the number of
+	Gaussians to fit.  The number of optional parameters that
+	may follow is governed by the value of <CODE>N</CODE>.  Optional
+	arguments should follow in groups of 3's in the following order:
+	amplitude, mean, and full width at half maximum.  Assignment of the
+	output values follows as for linear fits.  If the <CODE>3*N+1</CODE>
+	parameter is present, it is set to the chi-square of the fit.
+	Setting any parameter to it's negative holds that value fixed
+	during the fit.  For example:
+	<PRE>
+    set \1 1.0   # Guess at amplitude.
+    set \2 5.0   # First guess at X-position of peak.
+    set \3 -2.3  # Input FHWM and hold this fixed during fit.
+    fit gaussian 1 \1 \2 \3 \4  # Fit 1 Gaussian and store fit
+          # and chi-square in \1, \2, \3, and \4, respectively.
+	</PRE>
+
+<HR><A NAME=FONT>
+<DT>
+FONT N - Sets the font type to type <CODE>N</CODE>.
+<DD>
+	<CODE>FONT</CODE> sets the font type to one of the available fonts.
+	The argument <CODE>N</CODE> selects the font used for subsequent
+	text plotting.  The font type is initially set to 1 ("normal")
+	and is reset to 1 whenever a new device is chosen.  Currently,
+	four fonts are available and can be set by setting the parameter
+	<CODE>N</CODE> to one of the following values:
+	<PRE>
+    1 : (default) a simple single-stoke font ("normal" font)
+    2 : roman font
+    3 : italic font
+    4 : script font
+	</PRE>
+	The font may also be temporarily changed within a text string
+	by using the escape sequences: \fn, \fr, \fi, or \fs.
+
+<HR><A NAME=FREE>
+<DT>
+FREE item1 [item2 [...]] - releases items created with the <CODE>NEW</CODE> command.
+<DD>
+	<CODE>FREE</CODE> will remove the user specified variable(s) from
+	WIP.  In addition, it releases (i.e. frees) the memory associated
+	with each <CODE>ITEM</CODE>.  At least one <CODE>ITEM</CODE> is
+	required and each <CODE>ITEM</CODE> listed specifies the name of
+	the string variable, user variable, or vector (without any index)
+	to release.
+
+<HR><A NAME=GLOBE>
+<DT>
+GLOBE [nlong nlat] - draws a "globe" with nlong/nlat long/lat lines.
+<DD>
+	<CODE>GLOBE</CODE> draws a "globe" for use in Aitoff (Hammer)
+	projections.  The "globe" that is drawn is an outline of the
+	entire sky centered on the position (L, b) = (0, 0).  There
+	are two optional parameters.  The first optional parameter
+	<CODE>NLONG</CODE> represents the number of longitude lines
+	that are drawn and the optional parameter <CODE>NLAT</CODE>
+	represents the number of latitude lines that are drawn.  If
+	these arguments are omitted, the values of <CODE>NLONG = 5</CODE>
+	and <CODE>NLAT = 3</CODE> will be used for defaults.
+	Also see the command <A HREF=#AITOFF><CODE>AITOFF</CODE></A>.
+
+<HR><A NAME=HALFTONE>
+<DT>
+HALFTONE [MIN MAX [N [BLANK]]] - produces a halftone plot of an image.
+<DD>
+	<CODE>HALFTONE</CODE> draws a plot of the array read with the
+	<A HREF=#IMAGE><CODE>IMAGE</CODE></A> command over the subimage
+	region selected with the <A HREF=#SUBIMAGE><CODE>SUBIMAGE</CODE></A>
+	command according to the coordinate transformation matrix
+	specified by the <A HREF=#TRANSFER><CODE>TRANSFER</CODE></A>
+	command and the current image transfer function (see the
+	<A HREF=#ITF><CODE>ITF</CODE></A> command).
+	If the device permits, colors
+	can be preassigned to the halftone values with any of the
+	<A HREF=#PALETTE><CODE>PALETTE,</CODE></A>
+	<A HREF=#LOOKUP><CODE>LOOKUP,</CODE></A>
+	<A HREF=#RGB><CODE>RGB,</CODE></A> or
+	<A HREF=#HLS><CODE>HLS</CODE></A> commands
+	(whenever a new device is selected, the palette is reset).
+	The first two optional parameters allow the user to specify the
+	intensity range for the plot.
+	If the optional parameters <CODE>MIN</CODE> and
+	<CODE>MAX</CODE> are not present,
+	then <CODE>HALFTONE</CODE> will use the image minimum and maximum.
+	The next optional parameter, <CODE>N</CODE>, if present,
+	indicates that histogram equalization should be performed using
+	<CODE>N</CODE> bins.  If this parameter is present and is set to
+	zero, then the full number of color table entries will be used
+	in the binning.  If this is not present, no equalization will be done.
+	The last optional parameter <CODE>BLANK</CODE> is used to
+	specify a blank value in the image to ignore when doing
+	histogram equalization.  It defaults to -99.
+	Histogram equalization is only applied to data within the
+	current subimage region and within the minimum and maximum intensity.
+	<P>
+	NOTE: Histogram equalization changes the current LUT.  The LUT
+	must be reset before calling the <CODE>HALFTONE</CODE> command again.
+
+<HR><A NAME=HARDCOPY>
+<DT>
+HARDCOPY - causes a stored printer plot to be plotted.
+<DD>
+	If the current device selected is a hardcopy unit, then the
+	<CODE>HARDCOPY</CODE> command will cause the output file to be
+	closed and the file spooled to the printer.  How the file is
+	printed is determined by the string variable "print" (see the
+	command <A HREF=#SET><CODE>SET</CODE></A>).  By setting "print"
+	to the string "ignore", automatic printing can be disabled.
+	By default, the string variable "print" is set to "lpr"
+	(use the command '<A HREF=#ECHO><CODE>echo print</CODE></A>'
+	to display the current value of "print").
+
+<HR><A NAME=HEADER>
+<DT>
+HEADER [XTYPE [YTYPE]] - loads header information of the current image.
+<DD>
+	<CODE>HEADER</CODE> sets the transfer function and World (User)
+	limits of the box region for the current image.  This function
+	makes use of the current <A HREF=#SUBIMAGE><CODE>SUBIMAGE</CODE></A>
+	values to fix the World coordinate range.  If the optional
+	arguments <CODE>XTYPE</CODE> and <CODE>YTYPE</CODE> are
+	not present, they are set to the current values of the string
+	variables "XHEADER" and "YHEADER", respectively.  If only one
+	argument is present, both <CODE>XTYPE</CODE> and <CODE>YTYPE</CODE>
+	are set to this value.  Currently, there are 7 possible values
+	for <CODE>XTYPE</CODE> and <CODE>YTYPE</CODE> used to control
+	the resulting header arrangement:
+	<PRE>
+    rd : Right ascension/declination (absolute coordinates).
+    so : Arcsecond offset positions.
+    mo : Arcminute offset positions.
+    po : Pixel offset positions.
+    px : Absolute pixel positions.
+    gl : General linear coordinates.
+    go : General linear offset coordinates.
+	</PRE>
+	All offset arguments are relative to the value of the user variables
+	CRVALX and CRVALY.  The option "rd" includes a 15*cos(dec) factor
+	applied to the right ascension term.  Incorrect options are treated
+	as if "px" was selected.  The options "gl" and "go" apply no
+	additional scaling factor to the header variables.  If the image
+	headers CRVAL, CRPIX, and CDELT are not present for that axis or
+	are all set to 0, the coordinate transfer function will be set to
+	its default value (see the command
+	<A HREF=#TRANSFER><CODE>TRANSFER</CODE></A>) and the world limits
+	to the image range in pixels.
+	NOTE: Currently, the conversion is
+	fixed to be from radians to arcseconds (or seconds of time) for
+	MIRIAD images; degrees to arcseconds for FITS images; and no
+	conversion for BASIC images.
+
+<HR><A NAME=HELP>
+<DT>
+HELP xxx - prints an explanation of the command <CODE>xxx</CODE>.
+<DD>
+	Without any argument, <CODE>HELP</CODE> prints a one line
+	description of every command.  With the name of a command as
+	an argument, <CODE>HELP</CODE> prints more information on that
+	particular command.  The command '<CODE>help ?</CODE>' will
+	provide a list of all available command and macro names.
+
+<HR><A NAME=HI2D>
+<DT>
+HI2D bias [slant [center]] - draws a histogram of the data read by <CODE>IMAGE</CODE>.
+<DD>
+	<CODE>HI2D</CODE> plots a series of cross-sections of the current
+	image (see <A HREF=#IMAGE><CODE>IMAGE</CODE></A>).  Each
+	cross-section is plotted as a hidden line histogram.  The one
+	required argument, <CODE>BIAS</CODE>, specifies a bias value
+	to be applied to each successive cross-section (in order to
+	raise it above the previous one).  <CODE>BIAS</CODE> is in the
+	same units as the image data.  If the optional parameter
+	<CODE>SLANT</CODE> is present, it is an integer value offset to
+	be applied to each successive cross-section (in the X-direction).
+	If <CODE>SLANT</CODE> is greater than 0, then the plot slants to
+	the right; less than 0, it slants to the left.  The default value
+	for <CODE>SLANT</CODE> is 0 (no slant).  If the optional argument
+	<CODE>CENTER</CODE> is present and equal to 1 (the default), then
+	the individual X values denote the center location of the bin;
+	otherwise, the X values denote the lower edge (in X) of the bin.
+
+<HR><A NAME=HISTOGRAM>
+<DT>
+HISTOGRAM [MIN MAX [N]] - draws a histogram of the data read by <CODE>XCOLUMN</CODE>.
+<DD>
+	<CODE>HISTOGRAM</CODE> connects the coordinates read by
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> as a histogram.  If the
+	optional arguments <CODE>MIN</CODE> and <CODE>MAX</CODE> are present,
+	they are used to specify the minimum and maximum of the histogram.
+	Furthermore, an optional parameter <CODE>N</CODE> can specify the
+	number of bins to divide up the histogram.  At present, <CODE>N</CODE>
+	may not exceed 200.  By default, <CODE>MIN</CODE> and <CODE>MAX</CODE>
+	are set to the minimum and maximum of the data read by
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and <CODE>N</CODE> is set
+	to 5.  The user should set the limits (see the command
+	<A HREF=#LIMITS><CODE>LIMITS</CODE></A>) of the box before calling
+	the <CODE>HISTOGRAM</CODE> command.
+
+<HR><A NAME=HLS>
+<DT>
+HLS K hue light sat - sets the color representation using the HLS system.
+<DD>
+	<CODE>HLS</CODE> sets the color representation of the color index
+	<CODE>K</CODE> to the provided values of Hue-Lightness-Saturation.
+	<CODE>HUE</CODE> is represented by an angle in degrees, with red
+	at 120, green at 240, and blue at 0 (or 360).  <CODE>LIGHT</CODE>
+	ranges from 0 to 1, with black at lightness of 0 and white at
+	lightness 1.  <CODE>SAT</CODE> ranges from 0 (gray) to 1 (pure color).
+	<CODE>HUE</CODE> is irrelevant when <CODE>SAT</CODE> is 0.  If
+	<CODE>K</CODE> is greater than the maximum color index of the device,
+	then this call will be ignored (use the command
+	'<A HREF=#ECHO><CODE>echo cmin cmax</CODE></A>'
+	to display the current color range).
+
+<HR><A NAME=ID>
+<DT>
+ID - puts an identification label at the bottom of a plot.
+<DD>
+	<CODE>ID</CODE> puts the name of the user and the current date
+	and time at the bottom of the plot region.  If the environment
+	variable PGPLOT_IDENT is defined and the current device is a hardcopy
+	device (the command '<A HREF=#ECHO><CODE>echo hardcopy</CODE></A>'
+	will return 1 if this is true), then this call is automatically
+	done when the device is finally closed (see the command
+	<A HREF=#HARDCOPY><CODE>HARDCOPY</CODE></A>).
+
+<HR><A NAME=IF>
+<DT>
+IF EXPRESSION XXX [...] - executes <CODE>xxx</CODE> if <CODE>EXPRESSION</CODE> is true.
+<DD>
+	<CODE>IF</CODE> allows conditional execution of macros and commands.
+	The macro or command <CODE>XXX</CODE> is executed only if the
+	conditional test of the expression is TRUE (non-zero).  The
+	<CODE>EXPRESSION</CODE> may be a simple <CODE>(X OP Y)</CODE>
+	expression where the parameters <CODE>X</CODE> and <CODE>Y</CODE>
+	may be any numerical value or user variable (see the
+	<A HREF=#SET><CODE>SET</CODE></A> command) and <CODE>OP</CODE> is
+	the condition to test and is defined TRUE for the following:
+	<PRE>
+    op : Test
+------------------------------------------------------
+    == : X equal to Y;
+    != : X not equal to Y;
+    <  : X less than Y;
+    >  : X greater than Y;
+    <= : X less than or equal to Y;
+    >= : X greater than or equal to Y;
+    && : X and Y are non-zero;
+    || : X or Y are non-zero;
+    ^  : X or Y, but not both, are non-zero.
+	</PRE>
+	If the test consists of more than just a simple <CODE>(X op Y)</CODE>
+	test, then the entire expression MUST be enclosed by parenthesis.
+	As an example,
+	<PRE>
+    if ((x1 < x2) && (y1 < y2)) limits x2 x1 y1 y2
+	</PRE>
+	will only execute the <A HREF=#LIMITS><CODE>LIMITS</CODE></A>
+	command if X1 is less than X2 AND Y1 is less than Y2.  Note also
+	that this example illustrates that the usual parameters/arguments
+	may follow the macro or command name.  See the command
+	<A HREF=#SET><CODE>SET</CODE></A> for a more detailed description
+	of <CODE>EXPRESSION</CODE>.
+
+<HR><A NAME=IMAGE>
+<DT>
+IMAGE fspec [plane [badpixel [order]]] - reads in an image from file "fspec".
+<DD>
+	<CODE>IMAGE</CODE> loads an array into WIP for use with plotting
+	commands like <A HREF=#CONTOUR><CODE>CONTOUR</CODE></A> and
+	<A HREF=#HALFTONE><CODE>HALFTONE</CODE></A>.
+	Currently, WIP tests the file to determine its file type (i.e.
+	FITS, MIRIAD, BASIC, etc.) and then loads it into available memory.
+	The optional parameter <CODE>PLANE</CODE> selects which plane of
+	a data cube to load.  The default value for <CODE>PLANE</CODE> is 1.
+	<CODE>IMAGE</CODE> trys to read available header information which
+	will be useful for setting the coordinate transformation matrix
+	(see the command <A HREF=#TRANSFER><CODE>TRANSFER</CODE></A>)
+	after the image is read into memory (with the command
+	<A HREF=#HEADER><CODE>HEADER</CODE></A>).  The current subimage
+	values (see the command <A HREF=#SUBIMAGE><CODE>SUBIMAGE</CODE></A>)
+	are reset to the full array size of the new image and the user
+	variables CRVALX/Y, CRPIXX/Y, and CDELTX/Y may be set to the newly
+	read header values (if they can be read).  The subimage values,
+	6 user variables, and the transformation matrix are used to
+	determine where the plot will appear.  In order to correctly
+	set the transformation matrix with the command
+	<A HREF=#HEADER><CODE>HEADER</CODE></A>, the values of CRVAL,
+	CRPIX, CDELT, and CTYPE must be present for the first two axes.
+	The next optional parameter <CODE>BADPIXEL</CODE> may be
+	specified (after <CODE>PLANE</CODE>) as the value for blanked or
+	masked pixels.
+	By default, these will be set to -99.
+	This value may be helpful for use
+	with the <A HREF=#CONTOUR><CODE>CONTOUR</CODE></A> command.
+	The final optional parameter <CODE>ORDER</CODE> permits the
+	image to be smoothed on reading.  The parameter <CODE>ORDER</CODE>
+	may take on a value of 0, 1, or 2 and represents the order of
+	the fit.  A value of 0 (or if it is not provided) means to apply
+	no smoothing (the default).
+	<P>
+	NOTE: Current image types include:
+	basic, Miriad, and FITS.
+	BASIC image name syntax is: filename`columnsXrows[`offset] where
+	rows and columns are in pixels and the optional offset is in
+	bytes from the beginning of the file.  The character 'X' determines
+	the size of each element and is 'b' for unsigned bytes; 's',
+	signed 2 byte integers; 'l', signed 4 byte integers; 'r', 4 byte
+	floating point; 'd', 8 byte double precision floating point.
+
+<HR><A NAME=INITIALIZE>
+<DT>
+INITIALIZE V N EXPRESSION - Sets <CODE>V</CODE> to the result of <CODE>EXPRESSION</CODE>.
+<DD>
+	<CODE>INITIALIZE</CODE> evaluates the <CODE>EXPRESSION</CODE>
+	(see the command <A HREF=#SET><CODE>SET</CODE></A>) and sets
+	every element of the array (vector) user variable <CODE>V</CODE>
+	to the result.  If <CODE>N</CODE> is less than zero, the current
+	size of the vector variable <CODE>V</CODE> is used.  If
+	<CODE>N</CODE> is zero, no expression is needed and the vector
+	is set to size zero (empty).  If <CODE>N</CODE> is greater than
+	zero and an expression is present, the first <CODE>N</CODE>
+	elements of the vector are set to the result of the expression.
+	If the expression is missing, the size of the vector will be reset.
+
+<HR><A NAME=INPUT>
+<DT>
+INPUT fspec - reads plot commands from file "fspec" and executes them.
+<DD>
+	<CODE>INPUT</CODE> reads plot commands from a file and treats
+	them exactly as if they were typed:  commands are executed or
+	can be inserted or macros may be defined.  Unlike interactive
+	mode, individual commands are NOT saved in the command buffer
+	(see <A HREF=#BUFFER><CODE>BUFFER</CODE></A>).
+	NOTE: Macros are not redefined so care should be taken to
+	insure that the proper macro is being executed.
+
+<HR><A NAME=INSERT>
+<DT>
+INSERT [N [macro]] - commands are inserted before command <CODE>N</CODE> in a macro.
+<DD>
+	<CODE>INSERT</CODE> enters insert mode (indicated by the
+	<CODE>INSERT</CODE>&gt; prompt) and
+	subsequent commands are inserted, without execution, into the
+	named macro until an <A HREF=#END><CODE>END</CODE></A> command
+	is encountered.  Commands are numbered as shown by the command
+	<A HREF=#LIST><CODE>LIST</CODE></A>.  Without any arguments,
+	<CODE>INSERT</CODE> inserts commands at the end of the command
+	buffer.  If <CODE>N</CODE> is present but no macro name is given,
+	then commands are inserted before line <CODE>N</CODE> in the
+	command macro (<A HREF=#BUFFER><CODE>BUFFER</CODE></A>).  With
+	the <CODE>MACRO</CODE> argument, <CODE>INSERT</CODE> starts
+	inserting just before line number <CODE>N</CODE> in macro
+	<CODE>MACRO</CODE>.
+	NOTE: The command buffer macro name is
+	<A HREF=#BUFFER><CODE>BUFFER</CODE></A>.
+
+<HR><A NAME=ITF>
+<DT>
+ITF N - sets the current image transfer function to <CODE>N</CODE>.
+<DD>
+	<CODE>ITF</CODE> sets an internal parameter such that all subsequent
+	image drawing functions (<A HREF=#IMAGE><CODE>IMAGE</CODE></A> and
+	<A HREF=#WEDGE><CODE>WEDGE</CODE></A>) act on the transformed image.
+	Acceptable values for <CODE>N</CODE> and their meanings follow:
+	<PRE>
+    0 : linear
+    1 : logarithmic
+    2 : square-root
+	</PRE>
+	The initial value of the image transfer function is 0 and is
+	reset to 0 whenever a new device is selected.
+
+<HR><A NAME=LABEL>
+<DT>
+LABEL STR - writes the string <CODE>STR</CODE> at the current cursor position.
+<DD>
+	<CODE>LABEL</CODE> writes the string <CODE>STR</CODE> (which
+	starts at the current cursor position and continues to the
+	last non-space character in the label string).  The string's 
+	size and the angle it is displayed are controlled by the most
+	recent call to the commands <A HREF=#EXPAND><CODE>EXPAND</CODE></A>
+	and <A HREF=#ANGLE><CODE>ANGLE</CODE></A>.
+
+<HR><A NAME=LCUR>
+<DT>
+LCUR [NPTS] - draws a line using the cursor.
+<DD>
+	<CODE>LCUR</CODE> allows a polyline to be drawn using the cursor.
+	Vertices may be added or removed by locating the cursor at a
+	desired point and selecting the key 'A' (Add) or 'D' (Delete) or
+	may terminate the command with the key 'X' (eXit).  The vertices
+	are stored in the <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> arrays and may be
+	redrawn by subsequent calls to this command.  If the optional
+	parameter <CODE>NPTS</CODE> is given, it is used as the number
+	of points in the previous call to this command.  To initialize
+	the command, set <CODE>NPTS</CODE> to 0.  By default,
+	<CODE>NPTS</CODE> is set to the current value of the number of
+	points in the most recent call to the
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> commands.
+
+<HR><A NAME=LDEV>
+<DT>
+LDEV - lists the devices currently available.
+<DD>
+	<CODE>LDEV</CODE> lists (to standard output) the names of
+	the installed devices known to the current version of WIP.
+
+<HR><A NAME=LEVELS>
+<DT>
+LEVELS [L1 L2 ...] - sets the contour levels for a contour plot.
+<DD>
+	<CODE>LEVELS</CODE> establishes the contour values for use in a
+	contour plot.  Currently, the maximum number of levels available
+	is 40.  This array of levels may be augmented if a call to the
+	command <A HREF=#SLEVEL><CODE>SLEVEL</CODE></A> is done prior to
+	a call to the <A HREF=#CONTOUR><CODE>CONTOUR</CODE></A> command.
+
+<HR><A NAME=LIMITS>
+<DT>
+LIMITS [X1 X2 Y1 Y2] - sets the World limits of the plot.
+<DD>
+	<CODE>LIMITS</CODE> sets the World (user) coordinate system of
+	the plot window.  All coordinates from
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A>,
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A>,
+	<A HREF=#MOVE><CODE>MOVE</CODE></A>,
+	<A HREF=#DRAW><CODE>DRAW</CODE></A>, etc.,
+	are relative to these limits.  If no
+	arguments are present, then the data from the most recent
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A>
+	commands are used to set the limits.
+
+<HR><A NAME=LINES>
+<DT>
+LINES L1 L2 - limits the <CODE>X, Y, E,</CODE> and <CODE>PCOLUMN</CODE> file read to lines <CODE>L1-L2</CODE>.
+<DD>
+	<CODE>LINES</CODE> sets the range of lines read from the
+	data file by the commands
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A>,
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A>,
+	<A HREF=#ECOLUMN><CODE>ECOLUMN</CODE></A>, and
+	<A HREF=#PCOLUMN><CODE>PCOLUMN</CODE></A>.
+	This is useful to avoid non-data lines.  The argument <CODE>L1</CODE>
+	is also used to specify the line that the command
+	<A HREF=#STRING><CODE>STRING</CODE></A>
+	will use to extract a string variable.
+
+<HR><A NAME=LIST>
+<DT>
+LIST [L1 [L2 [xxx]]] - lists the commands of macro <CODE>xxx</CODE>.
+<DD>
+	<CODE>LIST</CODE> lists the commands of the named macro.  If there
+	are no arguments, the macro <A HREF=#BUFFER><CODE>BUFFER</CODE></A>
+	(the command buffer) is listed.  If one argument is given, then
+	the commands from <CODE>L1</CODE> to the end of the macro
+	<A HREF=#BUFFER><CODE>BUFFER</CODE></A> is shown.  With two
+	arguments, lines <CODE>L1</CODE> to <CODE>L2</CODE> are shown.
+	If the macro name <CODE>xxx</CODE> is also entered as the third
+	argument, then that macro is listed over the inclusive line range
+	of <CODE>L1</CODE> to <CODE>L2</CODE>.  The numbers assigned to
+	commands by <CODE>LIST</CODE> should be the ranges used by calls
+	to the commands <A HREF=#DELETE><CODE>DELETE</CODE></A> and
+	<A HREF=#INSERT><CODE>INSERT</CODE></A>.
+	NOTE: The command buffer macro name is
+	<A HREF=#BUFFER><CODE>BUFFER</CODE></A>.
+
+<HR><A NAME=LOGARITHM>
+<DT>
+LOGARITHM name [scale] - takes the scaled logarithm of vectors and images.
+<DD>
+	<CODE>LOGARITHM</CODE> takes the base 10 logarithm of either
+	vectors or images.  The argument <CODE>NAME</CODE> specifies
+	either a vector name (e.g. "x") or an image name (currently,
+	only the name "image" is acceptable).  If the value of the
+	vector or image is greater than zero, the logarithm is taken
+	and this result is multiplied by the value of <CODE>SCALE</CODE>.
+	If <CODE>SCALE</CODE> is not present, a value of 1.0 is used.
+	<CODE>SCALE</CODE> may be any valid numeric expression (see
+	the command <A HREF=#SET><CODE>SET</CODE></A>).
+	<CODE>LOGARITHM</CODE> uses -50 for the logarithm
+	of 0 or negative numbers and does not scale these values.
+
+<HR><A NAME=LOOKUP>
+<DT>
+LOOKUP [N] - loads a RGB color lookup table.
+<DD>
+	<CODE>LOOKUP</CODE> uses the values read by the most recent call to
+	the commands <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A>,
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A>,
+	<A HREF=#ECOLUMN><CODE>ECOLUMN</CODE></A>, and
+	<A HREF=#PCOLUMN><CODE>PCOLUMN</CODE></A>
+	to load values into the color lookup table.  This is a more
+	compact (and correct) method for loading an entire table than
+	the single color index commands <A HREF=#RGB><CODE>RGB</CODE></A> and
+	<A HREF=#HLS><CODE>HLS</CODE></A>.  All values in the
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A>,
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A>,
+	<A HREF=#ECOLUMN><CODE>ECOLUMN</CODE></A>, and
+	<A HREF=#PCOLUMN><CODE>PCOLUMN</CODE></A> data must be between 0 and 1.
+	The <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> data correspond to the
+	red values, <A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> to green, and
+	<A HREF=#ECOLUMN><CODE>ECOLUMN</CODE></A> to blue.  The
+	<A HREF=#PCOLUMN><CODE>PCOLUMN</CODE></A> data identifies the
+	ramp intensity level for the corresponding RGB values.  Colors
+	on the ramp are linearly interpolated from neighboring levels.
+	If the optional parameter <CODE>N</CODE> is present and is negative,
+	then the resulting lookup table will be flipped.  By default (if the
+	optional argument <CODE>N</CODE> is missing or is positive), the
+	RGB table is loaded directly (not flipped).
+
+<HR><A NAME=LOOP>
+<DT>
+LOOP count xxx [p1 p2 ...] - executes the macro <CODE>xxx COUNT</CODE> times.
+<DD>
+	<CODE>LOOP</CODE> allows for multiple execution of a macro.
+	The macro <CODE>xxx</CODE> is executed <CODE>COUNT</CODE> times.
+	The optional parameters <CODE>P1, P2, ...</CODE>
+	are any arguments needed to be passed to the macro (see the
+	<A HREF=#DEFINE><CODE>DEFINE</CODE></A> command).  The arguments
+	<CODE>P1, P2, ...</CODE> passed to the macro are NOT altered
+	during each execution of the loop.
+
+<HR><A NAME=LSTYLE>
+<DT>
+LSTYLE N - sets the current line style to <CODE>N</CODE>.
+<DD>
+	All subsequent lines except for points and characters are drawn
+	with line style <CODE>N</CODE>, where <CODE>N</CODE> refers to
+	lines of the following form:
+	<PRE>
+    1 : solid
+    2 : dashed
+    3 : dot - dash - dot - dash
+    4 : dotted
+    5 : dash - dot - dot - dot
+	</PRE>
+	If <CODE>N</CODE> is some number other than one of the line style
+	values above, it is set to 1.  Also, the line style is set to 1
+	initially and is reset to 1 whenever a new device is selected.
+
+<HR><A NAME=LWIDTH>
+<DT>
+LWIDTH N - sets the current line width attribute to <CODE>N</CODE>.
+<DD>
+	<CODE>LWIDTH</CODE> sets an internal parameter such that all
+	subsequent lines, text, and graph markers are drawn with lines
+	of width <CODE>N</CODE>.  This number may range from the default
+	of 1 to a maximum of 201.  Any other value is set to 1.  The
+	actual thickness drawn is device dependent, but is approximately
+	equal to 0.005 inches times the value of <CODE>N</CODE>.  The
+	initial value of the line width is 1 and is reset to 1 whenever
+	a new device is selected.
+
+<HR><A NAME=MACRO>
+<DT>
+MACRO filename - Used to define macros using an external file.
+<DD>
+	<CODE>MACRO</CODE> will read the commands from the file
+	<CODE>filename</CODE> and define macros exactly as if they were
+	typed interactively.  This allows macros saved from previous WIP
+	sessions (using the <A HREF=#WRITE><CODE>WRITE</CODE></A> command)
+	to be read into WIP and defined.  Only macro definitions are allowed.
+
+<HR><A NAME=MINMAX>
+<DT>
+MINMAX [N] - list the maximum and minimum values of the current image.
+<DD>
+	<CODE>MINMAX</CODE> list the maximum and minimum values of the
+	image that has been read by the <A HREF=#IMAGE><CODE>IMAGE</CODE></A>
+	command.  This command may be useful for setting contour levels,
+	or adjusting a halftone plot.  The minimum and maximum of the
+	current array are stored in the user variables IMMIN and IMMAX.
+	(The minimum and maximum may also be displayed using the command
+	'<A HREF=#ECHO><CODE>echo immin immax</CODE></A>'.)  If the
+	optional parameter <CODE>N</CODE> is present and set to any value
+	greater than 0, then the minimum and maximum are explicitly
+	recalculated.  This may be useful if the minimum and maximum has
+	been found and then the logarithm of the image is computed.
+
+<HR><A NAME=MOVE>
+<DT>
+MOVE X Y - sets the current World (user) position to <CODE>(x,y).</CODE>
+<DD>
+	<CODE>MOVE</CODE> sets the current World (user) location to (x,y)
+	without drawing any lines or text.  This simply provides a way to
+	specify the current position of the cursor.
+
+<HR><A NAME=MTEXT>
+<DT>
+MTEXT side disp coord just str - writes the string <CODE>STR</CODE> relative to <CODE>SIDE</CODE>.
+<DD>
+	<CODE>MTEXT</CODE> writes text at the position specified relative
+	to a viewport side.  The parameter <CODE>SIDE</CODE> specifies
+	which side of the viewport to place the string.  <CODE>SIDE</CODE>
+	must be either `B', `L', `T', or `R' to specify the
+	Bottom, Left, Top, or Right side of the viewport.
+	Additionally, if <CODE>SIDE</CODE> is `LV' or `RV', then the string
+	will be written perpendicular to the frame rather than parallel
+	to it.  The parameter <CODE>DISP</CODE> specifies the displacement
+	from the frame edge (in character height units).  If <CODE>DISP</CODE>
+	is negative, then the string is written inside the viewport.  The
+	parameter <CODE>COORD</CODE> is the location of the string as a
+	fractional length of the specified edge of the viewport.
+	<CODE>JUST</CODE> specifies how to justify the string relative to
+	<CODE>COORD</CODE> with <CODE>JUST = 0</CODE> meaning left justified;
+	0.5, centered; and 1.0, right justified.  The text <CODE>STR</CODE>
+	is the (multiword) string to display.
+	As an example, "good" values used to place a string along the X
+	axis, the Y axis, and the top of the plot box are:
+	<PRE>
+    mtext B 3.2 0.5 0.5 Xaxis label string
+    mtext L 2.2 0.5 0.5 Yaxis label string
+    mtext T 2.0 0.5 0.5 Top label string
+	</PRE>
+	The first two examples above correspond to the syntax used by
+	the commands <A HREF=#XLABEL><CODE>XLABEL</CODE></A> and
+	<A HREF=#YLABEL><CODE>YLABEL</CODE></A>.
+
+<HR><A NAME=NCURSE>
+<DT>
+NCURSE [n] - marks a set of points using the cursor.
+<DD>
+	<CODE>NCURSE</CODE> allows a set of points to be drawn using the
+	cursor.  Points may be added or removed by locating the cursor
+	at a desired point and selecting the key `A' (Add) or `D' (Delete)
+	or may terminate the command with the key `X' (eXit).  The points
+	are stored in the <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> arrays and may be redrawn
+	by subsequent calls to this command.  If the optional parameter
+	<CODE>N</CODE> is given, it is used as the number of points in the
+	previous call to this command.  To initialize the command, set
+	<CODE>N</CODE> to 0.  By default, <CODE>N</CODE> is set to the
+	current number of points in the most recent call to the
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> commands.  On return,
+	the cursor points are returned in increasing order of X (unlike
+	the command <A HREF=#OLIN><CODE>OLIN</CODE></A>).
+
+<HR><A NAME=NEW>
+<DT>
+NEW item [...] - creates a new string variable, user variable, or vector.
+<DD>
+	<CODE>NEW</CODE> creates a new variable.  If more than one
+	<CODE>ITEM</CODE> is present on the command line, then each will
+	represent the name of a new variable to be created.  Each
+	<CODE>ITEM</CODE> name must be unique and may not correspond
+	to a pre-defined variable or any other defined variable.  Once
+	these variables are created, they may be used just like the
+	pre-defined variables:  the command <A HREF=#SET><CODE>SET</CODE></A>
+	will permit the value to be set/changed and the command
+	<A HREF=#ECHO><CODE>ECHO</CODE></A> may be used to display the
+	current value.  Use the command <A HREF=#FREE><CODE>FREE</CODE></A>
+	to release the memory associated with each <CODE>ITEM</CODE>.  If
+	the <CODE>ITEM</CODE> is enclosed in double quotes
+	(e.g. <CODE>"ITEM"</CODE>), a string variable is created.  If the
+	<CODE>ITEM</CODE> has an optional size argument included, a vector
+	is created.  Note that when defining a vector variable, the
+	maximum number of elements should be enclosed in brackets and
+	appear affixed to the end of the <CODE>ITEM</CODE> name
+	(e.g.  <CODE>array[10]</CODE>).  If <CODE>ITEM</CODE> is not a
+	vector or string variable, then <CODE>ITEM</CODE> represents a
+	simple user variable.
+
+<HR><A NAME=OLIN>
+<DT>
+OLIN [n] - marks a set of points using the cursor.
+<DD>
+	<CODE>OLIN</CODE> allows a set of points to be drawn using the
+	cursor.  Points may be added or removed by locating the cursor
+	at a desired point and selecting the key `A' (Add) or `D' (Delete)
+	or may terminate the command with the key `X' (eXit).  The points
+	are stored in the <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> arrays and may be
+	redrawn by subsequent calls to this command.  If the optional
+	parameter <CODE>N</CODE> is given, it is used as the number of
+	points in the previous call to this command.  To initialize the
+	command, set <CODE>N</CODE> to 0.  By default, <CODE>N</CODE>
+	is set to the current number of points in the most recent call
+	to the <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A>
+	and <A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> commands.  On
+	return, the cursor points are returned in the order they were
+	added (unlike the command <A HREF=#NCURSE><CODE>NCURSE</CODE></A>).
+
+<HR><A NAME=PALETTE>
+<DT>
+PALETTE K [LEV] - Sets the color palette to entry <CODE>K</CODE>.
+<DD>
+	<CODE>PALETTE</CODE> sets the current image color array to a
+	known look up table (LUT).  The argument <CODE>K</CODE> specifies
+	which palette is loaded and legal values are displayed below.
+	If <CODE>K</CODE> is not associated with a legal palette value,
+	a warning is issued and the palette remains unchanged.  The
+	value of <CODE>K</CODE> can be negative in which case, the
+	absolute value of <CODE>K</CODE> is used and the sense of the LUT
+	is reversed.
+	NOTE: Not all devices have color LUTs so this
+	command may have no effect on them.  Whenever a device is
+	changed, the palette resets to the default.
+	<PRE>
+    K   Palette set to...
+-------------------------------
+    0 : Background to Foreground (default).
+    1 : Gray scale.
+    2 : A rainbow.
+    3 : Heat scale.
+    4 : IRAF scale.
+    5 : AIPS scale.
+    6 : PGPLOT scale.
+    7 : Saoimage A scale.
+    8 : Saoimage BB scale.
+    9 : Saoimage HE scale.
+   10 : Saoimage I8 scale.
+   11 : DS scale.
+   12 : Cyclic scale.
+	</PRE>
+	The optional parameter <CODE>LEV</CODE> may be provided to
+	specify the number of levels into which to squeeze the palette.
+	If <CODE>LEV</CODE> is not present (or is negative), then the
+	number of levels is not changed.  If <CODE>LEV</CODE> is present
+	and set to 0, the number is reset to the maximum range for the
+	current device.  If <CODE>LEV</CODE> is present and positive,
+	the number of color levels is set to this value.
+
+<HR><A NAME=PANEL>
+<DT>
+PANEL nx ny k - Sets the plot location to a subpanel.
+<DD>
+	<CODE>PANEL</CODE> makes the current plot location panel
+	<CODE>K</CODE>, where there are <CODE>NX</CODE> panels across
+	and <CODE>NY</CODE> panels vertically.  The direction the panels
+	run depends on the sign of <CODE>K</CODE>.  If <CODE>K</CODE> is
+	positive, then the panels are counted across from the lower left
+	and upwards (<CODE>K = 1</CODE> specifies the first panel).  If
+	<CODE>K</CODE> is negative, then the panels are counted across
+	from the upper left and downwards.  <CODE>PANEL</CODE> retains a
+	copy of the <A HREF=#VIEWPORT><CODE>VIEWPORT</CODE></A> coordinate
+	system that is present when <CODE>PANEL</CODE> is first called.
+	To reset to those values, use the command <CODE>panel 1 1 1</CODE>;
+	this will reset the plot location to the previous
+	<A HREF=#VIEWPORT><CODE>VIEWPORT</CODE></A> area (this is also
+	done automatically every time the current device is changed).
+	Be sure to also call <CODE>panel 1 1 1</CODE> prior to changing
+	the plot location with any other
+	<A HREF=#VIEWPORT><CODE>VIEWPORT</CODE></A> command!  The
+	separation between adjacent panels is controlled by the value of
+	<A HREF=#EXPAND><CODE>EXPAND</CODE></A> as well as by the user
+	variables XSUBMAR and YSUBMAR (see the
+	<A HREF=#SUBMARGIN><CODE>SUBMARGIN</CODE></A> command for more
+	details on these variables).  If either <CODE>NX</CODE> or
+	<CODE>NY</CODE> is negative, then the gap between the subpanels in
+	that direction is removed.  The absolute value of <CODE>NX</CODE>
+	and <CODE>NY</CODE> is always used to determine the number of subpanels.
+
+<HR><A NAME=PAPER>
+<DT>
+PAPER width aspect - change the size of the view surface.
+<DD>
+	<CODE>PAPER</CODE> changes the size of the view surface to a
+	specified width (inches) and aspect ratio (height/width).  This
+	command should only be used immediately after a call to the
+	<A HREF=#DEVICE><CODE>DEVICE</CODE></A> command.
+
+<HR><A NAME=PCOLUMN>
+<DT>
+PCOLUMN n - reads point type data from column <CODE>N</CODE> of the current data file.
+<DD>
+	<CODE>PCOLUMN</CODE> reads column <CODE>N</CODE> from the data
+	file as the values of a symbol array.  The data read by
+	<CODE>PCOLUMN</CODE> is used by the commands
+	<A HREF=#POINTS><CODE>POINTS</CODE></A> and
+	<A HREF=#BIN><CODE>BIN</CODE></A> (as well as others) to
+	represent additional data information.
+
+<HR><A NAME=PHARD>
+<DT>
+PHARD devname [xxx args] - spool a plot to an alternative device.
+<DD>
+	<CODE>PHARD</CODE> allows the commands in macro <CODE>xxx</CODE>
+	(or the commands in the command buffer) to be spooled to an
+	alternative device.  The one required argument <CODE>DEVNAME</CODE>
+	is the name of the alternative device (see the command
+	<A HREF=#DEVICE><CODE>DEVICE</CODE></A>).  If no other
+	arguments are present, then the commands in the command buffer
+	are played back (see the command
+	<A HREF=#PLAYBACK><CODE>PLAYBACK</CODE></A>);
+	otherwise, the named macro (<CODE>xxx</CODE>) is called (with
+	any further arguments on the command line used as input arguments
+	to the named macro).  If the named device is a hardcopy device, the
+	<A HREF=#HARDCOPY><CODE>HARDCOPY</CODE></A> command is automatically
+	executed at the end of the playback.  Finally, the current device
+	is set to the device that was present when this command was called.
+
+<HR><A NAME=PLAYBACK>
+<DT>
+PLAYBACK [xxx args] - replay macro <CODE>xxx</CODE> or commands in the command buffer.
+<DD>
+	<CODE>PLAYBACK</CODE> executes the macro <CODE>xxx</CODE> without
+	storing the commands in the command buffer.  With an argument of
+	<A HREF=#BUFFER><CODE>BUFFER</CODE></A> (or no argument),
+	<CODE>PLAYBACK</CODE> replays all commands in the command buffer.
+	The optional arguments (<CODE>args</CODE>) are passed to the macro.
+
+<HR><A NAME=PLOTFIT>
+<DT>
+PLOTFIT [X1 X2 [STEP]] - draws a plot of the most recent fit.
+<DD>
+	<CODE>PLOTFIT</CODE> uses the parameters from the most recent
+	call to <A HREF=#FIT><CODE>FIT</CODE></A> to display a smooth
+	curve.  The optional parameters <CODE>X1</CODE> and <CODE>X2</CODE>
+	can be used to limit the X-range to be plotted.  They default to
+	the full range of the window.  The other optional parameter is
+	the <CODE>STEP</CODE> size of the plot.  It provides a means to
+	make the plot smoother or more coarse.  The <CODE>STEP</CODE>
+	defaults to the mean of the difference between data in the
+	most recent call to the <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A>
+	command.
+
+<HR><A NAME=POINTS>
+<DT>
+POINTS [K] - draws points of the current style at each <CODE>(x,y).</CODE>
+<DD>
+	<CODE>POINTS</CODE> draws points of the current style (see the command
+	<A HREF=#SYMBOL><CODE>SYMBOL</CODE></A>) and size (see the command
+	<A HREF=#EXPAND><CODE>EXPAND</CODE></A>) at the coordinates read by the
+	commands <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A>.
+	The command <A HREF=#PCOLUMN><CODE>PCOLUMN</CODE></A> may be used to
+	specify a <A HREF=#SYMBOL><CODE>SYMBOL</CODE></A> corresponding to
+	each (x,y) point plotted.  The format of the data read by the
+	<A HREF=#PCOLUMN><CODE>PCOLUMN</CODE></A> command is the same as the
+	argument for the <A HREF=#SYMBOL><CODE>SYMBOL</CODE></A> command,
+	except that an optional fractional part may be added to each symbol.
+	If the entry has a fractional part, it is treated as an expansion
+	factor (fractional parts less than 0.01 gives the default expansion).
+	For example, an entry of 93.5 in a point column is the same as
+	<A HREF=#SYMBOL><CODE>symbol 93</CODE></A>,
+	<A HREF=#EXPAND><CODE>expand 0.5</CODE></A>.
+	If the optional argument <CODE>K</CODE> is present, the command
+	<A HREF=#ECOLUMN><CODE>ECOLUMN</CODE></A> may be used to specify a
+	color corresponding to each (x,y) point plotted.  Each item of
+	data read by <A HREF=#ECOLUMN><CODE>ECOLUMN</CODE></A> corresponds
+	to a color index.
+
+<HR><A NAME=POLY>
+<DT>
+POLY - draws a polygon.
+<DD>
+	<CODE>POLY</CODE> will draw a closed polygon based on the data
+	from the most recent call to the
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> commands.
+	<CODE>POLY</CODE> will draw the polygon according to the
+	graphical characteristics such as
+	<A HREF=#FILL><CODE>FILL</CODE></A> and
+	<A HREF=#COLOR><CODE>COLOR</CODE></A>.
+	Also see the command <A HREF=#RECT><CODE>RECT</CODE></A>.
+
+<HR><A NAME=PUTLABEL>
+<DT>
+PUTLABEL just str - writes justified text <CODE>STR</CODE> at the current location.
+<DD>
+	<CODE>PUTLABEL</CODE> writes a string at the current cursor
+	location with rotation and size specified by the
+	<A HREF=#ANGLE><CODE>ANGLE</CODE></A> and
+	<A HREF=#EXPAND><CODE>EXPAND</CODE></A> commands
+	(exactly like <A HREF=#LABEL><CODE>LABEL</CODE></A>).
+	The label is justified with respect to the current
+	location according to the argument <CODE>JUST</CODE>: 0 for left
+	justified; 0.5 for centered justified; and 1 for right justified.
+	If <CODE>JUST</CODE> is negative, the cursor is activated and the
+	position of the cursor when any key is struck is used as the
+	current location and the absolute value of <CODE>JUST</CODE> is
+	used to determine the string justification.
+	NOTE: Because -0 will be interpreted as +0 by the
+	string parser, use something like -0.001 for left justification
+	when using the cursor to locate the position.
+
+<HR><A NAME=QUARTER>
+<DT>
+QUARTER [N] - allows quick selection of a subsection of the current image.
+<DD>
+	<CODE>QUARTER</CODE> is a short cut to selecting a quadrant of
+	the current image.  Rather than determining pixel ranges and
+	then calling <A HREF=#SUBIMAGE><CODE>SUBIMAGE</CODE></A>,
+	<CODE>QUARTER</CODE> allows the user to quickly set the
+	corresponding pixel range.  If the optional parameter <CODE>N</CODE>
+	is present and set to 1, <CODE>QUARTER</CODE> selects the lower
+	left quadrant; set to 2, the lower right; 3, the upper left;
+	and 4, the upper right.  <CODE>QUARTER</CODE>, with any other
+	value for <CODE>N</CODE> or if no argument is present, selects
+	the inner quarter of the current image.
+
+<HR><A NAME=RANGE>
+<DT>
+RANGE [X1 X2 Y1 Y2] - limits the range over which to fit.
+<DD>
+	<CODE>RANGE</CODE> permits a way to limit the data used by the
+	<A HREF=#FIT><CODE>FIT</CODE></A> command.  By default, the
+	<CODE>FIT</CODE> command uses all the data read by the most
+	recent call to the <A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A>
+	and <A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> commands.
+	Specifying the limits in one direction restricts which data
+	will be used by the <A HREF=#FIT><CODE>FIT</CODE></A> command.
+	If the limits in either direction are equal, then the fit is
+	unbounded in that direction.
+
+<HR><A NAME=READ>
+<DT>
+READ fspec - reads plot commands from file "fspec".
+<DD>
+	<CODE>READ</CODE> reads plot commands from a file and places
+	them in the command buffer.  Commands are not executed and macros
+	are ignored.  To execute the commands, see the command
+	<A HREF=#XCOLUMN><CODE>PLAYBACK</CODE></A>; to define macros,
+	see the commands <A HREF=#DEFINE><CODE>DEFINE</CODE></A> and
+	<A HREF=#MACRO><CODE>MACRO</CODE></A>.
+
+<HR><A NAME=RECT>
+<DT>
+RECT xmin xmax ymin ymax - draw a rectangle, using fill-area attributes.
+<DD>
+	<CODE>RECT</CODE> is like the command
+	<A HREF=#POLY><CODE>POLY</CODE></A> but draws a
+	rectangle bordered by the World (user) coordinate vertices
+	<CODE>(XMIN, YMIN)</CODE> and <CODE>(XMAX, YMAX)</CODE>.
+	<CODE>RECT</CODE> uses the current
+	<A HREF=#FILL>fill</A>, <A HREF=#LSTYLE>line style</A>, and
+	<A HREF=#COLOR>line color</A> characteristics.
+
+<HR><A NAME=RESET>
+<DT>
+RESET - full reset of the graphics state of the current plotting device.
+<DD>
+	<CODE>RESET</CODE> executes a full reset of graphics state of the
+	current plotting device.  The coordinate transformation matrix is
+	reset to the default value (see the command
+	<A HREF=#TRANSFER><CODE>TRANSFER</CODE></A>); the current
+	angle is set to 0 (see the command
+	<A HREF=#ANGLE><CODE>ANGLE</CODE></A>); the
+	tick mark interval and the number of minor tick marks is reset to 0
+	(see the command <A HREF=#TICKSIZE><CODE>TICKSIZE</CODE></A>); the
+	image transfer function is reset to linear (see the command
+	<A HREF=#ITF><CODE>ITF</CODE></A>); the text background color index
+	is set to transparent (see the command
+	<A HREF=#BGCI><CODE>BGCI</CODE></A>); and the
+	color, expand, fill, font, line style, and line width are all set
+	to 1 (see the commands <A HREF=#COLOR><CODE>COLOR</CODE></A>,
+	<A HREF=#EXPAND><CODE>EXPAND</CODE></A>,
+	<A HREF=#FILL><CODE>FILL</CODE></A>,
+	<A HREF=#FONT><CODE>FONT</CODE></A>,
+	<A HREF=#LSTYLE><CODE>LSTYLE</CODE></A>, and
+	<A HREF=#LWIDTH><CODE>LWIDTH</CODE></A>).  Finally, the Palette
+	(see the command <A HREF=#PALETTE><CODE>PALETTE</CODE></A>) is
+	reset to the default palette and the number of halftone levels is
+	reset to the maximum range possible for the current device.
+
+<HR><A NAME=RGB>
+<DT>
+RGB K red [green blue] - sets the color representation using the RGB system.
+<DD>
+	<CODE>RGB</CODE> sets the color representation of color index
+	<CODE>K</CODE> to the Red-Green-Blue values.  The range of values
+	for the color value inputs are [0 - 1], inclusive.  If only the
+	first two arguments are present, the <CODE>RED</CODE> value is
+	also used to set the <CODE>GREEN</CODE> and <CODE>BLUE</CODE> values
+	(useful when creating just a gray scale).
+	If <CODE>K</CODE> is larger than the maximum color index of the
+	device (use the command '<A HREF=#ECHO><CODE>echo cmin cmax</CODE></A>'
+	to display the color index range), then this call is ignored.
+
+<HR><A NAME=SCALE>
+<DT>
+SCALE X [Y [K]] - sets the viewport size scale.
+<DD>
+	<CODE>SCALE</CODE> allows the viewport (device) size scale to be
+	set based on the range of the World (user) coordinate range.  The
+	viewport is changed to the World range divided by the input scale
+	factor (i.e. <CODE>X</CODE> and <CODE>Y</CODE> are in World units h
+	per desired unit).  The optional parameter <CODE>K</CODE> specifies
+	the desired conversion the two scale parameters will be performing
+	and scales as shown below:
+	<PRE>
+    K   X and Y are dimensioned as...
+---------------------------------------------------------------
+    0 : World (user) units per normalized device coordinate.
+    1 : World units per inch.
+    2 : World units per mm.
+    3 : World units per pixel.
+	</PRE>
+	If <CODE>K</CODE> is not present on the command line, then it is
+	set to 2.  The value of <CODE>Y</CODE> may be omitted, in which
+	case it is set to the same value as <CODE>X</CODE>.  However,
+	if a value other than <CODE>K = 2</CODE> is desired, both
+	<CODE>X</CODE> and <CODE>Y</CODE> MUST be present.  If <CODE>K</CODE>
+	is not one of the above accepted values, no conversion is performed.
+	Also, if either <CODE>X</CODE> or <CODE>Y</CODE> are less than
+	or equal to 0, no conversion is performed.  As an example,
+	if the limits of the current plot are 0 - 10 in the x-direction and
+	0 - 12 in the y-direction, <CODE>scale 2 3 1</CODE> will produce
+	a viewport region 5x4 inches in size.  Hence, it is possible to
+	produce a viewport larger than the view size.
+
+<HR><A NAME=SET>
+<DT>
+SET V EXPRESSION - sets the user variable <CODE>V</CODE> to result of <CODE>EXPRESSION</CODE>.
+<DD>
+	<CODE>SET</CODE> sets the symbolic variable <CODE>V</CODE> to the
+	result from evaluating the statement <CODE>EXPRESSION</CODE>.
+	<CODE>V</CODE> is a string variable if it is enclosed in
+	double quotes.  If <CODE>V</CODE> is a string variable, then
+	<CODE>EXPRESSION</CODE> represents the value to assign to the
+	variable (Example: '<CODE>set "print" lpr -Pps</CODE>').  For
+	user and vector variables, <CODE>EXPRESSION</CODE> may be a
+	simple syntax statement that will be evaluated.  Precedence in
+	the expression is ALWAYS left to right with the inner most set
+	of parenthesis evaluated first.  Hence
+	<CODE>(5 * 3 + 2) != (2 + 3 * 5)</CODE> but <CODE>((5 * 3) + 2)</CODE>
+	does equal <CODE>(2 + (3 * 5))</CODE>.  Currently, a maximum of
+	20 nested levels of parenthesis is permitted.  Also note that a
+	set of parenthesis is understood to mean "()", "[]", or "{}".
+	At the most basic level, <CODE>EXPRESSION</CODE> may just be an
+	item that is either a number, a pre-defined user variable, or a
+	vector element.  More complex <CODE>EXPRESSION</CODE>'s may be
+	generated using the operators and functions listed below.  If
+	an item begins with '-', it is treated as a unary minus sign.
+	The current defined operations that act on two variables are:
+	<PRE>
+   +          add |  /         divide | max               maximum
+   -     subtract |  %  modulo divide | min               minimum
+   *     multiply |  \ integer divide |  **        exponentiation
+  ==     equal to |  >   greater than |  >= greater than or equal
+  != not equal to |  <      less than |  <=    less than or equal
+  ||   logical OR | &&    logical AND |   ^           logical XOR
+	</PRE>
+	Note that <CODE>min</CODE> and <CODE>max</CODE> are used as
+	<CODE>(a min b)</CODE> and <CODE>(a max b)</CODE>.  Also, note
+	that logical operations return 1 if true; 0 if false.
+	Current pre-defined functions (i.e. f(x)) are:
+	<PRE>
+  sqrt(x)          square root |    abs(x)        absolute value
+   int(x)   integer truncation |   nint(x)           nearest int
+    ln(x)    natural logarithm |    log(x)     base-10 logarithm
+   exp(x) base-e antilogarithm |  log10(x)     base-10 logarithm
+   sin(x)      sine in radians |   sind(x)       sine in degrees
+  asin(x)   arcsine in radians |  asind(x)    arcsine in degrees
+	</PRE>
+        The four types of sin functions apply just as well for the
+	four functions of cos and tan.
+	Note that either <CODE>log(x)</CODE> or <CODE>log10(x)</CODE>
+	may be used for the log base 10.  Many of the symbolic and user
+	variables are displayed using the <A HREF=#SHOW><CODE>SHOW</CODE></A>
+	command, where symbolic names are displayed in CAPS.  All other
+	variables can be displayed using the
+	<A HREF=#ECHO><CODE>ECHO</CODE></A> command.  All of the user
+	variable and vectors can then be used as arguments to any other
+	command.
+	NOTE: The macro arguments ($1, $2, ...) may be redefined using
+	this command but only if the macro argument is a numeric user variable.
+
+<HR><A NAME=SHOW>
+<DT>
+SHOW [what] - shows current limits and attributes.
+<DD>
+	<CODE>SHOW</CODE> lists the values of some the symbolic and user
+	variables, including the current location and plot region limits
+	in World (user) and Viewport (device) coordinates, the value of
+	the expansion and angle variables, the line style and width, etc.
+	If no arguments are present, then everything below is displayed.
+	If the optional argument is present, then it represents a string
+	used to define what will be shown.  The options that are currently
+	available are:
+	<PRE>
+    B : Box attributes.
+    C : Coordinate system information.
+    D : Device, Printer, and Data file information.
+    G : Graphical attributes.
+    I : Image characteristics.
+    R : Register variables (\0 - \20).
+	</PRE>
+	More than one option may be selected (e.g. '<CODE>show bci</CODE>')
+	and unknown options are ignored.  The command
+	<A HREF=#ECHO><CODE>ECHO</CODE></A> may also be used to display
+	user variable values.
+
+<HR><A NAME=SLEVEL>
+<DT>
+SLEVEL type [value] - sets the type and value used to scale contour levels.
+<DD>
+	<CODE>SLEVEL</CODE> is used to change the <CODE>TYPE</CODE> and
+	<CODE>VALUE</CODE> used to scale the contour level array.
+	Initially, <CODE>TYPE</CODE> (the user string variable "LEVTYPE")
+	is set to <CODE>A</CODE> and <CODE>VALUE</CODE> (the user variable
+	SLEVEL) is set to 1.0 so that no scaling is performed.
+	<CODE>TYPE</CODE> may only be either <CODE>A</CODE> or <CODE>P</CODE>
+	(all other values are treated as <CODE>A</CODE>) and defines the
+	type of contour scale factor.  If <CODE>TYPE</CODE> is <CODE>P</CODE>,
+	then scaling is done by percentage; <CODE>A</CODE> for absolute
+	scaling.  <CODE>VALUE</CODE> represents how much the array will
+	be scaled.  For example, <CODE>slevel P 1</CODE> will multiply
+	each contour level by 1% of the image peak value.  Likewise,
+	<CODE>slevel A 1E-4</CODE> would multiply each contour level
+	by 0.0001.  If the parameter <CODE>VALUE</CODE> is not given,
+	<CODE>SLEVEL</CODE> will not change.  The contour level array
+	affected is defined with the commands
+	<A HREF=#LEVELS><CODE>LEVELS</CODE></A> or
+	<A HREF=#AUTOLEVS><CODE>AUTOLEVS</CODE></A>
+	and is altered internally every time the command
+	<A HREF=#CONTOUR><CODE>CONTOUR</CODE></A> is called.
+
+<HR><A NAME=STRING>
+<DT>
+STRING name [W1 [W2]] - sets a string variable "name" from a file.
+<DD>
+	<CODE>STRING</CODE> allows certain string variables to be
+	redefined using data in an external file.  <CODE>STRING</CODE>
+	reads one line (see the commands <A HREF=#DATA><CODE>DATA</CODE></A>
+	and <A HREF=#LINES><CODE>LINES</CODE></A>) and assigns the string
+	starting with word <CODE>W1</CODE> and ending with <CODE>W2</CODE>
+	to the string variable <CODE>NAME</CODE>.  If <CODE>W1</CODE> is
+	omitted or set to 0, the entire line is assigned.  If <CODE>W1</CODE>
+	is greater than 0, it represents the starting word of the
+	assignment.  If <CODE>W2</CODE> is not present, it is set to the
+	value of <CODE>W1</CODE>.  If <CODE>W2</CODE> is set to 0, it
+	corresponds to the end of the line; if it less than zero, the
+	absolute value represents the number of words to read; if it
+	is greater than zero, it specifies the last word to read.
+	<P>
+	Currently, the pre-defined string variables are: XBOX and YBOX
+	(which are the default X and Y arguments for a call to the
+	command <A HREF=#BOX><CODE>BOX</CODE></A> and are initially
+	set to "BCNST" and "BCNSTV", respectively); PRINT (which is
+	the default print command to spool a plot when the command
+	<A HREF=#HARDCOPY><CODE>HARDCOPY</CODE></A> or
+	<A HREF=#PHARD><CODE>PHARD</CODE></A> is used); and
+	HELPFILE (which is the full name of the help file).  Other
+	pre-defined string names include XHEADER and YHEADER (see
+	the command <A HREF=#HEADER><CODE>HEADER</CODE></A>) and LEVTYPE
+	(see the command <A HREF=#SLEVEL><CODE>SLEVEL</CODE></A>).  New
+	string variables may be defined using the
+	<A HREF=#NEW><CODE>NEW</CODE></A> command, released with the
+	command <A HREF=#FREE><CODE>FREE</CODE></A>, and may also be
+	assigned to using the <A HREF=#SET><CODE>SET</CODE></A> command.
+
+<HR><A NAME=SUBIMAGE>
+<DT>
+SUBIMAGE xmin xmax ymin ymax - sets the index range of a subimage.
+<DD>
+	<CODE>SUBIMAGE</CODE> allows the user to specify the indices
+	of a subimage read by the <A HREF=#IMAGE><CODE>IMAGE</CODE></A>
+	command.  When <A HREF=#IMAGE><CODE>IMAGE</CODE></A> reads in
+	a new image, the minimum values are set to 1 and the maximum
+	values are set to the number of pixels in the X and Y directions
+	(user variables NX and NY).  Use this command to select a subportion
+	of the image by entering the starting and ending pixels of
+	interest.  Using the command <A HREF=#HEADER><CODE>HEADER</CODE></A>
+	after the command <A HREF=#SUBIMAGE><CODE>SUBIMAGE</CODE></A> will
+	reset the limits of the plot region (World coordinates) to the
+	entire subimage region selected.
+
+<HR><A NAME=SUBIMAGE>
+<DT>
+SUBMARGIN xmarg [ymarg] - sets the gap between individual panels.
+<DD>
+	<CODE>SUBMARGIN</CODE> may be used to fix the gap size between
+	individual frames when using the command
+	<A HREF=#PANEL><CODE>PANEL</CODE></A>.  The gap between
+	individual panels is controlled by the user variables
+	XSUBMAR and YSUBMAR (which are initially set to 2 in character
+	height units).  This command is a convenience function to
+	facilitate setting these variables.  The arguments <CODE>XMARG</CODE>
+	and <CODE>YMARG</CODE> are used to set each of the two user variables.
+	If this command is called with only one argument, it is used to
+	set both XSUBMAR and YSUBMAR.
+
+<HR><A NAME=SYMBOL>
+<DT>
+SYMBOL N - sets the current point symbol to <CODE>N</CODE>.
+<DD>
+	<CODE>SYMBOL</CODE> causes points to be drawn as the symbol
+	<CODE>N</CODE>, where <CODE>N</CODE> refers to the graph marker
+	or a Hershey symbol number.  The symbol number corresponds to
+	the type of symbol drawn.  If the symbol number is -1, it
+	draws a dot of the smallest possible size.  If the symbol number
+	is between 0 and 31, it corresponds to a set of pre-defined symbols;
+	between 33 and 127, it corresponds to the ASCII character in the
+	currently selected font; and larger than 127, corresponds to the
+	Hershey symbol of the same number.
+
+<HR><A NAME=TICKSIZE>
+<DT>
+TICKSIZE XTICK NXSUB YTICK NYSUB - sets tick intervals for the <CODE>BOX</CODE> command.
+<DD>
+	<CODE>TICKSIZE</CODE> determines tick intervals for the command
+	<A HREF=#BOX><CODE>BOX</CODE></A>.  The argument <CODE>NXSUB</CODE>
+	refers to the number of intervals between major tick marks on
+	the X-axis and <CODE>XTICK</CODE> refers to the interval between
+	large ticks in World (user) coordinates.  If <CODE>XTICK</CODE>
+	or <CODE>NXSUB</CODE> are 0, the box routine will supply it's
+	own intervals according to the World coordinate limits (at
+	least 3 major tick marks).  Likewise for <CODE>NYSUB</CODE> and
+	<CODE>YTICK</CODE>, except for the Y-axis.  Setting
+	<CODE>NXSUB</CODE> or <CODE>NYSUB</CODE> to 1 will inhibit any
+	minor tick marks regardless of the arguments to the
+	<A HREF=#BOX><CODE>BOX</CODE></A> command.
+
+<HR><A NAME=TRANSFER>
+<DT>
+TRANSFER T1 T2 T3 T4 T5 T6 - specifies the image coordinate transformation.
+<DD>
+	<CODE>TRANSFER</CODE> specifies the coordinate transformation
+	between indices I and J of the image array and World (user)
+	coordinates.  All two dimensional plot commands (for example,
+	<A HREF=#CONTOUR><CODE>CONTOUR</CODE></A> or
+	<A HREF=#HALFTONE><CODE>HALFTONE</CODE></A>) require a
+	coordinate transformation function to place the image on the
+	plot surface.  The World coordinates (X, Y) of the array point
+	(I, J) are related by:
+	<PRE>
+    X = T1 + (T2 * I) + (T3 * J)
+    Y = T4 + (T5 * I) + (T6 * J)
+	</PRE>
+	Usually <CODE>T3</CODE> and <CODE>T5</CODE> are zero unless
+	the coordinate transformation involves a rotation or sheer.
+	The default transformation is (0, 1, 0, 0, 0, 1).  Calling
+	<CODE>TRANSFER</CODE> with no arguments resets the array to
+	these default values.  Usually, the command
+	<A HREF=#HEADER><CODE>HEADER</CODE></A> is used to set the
+	transformation matrix.
+
+<HR><A NAME=VECTOR>
+<DT>
+VECTOR [ANGLE [VENT]] - Draws a vector field as a sequence of arrows.
+<DD>
+	<CODE>VECTOR</CODE> draws a vector field as a number of arrows.
+	The tails of the arrows lie at points (x,y) read by
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A>, the lengths of the
+	arrows "r" are read by <A HREF=#PCOLUMN><CODE>PCOLUMN</CODE></A>
+	and the direction of the arrow (counter-clockwise from +X in
+	degrees) is read with <A HREF=#ECOLUMN><CODE>ECOLUMN</CODE></A>.
+	See the command <A HREF=#ARROW><CODE>ARROW</CODE></A> for a
+	description of the optional parameters <CODE>ANGLE</CODE> and
+	<CODE>VENT</CODE>.
+	NOTE: The use of <A HREF=#PCOLUMN><CODE>PCOLUMN</CODE></A>
+	in this context requires <A HREF=#SYMBOL><CODE>SYMBOL</CODE></A>
+	to be re-executed before plotting points.
+
+<HR><A NAME=VIEWPORT>
+<DT>
+VIEWPORT VX1 VX2 VY1 VY2 - sets the physical location of the plot.
+<DD>
+	The plot region is a rectangle within the coordinates allowed
+	by the plotting device (for example, the Viewport is the region
+	where the command <A HREF=#BOX><CODE>BOX</CODE></A> will draw its grid).
+	Vectors and points are truncated at the edge of this plot region.
+	<CODE>VIEWPORT</CODE> specifies (in normalized device coordinates)
+	where the plot region is located.  Viewport arguments for this
+	command range from 0 to 1, inclusive, in each direction for all
+	devices.  Note that the command <A HREF=#VSTAND><CODE>VSTAND</CODE></A>
+	is called to reset the Viewport coordinates every time a new
+	device is opened.
+
+<HR><A NAME=VSIZE>
+<DT>
+VSIZE VX1 VX2 VY1 VY2 - sets the physical location of the plot in inches.
+<DD>
+	<CODE>VSIZE</CODE> specifies (in inches) where the plot region
+	is located.
+	See also the <A HREF=#VIEWPORT><CODE>VIEWPORT</CODE></A> command.
+
+<HR><A NAME=VSTAND>
+<DT>
+VSTAND - sets the standard (default) viewport.
+<DD>
+	<CODE>VSTAND</CODE> defines the standard viewport scale.
+	Currently, this is a box with margins on each side of about
+	4 character heights.  This command is executed every time a
+	new device is chosen.
+	See also the <A HREF=#VIEWPORT><CODE>VIEWPORT</CODE></A> and
+	<A HREF=#VSIZE><CODE>VSIZE</CODE></A> commands.
+
+<HR><A NAME=WEDGE>
+<DT>
+WEDGE SIDE DISP THICK [MIN MAX BOXARG] - draws a halftone wedge.
+<DD>
+	<CODE>WEDGE</CODE> illustrates the range of values drawn by
+	the halftone command.  The <CODE>SIDE</CODE> argument is
+	used to specify the size and orientation of the wedge.
+	The parameter <CODE>SIDE</CODE> must be either
+	`B', `L', `T', or `R' to specify the Bottom, Left, Top, or Right
+	side of the viewport.  The <CODE>DISP</CODE> argument specifies
+	the displacement from the frame edge (in character height
+	units).  If <CODE>DISP</CODE> is negative, then the wedge is
+	drawn inside the viewport.  The parameter <CODE>THICK</CODE>
+	is the thickness of the wedge (in character height units).
+	The optional arguments <CODE>MIN</CODE> and <CODE>MAX</CODE>
+	allow the user to specify the intensity range of the wedge.
+	By default, <CODE>MIN</CODE> and <CODE>MAX</CODE> are the
+	values used by the most recent call to the
+	<A HREF=#HALFTONE><CODE>HALFTONE</CODE></A> command.
+	Providing the values of <CODE>MIN</CODE> and <CODE>MAX</CODE>
+	will cause <CODE>WEDGE</CODE> to display a different range
+	of intensities when labeling the wedge box.  The optional
+	argument <CODE>BOXARG</CODE> permits the user to control how
+	the box around the wedge is drawn (or omit it altogether).
+	By default, a simple box is drawn setting <CODE>BOXARG</CODE>
+	to BCSTN/M (depending on the orientation); to eliminate the box,
+	set <CODE>BOXARG</CODE> to 0 (for more information on permitted
+	box arguments, see the <A HREF=#BOX><CODE>BOX</CODE></A> command).
+	The arguments from the most recent call to the
+	<A HREF=#TICKSIZE><CODE>TICKSIZE</CODE></A> command are used
+	to draw a box around the wedge and numerically label it.
+	To use the optional <CODE>BOXARG</CODE> argument, the
+	<CODE>MIN</CODE> and <CODE>MAX</CODE> arguments must be provided.
+
+<HR><A NAME=WINADJ>
+<DT>
+WINADJ [xmin xmax ymin ymax] - sets limits and viewport to same aspect ratio.
+<DD>
+	<CODE>WINADJ</CODE> changes the World (user) limits and
+	adjusts the viewport so that the World coordinate scales are
+	equal in x and y.  If the four optional parameters are present,
+	they are used as the new World coordinate values; otherwise,
+	the minimum and maximum values of the
+	<A HREF=#XCOLUMN><CODE>XCOLUMN</CODE></A> and
+	<A HREF=#YCOLUMN><CODE>YCOLUMN</CODE></A> arrays are used.
+	Typical usage is (after an image is loaded) to rescale the
+	viewport so that the image has the proper aspect ratio.
+	For example, using the command '<CODE>winadj 0 nx 0 ny</CODE>'
+	after the <A HREF=#IMAGE><CODE>IMAGE</CODE></A> command BUT
+	before the <A HREF=#HEADER><CODE>HEADER</CODE></A> command
+	will produce square pixels.
+
+<HR><A NAME=WRITE>
+<DT>
+WRITE fspec xxx - writes macro <CODE>xxx</CODE> to file "fspec".
+<DD>
+	<CODE>WRITE</CODE> the commands making up a macro to a file.
+	If the macro name <CODE>XXX</CODE> given is <CODE>all</CODE>,
+	all macros currently defined and the entire command buffer
+	(<A HREF=#BUFFER><CODE>BUFFER</CODE></A>) are written to the
+	file.  If the macro name <CODE>XXX</CODE> is <CODE>macros</CODE>,
+	then only the currently defined macros are written to the file
+	(i.e. the command buffer <A HREF=#BUFFER><CODE>BUFFER</CODE></A>
+	is not written).  Otherwise, <CODE>XXX</CODE> represents a list
+	of macro names to be written in the output file.
+	NOTE: This command will OVERWRITE any currently existing file.
+
+<HR><A NAME=XCOLUMN>
+<DT>
+XCOLUMN N - reads X data from column <CODE>N</CODE> of the current file.
+<DD>
+	<CODE>XCOLUMN</CODE> reads column <CODE>N</CODE> from the
+	data file as the values of the X coordinates of the data points.
+
+<HR><A NAME=XLABEL>
+<DT>
+XLABEL str - writes the label <CODE>STR</CODE> centered under the X axis.
+<DD>
+	<CODE>XLABEL</CODE> writes a string centered under the
+	X axis drawn by the command <A HREF=#BOX><CODE>BOX</CODE></A>.
+	Also see the command <A HREF=#MTEXT><CODE>MTEXT</CODE></A>.
+
+<HR><A NAME=YCOLUMN>
+<DT>
+YCOLUMN N - reads Y data from column <CODE>N</CODE> of the current file.
+<DD>
+	<CODE>YCOLUMN</CODE> reads column <CODE>N</CODE> from the
+	data file as the values of the Y coordinates of the data points.
+
+<HR><A NAME=YLABEL>
+<DT>
+YLABEL str - writes the label <CODE>STR</CODE> centered left of the Y axis.
+<DD>
+	<CODE>YLABEL</CODE> writes a string centered left of the Y axis
+	drawn by the command <A HREF=#BOX><CODE>BOX</CODE></A>.  Also
+	see the command <A HREF=#MTEXT><CODE>MTEXT</CODE></A>;
+	especially if the displacement of the text is insufficient to
+	avoid the axis numbers.
+</DL>
+</BODY>
+</HTML>
