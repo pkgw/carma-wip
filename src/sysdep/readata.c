@@ -22,6 +22,7 @@
 		    modified wipopenfile() to drop maxsize requirement.
 	18nov97 jm  Modified wipreadcol() to warn user when number of
 	            points is larger than (and truncated to) maxsize.
+	16nov04 pjt add suggestion that's an FAQ
 
 Routines:
 void wiplines ARGS(( int first, int last ));
@@ -171,6 +172,8 @@ float array[];
           i, maxsize);
         wipoutput(stderr,
           "\tinternal storage.  Setting number of points to maximum.\n");
+        wipoutput(stderr,"Or try setting:    set maxarray %d\n",i);
+        wipoutput(stderr,"in your ~/.wipinit file\n");
         i = maxsize;
       }
       while (j < i) array[nxy++] = j++;
