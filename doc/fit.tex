@@ -1,0 +1,188 @@
+%% This file is to be included by latex in wip.tex
+%
+% Chapter:  Data Fitting
+%
+\mylabel{c:fit}
+\myfile{fit.tex}
+
+This chapter describes methods of how to fit data.
+There are currently five different ways to fit data loaded in
+the {\bf X} and {\bf Y} arrays.
+Two of these methods fit linear data, one fits gaussians, and two
+fit polynomials.
+In addition, only a subset of the data need be fit.
+Once a fit has been found, the fit may also be plotted.
+The commands that perform these tasks are described below
+(and also illustrated in Figure~\ref{p:fit}).
+
+\section{Fitting}
+\mylabel{s:fit}
+
+The {\tt fit}\index{Commands!{\tt fit}}\index{Fitting!commands!{\tt fit}}
+command is what is used to do all the fitting of data.
+The first argument to {\tt fit} is required and is the type of fit to perform.
+The first argument must be one of the following values:
+\begin{itemize}
+  \item lsqfit
+  \item medfit
+  \item polynomial
+  \item legendre
+  \item gaussian
+\end{itemize}
+Minimum match is in effect when identifying the fit type.
+
+There are two different ways to fit linear data:
+the Least Squares Method and the Method of Least Absolute Deviations.
+Data that is exponential in form can also be fit with either of these
+linear methods by first taking the logarithm of the data.
+There are also two different ways to fit polynomial data.
+One is a simple polynomial and the other is a fit of Legendre polynomials.
+In addition to fitting linear and polynomial data, one can also fit gaussians.
+More than one gaussian curve can be fit simultaneously.
+Information particular to each type of fitting are discussed below.
+
+In each method, the data from
+the {\bf X} and {\bf Y} arrays will be fit.
+And, except for the ``medfit'' method, a measure of the
+error in the Y-direction will be taken from the data in
+the {\bf ERR} array.
+If no data has been previously loaded in the {\bf ERR} array,
+then values of unity will be used.
+
+Additionally, each time a fit is performed,
+information about the fit will be displayed on the command line.
+The information will contain the fit parameters as well as a measure
+of the goodness of the fit.
+Additional (optional) parameters provided to the {\tt fit} command permit
+the user to assign these fit terms and their errors to
+user variables\index{User Variables}.
+
+\subsection*{Least Squares Method}
+\mylabel{ss:lsqfit}
+\index{Fitting!commands!{\tt fit}}
+\index{Fitting!Methods!Least Squares}
+
+The method of Least Squares trys to fit the input data
+to a straight line model of the form $y(x) = a + bx$.
+This is done by minimizing the chi-squared function:
+\[ \chi^2(a,b) = \sum_{i=1}^{N}\left(\frac{y_i - a - bx_i}{\sigma_i}\right)^2 \]
+where $\sigma_i$ is the error estimate for each data point (the {\bf ERR} data).
+
+When a fit is found, this method returns the parameters $a$ and $b$,
+the chi-squared value for the fit, and the probable uncertainties in the
+estimates of $a$ and $b$.
+If the data in the {\bf ERR} array was used to specify the errors on
+the observation points ({\bf Y} array), a ``goodness of fit'' is also returned.
+If, however, no errors are specified (there are no points in the {\bf ERR}
+array), then the correlation coefficient ($r$) is returned
+in place of the ``goodness of fit''.
+If the ``goodness of fit'' term (represented by the letter `q') is
+larger than about 0.1, then the fit is probably reasonable.
+Values for the correlation coefficient ($r$) near $\pm 1$ are considered good.
+
+\subsection*{Method of Least Absolute Deviations}
+\mylabel{ss:medfit}
+\index{Fitting!commands!{\tt fit}}
+\index{Fitting!Methods!Least Absolute Deviations}
+
+This is similar to the Least Squares Method described above except that
+the uncertainties in the data (the {\bf ERR} array data) are ignored and,
+instead of minimizing the chi-squared function, the merit function to
+minimize is
+\[ \sum_{i=1}^{N} \left|y_i - a - bx_i\right| \]
+The use of the median in this type of fitting provides a more robust method
+of fitting than the Least Squares method and is especially
+useful when the data contains outlying points.
+
+When a fit is found, this method returns the parameters $a$ and $b$ and
+a measure of the mean absolute deviation (in y) of the data points
+from the fitted line.
+
+\subsection*{Simple Polynomial Fitting}
+\mylabel{ss:polynomial}
+\index{Fitting!commands!{\tt fit}}
+\index{Fitting!Methods!Simple Polynomials}
+
+A simple polynomial has the form:
+\[ y(x) = \sum_{i=0}^{N-1} \left(a_{i} x^{i}\right) \]
+where $a_{j}$ is the $j$th coefficient of a polynomial of degree $N$.
+The method used to find a fit is just a generalization of the Least
+Squares method extended to include more than two coefficients.
+
+When a fit is found, this method returns the $N$ coefficients and then
+the $N$ probable uncertainties in the estimates of the coefficients.
+Finally, the chi-squared value of the fit is returned.
+
+\subsection*{Legendre Polynomial Fitting}
+\mylabel{ss:legendre}
+\index{Fitting!commands!{\tt fit}}
+\index{Fitting!Methods!Legendre Polynomials}
+
+The method is identical to the Simple Polynomial Fit except that it uses
+Legendre Polynomials.
+Legendre Polynomials have the following recurrence relation:
+\[ (n + 1)P_{n + 1}(x) = (2n + 1)xP_n(x) - nP_{n - 1}(x) \]
+where $P_0(x) = 1$ and $P_1(x) - x$.
+
+When a fit is found, this method returns the $N$ Legendre coefficients
+and then the $N$ probable uncertainties in the estimates of the coefficients.
+Finally, the chi-squared value of the fit is returned.
+
+\subsection*{Gaussian Fitting}
+\mylabel{ss:gaussfit}
+\index{Fitting!commands!{\tt fit}}
+\index{Fitting!Methods!Multiple Gaussians}
+
+This method tries to fit one or more Gaussians to the data.
+In addition to the style (which must be ``{\tt gaussian}''),
+the {\em number} of Gaussians to fit must be supplied.
+Additional parameters may also be supplied to help the fitting routine.
+For each Gaussian fit, there are three parameters used to describe it:
+the amplitude, the X-peak position, and the full width at half the peak
+amplitude (FWHM).
+Or as an equation:
+\[ G_{i}(x)=A_i\times\exp\left(\frac{\left(x-B_{i}\right)^2}{C_{i}^2}\right) \]
+where $A_i$ is the amplitude of the $i$th Gaussian;
+$B_i$, the peak position;
+and $C_i$, the FWHM.
+The resulting curve will be the sum of the $N$ Gaussians:
+\[ y(x) = \sum_{i=1}^{N} G_{i}(x) \]
+Note that if any of the supplied Gaussian terms are negative,
+they will be held fixed during the fitting.
+
+When a fit is found, this method returns three coefficients for each
+Gaussian fit and the chi-square value of the fit.
+
+\section{Limiting and Displaying Fits}
+\subsection*{Limiting A Fit}
+\mylabel{ss:fitrange}
+\index{Fitting!commands!{\tt range}}
+\index{Fitting!Limiting A Fit}
+
+There will be some data sets that should only have a subset fit.
+This could be done by limiting the amount of data loaded into \wip.
+But that is cumbersome at the least and error prone.
+The {\tt range}\index{Commands!{\tt range}} command
+allows a portion of the data to be selected and subsequent fitting
+will only pertain to this subset.
+The range command can limit data in the X-axis direction only
+or both the X and Y-axis directions.
+If the range arguments in either direction are equal, then the range is
+set as unlimited.
+Examples of how to use this command are shown in Figure~\ref{p:fit}.
+
+\subsection*{Displaying A Fit}
+\mylabel{ss:plotfit}
+\index{Fitting!commands!{\tt plotfit}}
+\index{Fitting!Plotting A Fit}
+
+The {\tt plotfit}\index{Commands!{\tt plotfit}} command
+provides an easy way to display the results of a fit.
+With no arguments, the fit is displayed over the entire X-axis range.
+The first two optional arguments provide a way to limit the X-axis
+extent of the displayed fit.
+The third argument is an optional step size.
+This permits a way to display the fit with finer or coarser resolution.
+By default, the command will use the data in the X array
+to guess a reasonable step size.
+Figure~\ref{p:fit} provides an example of how this command is used.
