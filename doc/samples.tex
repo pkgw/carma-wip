@@ -1,0 +1,144 @@
+%% This file is to be included by latex in wip.tex
+%
+% Sample Plots.
+%
+\mylabel{a:samples}
+\myfile{samples.tex}
+
+This appendix contains several examples of plot files generated using
+many of the \wip\ commands described in this manual.
+Because of the obvious limitations of print, commands like {\tt color} are
+omitted from this appendix.
+Wherever possible, each command is followed by a comment statement.
+While these comments, marked by the comment
+character\index{Comments} (\#),\index{Comments!comment character(\#)}
+are not required, they do provide information as to why certain commands
+are included or are necessary to generate a certain aspect of a plot.
+The user is strongly encouraged to include comments whenever possible;
+especially in macro definitions.
+All plots in this appendix may be reproduced by typing the commands
+listed in the accompanying plot files.
+
+\begin{description}
+  \item[Figure~\ref{p:basic}] is a very basic plot demonstrating many of the
+    commands that control the simple graphical attributes described
+    in Chapter~\ref{c:concepts}.
+
+  \item[Figure~\ref{p:simple}] demonstrates how to read data in from
+    an external file.
+
+  \item[Figure~\ref{p:text}] shows several examples of how to annotate a plot
+    with text and also illustrates the various fonts available in \wip.
+
+  \item[Figure~\ref{p:greek}] displays the lower and upper case Greek letters
+    and the Roman characters needed to generate them.
+
+  \item[Figure~\ref{p:panel}] presents a simple example of how to partition
+    a single plot surface into sub-regions or panels;
+    illustrates the various ways that the
+    {\tt box}\index{Commands!{\tt box}}\index{Boxes!commands!{\tt box}}
+    command may be called;
+    and demonstrates how to define and pass arguments to a macro\index{Macros}.
+
+  \item[Figure~\ref{p:cos}] presents a more complicated example of how to use
+    macros and how to generate array entries.
+    This example also illustrates the use of the {\tt set} and {\tt loop}
+    commands.
+
+  \item[Figure~\ref{p:symbol}]\index{Symbols!markers} plots the
+    standard graph markers used by the
+    {\tt symbol}\index{Commands!{\tt symbol}}\index{Symbols} command.
+
+  \item[Figure~\ref{p:hershey}]\index{Symbols!Hershey symbols} continues
+    the previous example by illustrating how to display the Hershey
+    symbols used by \wip.  The macro, as listed, will display all
+    currently available Hershey symbols, but only the first page is shown
+    in this example.
+    This example also makes use of macros\index{Macros},
+    panels\index{Commands!{\tt panel}}, and the
+    {\tt loop}\index{Commands!{\tt loop}} command.
+
+  \item[Figure~\ref{p:fit}] is an example of how to generate a fit
+    and display it.  The different methods of fits are illustrated.
+
+  \item[Figure~\ref{p:image}] is a simple example of how to generate an
+    image halftone and wedge and also lists a typical header for a
+    FITS\index{FITS}\index{Images!image formats!FITS} image file.
+
+  \item[Figure~\ref{p:image2}] expands on the previous example by
+    demonstrating how to extract a subimage and display it in a
+    different region on the view screen.  In addition, it illustrates
+    the power of user variables\index{User Variables} and macros in
+    moving to various regions of the display.
+
+  \item[Figure~\ref{p:overlay}] expands on the previous two image examples by
+    showing how to overlay two images that have different resolutions.
+
+\begin{htmlonly}
+  \item[Figure~\ref{p:cimage}] is the same as Figure~\ref{p:image}
+    except that it is done in color.
+
+  \item[Figure~\ref{p:palettes}] displays a collection of color palettes.
+    This example makes use of the {\tt loop} and {\tt wedge} commands.
+\end{htmlonly}
+
+\end{description}
+
+\clearevenpage
+\insertplot{Basic graphics commands}{basic}{A simple plot.}{}{}
+
+\clearpage
+\insertplot{Reading data from an external file}{simple}%
+{A plot using an external data file.}%
+{Contents of the external file {\tt data.dat}}{Examples/data.dat}
+
+\clearpage
+\insertplot{Fonts and different ways to present text}{text}%
+{A plot demonstrating various text capabilities.}{}{}
+
+\clearpage
+\insertplot{Roman to Greek character mapping}{greek}%
+{A plot demonstrating how to generate Greek characters.}{}{}
+
+\clearpage
+\insertplot{Macros and subdivision of a view surface}{panel}%
+{A plot demonstrating different panels.}{}{}
+
+\clearpage
+\insertplot{Generating data internally with macros}{cos}%
+{A plot with data generated internally.}{}{}
+
+\clearpage
+\insertplot{Symbols used to plot points}{symbol}%
+{A plot of the standard symbol markers.\index{Symbols}}{}{}
+
+\clearpage
+\insertplot{Hershey Symbols}{hershey}%
+{A plot of a few Hershey symbols.\index{Symbols!Hershey symbols}}{}{}
+
+\clearpage
+\insertplot{Fitting}{fit}%
+{A plot showing different ways to fit data.\index{Fitting!an example}}{}{}
+
+\clearpage
+\insertplot{A simple image}{image}{A basic image, halftone plot, and wedge.}%
+{Contents of the image header file}{Examples/orion.hed}
+
+\clearpage
+\insertplot{Multiple image layout and more macros}{image2}%
+{A plot demonstrating the use of subimages.}{}{}
+
+\clearpage
+\insertplot{Overlay of multiple images}{overlay}%
+{A plot demonstrating how to overlay different images.}{}{}
+
+\begin{htmlonly}
+\clearpage
+\insertplot{A simple color image}{cimage}%
+{A basic color image plot.  The contents of the image
+header file are the same as those seen in Example~\ref{p:image}.}{}{}
+
+\clearpage
+\insertplot{Color Palettes}{palettes}%
+{A collection of the pre-defined color palettes.}{}{}
+\end{htmlonly}
