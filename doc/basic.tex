@@ -1,0 +1,353 @@
+%% This file is to be included by latex in wip.tex
+%
+% Basic graphics.
+%
+\mylabel{c:basic}
+\myfile{basic.tex}
+
+This chapter introduces the commands used to generate one and two
+dimensional plots.
+This first section deals mainly with commands that do not require data;
+the second section with plotting commands that require data.
+Data may be loaded using the commands of section~\ref{s:data}.
+Chapter~\ref{c:concepts} introduced commands that define the
+current graphics device,
+border drawing commands like
+{\tt box}\index{Commands!{\tt box}}\index{Boxes!commands!{\tt box}}
+(Section~\ref{s:box}),
+commands needed to control
+some of the graphical attributes (Section~\ref{s:attrib}),
+and commands that can adjust the values of the coordinate systems
+(Section~\ref{s:coord}).
+Many of the concepts described in Chapter~\ref{c:concepts}
+will be useful here.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section               {Simple Plots}
+\mylabel{s:novarplts}
+
+This section describes some of the \wip\ commands that may be called
+that do not generally act on input data.
+Examples of many of these commands\index{Commands!simple plots}
+are shown in Appendix~\ref{a:samples}.
+An explanation of the optional and required arguments as well as
+a more detailed description of each of the following commands
+is available both
+in Appendix~\ref{a:cmdname} and via the on-line help using the
+{\tt help}\index{Help!commands!{\tt help}} command.
+\begin{description}
+  \item [{arc --}]\index{Commands!{\tt arc}}
+    Draws an arc relative to the current cursor position.
+    The command requires the major and minor
+    axes as inputs and may be drawn over a specified angular extent,
+    start at a particular angle, and be rotated by a specified amount.
+    The attribute ``fill''\index{Commands!{\tt fill}} determines whether
+    the arc will be filled or outlined.
+    All angles are in units of degrees, start from the right side of
+    the viewport, and increase counter-clockwise.
+    {\sc Note}:  This command is very dependent on the aspect
+    ratio of the plot region;
+    especially if the arc is rotated.
+  \item [{arrow --}]\index{Commands!{\tt arrow}}
+    Draws an arrow from the current cursor position to the specified location.
+    The arrow shape (acute angle of the arrow point and the fraction of
+    the triangular arrow-head that is cut away from the back)
+    may be controlled by use of optional arguments to the command.
+    The attribute ``fill''\index{Commands!{\tt fill}} determines whether
+    the arrow will be filled or outlined.
+  \item [{autolevs --}]\index{Commands!{\tt autolevs}}%
+    \index{Images!commands!{\tt autolevs}}%
+    \index{Contour Plots!setting levels}%
+    \index{Contour Plots!setting levels!{\tt autolevs}}
+    Automatically computes (fills) the contour level array elements
+    for use with contour plots (see Chapter~\ref{c:images}).
+  \item [{beam --}]\index{Commands!{\tt beam}}%
+    \index{Images!commands!{\tt beam}}%
+    \index{Fitting!commands!{\tt beam}}
+    Draws a beam at the current cursor position.
+  \item [{dot --}]\index{Commands!{\tt dot}} Draws the current symbol
+    type at a requested position or the current cursor position.
+  \item [{draw --}]\index{Commands!{\tt draw}} Draws from the
+    current cursor position to the specified position.
+  \item [{erase --}]\index{Commands!{\tt erase}} Erases the graphics
+    screen.  If the ``ask''\index{Commands!{\tt ask}} attribute is set,
+    then the user
+    will be prompted before the screen will be allowed to be erased.
+  \item [{globe --}]\index{Commands!{\tt globe}}
+    Draws a projection globe to use with positions generated
+    with the {\tt aitoff}\index{Commands!{\tt aitoff}} command.
+  \item [{hardcopy --}]\index{Commands!{\tt hardcopy}}%
+    \index{Hardcopy!commands!{\tt hardcopy}}
+    Spool the current plot to the printer
+    (applicable only when the current device\index{Devices} is a hardcopy type).
+  \item [{hls --}]\index{Commands!{\tt hls}}\index{Colors!HLS} Sets
+    the color of the specified color index to the input
+    Hue-Lightness-Saturation level.
+  \item [{input --}]\index{Commands!{\tt input}}%
+    \index{Data Files!commands!{\tt input}}%
+    \index{Macros!commands!{\tt input}}
+    Read and execute the \wip\ commands from the named file.
+  \item [{ldev --}]\index{Commands!{\tt ldev}}%
+    \index{Devices!commands!{\tt ldev}}
+    List the devices that are currently available to \wip.
+    This is equivalent to the command
+    {\tt device ?}\index{Commands!{\tt device}}.
+  \item [{levels --}]\index{Commands!{\tt levels}}%
+    \index{Images!commands!{\tt levels}}%
+    \index{Contour Plots!setting levels}%
+    \index{Contour Plots!setting levels!{\tt levels}}
+    Specify the levels for a contour plot (see Chapter~\ref{c:images}).
+  \item [{lines --}]\index{Commands!{\tt lines}}%
+    \index{Data Files!commands!{\tt lines}}
+    Specify which range of lines of a data file to read
+    (see Section~\ref{s:data}).
+  \item [{lookup --}]\index{Commands!{\tt lookup}}%
+    \index{Colors!Lookup Table}
+    Specify a lookup table for gray scale plots
+    (see Chapter~\ref{c:images}).
+  \item [{macro --}]\index{Commands!{\tt macro}}%
+    \index{Data Files!commands!{\tt macro}}%
+    \index{Macros!commands!{\tt macro}}
+    Read and define, but do not execute, the \wip\ macro definitions
+    from the named file.
+  \item [{move --}]\index{Commands!{\tt move}}
+    Move the current cursor position to the specified position.
+  \item [{minmax --}]\index{Commands!{\tt minmax}}%
+    \index{Images!commands!{\tt minmax}}
+    List the minimum and maximum of the current image.
+  \item [{palette --}]\index{Commands!{\tt palette}}%
+    \index{Colors!Lookup Table}
+    Select a lookup table for color halftone plots
+    (see Chapter~\ref{c:images}).
+  \item [{phard --}]\index{Commands!{\tt phard}}%
+    \index{Hardcopy!commands!{\tt phard}}
+    Replay the current plot commands to a specified device and then return to
+    the current device.
+    This is useful for spooling a plot to a hardcopy device.
+  \item [{playback --}]\index{Commands!{\tt playback}}%
+    \index{Macros!commands!{\tt playback}}
+    Repeat (execute) the commands in the command buffer\index{Macros!buffer}
+    or any named macro.
+  \item [{plotfit --}]\index{Commands!{\tt plotfit}}%
+    \index{Fitting!commands!{\tt plotfit}}%
+    \index{Fitting!commands!{\tt fit}}
+    Plots the most recent results from the 
+    {\tt fit}\index{Commands!{\tt fit}} command.
+  \item [{read --}]\index{Commands!{\tt read}}%
+    \index{Data Files!commands!{\tt read}}%
+    \index{Macros!commands!{\tt read}}
+    Read, but do not execute, the \wip\ commands in the named file.
+  \item [{rect --}]\index{Commands!{\tt rect}} Draw a rectangle bordered
+    by the specified vertices.  Many of the attributes listed in
+    Section~\ref{s:attrib} affect the resulting rectangle.
+  \item [{reset --}]\index{Commands!{\tt reset}} Resets the current
+    graphics state (\ie attributes)
+    to the way it is when the device is first selected.
+  \item [{rgb --}]\index{Commands!{\tt rgb}}\index{Colors!RGB} Sets
+    the color of the specified color index to the input Red-Green-Blue values.
+  \item [{set --}]\index{Commands!{\tt set}}%
+    \index{String Variables!commands!{\tt set}}
+    Discussed more fully in Section~\ref{s:varset}.
+  \item [{show --}]\index{Commands!{\tt show}} Discussed in
+    Section~\ref{s:help}.
+  \item [{slev --}]\index{Commands!{\tt slev}}%
+    \index{Images!commands!{\tt slev}}%
+    \index{Contour Plots!setting levels}%
+    \index{Contour Plots!setting levels!{\tt slev}}
+    Permits scaling of the contour level array
+    (see Chapter~\ref{c:images}).
+  \item [{string --}]\index{Commands!{\tt string}}%
+    \index{String Variables!commands!{\tt string}}
+    Discussed more fully in Section~\ref{s:varset}.
+  \item [{submargin --}]\index{Commands!{\tt submargin}}
+    Specifies the gap distance between individual frames.
+    For use with the {\tt panel}\index{Commands!{\tt panel}} command.
+  \item [{wedge --}]\index{Commands!{\tt wedge}}%
+    \index{Gray-Scale Plots!commands!{\tt wedge}}%
+    \index{Images!commands!{\tt wedge}}
+    Draws a halftone wedge to illustrate the
+    range of halftone values (see Chapter~\ref{c:images}).
+  \item [{write --}]\index{Commands!{\tt write}}%
+    \index{Data Files!commands!{\tt write}}%
+    \index{Macros!commands!{\tt write}}
+    Writes the command buffer\index{Macros!buffer} or named
+    macro(s) to the named file.
+\end{description}
+The following is a simple example of the use of some of these commands,
+including how to save a list of plot commands out to a file for later use
+(see Section~\ref{s:macwrite}
+for a more detailed explanation of saving and recalling commands).
+\begin{wiplist}%
+  \index{Commands!{\tt limits}}
+  \index{Commands!{\tt color}}
+  \index{Commands!{\tt rect}}
+  \index{Commands!{\tt move}}
+  \index{Commands!{\tt draw}}
+  \index{Commands!{\tt symbol}}
+  \index{Commands!{\tt dot}}
+  \index{Commands!{\tt erase}}
+  \index{Commands!{\tt playback}}
+  \index{Commands!{\tt write}}
+  \index{Commands!{\tt delete}}
+  \index{Commands!{\tt input}}
+  \index{Commands!{\tt phard}}
+  \index{Commands!{\tt end}}
+  \item {\tt limits 0 10 0 100}\hfill\# Set the World limits (\S~\ref{s:coord}).
+\samepage
+  \item {\tt color 3}\hfill\# Set the color to green (\S~\ref{s:attrib}).
+  \item {\tt rect 3 5 80 90}\hfill\# Draw a filled green rectangle.
+  \item {\tt move 5 80}\hfill\# Move the pen position.
+  \item {\tt color 2}\hfill\# Set the color to red.
+  \item {\tt draw 2 40}\hfill\# Draw a red line.
+  \item {\tt symbol 2}\hfill\# Set current symbol to ``+''.
+  \item {\tt move 4 40}\hfill\# Move the pen position.
+  \item {\tt dot}\hfill\# Draw a ``+'' at the pen position.
+  \item {\tt erase}\hfill\# Erase the graphics display.
+  \item {\tt playback}\hfill\# Redraw everything up to the erase command.
+  \item {\tt write myfile.wip}\hfill\# Writes commands to the file ``myfile.wip''.
+  \item {\tt delete 1 100}\hfill\# Clear the command buffer
+    (see \S~\ref{s:macedit}).
+  \item {\tt erase}\hfill\# Erase the graphics display.
+  \item {\tt input myfile.wip}\hfill\# Execute the commands in ``myfile.wip''.
+  \item {\tt phard /ps}\hfill\# Spool this plot to a PostScript printer.
+  \item {\tt end}\hfill\# Exit \wip.
+\end{wiplist}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section               {Single Variable Plots}
+\mylabel{s:onevarplts}
+
+Plots generally referred to as {\em scatter} or {\em xy} plots are
+usually the result of single variable expressions.
+Displaying these plots can be done in point mode
+(\eg\ {\tt points}\index{Commands!{\tt points}}) or in line mode
+(\eg\ {\tt connect}\index{Commands!{\tt connect}}).
+\wip\ has a variety of commands available to vary how these plots are
+generated and displayed.
+Useful in distinguishing various data sets (and how the subsequent
+plot will look) are the various
+attributes described in Section~\ref{s:attrib}
+and the various techniques used to border the plot (see
+Section~\ref{s:box}).
+The following is a list of the current single variable plot
+commands\index{Commands!single variable plot} and a brief description
+of what they generate.
+For a more detailed description and a list of any required or optional
+arguments, use
+{\tt help cmd}\index{Commands!{\tt help}} (where {\tt cmd} is one of
+the following commands) or look at the listing in Appendix~\ref{a:cmdname}.
+
+\begin{description}
+  \item [{aitoff --}]\index{Commands!{\tt aitoff}} converts longitude
+    and latitude positions into the equivalent $x$ and $y$ positions
+    for use in an Aitoff (more correctly, Hammer) projection.
+  \item [{bar --}]\index{Commands!{\tt bar}} draws a bar graph
+    at each of the positions read into the current {\bf X} and
+    {\bf Y} arrays.
+    The bar may extend in either the $\pm x$ or $\pm y$ direction.
+    The color of each bar is determined by the corresponding values
+    in the current {\bf ERR} array.
+    The current color index is used if the {\bf ERR} array is empty.
+  \item [{bin --}]\index{Commands!{\tt bin}} draws a stepped
+    line plot (histogram).
+    A user supplied parameter may specify how to handle irregularly spaced
+    arrays and arrays with direction reversals.
+  \item [{connect --}]\index{Commands!{\tt connect}} draws line
+    segments to each of the positions read into the current {\bf X} and
+    {\bf Y} arrays.
+  \item [{errorbar --}]\index{Commands!{\tt errorbar}} draws error
+    bars on each of the positions read into the current {\bf X} and
+    {\bf Y} arrays with the magnitude of the error bar set by the values
+    in the {\bf ERR} array.
+    The error bar may extend in either the $\pm x$ or $\pm y$ direction.
+  \item [{histogram --}]\index{Commands!{\tt histogram}} generates
+    a histogram from the data in the current {\bf X} array.
+  \item [{lcur --}]\index{Commands!{\tt lcur}} interactive routine
+    \index{Cursor!commands!{\tt lcur}}
+    to generate a polyline.
+    Vertices are selected using the cursor and are stored in
+    the current {\bf X} and {\bf Y} arrays.
+  \item [{logarithm --}]\index{Commands!{\tt logarithm}} changes the
+    named array to it's base-10 logarithm (with an optional scaling).
+  \item [{ncurse --}]\index{Commands!{\tt ncurse}} interactive routine
+    \index{Cursor!commands!{\tt ncurse}}
+    to generate a set of data points.
+    Points are selected using the cursor and are
+    stored in the current {\bf X} and {\bf Y} arrays (in increasing $x$ order).
+  \item [{olin --}]\index{Commands!{\tt olin}} interactive routine
+    \index{Cursor!commands!{\tt olin}}
+    to generate a set of data points.
+    Points are selected using the cursor and are
+    stored in the current {\bf X} and {\bf Y} arrays
+    (in the order they were added).
+  \item [{points --}]\index{Commands!{\tt points}} draws points of
+    the current point style at the positions of the current {\bf X} and
+    {\bf Y} arrays.
+    Point styles for each point may be stored in the current {\bf PSTYLE} array.
+    Colors for each point are retrieved from the current {\bf ERR} array.
+  \item [{poly --}]\index{Commands!{\tt poly}} fills a polygonal area
+    defined by the current {\bf X} and {\bf Y} arrays.
+  \item [{vector --}]\index{Commands!{\tt vector}} draws arrows using
+    the current point positions from the current {\bf X} and {\bf Y} arrays
+    and extending a radius (specified by the values
+    stored in the current {\bf PSTYLE} array) at an angle (degrees
+    positive counter-clockwise from the $+x$-direction
+    and specified in the current {\bf ERR} array).
+    Each arrow's shape (acute angle of the arrow point and
+    the fraction of the triangular arrow-head that is cut away from the back)
+    may be controlled by use of optional arguments to the command.
+    The attribute ``fill''\index{Commands!{\tt fill}} determines whether
+    the arrow will be filled or outlined.
+\end{description}
+
+Most of the above commands operate on the current {\bf X} and {\bf Y}
+arrays (see section~\ref{s:data}).
+There are also two pre-defined arrays called {\bf PSTYLE} and {\bf ERR} which
+are used along with the {\bf X} and {\bf Y} arrays to affect the look of
+the plot.
+For example, the command {\tt errorbar}\index{Commands!{\tt errorbar}}
+uses the {\bf ERR} array to determine the length of the error bar drawn
+at each point.
+As another example, the command {\tt points}\index{Commands!{\tt points}}
+uses the integer part of the {\bf PSTYLE} array value
+to set the symbol number for each point.
+The symbol
+number\index{Symbols!symbol numbers}\index{Commands!{\tt symbol}}
+corresponds to the type of symbol drawn.
+If the symbol number is less than -2,
+it draws a filled polygon\index{Symbols!polygons}
+of $N$ sides where $N$ is the absolute value of the symbol number.
+If the symbol number is -1 or -2, it draws a dot\index{Symbols!dots}
+of the smallest possible size and the current line width.
+If the symbol number is between 0 and 31, it corresponds to the symbols
+shown in Figure~\ref{p:symbol}\index{Symbols!markers};
+between 33 and 127, the symbol corresponds to the ASCII\index{ASCII}
+character\index{Symbols!ASCII characters} in the currently selected font;
+and larger than 127, it corresponds to
+the Hershey symbol\index{Symbols!Hershey symbols}
+of the same number
+(see section~\ref{p:hershey}).
+If a fractional part of a {\bf PSTYLE} item exists,
+then it is treated as a fractional expansion of the symbol size
+(fractional parts less than 0.01 are treated as no fractional expansion).
+In addition, the command {\tt points}\index{Commands!{\tt points}}
+uses the {\bf ERR} array to determine which color index to use to draw
+each point.
+
+The commands {\tt lcur}, {\tt ncurse}, and {\tt olin} use the cursor to
+add and delete points from the current {\bf X} and {\bf Y} arrays.
+The keystroke commands used by these commands are different from the 
+interactive commands available with the
+{\tt cursor}\index{Cursor!commands!{\tt cursor}} command.
+With these commands, the (case independent) keystroke commands are
+described in the list that follows:
+\begin{description}
+  \item [{A --}] Add a point at the current cursor location.
+\samepage
+  \item [{D --}] Remove either the last point entered ({\tt lcur}
+    and {\tt olin}) or the point closest to the current cursor
+    location ({\tt ncurse}).
+  \item [{X --}] Exit the interactive part of the command.
+\end{description}
+{\sc Note}: Many devices with a 3-button mouse have the keys
+`A', `D', and `X' bound (assigned) to the left, middle,
+and right buttons, respectively.

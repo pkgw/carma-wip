@@ -1,0 +1,695 @@
+%% This file is to be included by latex in wip.tex
+%
+% Uservars.
+%
+\mylabel{c:uservar}
+\myfile{uservar.tex}
+
+\section		{General Concepts}
+\mylabel{s:vargeneral}
+\index{User Variables!general concepts}
+
+Available to the \wip\ user are a host of variables.
+Many of these variables are associated with the general
+graphical attributes discussed in Chapter~\ref{c:concepts};
+some with the current image (Section~\ref{c:images});
+and some are available to perform simple to complex calculations.
+Whenever the user accesses a graphics tool in \wip,
+they are probably setting the value of an internal variable.
+In general, these variables need not (and should not) be accessed directly.
+These variables may, however,
+be used to probe the current values and may also
+be used as arguments to their respective commands.
+Some of the variables, however, can only be accessed
+directly and are designed for that use.
+The sections that follow will describe the variables that are currently
+available to the user (Section~\ref{s:varpredef})
+and the tools used to access them (Section~\ref{s:varset}).
+In addition, there are ways the user can create and destroy
+their own user variables (Section~\ref{s:varnew}).
+
+User variables enable the \wip\ user to perform quite
+complicated tasks easily.
+In addition, it allows the user to perform commands without knowledge of
+the actual current {\em value} of the user variable.
+For example, as will be shown in Section~\ref{s:varpredef}, the user
+variables that specify the limits of the current
+world (or User coordinate) window are
+{\tt x1}, {\tt x2}, {\tt y1}, and {\tt y2}.
+Suppose an astronomer reads in a list of $x$ and $y$ values that
+correspond to right ascension and declination positions, respectively.
+If the limits are determined automatically with the
+{\tt limits}\index{Commands!{\tt limits}} command
+(\ie the command called with no arguments),
+then the $x$ axis values will increase
+to the right.
+But right ascension increases to the left.
+The following \wip\ listing shows how, with the use of user variables,
+this can be corrected\ldots without knowing the actual values of
+{\tt x1}, {\tt x2}, {\tt y1}, and {\tt y2}:
+\begin{wiplist}%
+  \index{Commands!{\tt data}}
+  \index{Commands!{\tt xcolumn}}
+  \index{Commands!{\tt ycolumn}}
+  \index{Commands!{\tt limits}}
+  \item {\tt data myfile}\hfill\# Access the data file.
+\samepage
+  \item {\tt xcolumn 1}\hfill\# Read the RA positions.
+  \item {\tt ycolumn 2}\hfill\# Read the Dec.\ positions.
+  \item {\tt limits}\hfill\# Autoscale the limits.
+  \item {\tt limits x2 x1 y1 y2}\hfill\# Flip only the $x$ axis limits.
+\end{wiplist}
+Note that by calling {\tt limits} with the four user variables as
+arguments, the user does not need to know the {\em actual} values or
+contents of the user variables, just the names of the variables.
+Furthermore, by switching the order of the $x$-axis arguments, the
+orientation of the $x$-axis direction has been flipped.
+
+This works because \wip\
+checks for arguments and expects literal numeric values
+whenever it is passed a command.
+If \wip\ cannot ``understand'' the argument as a number it searches the
+list of user variables for a match.
+If a match is made, the current value of the user variable is
+substituted internally for the corresponding command argument.
+
+\section		{Pre-Defined Variables}
+\mylabel{s:varpredef}
+\index{User Variables!pre-defined variables}
+
+There are two types of user variables available:
+numeric variables and string variables.
+These two types cannot be mixed at any time!
+Attempting to mix these types of user variables will either create an
+error message or produce unpredictable and undesirable results.
+
+Tables~\ref{t:uservar1} -- \ref{t:uservar3}
+identify the current predefined numeric user variable
+names, a description,
+and a (typical) command which may be used to set it
+(the index at the end of the manual will direct the reader to a more
+detailed description of each of the commands mentioned as well as
+possibly a few more that are applicable).
+The tables are broken up into areas where the user variable is most applicable.
+\begin{table}
+  \caption{User Variables -- Coordinate Systems}
+  \mylabel{t:uservar1}
+  \index{User Variables!table of}
+  \index{User Variables!commands!{\tt set}}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt limits}}
+  \index{Commands!{\tt viewport}}
+  \index{Commands!{\tt cursor}}
+  \index{Commands!{\tt ticksize}}
+  \index{Commands!{\tt show}}
+  \index{Coordinate System!commands!{\tt limits}}
+  \index{Coordinate System!commands!{\tt viewport}}
+  \index{Cursor!commands!{\tt cursor}}
+  \index{Boxes!commands!{\tt ticksize}}
+  \centering
+  \setlength{\tabentrylen}{\textwidth}
+  \addtolength{\tabentrylen}{-1.6in}
+  \begin{tabular}{|c|c|p{\tabentrylen}|} \hline\hline
+    \multicolumn{1}{|c}{Variable}
+    & \multicolumn{1}{|c|}{Command}
+    & \multicolumn{1}{|c|}{Description} \\ \hline
+    && \\
+    x1     & {\tt limits}   & World Coordinate left $x$-axis limit value. \\
+    x2     & {\tt limits}   & World Coordinate right $x$-axis limit value. \\
+    y1     & {\tt limits}   & World Coordinate lower $y$-axis limit value. \\
+    y2     & {\tt limits}   & World Coordinate upper $y$-axis limit value. \\
+    vx1    & {\tt viewport} & Viewport Coordinate left $x$ axis limit. \\
+    vx2    & {\tt viewport} & Viewport Coordinate right $x$ axis limit. \\
+    vy1    & {\tt viewport} & Viewport Coordinate lower $y$ axis limit. \\
+    vy2    & {\tt viewport} & Viewport Coordinate upper $y$ axis limit. \\
+    cx     & {\tt cursor} & Current World Coordinate $x$ value (pen position).\\
+    cy     & {\tt cursor} & Current World Coordinate $y$ value (pen position).\\
+    xtick  & {\tt ticksize}
+           & Major tick mark interval along $x$ axis (World units). \\
+    ytick  & {\tt ticksize}
+           & Major tick mark interval along $y$ axis (World units). \\
+    nxsub  & {\tt ticksize} & Number of minor tick marks along the $x$ axis. \\
+    nysub  & {\tt ticksize} & Number of minor tick marks along the $y$ axis. \\
+    xsubmar & {\tt submargin}
+           & Panel gap size in $x$-direction (char. height units). \\
+    ysubmar & {\tt submargin}
+           & Panel gap size in $y$-direction (char. height units). \\
+    && \\ \hline\hline
+  \end{tabular}
+\end{table}
+\begin{table}
+  \caption{User Variables -- Images}
+  \mylabel{t:uservar2}
+  \index{User Variables!table of}
+  \index{User Variables!commands!{\tt set}}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt header}}
+  \index{Commands!{\tt image}}
+  \index{Commands!{\tt subimage}}
+  \index{Commands!{\tt slev}}
+  \index{Images!commands!{\tt header}}
+  \index{Images!commands!{\tt image}}
+  \index{Images!commands!{\tt slev}}
+  \index{Images!commands!{\tt subimage}}
+  \index{Images!user variables!table of}
+  \index{Contour Plots!setting levels!{\tt slev}}
+  \centering
+  \setlength{\tabentrylen}{\textwidth}
+  \addtolength{\tabentrylen}{-1.6in}
+  \begin{tabular}{|c|c|p{\tabentrylen}|} \hline\hline
+    \multicolumn{1}{|c}{Variable}
+    & \multicolumn{1}{|c|}{Command}
+    & \multicolumn{1}{|c|}{Description} \\ \hline
+    && \\
+    subx1  & {\tt subimage} & Left $x$ pixel number of current subimage. \\
+    subx2  & {\tt subimage} & Right $x$ pixel number of current subimage. \\
+    suby1  & {\tt subimage} & Lower $y$ pixel number of current subimage. \\
+    suby2  & {\tt subimage} & Upper $y$ pixel number of current subimage. \\
+    crvalx & {\tt header}
+           & Reference pixel value in the $x$-direction (World units). \\
+    crpixx & {\tt header}   & The reference pixel in the $x$-direction. \\
+    cdeltx & {\tt header}
+           & The $x$-direction step size between pixels (World units). \\
+    crvaly & {\tt header}
+           & Reference pixel value in the $y$-direction (World units). \\
+    crpixy & {\tt header}   & The reference pixel in the $y$-direction. \\
+    cdelty & {\tt header}
+           & The $y$-direction step size between pixels (World units). \\
+    slevel & {\tt slev}
+           & The scaling factor applied to the contour level array. \\
+    immin  & {\tt image}    & Minimum intensity value of the current image. \\
+    immax  & {\tt image}    & Maximum intensity value of the current image. \\
+    nx     & {\tt image}
+           & Number of pixels in the current image's $x$ direction. \\
+    ny     & {\tt image}
+           & Number of pixels in the current image's $y$ direction. \\
+    && \\ \hline\hline
+  \end{tabular}
+\end{table}
+\begin{table}
+  \caption{User Variables -- Graphical Attributes}
+  \mylabel{t:uservar3}
+  \index{User Variables!table of}
+  \index{User Variables!commands!{\tt set}}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt angle}}
+  \index{Commands!{\tt bgci}}
+  \index{Commands!{\tt expand}}
+  \index{Commands!{\tt color}}
+  \index{Commands!{\tt fill}}
+  \index{Commands!{\tt font}}
+  \index{Commands!{\tt itf}}
+  \index{Commands!{\tt lstyle}}
+  \index{Commands!{\tt lwidth}}
+  \index{Commands!{\tt show}}
+  \index{Graphical Attributes}
+  \index{User Variables!pre-defined variables!{\tt maxarray}}
+  \centering
+  \setlength{\tabentrylen}{\textwidth}
+  \addtolength{\tabentrylen}{-1.6in}
+  \begin{tabular}{|c|c|p{\tabentrylen}|} \hline\hline
+    \multicolumn{1}{|c}{Variable}
+    & \multicolumn{1}{|c|}{Command}
+    & \multicolumn{1}{|c|}{Description} \\ \hline
+    && \\
+    angle  & {\tt angle}    & Current rotation angle value (in degrees). \\
+    expand & {\tt expand}
+           & Current character expansion value (character height units). \\
+    color  & {\tt color}    & Current color index value. \\
+    fill   & {\tt fill}     & Current fill type value. \\
+    font   & {\tt font}     & Current font type. \\
+    lstyle & {\tt lstyle}   & Current line style. \\
+    lwidth & {\tt lwidth}   & Current line width. \\
+    cmin   & {\tt device}   & Current device's minimum color index. \\
+    cmax   & {\tt device}   & Current device's maximum color index. \\
+    bgci   & {\tt bgci}
+           & Value of argument to the most recent call to {\tt bgci}. \\
+    itf    & {\tt itf}
+           & Value of argument to the most recent call to {\tt itf}. \\
+    cursmode & {\tt set}    & Value determines type of cursor drawn. \\
+    hardcopy & {\tt device}
+           & 1 if current device is hardcopy; 0 otherwise. \\
+    maxarray & {\tt set}    & Initializes the maximum size of the
+             {\bf X, Y, ERR}, and {\bf PSTYLE} arrays. \\
+    nsig   & {\tt set}
+           & Number of significant digits used to print a variable. \\
+    pi     & (none)         & The value of $\pi$. \\
+    \esc{0} -- \esc{20} & {\tt set} & Storage registers 0 -- 20. \\
+    && \\ \hline\hline
+  \end{tabular}
+\end{table}
+
+In addition,
+Table~\ref{t:uservararray}
+identifies the current predefined numeric user variable array (vector) names,
+the maximum defined size of the array, and the typical commands used to load
+the array.
+Some of these entries have the maximum size set by the user variable
+{\tt maxarray}\index{User Variables!pre-defined variables!{\tt maxarray}}.
+This is initialized to 20,000 by \wip\ but may be overridden by setting
+it to a larger or smaller number.
+This must, however, be done right when \wip\ starts.
+The best way to insure this is done correctly is to specify a different
+value in the user's \wipinit\index{wipinit@\wipinit} file
+(see Appendix~\ref{a:wipinit} for further details).
+For example, to set this value to 10,000, the following command would be
+put in the user's \wipinit\index{wipinit@\wipinit} file:
+\begin{wiplist}%
+  \index{Commands!{\tt set}}
+  \index{User Variables!pre-defined variables!{\tt maxarray}}
+  \item {\tt set maxarray 10000}\hfill\# Limits array size.
+\end{wiplist}
+In general, though, the default value should be sufficient for almost all
+needs.
+\begin{table}
+  \caption{User Variables -- Numeric Arrays}
+  \mylabel{t:uservararray}
+  \index{User Variables!table of}
+  \index{Commands!{\tt xcolumn}}
+  \index{Commands!{\tt ycolumn}}
+  \index{Commands!{\tt ecolumn}}
+  \index{Commands!{\tt pcolumn}}
+  \index{Commands!{\tt transfer}}
+  \index{Commands!{\tt header}}
+  \index{Commands!{\tt levels}}
+  \index{Commands!{\tt autolevs}}
+  \index{Commands!{\tt slev}}
+  \index{Data Files!commands!{\tt xcolumn}}
+  \index{Data Files!commands!{\tt ycolumn}}
+  \index{Data Files!commands!{\tt ecolumn}}
+  \index{Data Files!commands!{\tt pcolumn}}
+  \index{Images!commands!{\tt header}}
+  \index{Images!commands!{\tt transfer}}
+  \index{Images!commands!{\tt levels}}
+  \index{Images!commands!{\tt autolevs}}
+  \index{Images!commands!{\tt slev}}
+  \index{Contour Plots!setting levels}
+  \index{User Variables!pre-defined variables!{\tt maxarray}}
+  \centering
+  \begin{tabular}{|c|c|c|} \hline\hline
+    \multicolumn{1}{|c}{Variable}
+    & \multicolumn{1}{|c}{Maximum Size}
+    & \multicolumn{1}{|c|}{Command} \\ \hline
+    && \\
+    x        & {\tt maxarray} & {\tt xcolumn} \\
+    y        & {\tt maxarray} & {\tt ycolumn} \\
+    err      & {\tt maxarray} & {\tt ecolumn} \\
+    pstyle   & {\tt maxarray} & {\tt pcolumn} \\
+    transfer &     6 & {\tt transfer} {\tt header} \\
+    levels   &    40 & {\tt levels} {\tt autolevs} {\tt slev} \\
+    && \\ \hline\hline
+  \end{tabular}
+\end{table}
+
+The string user variables may be fewer in number but are just as
+powerful as the numeric user variables.
+The current pre-defined string user variables are
+listed in Table~\ref{t:userstrvar}
+along with the primary command used to set each,
+a description of each variable,
+and the corresponding default string value.
+\begin{table}
+  \caption{String User Variables}
+  \mylabel{t:userstrvar}
+  \index{User Variables!table of}
+  \index{User Variables!commands!{\tt set}}
+  \index{User Variables!commands!{\tt string}}
+  \index{String Variables!table of}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt string}}
+  \index{Commands!{\tt device}}
+  \index{Commands!{\tt data}}
+  \index{Commands!{\tt image}}
+  \index{Commands!{\tt box}}
+  \index{Commands!{\tt header}}
+  \index{Commands!{\tt slev}}
+  \index{Help!on-line help file!\$WIPHELP}
+  \index{Help!on-line help file!the {\em helpfile} string}
+  \index{Devices!device-type!/xwindow}
+  \index{Devices!the {\em device} string}
+  \index{Data Files!commands!{\tt data}}
+  \index{Images!commands!{\tt image}}
+  \index{Images!commands!{\tt header}}
+  \index{Images!commands!{\tt slev}}
+  \index{Boxes!commands!{\tt box}}
+  \index{Boxes!the {\em xbox} string}
+  \index{Boxes!the {\em ybox} string}
+  \index{Contour Plots!setting levels!{\tt slev}}
+  \centering
+  \begin{tabular}{|c|c|l|c|} \hline\hline
+    \multicolumn{1}{|c}{Variable}
+    & \multicolumn{1}{|c|}{Command}
+    & \multicolumn{1}{|c|}{Description}
+    & \multicolumn{1}{|c|}{Default} \\ \hline
+    &&& \\
+    device    & {\tt device} & Name of the current device. & /xwindow \\
+    datafile  & {\tt data}   & Name of the current data file. & empty \\
+    imagefile & {\tt image}  & Name of the current image file. & empty \\
+    helpfile  & {\tt set string} & Name of the on-line help file. & \$WIPHELP \\
+    xbox      & {\tt set string} & $x$-axis argument for {\tt box}. & bcnst \\
+    ybox      & {\tt set string} & $y$-axis argument for {\tt box}. & bcnstv \\
+    print     & {\tt set string} & The print plot file command. & lpr \\
+    xheader   & {\tt set string} & $x$-axis argument for {\tt header}. & rd \\
+    yheader   & {\tt set string} & $y$-axis argument for {\tt header}. & rd \\
+    levtype   & {\tt slev}   & Type of scaling for contour levels. & absolute \\
+    &&& \\ \hline\hline
+  \end{tabular}
+\end{table}
+
+\section		{Accessing the User Variables}
+\mylabel{s:varset}
+\index{User Variables!accessing}
+
+This section describes the \wip\ commands that access and change the
+value of the user variables.
+Remember that there are two types of user variables:
+numeric and string.
+The primary command used to access all User Variables
+is {\tt set}\index{Commands!{\tt set}}.
+In addition, another command used to set the string variables
+is called {\tt string}\index{Commands!{\tt string}}.
+The command {\tt echo}\index{Commands!{\tt echo}}
+can be used to display the value of many of the user variables
+(both numeric and string) on the command line.
+Also of use is the {\tt show}\index{Commands!{\tt show}} command.
+The {\tt show} command presents many of the user variables
+along with their current values.
+The user variables are listed by {\tt show} in upper case along
+with their current value.
+
+\subsection*		{The SET Command}
+\mylabel{ss:set}
+\index{Commands!{\tt set}}
+\index{User Variables!commands!{\tt set}}
+
+The command {\tt set} requires at least two arguments.
+The first (required) argument is an acceptable user variable name.
+This may be any predefined user variable
+(see Tables~\ref{t:uservar1} -- Table~\ref{t:userstrvar})
+or any user variable defined with the
+{\tt new}\index{Commands!{\tt new}}\index{User Variables!commands!{\tt new}}
+command (see below).
+The remaining arguments are treated 
+differently depending on the type of user variable being set.
+The next two sections discuss how {\tt set} treats (i) numeric and variable
+array (vector) user variables and (ii) string user variables.
+
+\subsubsection*		{Numeric User Variables}
+\mylabel{sss:numbers}
+\index{Commands!{\tt set}}
+\index{User Variables!commands!{\tt set}}
+
+When evaluating numeric user variables (both simple numeric and vector),
+the first argument will be set
+to the result of the expression consisting of the tokens appearing in
+the rest of the command.
+The expression is used to
+determine what value will be assigned to the user variable.
+The syntax of the {\tt set} command expression in this case is just a standard
+mathematical expression with the following exceptions:
+\begin{enumerate}
+  \item The inner most expression enclosed by parenthesis
+        is always evaluated first.
+\samepage
+  \item All expressions are evaluated left to right.
+  \item All functions must have a set of parenthesis delimiting their argument.
+  \item All operators that act on two variables (binary operators)
+        must appear between their arguments.
+\end{enumerate}
+In many ways, the {\tt set} command is similar to a basic calculator.
+
+The most straightforward use is to set the user variable equal to
+something.
+For example (and note the absence of the = sign),
+\begin{wiplist}%
+  \index{Commands!{\tt set}}
+  \item {\tt set x1 0.1}\hfill\# Sets the user variable
+    {\tt x1} to the value of 0.1.
+\end{wiplist}
+
+Table~\ref{t:twoop} identifies the operations that act on two variables.
+These operators allow user variables to be added, subtracted, and so on.
+They also allow two user variables (or expressions) to be compared with
+the validity of the comparison as the result.
+As mentioned already, there is no precedence of the various operators
+except that of being evaluated from left to right.
+This may be explicitly specified by enclosing various
+operations within a matching pair of parentheses.
+\begin{table}
+  \caption{Double Variable Operations}
+  \mylabel{t:twoop}
+  \index{User Variables!operations!table of two variable}
+  \centering
+  \setlength{\tabentrylen}{\textwidth}
+  \addtolength{\tabentrylen}{-1.0in}
+  \begin{tabular}{|c|p{\tabentrylen}|} \hline\hline
+    \multicolumn{1}{|c}{Binary} & \multicolumn{1}{|c|}{Result} \\ \hline
+    & \\
+    $+$          & Addition of the two arguments. \\
+    $-$          & Subtraction of second from first argument. \\
+    $*$          & Multiplication of the two arguments. \\
+    $/$          & Division of first argument by second argument. \\
+    $\backslash$ & Integer result of division of first by second argument. \\
+    \%           & Remainder of first argument divided by second argument. \\
+    max          & Larger value of the first and second argument. \\
+    min          & Smaller value of the first and second argument. \\
+    $**$         & First argument raised to the power of the second argument. \\
+    & \\ \hline\hline
+    \multicolumn{1}{|c}{Logical} &
+    \multicolumn{1}{|c|}{Result is 1 only if the relationship is true;
+    0 otherwise}
+    \\ \hline
+    & \\
+    $>$  & True if the first argument is greater than the second. \\
+    $<$  & True if the first argument is less than the second. \\
+    $>=$ & True if the first argument is greater than or equal to the second. \\
+    $<=$ & True if the first argument is less than or equal to the second. \\
+    $==$ & True if the first argument is equal to the second. \\
+    $!=$ & True if the first argument is not equal to the second. \\
+    $\mid\mid$
+         & True if either the first or second argument is not equal to zero. \\
+    \&\& & True if both the first and second arguments are not equal to zero. \\
+    \verb+^+
+      & True if first or second argument (but not both) is not equal to zero. \\
+    & \\ \hline\hline
+  \end{tabular}
+\end{table}
+Note that the logical operations will only return a value
+of 1 if the expression evaluated is true or a value of 0 if it is false.
+Only these two values are returned
+regardless of the value of the two arguments used to test the conditional.
+
+Table~\ref{t:oneop} lists functions that operate on single variables.
+Functions are identified by \wip\ when it sees a recognized function
+name followed by parenthesis which enclose the variable.
+The argument within the parenthesis is evaluated and then passed to the
+function.
+Hence, the expression within the parenthesis may be any valid expression
+(even another function) as long as it evaluates to a single variable.
+Note that functions appearing in the top part of Table~\ref{t:oneop}
+require a {\em numeric value} as the argument to the function and
+functions listed in the bottom part require a {\em vector name}.
+\begin{table}
+  \caption{Single Variable Functions}
+  \mylabel{t:oneop}
+  \index{User Variables!operations!table of one variable}
+  \centering
+  \begin{tabular}{|c|c|l|} \hline\hline
+    \multicolumn{1}{|c}{Function} & \multicolumn{1}{|c}{Numeric Argument}
+      & \multicolumn{1}{|c|}{Result} \\ \hline
+    && \\
+    sin($\theta$)  & ($\theta$) -- angle in radians  & $\sin(\theta)$ \\
+    sind($\theta$) & ($\theta$) -- angle in degrees  & $\sin(\theta)$ \\
+    asin($x$)      & $-1 \leq (x = \sin(\theta)) \leq 1$
+           & Angle ($- \pi / 2 \leq \theta \leq \pi / 2$) in radians. \\
+    asind($x$)     & $-1 \leq (x = \sin(\theta)) \leq 1$
+           & Angle ($-90 \leq \theta \leq 90$) in degrees.            \\
+    cos($\theta$)  & ($\theta$) -- angle in radians  & $\cos(\theta)$ \\
+    cosd($\theta$) & ($\theta$) -- angle in degrees  & $\cos(\theta)$ \\
+    acos($x$)      & $-1 \leq (x = \cos(\theta)) \leq 1$
+           & Angle ($0 \leq \theta \leq \pi$) in radians.             \\
+    acosd($x$)     & $-1 \leq (x = \cos(\theta)) \leq 1$
+           & Angle ($0 \leq \theta \leq 180$) in degrees.             \\
+    tan($\theta$)  & ($\theta$) -- angle in radians  & $\tan(\theta)$ \\
+    tand($\theta$) & ($\theta$) -- angle in degrees  & $\tan(\theta)$ \\
+    atan($x$)      & $x = \tan(\theta)$
+           & Angle ($- \pi / 2 \leq \theta \leq \pi / 2$) in radians. \\
+    atand($x$)     & $x = \tan(\theta)$
+           & Angle ($-90 \leq \theta \leq 90$) in degrees. \\
+    sqrt($x$)      & Any argument $x > 0$  & Non-negative square root.\\
+    ln($x$)        & Any argument $x > 0$  & Base $e$ logarithm.      \\
+    log($x$)       & Any argument $x > 0$  & Base 10 logarithm.       \\
+    log10($x$)     & Any argument $x > 0$  & Base 10 logarithm.       \\
+    exp($x$)       & Any argument $x < 85$ & Base $e$ exponent function.     \\
+    abs($x$)       & Any argument $x$      & Absolute value of the argument. \\
+    int($x$)       & Any argument $x$      & Integer value of the argument.  \\
+    nint($x$)      & Any argument $x$      & Nearest integer of the argument.\\
+    rand($x$)      & An integer seed $x$   & Uniform random deviate [0, 1). \\
+    gasdev($x$)    & An integer seed $x$
+           & Normal (Gaussian) random deviate [0, 1). \\
+    && \\ \hline\hline
+    \multicolumn{1}{|c}{Function} & \multicolumn{1}{|c}{Vector Argument}
+      & \multicolumn{1}{|c|}{Result} \\ \hline
+    && \\
+    npts($x$)      & Any vector name $x$   & Current size of the named vector.\\
+    && \\ \hline\hline
+  \end{tabular}
+\end{table}
+
+One note about two of the functions listed in Table~\ref{t:oneop}.
+The functions rand($x$) and gasdev($x$) use a negative integer argument
+to help seed the random number generator functions.
+By default, a seed is pre-supplied by \wip.
+Hence, the user only needs to supply an argument of zero each time one
+of these functions is called.
+If the user wishes to start with a different seed value, then
+the first time one of these functions is called, the user should
+supply an odd, negative integer value.
+On subsequent calls, the user should still supply a value of zero.
+This is because the seed is retained internally and it is used if any
+positive argument is passed to the function.
+
+Note that an argument in the expression of the
+{\tt set}\index{Commands!{\tt set}} syntax
+can be easily made negative by placing the minus sign
+before the user variable name.
+For example, the commands
+\begin{wiplist}%
+  \index{Commands!{\tt set}}
+  \item {\tt set \esc{0} -\esc{0}}
+  \item {\tt set \esc{1} tand(-angle)}
+  \item {\tt set \esc{2} 2 ** -x1}
+\end{wiplist}
+will set, respectively,
+the user variable \esc{0} to the negative of its current value;
+the user variable \esc{1} to the tangent of the negative of the current
+angle variable;
+and \esc{2} to the value of two raised to the negative of the current
+value of {\tt x1}.
+
+\subsubsection*		{String User Variables}
+\mylabel{sss:strings}
+\index{Commands!{\tt string}}
+\index{User Variables!commands!{\tt string}}
+\index{String Variables|(}
+
+When the user variable is a string variable, the first argument to {\tt set}
+is the string variable name and
+the remaining arguments are treated as a string to be assigned to that variable.
+This is the easiest way to set a string variable.
+For example,
+\begin{wiplist}%
+  \index{Commands!{\tt set}}
+  \item {\tt set print ignore}
+\end{wiplist}
+will set the string variable
+{\em print}\index{String Variables!variables!{\em print}}
+to the string {\tt ignore}.
+This overrides the default value such that when a plot file
+is ready to be spooled to the printer,
+the spool command will not send the file to the printer.
+
+The syntax of the {\tt set}\index{String Variables!commands!{\tt set}}
+command is such that it requires at least
+one argument: the string variable name.
+If no other arguments are present,
+the string variable is set to an empty string.
+If other arguments are present, then the remaining arguments are
+copied, exactly as entered, into the string variable.
+Hence, string variables may contain several tokens (words) in its
+translation.\footnote{The current maximum length for the value
+of a string variable is 256 characters.}
+
+The string variables in Table~\ref{t:userstrvar}
+not directly associated with the 
+{\tt set} command ({\em device}, {\em datafile}, {\em imagefile}, etc.)
+are set by the listed commands and generally should not be changed with
+the {\tt set} command.
+The other string variables listed in Table~\ref{t:userstrvar}
+are specifically designed to be accessed by the user
+to allow \wip\ to be customized according to their needs.
+The {\tt set} command changes the value of the variable until either
+the end of the plotting session, until another {\tt set} command,
+or until it is reset by a command.
+Additionally, {\tt set} commands may be placed in the user's
+\wipinit\index{wipinit@\wipinit} file (see Appendix~\ref{a:wipinit} for more
+details) to always override \wip's initial values.
+
+The {\tt string}\index{String Variables!commands!{\tt string}} command
+is another method used to set string user variables.
+The {\tt string} command allows the user to set the string variable
+using the contents of an external file.
+Only one line is read by the command but the user may specify which
+words of that line are actually loaded into the string variable.
+This command, along with its arguments, is discussed further
+in Section~\ref{s:data} and Appendix~\ref{a:cmdname}.%
+\index{String Variables|)}
+
+\section		{Creating and Removing User Variables}
+\mylabel{s:varnew}
+\index{User Variables!defining new variables}
+\index{User Variables!removing user variables}
+
+New user variables may easily be defined with the
+{\tt new}\index{Commands!{\tt new}}%
+\index{User Variables!user defined variables}%
+\index{User Variables!commands!{\tt new}}
+command.
+Likewise, the user defined variables may be removed with the
+{\tt free}\index{Commands!{\tt free}}%
+\index{User Variables!user defined variables}%
+\index{User Variables!commands!{\tt free}}
+command.
+The ability to define user variables allows the user
+to create local variables in macros,
+retrieve and assign image header variables,
+and associate a value with a variable name more in keeping with its use.
+The only limitation on user defined user variables is that they may not
+have the same name as any other user variable, vector, string variable,
+or function.\footnote{Just like predefined commands,
+no predefined user variable, vector, string variable,
+or function may be removed.}
+
+As an example of local usage of user variables, consider the following macro:
+\begin{wiplist}%
+  \index{Commands!{\tt define}}
+  \index{Commands!{\tt new}}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt if}}
+  \index{Commands!{\tt move}}
+  \index{Commands!{\tt free}}
+  \index{Commands!{\tt end}}
+  \index{User Variables!commands!{\tt new}}
+  \index{User Variables!commands!{\tt free}}
+  \item [\wipp] {\tt define radec}\hfill\# \$1--\$6=rah ram ras decd decm decs
+  \item [\wipd] {\tt new ra dec}\hfill\# Create new user variables:
+    ``ra'' and ``dec''.
+  \item [\wipd] {\tt set ra (((\$1 * 60.0) + \$2) * 60.0) + \$3}
+  \item [\wipd] {\tt set dec (((abs(\$4) * 60.0) + \$5) * 60.0) + \$6}
+  \item [\wipd] {\tt if \$4 < 0 set dec -dec}
+  \item [\wipd] {\tt move ra dec}\hfill\# Move to the position (ra, dec).
+  \item [\wipd] {\tt free ra dec}\hfill\# Remove the user variables ra and dec.
+  \item [\wipd] {\tt end}\hfill\# Finish the definition.
+\end{wiplist}
+This macro will convert a Right Ascension and Declination position
+into units of seconds of time and seconds of arc and moves the current
+position to that location.
+By creating the user variables {\tt ra} and {\tt dec}
+within the macro and then removing them prior to leaving it,
+the user has limited the scope of these variables.
+In addition, the user has also removed the possibility of inadvertently
+altering their value by another macro.
+
+The user should be aware, however, that defining user variables is a
+global operation.\index{User Variables!lifetime of new variables}
+Just because a variable is defined within a macro does not mean that
+it is only seen by that macro or is active only while in that macro.
+On the contrary, user defined variables exist in same way as predefined
+user variables and do so until they are removed.
+For this reason, care is needed when defining local variables.
+In the example above,
+another macro could define these same variables and then call the macro
+{\tt radec}.
+This would cause the macro {\tt radec} to abort when
+the {\tt new} command is reached.
+Therefore, make sure your local names are ``really'' local (\ie unique).
