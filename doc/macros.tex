@@ -144,10 +144,12 @@ going to be used in the plot file.
 \mylabel{s:macarguments}
 \index{Macros!passing arguments}
 
-There are 10 special arguments that may be used within the definition of
-a macro: \$1, \$2, \ldots, \$9, and \$0.
+There are 99 special arguments that may be used within the definition of
+a macro: \$1, \$2, \ldots, \$99, and \$0 has a historic meaning
+which is the same as \$10. Version 2.3 and below of WIP only
+supported 10 arguments.
 When a macro is executed, any parameters following the macro name are
-assigned, in order, to the ten variables.
+assigned, in order, to the (up to 99) variables. 
 Whenever a command in the macro references one of these variables,
 the command line parameter is substituted in its place.
 The input arguments to a macro are specified in the same fashion as when
