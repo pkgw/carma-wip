@@ -1,0 +1,7 @@
+
+this works:
+wip test.wip -e wipcmd  arg1
+
+but this doesn't seem to be able to enter a command argument with whitespace
+wip test.wip -e wipcmd  "arg1a arg1b"
+
