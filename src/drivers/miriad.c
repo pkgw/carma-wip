@@ -731,11 +731,11 @@ static MIRMASK *mirfindmask(MIRIAD *f, Const char *name, int nx)
     /* RND3 or RND4 ??? -- but should it really matter ?? */
 #ifdef RND
     mask->flag = (int *)malloc(sizeof(int)*RND(nx,4));
-    printf("DEBUG: alloc %d for mask\n",RND(nx,4));
+    /* printf("DEBUG: RND alloc %d for mask\n",RND(nx,4)); */
 #else
     /* this can cause bugs in linux if nx%4 nonzero, e.g. 127 size */
     mask->flag = (int *)malloc(sizeof(int)*nx);
-    printf("DEBUG: alloc %d for mask\n",nx);
+    /* printf("DEBUG: non-RND alloc %d for mask\n",nx); */
 #endif
 
     if (mask->flag == (int *)NULL) {
@@ -794,7 +794,7 @@ static int maskread(MIRIAD *f, int *flags, size_t length, long int offset)
 #else
         isize = (size_t)itemsize;
 	/* next line has read_overflow in not RND */
-	printf("DEBUG: isize=%d\n",isize);
+	/* printf("DEBUG: isize=%d\n",isize); */
         if (fread(f->buffer, sizeof(char), isize, fd) != isize) {
 #endif
           (void)fprintf(stderr,
