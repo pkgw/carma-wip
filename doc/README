@@ -1,0 +1,70 @@
+              Installation Instructions for the WIP Manual
+
+    There are two versions of the WIP manual.  One is electronic and
+    the other has been written using LaTeX.  The electronic version
+    is available on the World Wide Web at the URL address:
+    "http://bima.astro.umd.edu/wip/manual/wip.html".
+    One may also download a PostScript version of the file from the
+    WIP home page at the WWW URL: "http://bima.astro.umd.edu/wip/".
+
+    Instructions for printing and building a paper copy of the manual
+    comprise the rest of this message.
+
+    The WIP manual has been written using LaTeX.  There should be, in
+    this directory, a PostScript file of the entire manual (including
+    figures) called wip.ps.  (It may be compressed, in which case, the
+    file name will be wip.ps.gz.  Use 'gunzip wip.ps.gz' to return it
+    to the uncompressed state.)  If wip.ps is not present, the manual
+    can be rebuilt from the files in this directory.  If you do not
+    have LaTeX available and the PostScript file is not available,
+    contact Jim Morgan at morgan@astro.umd.edu for further information
+    (or use the World Wide Web URL address above to read it online).
+
+    If all you want is the PostScript version, then just print out the
+    file wip.ps.  There are currently about 155 pages in the manual.
+
+    If you do not have a PostScript printer, or if the PostScript file
+    is not present, you can use the various dvi-programs to rebuild it.
+    It can then be printed on whatever printer you have available.
+    The wip.dvi file is the most recent version of the manual (with
+    the figures NOT automatically included; see below).  To print the
+    manual from the wip.dvi file, use your local dvi- to printer command.
+
+    If you need to generate the file wip.dvi, you need to run the
+    command "latex wip" a couple of times (to make sure the page/section
+    references are correct).  The file wip.ind has been included for
+    sites that do not have the program makeindex (or equivalent).
+    The file wip.ind was generated from wip.idx and is the most
+    recent version of the index for the manual.  [Do not remove or
+    replace the file wip.ind unless you know what you are doing.]
+
+    Since the WIP manual contains figures and there is no standard way
+    for LaTeX to include figures, I have tried to accommodate the most
+    standard method: PostScript.  Even still, this method may not work
+    on your printer.  There are alternatives.
+
+    The default method is to print the manual directly as described
+    above.  This will produce a manual without any plots but will have
+    pages directing where the figures should appear.  At this point,
+    either print the compressed PostScript files (see above on how to
+    uncompress them) in the directory Examples or, if you have built WIP,
+    use WIP to generate the figures using the script wip.csh in the
+    Examples subdirectory (or use the command "make examples" in this
+    directory).  The pages may then be substituted or cut-and-pasted in
+    place.  If the printing device is not PostScript, then you should
+    look at the file Examples/wip.csh and see how to change the plotting
+    device accordingly.  Also, in order for the script to work properly,
+    it requires that WIP has already been built and is either in your
+    executable path or can be identified (again, look at Examples/wip.csh).
+
+    The other alternative is the one used to generated the PostScript
+    file in this directory.  It requires that you have the Radical Eye
+    Software's program dvips (we are running dvipsk 5.58f).  If so,
+    then you may be able to include the figures directly in the
+    document.  Modify the file wip.tex so that the variable \doplot is
+    set to true (change \doplotfalse to \doplottrue) and then run the
+    command "latex wip" a couple of times (to get the page number
+    references correct). Then, when you use dvips, the figures will
+    be automatically inserted in the document.  If this fails,
+    change \doplot back to false (\doplotfalse), rerun LaTeX, and
+    then print the manual and figures as described above.
