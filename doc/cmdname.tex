@@ -1,0 +1,31 @@
+%% This file is to be included by latex in wip.tex
+%
+% CmdNames.
+%
+\mylabel{a:cmdname}
+\myfile{cmdname.tex}
+
+This Appendix presents, alphabetically, each of the current command names
+along with a description of the arguments to each command.
+Each entry in this file is equivalent to
+requesting help\index{Help} with the command
+{\tt help cmd}\index{Help!commands!{\tt help}}
+where {\tt cmd} is the command name.
+Command arguments inside square brackets are optional parameters;
+the description will describe what value will be substituted if these
+arguments are not supplied.
+
+If there is a difference between the descriptions that follow and
+the corresponding on-line version,
+the on-line help message should be assumed to be correct.
+
+\begin{htmlonly}
+  \input hhelp
+\end{htmlonly}
+\begin{latexonly}
+  \small
+  \begin{description}
+    \input lhelp
+  \end{description}
+  \normalsize
+\end{latexonly}
