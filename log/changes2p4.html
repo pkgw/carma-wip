@@ -1,0 +1,54 @@
+<HTML>
+<HEAD>
+<TITLE>WIP Version 2.4 Changes</TITLE>
+</HEAD>
+
+<BODY>
+<H1>WIP Version 2.4 Changes</H1>
+
+This version reflects corrections and enhancements to WIP (Version 2.4):
+
+<OL>
+
+  <LI> More string space for long lines (8192) - pjt
+
+  <LI> gaussian fits are different now: the ~ is used to fix a value,
+       thus enabling to fit negative velocities. Also, the centroid
+       can now also be fit (previously was hardcoded not to...) - pjt
+
+  <LI> Compilation on VMS is now no longer checked. - pjt
+
+  <LI> Images are now checked on the CD matrix, if CDELTs are missing - pjt
+
+  <LI> Can now handle up to 100 variables, instead of 20. Arguments 	
+	in macros can now be up to 100, instead of 10. - pjt
+
+  <LI> Some changes to miriad.c to fix linux bugs, some remained oddity left
+       in 2.3.1 that have to do with mask files.  - pjt
+
+  <LI> Added a MAIN__ and MAIN_ routine for Linux machines in wipmain.c to
+     suppress the warning message caused by the mix of Fortran and C.
+     If it ever reaches that routine (it should not), WIP exits with
+     a warning.
+
+  <LI> Added a warning to the data reader (<CODE>wipreadcol()</CODE>)
+     so the user is notified when the number of points to be read is
+     truncated to the internal array maximum.
+
+  <LI> Added a check for and removal of any include file TRUE/FALSE
+     definitions.  Apparently, some gcc (under Linux) compilers
+     (incorrectly) define these variables.
+
+  <LI> Used an #ifdef to temporarily remove the Debug code in heq.c.
+     This block should remain removed until PGPLOT 5.1.0 code is the
+     earliest version required by WIP.  WIP should also be generalized
+     so that this second device could be specified by the user.
+
+  <LI> Changed the makewip script to reflect more modern fortran (g77)
+	compilers for linux these days; also documented example of
+	usage of ccmalloc leak detector.
+
+  </OL>
+
+</BODY>
+</HTML>
