@@ -6,6 +6,7 @@
 	20feb92 jm  Changed wiplenc to change trailing WHITE to Null's.
 	28jul92 jm  Added wipnewstring() routine.
 	11sep92 jm  Added test for empty (NULL) strings.
+	09oct00 pjt no more PROTOTYPE #ifdef
 
 Routines:
 char *wipparse ARGS(( char **line ));
@@ -24,12 +25,7 @@ int wiparguments ARGS(( char **rest, int n, double arg[] ));
 
 /* Code */
 
-#ifdef PROTOTYPE
 char *wipparse(char **line)
-#else
-char *wipparse(line)
-char **line;
-#endif /* PROTOTYPE */
 {
     char *s, *par;
 
@@ -49,12 +45,7 @@ char **line;
     return(par);                                  /* Return found word. */
 }
 
-#ifdef PROTOTYPE
 int wipcountwords(Const char *line)
-#else
-int wipcountwords(line)
-Const char *line;
-#endif /* PROTOTYPE */
 {
     register int n = 0;
     char *s;
@@ -65,12 +56,7 @@ Const char *line;
     return(n);
 }
 
-#ifdef PROTOTYPE
 void wiplower(char *s)
-#else
-void wiplower(s)
-char *s;
-#endif /* PROTOTYPE */
 {
     register char j;
 
@@ -78,12 +64,7 @@ char *s;
       *s++ = (isupper((int)j) ? (char)tolower((int)j) : j);
 }
 
-#ifdef PROTOTYPE
 void wipupper(char *s)
-#else
-void wipupper(s)
-char *s;
-#endif /* PROTOTYPE */
 {
     register char j;
 
@@ -91,12 +72,7 @@ char *s;
       *s++ = (islower((int)j) ? (char)toupper((int)j) : j);
 }
 
-#ifdef PROTOTYPE
 char *wipleading(Const char *line)
-#else
-char *wipleading(line)
-Const char *line;
-#endif /* PROTOTYPE */
 {
     register char *s;
 
@@ -111,12 +87,7 @@ Const char *line;
     return((char *)s);
 }
 
-#ifdef PROTOTYPE
 int wiplenc(char *c)
-#else
-int wiplenc(c)
-char *c;
-#endif /* PROTOTYPE */
 {
     register char *s;
 
@@ -133,12 +104,7 @@ char *c;
  *  Copies an instance of a string.  You must release this memory with Free()!
  *  Returns a NULL pointer if the input string is empty or on an error.
  */
-#ifdef PROTOTYPE
 char *wipnewstring(Const char *string)
-#else
-char *wipnewstring(string)
-Const char *string;
-#endif /* PROTOTYPE */
 {
     char *newstr;
     size_t strsize;
@@ -161,14 +127,7 @@ Const char *string;
     return(newstr);
 }
 
-#ifdef PROTOTYPE
 int wiparguments(char **rest, int maxarg, double arg[])
-#else
-int wiparguments(rest, maxarg, arg)
-char **rest;
-int maxarg;
-double arg[];
-#endif /* PROTOTYPE */
 {
     char *s;
     register int j;

@@ -5,6 +5,8 @@
 	12jan93 jm  Added exact match code section to find_command().
 	14feb95 jm  Added exact argument to find_command().
 	16jun95 jm  Fixed a bug that kept only 3 choices on a line.
+         9oct00 pjt no more PROTOTYPEs
+
 
 Routines:
 COMMAND *find_command ARGS(( COMMAND *first, Const char *inname, int exact ));
@@ -27,14 +29,7 @@ COMMAND *wipinterpret ARGS(( char **line ));
  *  to a COMMAND pointer is returned.  A pointer to NULL is returned
  *  on any error.
  */
-#ifdef PROTOTYPE
 COMMAND *find_command(COMMAND *first, Const char *inname, int exact)
-#else
-COMMAND *find_command(first, inname, exact)
-COMMAND *first;
-Const char *inname;
-int exact;
-#endif /* PROTOTYPE */
 {
     char *ptr;
     Const char *endstr = "end";
@@ -103,12 +98,7 @@ int exact;
  *  the command structure is returned; a pointer to NULL means either
  *  no command found or some other error.
  */
-#ifdef PROTOTYPE
 COMMAND *wipinterpret(char **line)
-#else
-COMMAND *wipinterpret(line)
-char **line;
-#endif /* PROTOTYPE */
 {
     char *par;
     COMMAND *vb;

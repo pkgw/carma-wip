@@ -31,6 +31,9 @@
  *    13nov96 jm  Modified wipimage so ctype was declared as large as
  *                in the WIPIMAGE structure.  There was a problem with
  *                memory overwrite for some images.
+ *    18may99 pjt simple support for cd1_1 cd2_2 instead of cdelt1/2
+ *    10oct00 pjt no more PROTOTYPE
+ *    
  *
  * Routines:
  * static void wipimagefree ARGS(( Void *image ));
@@ -91,12 +94,7 @@ static IMSTACK imstackHead = {"curimage", (Void *)NULL, (IMSTACK *)NULL};
 
 /* Code */
 
-#ifdef PROTOTYPE
 static void wipimagefree(Void *image)
-#else
-static void wipimagefree(image)
-Void *image;
-#endif /* PROTOTYPE */
 {
     IMFORMAT *fmt;
     WIPIMAGE *ptr;
@@ -118,14 +116,7 @@ Void *image;
  *  Fill the real array pixels[ny][nx] and the structure image.
  *  Returns a pointer to the structure if successful; NULL on error.
  */
-#ifdef PROTOTYPE
 static WIPIMAGE *getimage(Const char *filename, int plane, float blank)
-#else
-static WIPIMAGE *getimage(filename, plane, blank)
-Const char *filename;
-int plane;
-float blank;
-#endif /* PROTOTYPE */
 {
 
     Void *handle;         /* Opaque handle returned from open routine. */
@@ -136,7 +127,7 @@ float blank;
     float fmin, fmax;
     float *rptr, *fptr;
     FLOAT **pixels;
-    double crval1, crval2, crpix1, crpix2, cdelt1, cdelt2;
+    double crval1, crval2, crpix1, crpix2, cdelt1, cdelt2, tmpd;
     WIPIMAGE *image;
     IMFORMAT *fmt;
 
@@ -174,6 +165,18 @@ float blank;
     fmt->imrdhdd(handle,  "crpix2", &crpix2, 0.0);
     fmt->imrdhdd(handle,  "cdelt1", &cdelt1, 0.0);
     fmt->imrdhdd(handle,  "cdelt2", &cdelt2, 0.0);
+    if (cdelt1 == 0.0) {
+      fmt->imrdhdd(handle,  "cd1_1", &cdelt1, 0.0);
+      fmt->imrdhdd(handle,  "cd1_2", &tmpd, 0.0);
+      if (tmpd != 0.0) 
+	wipoutput(stderr, "GETIMAGE: cd1_2 = %g non-zero ...\n", tmpd);
+    }
+    if (cdelt2 == 0.0) {
+      fmt->imrdhdd(handle,  "cd2_2", &cdelt2, 0.0);
+      fmt->imrdhdd(handle,  "cd2_1", &tmpd, 0.0);
+      if (tmpd != 0.0) 
+	wipoutput(stderr, "GETIMAGE: cd2_1 = %g non-zero ...\n", tmpd);
+    }
     fmt->imrdhda(handle,  "ctype1",  ctype1, "(none)", 80);
     fmt->imrdhda(handle,  "ctype2",  ctype2, "(none)", 80);
 
@@ -240,14 +243,7 @@ float blank;
     return(image);
 }
 
-#ifdef PROTOTYPE
 Void *wipimage(Const char *filename, int plane, float blank)
-#else
-Void *wipimage(filename, plane, blank)
-Const char *filename;
-int plane;
-float blank;
-#endif /* PROTOTYPE */
 {
     char dummy[80];
     int nx, ny;
@@ -279,13 +275,8 @@ float blank;
     return((Void *)ptr);
 }
 
-#ifdef PROTOTYPE
+
 void wipimagenxy(Const Void *image, int *nx, int *ny)
-#else
-void wipimagenxy(image, nx, ny)
-Const Void *image;
-int *nx, *ny;
-#endif /* PROTOTYPE */
 {
     WIPIMAGE *ptr;
 
@@ -300,14 +291,7 @@ int *nx, *ny;
     return;
 }
 
-#ifdef PROTOTYPE
 void wipimageminmax(Void *image, float *min, float *max, int force)
-#else
-void wipimageminmax(image, min, max, force)
-Void *image;
-float *min, *max;
-int force;
-#endif /* PROTOTYPE */
 {
     int nx, ny;
     WIPIMAGE *ptr;
@@ -333,12 +317,7 @@ int force;
 }
 
 /*  Returns 1 if the named image exists and has data; 0 otherwise. */
-#ifdef PROTOTYPE
 int wipimagexists(Const Void *image)
-#else
-int wipimagexists(image)
-Const Void *image;
-#endif /* PROTOTYPE */
 {
     int doesItExist;
     WIPIMAGE *ptr;
@@ -352,12 +331,7 @@ Const Void *image;
 }
 
 /*  Returns a pointer to the image data if it exists; NULL otherwise. */
-#ifdef PROTOTYPE
 float **wipimagepic(Const Void *image)
-#else
-float **wipimagepic(image)
-Const Void *image;
-#endif /* PROTOTYPE */
 {
     WIPIMAGE *ptr;
 
@@ -371,13 +345,7 @@ Const Void *image;
 }
 
 /*  Returns 1 on error; 0 if successful. */
-#ifdef PROTOTYPE
 int wipimlogscale(Void *image, float scale)
-#else
-int wipimlogscale(image, scale)
-Void *image;
-float scale;
-#endif /* PROTOTYPE */
 {
     register int x, y;
     int nx, ny;
@@ -402,13 +370,7 @@ float scale;
 }
 
 /*  Returns 1 on error; 0 if successful. */
-#ifdef PROTOTYPE
 int wipimsetminmax(Void *image, float min, float max)
-#else
-int wipimsetminmax(image, min, max)
-Void *image;
-float min, max;
-#endif /* PROTOTYPE */
 {
     WIPIMAGE *ptr;
 
@@ -430,15 +392,7 @@ float min, max;
  *  Note: ctype must be declared as large as the structure element!
  *  No test of this is done.
  */
-#ifdef PROTOTYPE
 int wipimgethead(Const Void *image, int axis, double *crval, double *crpix, double *cdelt, char *ctype)
-#else
-int wipimgethead(image, axis, crval, crpix, cdelt, ctype)
-Const Void *image;
-int axis;
-double *crval, *crpix, *cdelt;
-char *ctype;
-#endif /* PROTOTYPE */
 {
     WIPIMAGE *ptr;
 
@@ -467,14 +421,7 @@ char *ctype;
  *  routine assumes that the size of the string pointed to by "ctype"
  *  is large enough to hold the information.
  */
-#ifdef PROTOTYPE
 int wipimctype(Const Void *image, int axis, char *ctype)
-#else
-int wipimctype(image, axis, ctype)
-Const Void *image;
-int axis;
-char *ctype;
-#endif /* PROTOTYPE */
 {
     WIPIMAGE *ptr;
 
@@ -494,12 +441,7 @@ char *ctype;
 }
 
 /* Returns NULL if no image; otherwise pointer to name of image type loaded. */
-#ifdef PROTOTYPE
 char *wipimtype(Const Void *image)
-#else
-char *wipimtype(image)
-Const Void *image;
-#endif /* PROTOTYPE */
 {
     WIPIMAGE *ptr;
 
@@ -513,12 +455,7 @@ Const Void *image;
 }
 
 /* Returns 0 if no image is present; current plane number otherwise. */
-#ifdef PROTOTYPE
 int wipimplane(Const Void *image)
-#else
-int wipimplane(image)
-Const Void *image;
-#endif /* PROTOTYPE */
 {
     WIPIMAGE *ptr;
 
@@ -532,13 +469,7 @@ Const Void *image;
 }
 
 /* Returns 1 if header name is present; 0 otherwise. */
-#ifdef PROTOTYPE
 int wipimhdprsnt(Const Void *image, Const char *hdname)
-#else
-int wipimhdprsnt(image, hdname)
-Const Void *image;
-Const char *hdname;
-#endif /* PROTOTYPE */
 {
     IMFORMAT *fmt;
     WIPIMAGE *ptr;
@@ -558,14 +489,7 @@ Const char *hdname;
 }
 
 /* Returns 0 and header value if image is present; 1 otherwise (error). */
-#ifdef PROTOTYPE
 int wipimhdval(Const Void *image, Const char *hdname, double *retval)
-#else
-int wipimhdval(image, hdname, retval)
-Const Void *image;
-Const char *hdname;
-double *retval;
-#endif /* PROTOTYPE */
 {
     IMFORMAT *fmt;
     WIPIMAGE *ptr;
@@ -589,15 +513,7 @@ double *retval;
 /*
  *  Returns the length of the requested string header if "image" is present
  *  and the header item exists; 0 otherwise (error). */
-#ifdef PROTOTYPE
 int wipimhdstr(Const Void *image, Const char *hdname, char *retval, size_t maxlen)
-#else
-int wipimhdstr(image, hdname, retval, maxlen)
-Const Void *image;
-Const char *hdname;
-char *retval;
-size_t maxlen;
-#endif /* PROTOTYPE */
 {
     int retlen;
     IMFORMAT *fmt;
@@ -621,12 +537,7 @@ size_t maxlen;
 }
 
 /* Returns NULL if imagename is not present; opaque pointer otherwise. */
-#ifdef PROTOTYPE
 Void *wipimcur(Const char *imagename)
-#else
-Void *wipimcur(imagename)
-Const char *imagename;
-#endif /* PROTOTYPE */
 {
     char string[STRINGSIZE];
     IMSTACK *ptr;
@@ -642,13 +553,7 @@ Const char *imagename;
     return( ((ptr == (IMSTACK *)NULL) ? (Void *)NULL : ptr->image) );
 }
 
-#ifdef PROTOTYPE
 void wipimsetcur(Const char *imagename, Const Void *image)
-#else
-void wipimsetcur(imagename, image)
-Const char *imagename;
-Const Void *image;
-#endif /* PROTOTYPE */
 {
     char string[STRINGSIZE];
     IMSTACK *ptr, *new, *last;
@@ -678,12 +583,7 @@ Const Void *image;
     return;
 }
 
-#ifdef PROTOTYPE
 void wipfreeimage(Const char *imagename)
-#else
-void wipfreeimage(imagename)
-Const char *imagename;
-#endif /* PROTOTYPE */
 {
     char string[STRINGSIZE];
     IMSTACK *ptr, *last;
@@ -717,13 +617,7 @@ Const char *imagename;
 
 #define VERSION_ID "1.0"
 
-#ifdef PROTOTYPE
 main(int argc, char *argv[])
-#else
-main(argc, argv)
-int argc;
-char *argv[];
-#endif /* PROTOTYPE */
 {
     Void *image;
     char *infile;

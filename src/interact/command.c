@@ -2,6 +2,7 @@
 	<command.c> -- This file handles the COMMAND structure.
 	19jul90 jm  Original code.
 	16aug92 jm  Cleaned up code a bit.
+  	 9oct00 pjt no more PROTOTYPEs
 
 Routines:
 COMMAND *create_command ARGS(( void ));
@@ -16,11 +17,7 @@ void delete_command ARGS(( COMMAND *vb ));
 
 /* Code */
 
-#ifdef PROTOTYPE
 COMMAND *create_command(void)
-#else
-COMMAND *create_command()
-#endif /* PROTOTYPE */
 {
     COMMAND *vb;
 
@@ -32,12 +29,7 @@ COMMAND *create_command()
     return(vb);
 }
 
-#ifdef PROTOTYPE
 void add_command(COMMAND *vb)
-#else
-void add_command(vb)
-COMMAND *vb;
-#endif /* PROTOTYPE */
 {
     COMMAND *p;
 
@@ -52,12 +44,7 @@ COMMAND *vb;
     return;
 }
 
-#ifdef PROTOTYPE
 void delete_command(COMMAND *vb)
-#else
-void delete_command(vb)
-COMMAND *vb;
-#endif /* PROTOTYPE */
 {
     COMMAND *p;
     PCMACRO *ptr, *next;

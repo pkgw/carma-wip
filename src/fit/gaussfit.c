@@ -14,6 +14,8 @@
 	19jun96 jm  Split the fit code off into it's own individual
 		    directory and split the different types of fits
 		    into individual routines.
+        30nov00 sally/pjt  fixed correct reporting of fwhm
+         1dec00 pjt ansi-c; changed fixing parameters to the MAGICFIX character
 
   NOTE:  This code was originally extracted from the Fortran version of
   Numerical Recipes by Press, et. al. and has been modified and updated
@@ -44,6 +46,9 @@ int wipgaussfit ARGS(( char *rest, float x[], float y[], int nxy, \
   float sig[], int nsig, int ngauss, float terms[] ));
 */
 
+/*   undef this if you *must* be in the old incompatible mode */
+#define MAGICFIX  '~'
+
 #include "wip.h"
 
 /* Global variables for just this file */
@@ -59,16 +64,7 @@ int wipgaussfit ARGS(( char *rest, float x[], float y[], int nxy, \
  *
  *  Both a[] and dyda[] are of size na and are 1-based vectors.
  */
-#ifdef PROTOTYPE
 static void fgauss(float x, float a[], float *y, float dyda[], int na)
-#else
-static void fgauss(x, a, y, dyda, na)
-float x;
-float a[];
-float *y;
-float dyda[];
-int na;
-#endif /* PROTOTYPE */
 {
     register int i;
     float fac, ex, arg;
@@ -89,24 +85,10 @@ int na;
  *  Used to evaluate the linearized fitting matrix alpha and vector beta
  *  and to calculate chi-squared.
  */
-#ifdef PROTOTYPE
+
 static void mrqcof(float x[], float y[], int ndata, float sig[], int nsig,
   float a[], int ia[], int ma, float **alpha, float beta[], float *chisq,
   void (*funcs)(float, float [], float *, float [], int))
-#else
-static void mrqcof(x, y, ndata, sig, nsig, a, ia, ma, alpha, beta, chisq, funcs)
-float x[], y[];
-int ndata;
-float sig[];
-int nsig;
-float a[];
-int ia[];
-int ma;
-float **alpha;
-float beta[];
-float *chisq;
-void (*funcs)();
-#endif /* PROTOTYPE */
 {
     int i, j, k, L, m, mfit;
     float ymod, wt, sig2i, dy;
@@ -164,15 +146,7 @@ void (*funcs)();
  *
  *  Returns 0 if successful; 1 on error.
  */
-#ifdef PROTOTYPE
 static int gaussj(float **a, int n, float **b, int m)
-#else
-static int gaussj(a, n, b, m)
-float **a;
-int n;
-float **b;
-int m;
-#endif /* PROTOTYPE */
 {
 #define SWAP(a,b) {temp = (a); (a) = (b); (b) = temp;}
 
@@ -288,15 +262,7 @@ errBranch:
  *  into account parameters that are being help fixed.
  *  (For the latter, return zero covariances.)
  */
-#ifdef PROTOTYPE
 static void covsrt(float **covar, int ma, int ia[], int mfit)
-#else
-static void covsrt(covar, ma, ia, mfit)
-float **covar;
-int ma;
-int ia[];
-int mfit;
-#endif /* PROTOTYPE */
 {
 #define SWAP(a,b) {swap = (a); (a) = (b); (b) = swap;}
 
@@ -350,24 +316,10 @@ int mfit;
  *  Returns 1 if there was trouble allocating arrays or some other
  *  error; 0 on success.
  */
-#ifdef PROTOTYPE
+
 static int mrqmin(float x[], float y[], int ndata, float sig[], int nsig,
   float a[], int ia[], int ma, float **covar, float **alpha, float *chisq,
   void (*funcs)(float, float [], float *, float [], int), float *alamda)
-#else
-static int mrqmin(x, y, ndata, sig, nsig, a, ia, ma, covar, alpha, chisq, funcs, alamda)
-float x[], y[];
-int ndata;
-float sig[];
-int nsig;
-float a[];
-int ia[];
-int ma;
-float **covar, **alpha;
-float *chisq;
-void (*funcs)();
-float *alamda;
-#endif /* PROTOTYPE */
 {
     int j, k, L, m;
     static int mfit;
@@ -484,20 +436,8 @@ float *alamda;
 /*
  *  Returns 0 if successful; 1 otherwise.
  */
-#ifdef PROTOTYPE
 static int gaussfit(float x[], float y[], int ndata, float sig[], int nsig,
   float a[], int ia[], int ma, float *chisq)
-#else
-static int gaussfit(x, y, ndata, sig, nsig, a, ia, ma, chisq)
-float x[], y[];
-int ndata;
-float sig[];
-int nsig;
-float a[];
-int ia[];
-int ma;
-float *chisq;
-#endif /* PROTOTYPE */
 {
     int j;
     float alamda, ochisq;
@@ -522,7 +462,7 @@ float *chisq;
       goto errBranch;
     }
 
-    for (j = 0; j < 10; /* NULL */) {
+    for (j = 0; j < 10; /* NULL */) {        /* why 10  ????  - pjt */
       ochisq = *chisq;
       if (mrqmin(x-1, y-1, ndata, sig-1, nsig, a-1, ia-1, ma, covar, alpha,
         chisq, fgauss, &alamda)) {
@@ -555,13 +495,13 @@ float *chisq;
     freematrix(alpha, 1, 1);
     freematrix(covar, 1, 1);
 
-    return(0);
+    return 0;
 
 errBranch:
     freematrix(alpha, 1, 1);
     freematrix(covar, 1, 1);
 
-    return(1);
+    return 1;
 }
 
 /*
@@ -572,22 +512,15 @@ errBranch:
  *
  *  Returns 0 if successful; 1 if there are insufficient number of points.
  */
-#ifdef PROTOTYPE
 static int moment(float x[], float y[], int n, float *amp,
   float *xmean, float *sdev)
-#else
-static int moment(x, y, n, amp, xmean, sdev)
-float x[], y[];
-int n;
-float *amp, *xmean, *sdev;
-#endif /* PROTOTYPE */
 {
     register unsigned int j;
     float s, ep;
     float mom0, mom1, mom2;
 
     if (n < 2)
-      return(1);
+      return 1;
 
     *amp = y[0];
     ep = mom0 = mom1 = mom2 = 0.0;
@@ -609,7 +542,7 @@ float *amp, *xmean, *sdev;
     mom2 = (mom2 - (ep * ep / mom0)) / (mom0 - 1);
     *sdev = (mom2 > 0) ? SQRT(mom2) : 0.0;
 
-    return(0);
+    return 0;
 }
 
 /*
@@ -625,20 +558,8 @@ float *amp, *xmean, *sdev;
  *
  *  This routine returns 0 if successful; 1 otherwise.
  */
-#ifdef PROTOTYPE
 int wipgaussfit(char *rest, float x[], float y[], int nxy,
   float sig[], int nsig, int ngauss, float terms[])
-#else
-int wipgaussfit(rest, x, y, nxy, sig, nsig, ngauss, terms)
-char *rest;
-float x[];
-float y[];
-int nxy;
-float sig[];
-int nsig;
-int ngauss;
-float terms[];
-#endif /* PROTOTYPE */
 {
     char *par, *pvar;
     char uservar[STRINGSIZE];
@@ -654,7 +575,7 @@ float terms[];
     if (ia == (int *)NULL) {
       wipoutput(stderr,
         "Trouble finding temporary storage for the Gaussian fit arguments.\n");
-      return(1);
+      return 1;
     }
 
     /* Process the input arguments (amp, mean, fwhm, ...). */
@@ -663,14 +584,25 @@ float terms[];
     for (j = 0; j < nsize; j++) {
       if ((pvar = wipparse(&par)) == (char *)NULL)
         break;
+#ifdef MAGICFIX
+      if (*pvar == MAGICFIX) {		/* keep this argument fixed for fitting */
+	ia[j] = 0;
+	pvar++;
+      } else
+	ia[j] = 1;
       if (wiparguments(&pvar, 1, &arg) != 1)
         break;
-      ia[j] = (arg >= 0.0);   /* Only fit if the argument is positive. */
+      terms[j] = arg;
+#else
+      if (wiparguments(&pvar, 1, &arg) != 1)
+        break;
+      ia[j] = (arg >= 0.0); 	/* Only fit if the argument is positive. */
       terms[j] = ABS(arg);
       if ((j % 3) == 0) {          /* The peak position is always fit. */
         ia[j] = 1;
         terms[j] = arg;
       }
+#endif
     }
 
     if (j < nsize) {
@@ -704,7 +636,7 @@ float terms[];
     if (gaussfit(x, y, nxy, sig, nsig, terms, ia, nsize, &chi2)) {
       wipoutput(stderr, "Trouble finding a Gaussian fit.\n");
       Free(ia);
-      return(1);
+      return 1;
     }
 
     /* Write fits to user variables. */
@@ -713,8 +645,14 @@ float terms[];
         break;
       idum = (j / 3) + 1;
       if ((j % 3) == 0)
-        wipoutput(stdout, "\nGaussian fit %d (amp,mean,fwhm) = ", idum);
-      wipoutput(stdout, "%G  ", terms[j]);
+        wipoutput(stdout, "\nGaussian fit %d (Amp,Mean,FWHM) = ", idum);
+      if ((j % 3) == 2)
+	      wipoutput(stdout, "%G  ", terms[j]*1.665109222);   /* 2*sqrt(ln(2)) */
+      else
+	      wipoutput(stdout, "%G  ", terms[j]);
+#ifdef MAGICFIX
+      if (*pvar == MAGICFIX) pvar++;
+#endif
       if (wipisnumber(pvar, &arg)) {
         /* No need to warn about this...?
         wipoutput(stdout, "Term %d was input as a number; ", j + 1);
@@ -737,6 +675,9 @@ float terms[];
      /* If any variables exist, fill them with the chi-square value. */
     wipoutput(stdout, "\nchi2 = %G\n", chi2);
     while ((pvar = wipparse(&rest)) != (char *)NULL) {
+#ifdef MAGICFIX
+      if (*pvar == MAGICFIX) pvar++;
+#endif
       if (wipisnumber(pvar, &arg)) {
         /* No need to warn about this...?
         wipoutput(stdout, "Chi-square term was input as a number; ");
@@ -750,5 +691,5 @@ float terms[];
     }
 
     Free(ia);
-    return(0);
+    return 0;
 }

@@ -11,6 +11,7 @@
 		    accessed items are closer to the end of the list.
 	01oct92 jm  Changed initVariable() to a static function called
 		    once by find_variable().
+         9oct00 pjt no more PROTOTYPE
 
 Routines:
 static int initVariable ARGS(( void ));
@@ -33,11 +34,7 @@ static VARIABLE *VARHEAD = (VARIABLE *)NULL;
 /* Code */
 
 /*  Always returns 0, but function needs to return a status int. */
-#ifdef PROTOTYPE
 static int initVariable(void)
-#else
-static int initVariable()
-#endif /* PROTOTYPE */
 {
     register int j, number;
     VARIABLE *vb;
@@ -58,12 +55,7 @@ static int initVariable()
  *  Returns a pointer to the VARIABLE structure if "inname" is defined
  *  as a variable; a pointer to NULL otherwise.
  */
-#ifdef PROTOTYPE
 static VARIABLE *find_variable(Const char *inname)
-#else
-static VARIABLE *find_variable(inname)
-Const char *inname;
-#endif /* PROTOTYPE */
 {
     char *par, *ptr;
     char word[STRINGSIZE];
@@ -92,12 +84,7 @@ Const char *inname;
 }
 
 /* Returns 1 if "name" is defined as a variable; 0 otherwise. */
-#ifdef PROTOTYPE
 int wipisvar(Const char *name)
-#else
-int wipisvar(name)
-Const char *name;
-#endif /* PROTOTYPE */
 {
     return(find_variable(name) != (VARIABLE *)NULL);
 }
@@ -106,13 +93,7 @@ Const char *name;
  *  Returns, if the variable exists, the current value of the variable
  *  and sets error to FALSE; otherwise, it returns 0 and sets error to TRUE.
  */
-#ifdef PROTOTYPE
 double wipgetvar(Const char *inword, LOGICAL *error)
-#else
-double wipgetvar(inword, error)
-Const char *inword;
-LOGICAL *error;
-#endif /* PROTOTYPE */
 {
     VARIABLE *vb;
 
@@ -127,13 +108,7 @@ LOGICAL *error;
 }
 
 /* Returns 0 if the variable exists and was set; 1 if an error occured. */
-#ifdef PROTOTYPE
 int wipsetvar(Const char *inword, double value)
-#else
-int wipsetvar(inword, value)
-Const char *inword;
-double value;
-#endif /* PROTOTYPE */
 {
     VARIABLE *vb;
 
@@ -147,12 +122,7 @@ double value;
 }
 
 /* Returns 0 if all went well; 1 if an error occured. */
-#ifdef PROTOTYPE
 int wipNewVariable(Const char *name)
-#else
-int wipNewVariable(name)
-Const char *name;
-#endif /* PROTOTYPE */
 {
     char *ptr;
     VARIABLE *vb;
@@ -184,12 +154,7 @@ Const char *name;
     return(0);
 }
 
-#ifdef PROTOTYPE
 int wipFreeVariable(Const char *name)
-#else
-int wipFreeVariable(name)
-Const char *name;
-#endif /* PROTOTYPE */
 {
     register VARIABLE *p;
     VARIABLE *vb;

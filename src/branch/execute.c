@@ -43,8 +43,6 @@ int wipexecute ARGS(( Const char *commandname, char *line ));
 /* Global variables for just this file */
 /* Parameter STRINGSIZE defined in wip.h. */
 
-#define MAXARG       10
-
 static LOGICAL termidle = FALSE;      /* T if terminal; F if hardcopy. */
 
 /* Code */

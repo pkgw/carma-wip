@@ -13,6 +13,7 @@
 	11sep92 jm  Added test for an empty value in wipsetstring().
 	01oct92 jm  Changed initString() to a static function called
 		    once by find_string().
+         9oct00 pjt no more PROTOTYPE
 
 Routines:
 static int initString ARGS(( void ));
@@ -35,11 +36,7 @@ static WSTRINGS *STRHEAD = (WSTRINGS *)NULL;
 /* Code */
 
 /*  Always returns 0, but function needs to return a status int. */
-#ifdef PROTOTYPE
 static int initString(void)
-#else
-static int initString()
-#endif /* PROTOTYPE */
 {
     register int j, number;
     WSTRINGS *vb;
@@ -60,12 +57,7 @@ static int initString()
  *  Returns a pointer to the WSTRINGS structure if "inname" is defined
  *  as a string variable; a pointer to NULL otherwise.
  */
-#ifdef PROTOTYPE
 static WSTRINGS *find_string(Const char *inname)
-#else
-static WSTRINGS *find_string(inname)
-Const char *inname;
-#endif /* PROTOTYPE */
 {
     char *par, *ptr;
     char word[STRINGSIZE];
@@ -94,12 +86,7 @@ Const char *inname;
 }
 
 /* Returns 1 if "string" is defined as a string variable; 0 otherwise. */
-#ifdef PROTOTYPE
 int wipisstring(Const char *name)
-#else
-int wipisstring(name)
-Const char *name;
-#endif /* PROTOTYPE */
 {
     return(find_string(name) != (WSTRINGS *)NULL);
 }
@@ -108,12 +95,7 @@ Const char *name;
  *  Returns a pointer to the string value if the string variable exists;
  *  a pointer to NULL if not found or is set to an empty string.
  */
-#ifdef PROTOTYPE
 char *wipgetstring(Const char *inword)
-#else
-char *wipgetstring(inword)
-Const char *inword;
-#endif /* PROTOTYPE */
 {
     WSTRINGS *vb;
 
@@ -126,13 +108,7 @@ Const char *inword;
 }
 
 /* Returns 0 if the string variable exists and was set; 1 on error. */
-#ifdef PROTOTYPE
 int wipsetstring(Const char *input, Const char *value)
-#else
-int wipsetstring(input, value)
-Const char *input;
-Const char *value;
-#endif /* PROTOTYPE */
 {
     char *ptr;
     WSTRINGS *vb;
@@ -154,12 +130,7 @@ Const char *value;
 }
 
 /* Returns 0 if all went well; 1 if an error occured. */
-#ifdef PROTOTYPE
 int wipNewStrVar(Const char *name)
-#else
-int wipNewStrVar(name)
-Const char *name;
-#endif /* PROTOTYPE */
 {
     char *ptr;
     WSTRINGS *vb;
@@ -191,12 +162,7 @@ Const char *name;
 }
 
 /* Returns 0 if all went well; 1 if an error occured. */
-#ifdef PROTOTYPE
 int wipFreeString(Const char *name)
-#else
-int wipFreeString(name)
-Const char *name;
-#endif /* PROTOTYPE */
 {
     register WSTRINGS *p;
     WSTRINGS *vb;

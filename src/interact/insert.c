@@ -4,6 +4,7 @@
 	02aug92 jm  Modified wipdelete() to return status (void -> int)
 		    rather than using a passed LOGICAL pointer.  Also
 		    fixed a few bugs and cleaned up a bit.
+        09oct00 pjt no more PROTOTYPE #ifdef
 
 
 Routines:
@@ -23,13 +24,7 @@ static int lineno = 0;
 
 /* Code */
 
-#ifdef PROTOTYPE
 void wipsaveline(COMMAND *macro, Const char *line)
-#else
-void wipsaveline(macro, line)
-COMMAND *macro;
-Const char *line;
-#endif /* PROTOTYPE */
 {
     if (macro == (COMMAND *)NULL) {
       wipoutput(stderr, "wipsaveline: Macro does not exist.\n");
@@ -42,12 +37,7 @@ Const char *line;
  *  Returns pointer to NULL on error or pointer to command structure
  *  if found and command is a macro.
  */
-#ifdef PROTOTYPE
 COMMAND *wipstartins(char *string)
-#else
-COMMAND *wipstartins(string)
-char *string;
-#endif /* PROTOTYPE */
 {
     char *par;
     double arg = -1;
@@ -77,13 +67,7 @@ char *string;
     return(vb);
 }
 
-#ifdef PROTOTYPE
 void wipinsert(COMMAND *command, Const char *string)
-#else
-void wipinsert(command, string)
-COMMAND *command;
-Const char *string;
-#endif /* PROTOTYPE */
 {
     if (command == (COMMAND *)NULL) {
       wipoutput(stderr, "Select a Macro first.\n");
@@ -95,12 +79,7 @@ Const char *string;
 }
 
 /*  Returns 0 if successful; 1 on error. */
-#ifdef PROTOTYPE
 int wipdelete(char *string)
-#else
-int wipdelete(string)
-char *string;
-#endif /* PROTOTYPE */
 {
     int line1, line2;
     char *par;
@@ -154,12 +133,7 @@ char *string;
     return(0);
 }
 
-#ifdef PROTOTYPE
 COMMAND *wipstartmac(Const char *string)
-#else
-COMMAND *wipstartmac(string)
-Const char *string;
-#endif /* PROTOTYPE */
 {
     char *par, *ptr;
     char macro[BUFSIZ];

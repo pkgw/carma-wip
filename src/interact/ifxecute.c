@@ -7,6 +7,7 @@
  *      01aug92 jm  Modified to return NULL cast to (COMMAND *).
  *      16sep92 jm  Modified to allow "loop" command to be called.
  *      02aug93 jm  Fixed a SEG violation in testing of right brace.
+ *       9oct00 pjt no more PROTOTYPEs
  *
  *      This routine checks the conditional value of two items and
  *      executes a macro/command if the test is true.  The conditional
@@ -54,12 +55,7 @@
 
 /* Code */
 
-#ifdef PROTOTYPE
 COMMAND *wipifxecute(char **rest)
-#else
-COMMAND *wipifxecute(rest)
-char **rest;
-#endif /* PROTOTYPE */
 {
     char *ptr, *op, *left, *right;
     char string[STRINGSIZE];

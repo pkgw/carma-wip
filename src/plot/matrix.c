@@ -4,6 +4,8 @@
 	01dec90 jm  Modified to only allow arrays with first index = [0][0].
 	26jul93 jm  Changed matrix routine to be index 1 based.
 	28jun96 jm  Modified matrix routine for arbitrary based indicies.
+         2dec00 pjt ansi-c; noted some leak locations via insure++ here
+	            (6400408 bytes)
 
 Routines:
 float *vector ARGS(( int nx ));
@@ -19,12 +21,7 @@ void freematrix ARGS(( float **matrix, int offx, int offy ));
 /* Code */
 
 /* Allocate a float array with index range [0..nx-1].  */
-#ifdef PROTOTYPE
 float *vector(int nx)
-#else
-float *vector(nx)
-int nx;
-#endif /* PROTOTYPE */
 {
     float *v;
 
@@ -41,15 +38,7 @@ int nx;
  *    m[offx..nx-1+offx][offy..ny-1+offy].
  *  Returns a pointer to matrix on success; NULL on failure.
  */
-#ifdef PROTOTYPE
 float **matrix(int offx, int nx, int offy, int ny)
-#else
-float **matrix(offx, nx, offy, ny)
-int offx;
-int nx;
-int offy;
-int ny;
-#endif /* PROTOTYPE */
 {
     int i;
     float **m;
@@ -79,12 +68,7 @@ int ny;
     return(m);
 }
 
-#ifdef PROTOTYPE
 void freevector(float *vector)
-#else
-void freevector(vector)
-float *vector;
-#endif /* PROTOTYPE */
 {
     Free(vector);
 }
@@ -94,14 +78,7 @@ float *vector;
  *  subscript range:
  *    m[offx..nx-1+offx][offy..ny-1+offy].
  */
-#ifdef PROTOTYPE
 void freematrix(float **matrix, int offx, int offy)
-#else
-void freematrix(matrix, offx, offy)
-float **matrix;
-int offx;
-int offy;
-#endif /* PROTOTYPE */
 {
     Free(matrix[offx]+offy);
     Free(matrix+offx);

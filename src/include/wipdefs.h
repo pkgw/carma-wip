@@ -5,6 +5,7 @@
  *    10nov93 jm  Moved standard definitions here.
  *    22aug94 jm  Added stdarg/varargs includes.
  *    13nov96 jm  Changed debug mode to a routine rather than a global variable.
+ *    30nov00 pjt Only ansi-c now
  *
  */
 
@@ -20,10 +21,12 @@
 #endif /* !convex */
 
 #ifdef linux
+/*			this is bad, would fail on power-pc etc. need different check */
 #define IEEEByteSwap
 #endif /* linux */
 
 #ifdef OSF
+/*			probably bad idea too */
 #define IEEEByteSwap
 #endif /* OSF */
 
@@ -33,7 +36,7 @@
 
 /* Define a default character string size (if <stdio.h> doesn't). */
 #ifndef BUFSIZ
-#define BUFSIZ 1024
+#define BUFSIZ 2048
 #endif
 
 /* Define a Null character if it is missing. */
@@ -41,31 +44,14 @@
 #define Null '\0'
 #endif
 
-#ifdef __STDC__
-#if (__STDC__ == 1)
+/* only Ansi C is now supported */
+
 #define PROTOTYPE 1
 typedef void Void;
 #define Const const
 #include <stdarg.h>
-#else
-typedef char Void;
-#define Const /* NULL */
-#include <varargs.h>
-#endif /* (__STDC__ == 1) */
-#else
-typedef char Void;
-#define Const /* NULL */
-#include <varargs.h>
-#endif /* __STDC__ */
-
-/* Define a macro that aides in presenting prototypes. */
-#ifndef ARGS
-#ifdef PROTOTYPE
 #define ARGS(alist) alist
-#else
-#define ARGS(alist) ()
-#endif /* PROTOTYPE */
-#endif /* ARGS */
+
 
 /*
  *  The next two definitions are used by the fseek() and ftell() routines;

@@ -12,6 +12,9 @@
         09aug93 jm  Added wipisnumber() function.
         10nov93 jm  Modified image variable to new opaque pointer type.
         02jul96 jm  Added rand and gasdev functions.
+        22sep00 pjt USERVAR is now bigger, and better protected to overrun
+         9oct00 pjt no more PROTOTYPE #ifdefs
+	
 
 Routines:
 static int wipisop ARGS(( Const char *inword ));
@@ -31,17 +34,12 @@ char  *wipbracextract ARGS(( Const char *inword, char **left ));
 
 /* Global variables for just this file */
 
-static double USERVAR[21]; /* USERVAR is an array of user setable variables. */
+static double USERVAR[MAXVAR]; /* USERVAR is an array of user setable variables. */
 
 /* Code */
 
 /* Returns 1 if "inword" is a predefined operation; 0 otherwise. */
-#ifdef PROTOTYPE
 static int wipisop(Const char *inword)
-#else
-static int wipisop(inword)
-Const char *inword;
-#endif /* PROTOTYPE */
 {
     char *ptr;
 
@@ -65,14 +63,7 @@ Const char *inword;
 }
 
 /* Returns the result of the operation (arg1 op arg2). */
-#ifdef PROTOTYPE
 static double wipdoop(Const char *inword, double arg1, double arg2, LOGICAL *error)
-#else
-static double wipdoop(inword, arg1, arg2, error)
-Const char *inword;
-double arg1, arg2;
-LOGICAL *error;
-#endif /* PROTOTYPE */
 {
     char *ptr;
     double arg;
@@ -145,12 +136,7 @@ LOGICAL *error;
 }
 
 /*  Returns 1 if "inword" is a predefined (standard) function; 0 otherwise. */
-#ifdef PROTOTYPE
 static int wipisfunction(Const char *inword)
-#else
-static int wipisfunction(inword)
-Const char *inword;
-#endif /* PROTOTYPE */
 {
     register char *ptr, *opbrac;
     char word[BUFSIZ];
@@ -184,14 +170,7 @@ Const char *inword;
 }
 
 /* Returns the result of the operation (F(arg)). */
-#ifdef PROTOTYPE
 static double wipdofunc(Const char *inword, double arg, LOGICAL *error)
-#else
-static double wipdofunc(inword, arg, error)
-Const char *inword;
-double arg;
-LOGICAL *error;
-#endif /* PROTOTYPE */
 {
     long int narg;
     static long int randarg = (-911);
@@ -276,13 +255,7 @@ BADVALUE:
  *  entirely into a number and the value of "retval" will be undefined;
  *  otherwise, the number will be assigned to "retval" and 1 will be returned.
  */
-#ifdef PROTOTYPE
 int wipisnumber(Const char *inword, double *retval)
-#else
-int wipisnumber(inword, retval)
-Const char *inword;
-double *retval;
-#endif /* PROTOTYPE */
 {
     char *ptr;
     char temp[50];
@@ -317,12 +290,7 @@ double *retval;
  *  variables, or vectors may appear by themselves; all other items
  *  produce an error message.
  */
-#ifdef PROTOTYPE
 void wipecho(Const char *input)
-#else
-void wipecho(input)
-Const char *input;
-#endif /* PROTOTYPE */
 {
     char *ptr, *op, *token, *next, *tmpnext;
     char sval[50];                        /* This size should be ample. */
@@ -433,12 +401,7 @@ Const char *input;
  *
  *  Returns 0 if successful; 1 on error.
  */
-#ifdef PROTOTYPE
 int wipsetuser(Const char *rest)
-#else
-int wipsetuser(rest)
-Const char *rest;
-#endif /* PROTOTYPE */
 {
     Void *curimage;                  /* Pointer to current image item. */
     char *ptr, *token, *next;
@@ -474,8 +437,10 @@ Const char *rest;
         token++;
         if (wiparguments(&token, 1, &arg1) != 1) goto MISTAKE;
         varindex = NINT(arg1);
-        if ((varindex >= 0) && (varindex < 21))
+        if ((varindex >= 0) && (varindex < MAXVAR))
           USERVAR[varindex] = arg;
+	else
+	  goto MISTAKE;
       } else if (wipimagexists(curimage = wipimcur("curimage"))) {
         if (Strcmp(token, "immin") == 0) {
           wipimageminmax(curimage, &pmin, &pmax, 0);
@@ -501,14 +466,7 @@ MISTAKE:
     return(1);
 }
 
-#ifdef PROTOTYPE
 char *wipgettoken(char *output, Const char *input, char **next)
-#else
-char *wipgettoken(output, input, next)
-char *output;
-Const char *input;
-char **next;
-#endif /* PROTOTYPE */
 {
 /*
  * This function parses the input string and returns the next token and
@@ -593,12 +551,7 @@ char **next;
  *  a minus sign or open brace; these items cause an immediate return
  *  with a value of 0.
  */
-#ifdef PROTOTYPE
 int wiptokenexists(Const char *inword)
-#else
-int wiptokenexists(inword)
-Const char *inword;
-#endif /* PROTOTYPE */
 {
     char *par, *ptr, *next;
     char tokenstring[STRINGSIZE];           /* Storage for current token. */
@@ -640,13 +593,7 @@ Const char *inword;
     return(0);
 }
 
-#ifdef PROTOTYPE
 double wipevaluate(Const char *inword, LOGICAL *error)
-#else
-double wipevaluate(inword, error)
-Const char *inword;
-LOGICAL *error;
-#endif /* PROTOTYPE */
 {
     Void *curimage;                     /* Pointer to current image item. */
     char *par, *ptr, *op, *next;
@@ -747,7 +694,7 @@ LOGICAL *error;
             result = wipevaluate(ptr, error);
             if (*error == TRUE) goto ANYERROR;
             indx = NINT(result);
-            if ((indx < 0) || (indx >= 21)) goto ANYERROR;
+            if ((indx < 0) || (indx >= MAXVAR)) goto ANYERROR;
             result = USERVAR[indx];
         } else if (wipimagexists(curimage = wipimcur("curimage"))) {
           if (Strcmp(ptr, "immin") == 0) {              /* Image minimum. */
@@ -814,13 +761,7 @@ ANYERROR:
     return(0.0);
 }
 
-#ifdef PROTOTYPE
 char *wipbracextract(Const char *inword, char **left)
-#else
-char *wipbracextract(inword, left)
-Const char *inword;
-char **left;
-#endif /* PROTOTYPE */
 {
     char *ptr;
     int level, chopen, chclose;
@@ -860,13 +801,7 @@ char **left;
  */
 #define VERSION_ID "1.0"
 
-#ifdef PROTOTYPE
 main(int argc, char *argv[])
-#else
-main(argc, argv)
-int argc;
-char *argv[];
-#endif /* PROTOTYPE */
 {
     char *par;
     char intext[BUFSIZ];

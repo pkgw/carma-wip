@@ -13,6 +13,10 @@
  *                   to level 3 ANSI supported I/O calls.
  *     jm  12jul96   Modified to permit small masks in the header.
  *                   Also moved static Buffer into MIRIAD structure.
+ *    pjt    aug99   fixed sizeing error in reading masks; (in linux, read too much)
+ *    pjt  12sep99   Fixed horrid bug fclose() mask, solved linux coredumps
+ *                   but still some very odd linux problems with masked files
+ *    pjt   2dec00   ansi-c, tracking down that still unsolved problem
  *
  * Routines:
  * Void *miropen(Const char *name, int naxis, int axes[]);
@@ -53,6 +57,11 @@ static char dble_item[ITEM_HDR_SIZE] = {0,0,0,5};
 #define BITS_PER_INT   31
 #define MASKOFFSET   (((ITEM_HDR_SIZE-1)/H_INT_SIZE + 1)*BITS_PER_INT)
 
+/* Rounding up a number, used in debugging linux */
+/* undef it if you want to revert back to the old buggy code */
+/* with overwrite's  */
+#define   RND(x,y)     ((y)*(((x)+(y)-1)/(y)))
+
 static int bits[BITS_PER_INT] = {
     0x00000001, 0x00000002, 0x00000004, 0x00000008,
     0x00000010, 0x00000020, 0x00000040, 0x00000080,
@@ -68,7 +77,7 @@ static int bits[BITS_PER_INT] = {
 typedef struct {
   FILE *fdmask;          /* File descriptor of mask item. */
   int  buf[BUFFERSIZE];  /* Array used to read mask information. */
-  int *flag;             /* Array used to hold masks for one row. */
+  int *flag;             /* Array used to hold masks for one row. - one int per pixel */
   long int size;         /* Size of mask item on disk (including int_item). */
   long int offset;       /* Offset into mask item stored in buf[]. */
   long int length;       /* Marker of how far into buf[] we have gone. */
@@ -94,13 +103,7 @@ static int maskread ARGS(( MIRIAD *f,int *flags, size_t len, long int offset ));
 /* Declare static variables (if needed). */
 
 /************************************************************************/
-#ifdef PROTOTYPE
 Void *miropen(Const char *name, int naxis, int axes[])
-#else
-Void *miropen(name, naxis, axes)
-Const char *name;
-int naxis,axes[];
-#endif /* PROTOTYPE */
 /* miropen -- Open an image file.
 
   Input:
@@ -227,7 +230,21 @@ int naxis,axes[];
 
 #if NO_CVT
 #else
+	/* there is a very strange bug here, with possible interaction
+	   with PGPLOT. Allocating 'just enough' will e.g. fail on masked
+  	   images with size 127 * 127: there appears to be an overwrite
+	   somewhere.  I could not get it to crash on other images,
+	   and crashing also depended on which pgplot device was used
+	   and which pgplot version !
+	   PJT  sep 1999
+	   Well, buffer handles things for conversion, a mask always
+	   has to be rounded up by 32.
+         */
+#ifdef RND
+    f->buffer = (char *)malloc(4*RND(axes[0],4)); /* roundup a bit */
+#else
     f->buffer = (char *)malloc(4 * axes[0]);
+#endif
     if (f->buffer == (char *)NULL) {
       (void)fprintf(stderr,
         "### Fatal Error: Ran out of memory opening Miriad image.\n");
@@ -244,12 +261,7 @@ int naxis,axes[];
 }
 
 /************************************************************************/
-#ifdef PROTOTYPE
 void mirclose(Void *file)
-#else
-void mirclose(file)
-Void *file;
-#endif /* PROTOTYPE */
 /* mirclose -- Close up an image file.
 
   Input:
@@ -267,7 +279,12 @@ Void *file;
     if (f->buffer != (char *)NULL) (void)free((Void *)f->buffer);
 
     if (f->mask != (MIRMASK *)NULL) {
+#if 1
+      if ((f->mask->hdoffset == 0) && (f->mask->fdmask != (FILE *)NULL))
+#else
+	/* this will cause pretty horrid things with masking present */
       if ((f->mask->hdoffset > 0) && (f->mask->fdmask != (FILE *)NULL))
+#endif
         (void)fclose(f->mask->fdmask);
       if (f->mask->flag != (int *)NULL) (void)free((Void *)f->mask->flag);
       (void)free((Void *)f->mask);
@@ -280,15 +297,7 @@ Void *file;
 }
 
 /************************************************************************/
-#ifdef PROTOTYPE
 int mirread(Void *file, int indx, FLOAT *array, FLOAT badpixel)
-#else
-int mirread(file, indx, array, badpixel)
-Void *file;
-int indx;
-FLOAT *array;
-FLOAT badpixel;
-#endif /* PROTOTYPE */
 /* mirread -- Read a single row from an image.  This accesses the plane
    given by the last call to mirsetpl.
 
@@ -360,14 +369,7 @@ FLOAT badpixel;
 }
 
 /************************************************************************/
-#ifdef PROTOTYPE
 int mirsetpl(Void *file, int naxis, int axes[])
-#else
-int mirsetpl(file, naxis, axes)
-Void *file;
-int naxis;
-int axes[];
-#endif /* PROTOTYPE */
 /* mirsetpl -- Set which plane of a cube is to be accessed.
 
   Input:
@@ -401,15 +403,7 @@ int axes[];
     return(0);
 }
 /************************************************************************/
-#ifdef PROTOTYPE
 void mirrdhdd(Void *file, Const char *keyword, double *value, double defval)
-#else
-void mirrdhdd(file, keyword, value, defval)
-Void *file;
-Const char *keyword;
-double *value;
-double defval;
-#endif /* PROTOTYPE */
 /* rdhdd -- Read a double precision-valued header variable.
 
   Input:
@@ -481,15 +475,7 @@ double defval;
 }
 
 /************************************************************************/
-#ifdef PROTOTYPE
 void mirrdhdr(Void *file, Const char *keyword, FLOAT *value, FLOAT defval)
-#else
-void mirrdhdr(file, keyword, value, defval)
-Void *file;
-Const char *keyword;
-FLOAT *value;
-FLOAT defval;
-#endif /* PROTOTYPE */
 /* mirrdhdr -- Read a real-valued header variable.
 
   Input:
@@ -511,15 +497,7 @@ FLOAT defval;
 }
 
 /************************************************************************/
-#ifdef PROTOTYPE
 void mirrdhdi(Void *file, Const char *keyword, int *value, int defval)
-#else
-void mirrdhdi(file, keyword, value, defval)
-Void *file;
-Const char *keyword;
-int *value;
-int defval;
-#endif /* PROTOTYPE */
 /* mirrdhdi -- Read an integer-valued header variable.
 
   Input:
@@ -541,16 +519,7 @@ int defval;
 }
 
 /************************************************************************/
-#ifdef PROTOTYPE
 void mirrdhda(Void *file, Const char *keyword, char *value, Const char *defval, size_t maxlen)
-#else
-void mirrdhda(file, keyword, value, defval, maxlen)
-Void *file;
-Const char *keyword;
-char *value;
-Const char *defval;
-size_t maxlen;
-#endif /* PROTOTYPE */
 /* mirrdhda -- Read a string-valued header variable.
 
   Input:
@@ -602,13 +571,7 @@ size_t maxlen;
 }
 
 /**********************************************************************/
-#ifdef PROTOTYPE
 int mirhdprsnt(Void *file, Const char *keyword)
-#else
-int mirhdprsnt(file, keyword)
-Void *file;
-Const char *keyword;
-#endif /* PROTOTYPE */
 /*
   Returns 1 if keyword is present in header; 0 otherwise.
 ------------------------------------------------------------------------*/
@@ -629,15 +592,7 @@ Const char *keyword;
 }
 
 /**********************************************************************/
-#ifdef PROTOTYPE
 static char *mirsrch(MIRIAD *f, Const char *keyword, long int *size, long int *seekloc)
-#else
-static char *mirsrch(f, keyword, size, seekloc)
-MIRIAD *f;
-Const char *keyword;
-long int *size;
-long int *seekloc;
-#endif /* PROTOTYPE */
 /*
   This searches for a MIRIAD header item.
   Returns a char string of the header item found; NULL otherwise.
@@ -685,14 +640,7 @@ long int *seekloc;
 }
 
 /************************************************************************/
-#ifdef PROTOTYPE
 static MIRMASK *mirfindmask(MIRIAD *f, Const char *name, int nx)
-#else
-static MIRMASK *mirfindmask(f, name, nx)
-MIRIAD *f;
-Const char *name;
-int nx;
-#endif /* PROTOTYPE */
 {
     char *item;
     char s[ITEM_HDR_SIZE];
@@ -780,7 +728,16 @@ int nx;
     mask->offset = -BUFFERSIZE * BITS_PER_INT;
     mask->length = 0;
 
+    /* RND3 or RND4 ??? -- but should it really matter ?? */
+#ifdef RND
+    mask->flag = (int *)malloc(sizeof(int)*RND(nx,4));
+    printf("DEBUG: alloc %d for mask\n",RND(nx,4));
+#else
+    /* this can cause bugs in linux if nx%4 nonzero, e.g. 127 size */
     mask->flag = (int *)malloc(sizeof(int)*nx);
+    printf("DEBUG: alloc %d for mask\n",nx);
+#endif
+
     if (mask->flag == (int *)NULL) {
       (void)fprintf(stderr,
         "### Warning: Failed to allocate Miriad mask array memory.\n");
@@ -793,15 +750,7 @@ int nx;
 }
 
 /**********************************************************************/
-#ifdef PROTOTYPE
 static int maskread(MIRIAD *f, int *flags, size_t length, long int offset)
-#else
-static int maskread(f, flags, length, offset)
-MIRIAD *f;
-int *flags;
-size_t length;
-long int offset;
-#endif /* PROTOTYPE */
 /*
   This reads the mask information for a MIRIAD image item.
   Returns number of mask entries found; -1 otherwise.
@@ -844,6 +793,8 @@ long int offset;
         if (fread((Void *)mask->buf, sizeof(int), isize, fd) != isize) {
 #else
         isize = (size_t)itemsize;
+	/* next line has read_overflow in not RND */
+	printf("DEBUG: isize=%d\n",isize);
         if (fread(f->buffer, sizeof(char), isize, fd) != isize) {
 #endif
           (void)fprintf(stderr,
@@ -853,6 +804,7 @@ long int offset;
 
 #if NO_CVT
 #else
+	isize /= sizeof(int);		/* PJT added 29-aug-99 */
         unpack32_c(f->buffer, mask->buf, isize);
 #endif
       }
@@ -898,22 +850,12 @@ long int offset;
 #define BADPIXEL  -99.0
 int debugMode = 0;
 
-#ifdef PROTOTYPE
 int wipDebugMode(void)
-#else
-int wipDebugMode()
-#endif /* PROTOTYPE */
 {
     return(debugMode);
 }
 
-#ifdef PROTOTYPE
 main(int argc, char *argv[])
-#else
-main(argc, argv)
-int argc;
-char *argv[];
-#endif /* PROTOTYPE */
 {
     Void *file;
     char *infile;

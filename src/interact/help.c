@@ -9,6 +9,8 @@
 		    to wipinput().
         13jun95 jm  Added a help message (at the end of the one line
 		    list) to user if no arguments are given.
+         9oct00 pjt no more PROTOTYPEs
+
 
 Routines:
 static void add_to_help ARGS(( COMMAND *cmd, char *helpline ));
@@ -24,13 +26,7 @@ static char dash[] = "---------------------------------------";
 
 /* Code */
 
-#ifdef PROTOTYPE
 static void add_to_help(COMMAND *cmd, char *helpline)
-#else
-static void add_to_help(cmd, helpline)
-COMMAND *cmd;
-char *helpline;
-#endif /* PROTOTYPE */
 {
     PCMACRO *mac, *ptr;
 
@@ -63,12 +59,7 @@ char *helpline;
 }
 
 /*  Returns 0 if successful; 1 on error. */
-#ifdef PROTOTYPE
 int wiphelp(char *line)
-#else
-int wiphelp(line)
-char *line;
-#endif /* PROTOTYPE */
 {
     char *ptr, *pstr;
     char string[STRINGSIZE], save[STRINGSIZE];

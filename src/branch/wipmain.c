@@ -20,6 +20,7 @@
 	09jan98 jm  Added bogus MAIN__ routine for some Linux compilers.
 	21jan98 jm  VMS reserves the readonly keyword, so it was changed
 		    to justread.
+         9oct00 pjt no PROTOTYPE #define
 
 
 Routines:
@@ -37,12 +38,7 @@ void main ARGS(( int argc, char *argv[] ));
 
 /* Code */
 
-#ifdef PROTOTYPE
 static void usage(Const char *name)
-#else
-static void usage(name)
-Const char *name;
-#endif /* PROTOTYPE */
 {
     char options[STRINGSIZE];
 
@@ -69,13 +65,7 @@ Const char *name;
     wipoutput(stderr, "\t\t it may include arguments.\n");
 }
 
-#ifdef PROTOTYPE
-void main(int argc, char *argv[])
-#else
-void main(argc, argv)
-int argc;
-char *argv[];
-#endif /* PROTOTYPE */
+int main(int argc, char *argv[])
 {
     char *ptr, *comm;                                     /* Pointers. */
     char *ifiles[MAXFILES];   /* Pointers to command line input files. */
@@ -263,12 +253,21 @@ char *argv[];
 
     wipclose();
     wipexit(0);                   /* Status 0 means successful finish. */
+    return 0;
 }
+
+	/* for some fortran implementations */
 
 #if defined(MAIN__) || defined(linux)
 MAIN__() {
   wipoutput(stderr, "MAIN__ called; some Fortran inconsistency.\n");
   exit(1);
 }
+
+MAIN_() {
+  wipoutput(stderr, "MAIN_ called; some Fortran inconsistency.\n");
+  exit(1);
+}
+
 #endif
 

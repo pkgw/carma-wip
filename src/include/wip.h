@@ -11,6 +11,8 @@
 		    includes and standard definitions into wipdefs.h.
 		    Moved some character macros into this file.
         09jan98 jm  Removed any previous definition of TRUE/FALSE.
+        09oct00 pjt MAXVAR now defined here (see also evaluate.c)
+        30nov00 pjt increased STRINGSIZE to 8192
 */
 
 #ifndef WIP_H
@@ -18,9 +20,22 @@
 
 #include "wipdefs.h"
 
-/* Define a default string size and contour level array size. */
-#define STRINGSIZE  256
-#define MAXCONTLEVEL 40
+/* 				max string size */
+#define STRINGSIZE  8192
+
+/* 				max number of contour levels */
+#define MAXCONTLEVEL 100
+
+/* 				max number of variables allowed \0, \1, .... */
+#define MAXVAR  100
+
+/*				max number of arguments to a wip command */
+#define MAXARG  100
+
+/*				max nesting (files/commands */
+#define MAXLEVEL 5
+
+
 
 /* Prevent a compiler from predefining these values. */
 #ifdef FALSE

@@ -21,6 +21,7 @@
 	01oct92 jm  Changed initVector() to a static function called
 		    once by find_vector().
 	31jan94 jm  Added a test for closing brace in find_vector().
+        30nov00 pjt ansi-c
 
 Routines:
 static int initVector ARGS(( void ));
@@ -48,11 +49,7 @@ static VECTOR *VECHEAD = (VECTOR *)NULL;
 /* Code */
 
 /*  Returns 0 if successful, 1 on error. */
-#ifdef PROTOTYPE
 static int initVector(void)
-#else
-static int initVector()
-#endif /* PROTOTYPE */
 {
     register int j, number;
     int maxsize;
@@ -82,20 +79,14 @@ static int initVector()
       }
     }
 
-    return(0);
+    return 0;
 }
 
 /*
  *  Returns a pointer to the VECTOR structure and the index requested
  *  if "inname" is defined as a vector; a pointer to NULL otherwise.
  */
-#ifdef PROTOTYPE
 static VECTOR *find_vector(Const char *inname, int *indx)
-#else
-static VECTOR *find_vector(inname, indx)
-Const char *inname;
-int *indx;
-#endif /* PROTOTYPE */
 {
     char *par, *ptr, *closing;
     char word[STRINGSIZE];
@@ -141,20 +132,15 @@ int *indx;
       return((VECTOR *)NULL);
 
     *indx = arrayindex;
-    return(vb);
+    return vb;
 }
 
 /* Returns 1 if "name" is defined as a vector; 0 otherwise. */
-#ifdef PROTOTYPE
 int wipisvec(Const char *name)
-#else
-int wipisvec(name)
-Const char *name;
-#endif /* PROTOTYPE */
 {
     int dummyindex;
 
-    return(find_vector(name, &dummyindex) != (VECTOR *)NULL);
+    return (find_vector(name, &dummyindex) != (VECTOR *)NULL);
 }
 
 /*
@@ -162,13 +148,7 @@ Const char *name;
  *  at the desired index and sets error to FALSE; otherwise, it
  *  returns 0 and sets error to TRUE.
  */
-#ifdef PROTOTYPE
 double wipgetvec(Const char *inword, LOGICAL *error)
-#else
-double wipgetvec(inword, error)
-Const char *inword;
-LOGICAL *error;
-#endif /* PROTOTYPE */
 {
     int arrayindex;
     double value;
@@ -183,17 +163,11 @@ LOGICAL *error;
     *error = FALSE;
     if (arrayindex > (vb->npts - 1)) vb->npts = arrayindex + 1;
     value = vb->value[arrayindex];
-    return(value);
+    return value;
 }
 
 /* Returns 0 if the vector exists and was set; 1 if an error occured. */
-#ifdef PROTOTYPE
 int wipsetvec(Const char *inword, double value)
-#else
-int wipsetvec(inword, value)
-Const char *inword;
-double value;
-#endif /* PROTOTYPE */
 {
     int arrayindex;
     VECTOR *vb;
@@ -205,7 +179,7 @@ double value;
 
     if (arrayindex > (vb->npts - 1)) vb->npts = arrayindex + 1;
     vb->value[arrayindex] = value;
-    return(0);
+    return 0;
 }
 
 /*
@@ -213,14 +187,7 @@ double value;
  *  declared max-size of the array and the current filled size;
  *  otherwise, a NULL pointer is returned.
  */
-#ifdef PROTOTYPE
 float *wipvector(Const char *inword, int *maxsize, int *currentsize)
-#else
-float *wipvector(inword, maxsize, currentsize)
-Const char *inword;
-int *maxsize;
-int *currentsize;
-#endif /* PROTOTYPE */
 {
     char temp[STRINGSIZE];
     int arrayindex;
@@ -237,20 +204,14 @@ int *currentsize;
 
     *maxsize = vb->size;
     *currentsize = vb->npts;
-    return(vb->value);
+    return vb->value;
 }
 
 /*
  *  Returns 0 if "inword" is a defined vector and the number of points
  *  in the current array was able to be set; 1 if an error occured.
  */
-#ifdef PROTOTYPE
 int wipvectornpts(Const char *inword, int currentsize)
-#else
-int wipvectornpts(inword, currentsize)
-Const char *inword;
-int currentsize;
-#endif /* PROTOTYPE */
 {
     char temp[STRINGSIZE];
     int arrayindex;
@@ -274,19 +235,14 @@ int currentsize;
       vb->npts = vb->size;
       return(1);
     }
-    return(0);
+    return 0;
 }
 
 /*
  *  Returns 1 if "inword" is defined as a function that operates on
  *  an entire vector; 0 otherwise.
  */
-#ifdef PROTOTYPE
 int wipisvecfunc(Const char *inword)
-#else
-int wipisvecfunc(inword)
-Const char *inword;
-#endif /* PROTOTYPE */
 {
     register char *ptr, *opbrac;
     char word[BUFSIZ];
@@ -307,18 +263,11 @@ Const char *inword;
       return(1);
     }
 
-    return(0);
+    return 0;
 }
 
 /* Returns the result of the operation (F(vectorNameArg)). */
-#ifdef PROTOTYPE
 double wipvecfunc(Const char *inword, Const char *arg, LOGICAL *error)
-#else
-double wipvecfunc(inword, arg, error)
-Const char *inword;
-Const char *arg;
-LOGICAL *error;
-#endif /* PROTOTYPE */
 {
     int maxsize, currentsize;
     float *ptr;    /* ---- Reserved for later use. ---- */
@@ -338,7 +287,7 @@ LOGICAL *error;
       return(0);
     }
     *error = FALSE;
-    return(value);
+    return value;
 }
 
 /*
@@ -348,14 +297,7 @@ LOGICAL *error;
  *  vector is made, effectively, empty.
  *  Returns 0 if successful, 1 on error.
  */
-#ifdef PROTOTYPE
 int wipvectorinit(Const char *name, int npts, Const char *expression)
-#else
-int wipvectorinit(name, npts, expression)
-Const char *name;
-int npts;
-Const char *expression;
-#endif /* PROTOTYPE */
 {
     register int i;
     int maxsize, mpts;
@@ -391,13 +333,7 @@ Const char *expression;
 }
 
 /* Returns 0 if all went well; 1 if an error occured. */
-#ifdef PROTOTYPE
 int wipNewVector(Const char *name, int size)
-#else
-int wipNewVector(name, size)
-Const char *name;
-int size;
-#endif /* PROTOTYPE */
 {
     char *ptr;
     VECTOR *vb;
@@ -442,12 +378,7 @@ int size;
     return(0);
 }
 
-#ifdef PROTOTYPE
 int wipFreeVector(Const char *name)
-#else
-int wipFreeVector(name)
-Const char *name;
-#endif /* PROTOTYPE */
 {
     char temp[STRINGSIZE];
     int dummyindex;

@@ -2,6 +2,7 @@
 	<filesize.c>
 	17sep90 jm  Original code.
 	17sep90 jm  Modified error returns to send literal long ints.
+         9oct00 pjt no PROTOTYPE's
 
 Routines:
 long int filesize ARGS(( FILE *fp ));
@@ -20,12 +21,7 @@ long int filesize ARGS(( FILE *fp ));
  *
  *  This routine assumes FSEEK and FTELL are present on the system.
  */
-#ifdef PROTOTYPE
 long int filesize(FILE *fp)
-#else
-long int filesize(fp)
-FILE *fp;
-#endif /* PROTOTYPE */
 {
       long int fsize;
 

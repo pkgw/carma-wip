@@ -8,6 +8,8 @@
 	08dec92 jm  Modified to strip leading blanks from string
 		    returned from wipfpfmt().
 	12dec94 jm  Changed output array from int to char.
+         9oct00 pjt no more PROTOTYPEs
+
 
 Routines:
 void wipdecode ARGS(( Const char *string, char *outstr, size_t maxout ));
@@ -19,14 +21,7 @@ void wipdecode ARGS(( Const char *string, char *outstr, size_t maxout ));
 
 /* Code */
 
-#ifdef PROTOTYPE
 void wipdecode(Const char *string, char *outstr, size_t maxout)
-#else
-void wipdecode(string, outstr, maxout)
-Const char *string;
-char *outstr;
-size_t maxout;
-#endif /* PROTOTYPE */
 {
     char *ptr, *tmptr, *savptr;
     char ch;

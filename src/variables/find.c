@@ -9,6 +9,7 @@
 		    free commands.
 	23sep92 jm  Modified wipnewitem() to use routine which tests
 		    for previously existing items.
+         9oct00 pjt no more PROTOTYPE #ifdefs
 
 Routines:
 int wipnewitem ARGS(( Const char *string ));
@@ -24,12 +25,7 @@ double wipuserfunc ARGS(( Const char *inword, double arg, LOGICAL *error ));
 /* Code */
 
 /* Returns 0 if all items were defined; 1 if an error occured. */
-#ifdef PROTOTYPE
 int wipnewitem(Const char *string)
-#else
-int wipnewitem(string)
-Const char *string;
-#endif /* PROTOTYPE */
 {
     char *par, *ptr, *psize, *next;
     char token[STRINGSIZE];
@@ -101,12 +97,7 @@ Const char *string;
 }
 
 /* Returns 0 if all items were removed; 1 if an error occured. */
-#ifdef PROTOTYPE
 int wipfreeitem(Const char *string)
-#else
-int wipfreeitem(string)
-Const char *string;
-#endif /* PROTOTYPE */
 {
     char *par, *ptr, *next;
     char token[STRINGSIZE];
@@ -156,12 +147,7 @@ Const char *string;
 }
 
 /* Returns 1 if user function; 0 otherwise. */
-#ifdef PROTOTYPE
 int wipisuserfunc(Const char *name)
-#else
-int wipisuserfunc(name)
-Const char *name;
-#endif /* PROTOTYPE */
 {
     register char *ptr, *opbrac;
     char word[BUFSIZ];
@@ -183,14 +169,7 @@ Const char *name;
 }
 
 /* ARGSUSED */
-#ifdef PROTOTYPE
 double wipuserfunc(Const char *inword, double arg, LOGICAL *error)
-#else
-double wipuserfunc(inword, arg, error)
-Const char *inword;  /* Unused for now... */
-double arg;          /* Unused for now... */
-LOGICAL *error;
-#endif /* PROTOTYPE */
 {
     /* NO USER FUNCTIONS YET... */
     *error = TRUE;

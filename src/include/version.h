@@ -18,7 +18,12 @@
 	2.1 30oct96 Minor modifications and additions.
 	2.2 13nov96 Minor modifications and image bug fix.
 	2.3 22jan98 Minor modifications, bug fixes, and added VMS code.
+
+        2.4 ?  12sep99 Fixed various linux problems with mask files
+        2.3.2  22sep00 More variables (MAXVAR) in evaluate.c
+        2.3.3  10oct00 include fix for cd1_1/2_2 for cdelt in image.c
+        2.3.4  30nov00 more stringspace, fixed  FWHM reporting in Gaussfit
 */
 #ifndef WIP_VERSION
-#define WIP_VERSION "Version: 2.3 22jan98"
+#define WIP_VERSION "Version: 2.3.4 2dec00"
 #endif /* WIP_VERSION */

@@ -5,6 +5,8 @@
         02aug92 jm  Modified to return status (void -> int) rather than
 		    using a passed LOGICAL pointer.
         12dec94 jm  Modified call sequence to parse line externally.
+         9oct00 pjt no more PROTOTYPEs
+
 
 Routines:
 int wiplist ARGS(( int line1, int line2, Const char *rest ));
@@ -18,14 +20,7 @@ int wiplist ARGS(( int line1, int line2, Const char *rest ));
 /* Code */
 
 /*  Returns 0 if successful; 1 on error. */
-#ifdef PROTOTYPE
 int wiplist(int line1, int line2, Const char *rest)
-#else
-int wiplist(line1, line2, rest)
-int line1;
-int line2;
-Const char *rest;
-#endif /* PROTOTYPE */
 {
     char *par, *ptr;
     char string[STRINGSIZE];

@@ -16,6 +16,7 @@
 		    to justread in wipbegin().  Also modified definition
 		    of historyFile variable for VMS machines (is this
 		    even available for VMS machines?).
+ 	 9oct00 pjt no more #ifdef PROTOTYPE
 
 Routines:
 void wipsetQuiet ARGS(( int quiet ));
@@ -50,24 +51,13 @@ extern void add_history ARGS(( char *string ));
 
 /* Code */
 
-#ifdef PROTOTYPE
 void wipsetQuiet(int quiet)
-#else
-void wipsetQuiet(quiet)
-int quiet;
-#endif /* PROTOTYPE */
 {
     quietMode = quiet;
     return;
 }
 
-#ifdef PROTOTYPE
 void wipbegin(int disable, int justread)
-#else
-void wipbegin(disable, justread)
-int disable;
-int justread;
-#endif /* PROTOTYPE */
 {
 #ifdef READLINE
     int err;
@@ -91,12 +81,7 @@ int justread;
     return;
 }
 
-#ifdef PROTOTYPE
 void wipexit(int status)
-#else
-void wipexit(status)
-int status;
-#endif /* PROTOTYPE */
 {
 #ifdef READLINE
     int err;
@@ -108,20 +93,12 @@ int status;
     }
 
 #endif /* READLINE */
-
     exit(status);
 }
 
 #ifndef NOVARARGS
 /*VARARGS2*/
-#ifdef PROTOTYPE
 void wipoutput(FILE *fp, Const char *fmt, ...)
-#else
-void wipoutput(fp, fmt, va_alist)
-FILE *fp;
-Const char *fmt;
-va_dcl /* Put no semicolon here! */
-#endif /* PROTOTYPE */
 {
     va_list ap;
 
@@ -129,11 +106,7 @@ va_dcl /* Put no semicolon here! */
       return;
     }
 
-#ifdef PROTOTYPE
     va_start(ap, fmt);
-#else
-    va_start(ap);
-#endif /* PROTOTYPE */
 
     VFPrintf(fp, fmt, ap);
     if (strchr(fmt, '\n') != (char *)NULL) {
@@ -162,15 +135,7 @@ va_dcl /* Put no semicolon here! */
  *  Returns EOF (see <stdio.h>) at the end of file, NULL for an empty
  *  input line, or the number of characters read.
  */
-#ifdef PROTOTYPE
 int wipinput(FILE *file, Const char *prompt, char *line, size_t maxchar)
-#else
-int wipinput(file, prompt, line, maxchar)
-FILE *file;
-Const char *prompt;
-char *line;
-size_t maxchar;
-#endif /* PROTOTYPE */
 {
     size_t nch;
     LOGICAL promptExists;

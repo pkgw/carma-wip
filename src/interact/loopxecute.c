@@ -1,6 +1,8 @@
 /*
 	<loopxecute.c>
 	Original 04aug90 jm
+         9oct00 pjt no more PROTOTYPEs
+
 
 Routines:
 COMMAND *wiploopxecute ARGS(( char **line, int *ncount ));
@@ -13,13 +15,7 @@ COMMAND *wiploopxecute ARGS(( char **line, int *ncount ));
 
 /* Code */
 
-#ifdef PROTOTYPE
 COMMAND *wiploopxecute(char **line, int *ncount)
-#else
-COMMAND *wiploopxecute(line, ncount)
-char **line;
-int *ncount;
-#endif /* PROTOTYPE */
 {
       char *par;
       double arg;

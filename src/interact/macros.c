@@ -5,6 +5,8 @@
 	02aug92 jm  Checked cast of returns and cleaned up code.
 	06aug93 jm  Fixed omission in create_macro() which didn't force
 		    new macro names to be saved in lower case.
+         9oct00 pjt no more PROTOTYPEs
+
 
 Routines:
 COMMAND *create_macro ARGS(( Const char *name ));
@@ -20,12 +22,7 @@ void delete_macro ARGS(( COMMAND *vb, int first, int last ));
 
 /* Code */
 
-#ifdef PROTOTYPE
 COMMAND *create_macro(Const char *name)
-#else
-COMMAND *create_macro(name)
-Const char *name;
-#endif /* PROTOTYPE */
 {
     char *nameptr;
     COMMAND *com;
@@ -73,13 +70,7 @@ Const char *name;
     return(com);
 }
 
-#ifdef PROTOTYPE
 void add_to_macro(COMMAND *vb, Const char *macline)
-#else
-void add_to_macro(vb, macline)
-COMMAND *vb;
-Const char *macline;
-#endif /* PROTOTYPE */
 {
     int addAtTheEnd = -1;
 
@@ -91,14 +82,7 @@ Const char *macline;
  *  Inserts a command line "macline" in the PCMACRO "vb" just before
  *  the line number "before".
  */
-#ifdef PROTOTYPE
 void insert_macro(COMMAND *vb, Const char *macline, int before)
-#else
-void insert_macro(vb, macline, before)
-COMMAND *vb;
-Const char *macline;
-int before;
-#endif /* PROTOTYPE */
 {
     register int j;
     char *lineptr;
@@ -155,13 +139,7 @@ int before;
     return;
 }
 
-#ifdef PROTOTYPE
 void delete_macro(COMMAND *vb, int first, int last)
-#else
-void delete_macro(vb, first, last)
-COMMAND *vb;
-int first, last;
-#endif /* PROTOTYPE */
 {
     int j = 0;
     PCMACRO *ptr, *next;

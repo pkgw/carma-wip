@@ -14,6 +14,8 @@
 	02aug92 jm  Moved static code to top of file.
 	16sep92 jm  Modified ifxecute to allow "if" commands to call "loop".
 	            Also cleaned up code and added a few comments.
+         9oct00 pjt no more PROTOTYPEs; MAXARGS now MAXARG
+
 
 Routines:
 static char *domacsubs ARGS(( char *string, Const char *line, char *macarg[] ));
@@ -26,7 +28,10 @@ int wipmaxecute ARGS(( COMMAND *comm, int count, Const char *rest ));
 /* Global variables for just this file */
 /* Parameter STRINGSIZE defined in wip.h. */
 
-#define MAXARGS 10
+/* #define MAXARGS 10	- now MAXARG, see wip.h */
+
+			
+
 
 /* Code */
 
@@ -57,16 +62,9 @@ int wipmaxecute ARGS(( COMMAND *comm, int count, Const char *rest ));
  * an open array, I have trouble doing this.
  *
  */
-#ifdef PROTOTYPE
 static char *domacsubs(char *string, Const char *line, char *macarg[])
-#else
-static char *domacsubs(string, line, macarg)
-char *string;
-Const char *line;
-char *macarg[];
-#endif /* PROTOTYPE */
 {
-    register int j;
+    register int j, k;
     register char *s, *ptr, *arg;
 
     if (Strchr(line, '$') == (char *)NULL) {   /* No arguments to sub. */
@@ -82,7 +80,25 @@ char *macarg[];
           if ((j < 0) || (j > 9)) {       /* Not a macro substitution. */
             *ptr++ = *s++;                      /* Just a regular '$'. */
           } else {
+#if 1
+            if ( *(s+2) ) {             /* see if next char */
+                k = *(s+2) - '0';       /* is a digit */
+                if (k>=0 && k<=9) {     /* and if so */
+                    j = j*10 + k;       /* allow two digit parameters */
+                    k = 1;              /* remember we had 2 digits */
+                } else
+                    k = 0;
+            } else 
+                k = 0;
+            if (j >= MAXARG) {
+                wipoutput(stderr, "$%d too large a reference\n",j);
+                return NULL;
+            }
+            j = (j==0 ? 9 : j-1);
+#else
             j = (j + 9) % 10;       /* This is where order is shifted. */
+            k = 0;
+#endif
             /*
              *  If the macro argument is not present, then quietly
              *  skip over the request.  If it is present (macarg[j]
@@ -95,6 +111,7 @@ char *macarg[];
             }
             s++;                                 /* Skip over the '$'. */
             s++;                                 /* Skip over the '#'. */
+            if (k) s++;                     /* and one more if needed. */
           }                           /* If (0 <= j <= 9) conditional. */
         }                               /* If (*s != '$') conditional. */
       }                                            /* While (*s) loop. */
@@ -105,17 +122,10 @@ char *macarg[];
 }
 
 /*  Returns 0 if no error; 1 otherwise. */
-#ifdef PROTOTYPE
 int wipmaxecute(COMMAND *comm, int count, Const char *rest)
-#else
-int wipmaxecute(comm, count, rest)
-COMMAND *comm;
-int count;
-Const char *rest;
-#endif /* PROTOTYPE */
 {
     char *ptr;
-    char *macarg[MAXARGS];             /* Pointers to macro arguments. */
+    char *macarg[MAXARG];              /* Pointers to macro arguments. */
     char restcopy[STRINGSIZE];          /* Private copy of input rest. */
     char substring[STRINGSIZE]; /* Command with arguments substituted. */
     int j;
@@ -124,11 +134,11 @@ Const char *rest;
     register PCMACRO *pc;
 
     nloop = count;
-    for (j = 0; j < MAXARGS; j++)
+    for (j = 0; j < MAXARG; j++)
       macarg[j] = Null;   /* Initialize the pointers to the arguments. */
 
     ptr = Strcpy(restcopy, rest);   /* Make a local copy of the input. */
-    for (j = 0; j < MAXARGS; j++)          /* Get the macro arguments. */
+    for (j = 0; j < MAXARG; j++)          /* Get the macro arguments. */
       if ((macarg[j] = wipparse(&ptr)) == (char *)NULL)
         break;
 

@@ -14,6 +14,7 @@
         21jul93 jm  Modified for syntax change of wipinput().
         25feb94 jm  Modified to permit system calls in input files and
 		    skip them in macro files.
+         9oct00 pjt no more PROTOTYPEs
 
 Routines:
 int wipreadinput ARGS(( Const char *rest ));
@@ -29,7 +30,7 @@ int wipmacroinput ARGS(( Const char *filename ));
 /* Global variables for just this file */
 /* STRINGSIZE is a global parameter defined in wip.h. */
 
-#define MAXLEVEL 5
+/* #define MAXLEVEL 5 see wip.h */
 
 static int inplevel = -1;
 static int inpmode[MAXLEVEL];
@@ -38,12 +39,7 @@ static char inpfile[MAXLEVEL][STRINGSIZE];
 /* Code */
 
 /*  Returns 0 if successful; 1 on errors. */
-#ifdef PROTOTYPE
 int wipreadinput(Const char *rest)
-#else
-int wipreadinput(rest)
-Const char *rest;
-#endif /* PROTOTYPE */
 {
       char *ptr, *par;
       char string[STRINGSIZE], full[STRINGSIZE];
@@ -123,13 +119,7 @@ Const char *rest;
 }
 
 /*  Returns 0 if no error; 1 otherwise. */
-#ifdef PROTOTYPE
 int wipwritemac(Const char *file, Const char *macs)
-#else
-int wipwritemac(file, macs)
-Const char *file;
-Const char *macs;
-#endif /* PROTOTYPE */
 {
     char *ptr, *mac;
     char buffer[STRINGSIZE];
@@ -191,12 +181,7 @@ Const char *macs;
 }
 
 /*  Returns 0 if no error; 1 otherwise. */
-#ifdef PROTOTYPE
 int wipplayback(Const char *macro)
-#else
-int wipplayback(macro)
-Const char *macro;
-#endif /* PROTOTYPE */
 {
     char *ptr, *mac;
     char macstr[STRINGSIZE];
@@ -223,12 +208,7 @@ Const char *macro;
 }
 
 /*  Returns 0 if no error; 1 otherwise. */
-#ifdef PROTOTYPE
 int wipreadmac(Const char *rest)
-#else
-int wipreadmac(rest)
-Const char *rest;
-#endif /* PROTOTYPE */
 {
     char *name;
     char *ptr, *par;
@@ -309,12 +289,7 @@ Const char *rest;
 }
 
 /*  Returns 0 if no error; 1 otherwise. */
-#ifdef PROTOTYPE
 int wipmacroinput(Const char *filename)
-#else
-int wipmacroinput(filename)
-Const char *filename;
-#endif /* PROTOTYPE */
 {
     char *ptr, *par;
     char string[STRINGSIZE], full[STRINGSIZE];

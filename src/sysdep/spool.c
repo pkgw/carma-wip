@@ -5,6 +5,7 @@
         02aug92 jm  Modified both routines to return status (void -> int)
 		    rather than using a passed LOGICAL pointer.
         21jan98 jm  Modified handling of spooling for VMS machines.
+	 9oct00 pjt no more PROTOTYPEs
 
 Routines:
 int wipspool ARGS(( Const char *file ));
@@ -18,12 +19,7 @@ int wipcommand ARGS(( Const char *command ));
 /* Code */
 
 /*  Returns 0 on success; 1 on error. */
-#ifdef PROTOTYPE
 int wipspool(Const char *file)
-#else
-int wipspool(file)
-Const char *file;
-#endif /* PROTOTYPE */
 {
     char *lpr, *ptr;
     char fmt[BUFSIZ];
@@ -91,16 +87,11 @@ Const char *file;
 }
 
 /*  Returns 0 on success; 1 on error. */
-#ifdef PROTOTYPE
 int wipcommand(Const char *command)
-#else
-int wipcommand(command)
-Const char *command;
-#endif /* PROTOTYPE */
 {
       char outbuf[BUFSIZ];
 
-      (void)Strcpy(outbuf, command);
+      Strcpy(outbuf, command);
       if (System(outbuf)) {
         wipoutput(stderr, "Error sending command:\n%s\n", command);
         return(1);
