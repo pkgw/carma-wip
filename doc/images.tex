@@ -1,0 +1,1009 @@
+%
+% Image (2-d) graphics.
+%
+\mylabel{c:images}
+\myfile{images.tex}
+
+This chapter will describe the image capabilities of \wip.
+The first section focuses on the image files and file formats.
+The next section details the commands \wip\ uses to select
+or exclude parts of the image.
+The following section identifies some techniques commonly used to get
+the image in the right location and at the right aspect ratio. 
+The last section concentrates on the \wip\ commands that generate plots
+using image data and the \wip\ commands that can be used to enhance
+these types of plots.
+
+\section		{Image Files}
+\mylabel{s:imfile}
+\index{Images!image files}
+
+Currently, there are a number of image file formats that \wip\ can recognize.
+The number will change as more image file format drivers become available to
+\wip\ and are included in the distribution.
+The currently acceptable formats are:
+\begin{itemize}
+  \item Miriad image data sets.
+  \item FITS image files.
+  \item Basic image files.
+\end{itemize}
+A brief description of each type will appear later in this section.
+
+In the current configuration of \wip, only
+one active image may be present at any one time.
+This is primarily because of the current way that \wip\ reserves
+memory for the image and also because of the limitation on memory space
+that many images can impose.
+
+The
+{\tt image}\index{Commands!{\tt image}}%
+\index{Images!commands!{\tt image}}
+command is used to ``load'' an image into \wip.
+The command has three arguments but only the first one is required.
+The required first argument is the image file name.
+How the image file name is specified may be dependent on the format of the
+image (this will be explained in the section that follows).
+The second argument is optional and selects the plane number to read.
+This defaults to the first plane if this argument is not present or a
+non-existent plane is requested.
+The third argument is also optional and specifies a mask value.
+If the image has masked (undefined) data,
+\wip\ will set the masked data (\eg magic numbers)
+to a value of -99 unless the third argument is present.
+If the mask value is present, then all masked data will be set to the
+requested value.
+
+When the {\tt image} command is called,
+\wip\ attempts to open the image file based
+on the different types of drivers available.
+If \wip\ can identify the image type, it will attempt to read the header
+information (if present) and then load the image into memory.
+
+When an image has more than 3 dimensions,
+the plane number argument ($\cal P$) may take on any value in the range:
+\[ 1 \leq {\cal P} \leq \prod_{i=3}^{\rm NAXIS} {\rm NAXIS}_{i}, \]
+where ${\rm NAXIS}$ is the total number of dimensions in the data set
+and ${\rm NAXIS}_{i}$ is the dimension size of the $i$th axis.\footnote{If
+${\rm NAXIS}$ only has a value of 2, the plane number may only be 1.}
+Hence, \wip\ will be able to correctly assign the plane number
+if a plane from a higher dimension is desired.
+
+\subsection*		{The Miriad Image Format}
+\mylabel{ss:Miriad images}
+
+Miriad\index{Images!image formats!Miriad}
+images are a subset of the Miriad data set format.
+Currently, the Miriad image is one ``item'' of the full data set and the
+header information is also stored as individual ``items.''
+Refer to
+\htmladdnormallink{the BIMA Project manuals}{http://bima.astro.umd.edu/programmer.html}
+for a more detailed description of
+\htmladdnormallink{Miriad}{http://bima.astro.umd.edu/}
+and its data structure.
+
+\subsection*		{The FITS Image Format}
+\mylabel{ss:FITS images}
+
+The \htmladdnormallink{FITS file format}{http://fits.cv.nrao.edu/}%
+\index{FITS}\index{Images!image formats!FITS}
+is a standard data transfer format used to pass data
+between different computers.
+In general, FITS images will contain a header section followed by the
+image data (in binary form).
+\wip\ expects that the header will be in standard 80 character format and
+{\em must} contain the standard keywords: SIMPLE, BITPIX, NAXIS,
+NAXIS{\it i} (for $i = 1, \dots$, NAXIS), and END.
+\wip\ will {\em only} recognize FITS files with
+BITPIX set to 16 (16 bit integers), 32 (32 bit integers),
+or -32 (32 bit floating point).
+In addition to the standard keywords,
+\wip\ requests the following keywords
+(but does not require them to be present):
+BSCALE, BZERO, BLANK,\footnote{According to the FITS guidelines,
+the BLANK keyword should be used only with data with positive BITPIX values.}
+DATAMAX, and DATAMIN.
+Also, the keywords
+CRVAL{\it i},
+CRPIX{\it i},
+CDELT{\it i},
+and
+CTYPE{\it i}, (where $i$ is either 1 or 2)
+are searched to help set up the transformation matrix.\footnote{Astronomical
+images displayed in right ascension and
+declination should provide CRVAL{\it i} and CDELT{\it i} values in
+units of degrees and degrees per pixel, respectively.}
+If the optional keywords are not found,
+then reasonable default values are assigned.
+
+\subsection*		{The Basic Image Format}
+\mylabel{ss:Basic images}
+
+Basic images\index{Images!image formats!Basic}
+are simple binary files that contain a
+multi-dimensional array along with (possibly) optional
+header information at the beginning of the file.
+Most image file formats will be structured something like this,
+so the Basic file format should suffice if a particular image driver has not
+yet been written.\footnote{Because of the way
+Basic Image files are loaded, header information may not be extracted
+automatically, or, for that matter, even accessible.}
+The necessary information needed to load the Basic file is contained in
+the file name argument to the
+{\tt image}\index{Commands!{\tt image}}%
+\index{Images!commands!{\tt image}}
+command.
+The name syntax is:
+\begin{center}
+  {\tt filename`columnsXrows[`offset]}
+\end{center}
+where {\tt filename} is the name of the file on the disk,
+{\tt columns} is the number of columns (in pixels), and
+{\tt rows} is the number of rows (in pixels).
+The single character {\tt X} defines the pixel data type and
+separates the {\tt columns} value from the {\tt rows} value.
+The character {\tt X} may be only one of the following characters:
+\begin{wiplist}%
+  \item [{\tt b:}] unsigned bytes
+\samepage
+  \item [{\tt s:}] signed 2 byte integers
+  \item [{\tt l:}] signed 4 byte integers
+  \item [{\tt r:}] 4 byte floating point
+  \item [{\tt d:}] 8 byte double precision floating point
+\end{wiplist}
+Finally, {\tt offset} represents the offset from the beginning of
+the file (in units of bytes).
+If this part of the name is not present, it defaults to 0 bytes.
+The first back quote in the name syntax is required.
+The second back quote should not be present unless an offset value is given.
+If a Basic file has any header information at the beginning of the file,
+this needs to be skipped;
+this is provided for with the {\tt offset} parameter.
+
+Some machines byte-swap\index{Images!byte-swapped}\index{Byte-swapped Images}
+their data.
+For all image types except Basic, the data is byte-swapped as needed.
+However, since Basic images are usually created and stored locally,
+they are probably already stored in the machine's native format.
+Hence, by default, Basic images are not byte-swapped.
+If however, on those machines, there are images that need to be
+byte-swapped when loaded into \wip,
+byte-swapping can be forced by using an upper case character
+to identify the pixel data type.
+For example, use `{\tt L}' to force byte-swapped a signed 4 byte integer array.
+{\sc Note}: Machines that are not byte-swapped will always ignore this
+byte-swapping option.
+
+\section		{Image Characteristics}
+\mylabel{s:imfunc}
+\index{Images!image characteristics}
+
+This section describes the methods \wip\ uses to associate a pixel
+in an image with a world coordinate position, how to select a
+subsection of the image, how to specify contour levels, and
+how to access the image header file.
+
+\subsection*		{The Coordinate Transfer Function}
+\mylabel{ss:transfer}
+
+All of the plotting commands discussed in Section~\ref{s:implot}
+require a transfer function\index{Images!coordinate transfer function}.
+Put simply, the transfer function tells \wip\ where a given pixel should
+be located relative to the
+world coordinates\index{Coordinate System!World}.
+The command to specify the transfer function is
+{\tt transfer}\index{Commands!{\tt transfer}}%
+\index{Images!commands!{\tt transfer}}.
+This command has six arguments that define the mapping from image pixel
+to world coordinate.
+If ({\tt I, J}) corresponds to a position in the image array
+(a particular pixel),
+then ($x$, $y$), the corresponding position in world coordinates,
+is related by:
+\begin{eqnarray*}
+\mylabel{eq:transfer}
+  x & = & a + b \mbox{I} + c \mbox{J}, \\
+  y & = & d + e \mbox{I} + f \mbox{J}.
+\end{eqnarray*}
+The constants $a$, $b$, $c$, $d$, $e$, and $f$
+are the six arguments to the {\tt transfer} command.
+As an example, if the limits\index{Commands!{\tt limits}} of a plot
+are the same as the number of pixels in an image
+(\ie {\tt limits}\index{Coordinate System!commands!{\tt limits}}%
+\index{Coordinate System!World}\index{World Units}
+1 $Nx$ 1 $Ny$),
+then the default transfer function constants of (0, 1, 0, 0, 0, 1)
+will correctly map the image onto the display.
+This configuration is particularly useful for images with large limits
+and very small step sizes (\eg very high resolution astronomical images).
+
+Another simple example deals with images that are flipped in one
+direction.
+For an image with the $y$-axis flipped and the world coordinates set as
+in the example above,
+a transfer function with constants (0, 1, 0, ($Ny + 1$), 0, -1)
+will dynamically orient the image correctly.
+
+If, however, you have loaded an astronomical image with the world
+coordinate limits set by the image header variables {\tt CRVAL},
+{\tt CRPIX}, and {\tt CDELT}, then a more useful set of values for
+the transfer function would be:
+\begin{eqnarray*}
+\mylabel{eq:radectransfer}
+  a & = & \mbox{CRVALX} - (\mbox{CRPIXX} \times \mbox{CDELTX}), \\
+  b & = & \mbox{CDELTX}, \\
+  c & = & 0, \\
+  d & = & \mbox{CRVALY} - (\mbox{CRPIXY} \times \mbox{CDELTY}), \\
+  e & = & 0, \\
+  f & = & \mbox{CDELTY}.
+\end{eqnarray*}
+This transfer function can be, in fact, set up for the user via the command
+{\tt header}\index{Commands!{\tt header}}%
+\index{Images!commands!{\tt header}}
+when these header variables are present in the image file.
+If these header variables are not present in the image header,
+they may be set manually by the user
+(since they are standard user variables\index{User Variables}).
+The user must set these user variables {\em after}
+the image is read into \wip\ but {\em before} the {\tt header} command.
+
+Using the command {\tt transfer}\index{Commands!{\tt transfer}}%
+\index{Images!commands!{\tt transfer}} without any arguments
+will automatically reset the transfer function
+to the default value of (0, 1, 0, 0, 0, 1).
+
+\subsubsection*		{Rotated Transfer Functions}
+\mylabel{ss:cdtransfer}
+\index{Images!transfer function}
+\index{Images!CD matrix}
+
+Some images do not have the {\tt cdelt} keywords but rather specify the
+pixel step sizes in a matrix.
+An example of that is a FITS image file that contains the keywords
+{\tt CD1\_1}, {\tt CD1\_2}, {\tt CD2\_1}, and {\tt CD2\_2}.
+To set up the transfer function (and the limits) for this type of FITS
+image like the {\tt header rd} command would,
+a macro could be written as follows:
+\begin{wiplist}%
+  \index{Commands!{\tt define}}
+  \index{Commands!{\tt new}}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt transfer}}
+  \index{Commands!{\tt limits}}
+  \index{Commands!{\tt subimage}}
+  \index{Commands!{\tt free}}
+  \index{Commands!{\tt end}}
+  \index{User Variables!commands!{\tt new}}
+  \index{User Variables!commands!{\tt free}}
+  \item {\tt define doheader}
+\samepage
+  \item {\tt new cd11 cd21 cd12 cd22}
+  \item {\tt new xconvert yconvert}
+  \item {\tt set xconvert 3600.0 / 15.0}
+  \item {\tt set yconvert 3600.0}
+  \item {\tt set cd11 CD1\_1 * xconvert / cosd(crvaly)}
+  \item {\tt set cd21 CD2\_1 * yconvert}
+  \item {\tt set cd12 CD1\_2 * xconvert / cosd(crvaly)}
+  \item {\tt set cd22 CD2\_2 * yconvert}
+  \item {\tt set \esc{1} (xconvert * crvalx) - (crpixx * cd11) - (crpixy * cd12)}
+  \item {\tt set \esc{2} (yconvert * crvaly) - (crpixx * cd21) - (crpixy * cd22)}
+  \item {\tt transfer \esc{1} cd11 cd12 \esc{2} cd21 cd22}
+  \item {\tt set \esc{11} \esc{1} + (cd11 * (subx1 - 0.5)) + (cd12 * (suby1 - 0.5) )}
+  \item {\tt set \esc{12} \esc{1} + (cd11 * (subx2 + 0.5)) + (cd12 * (suby2 + 0.5) )}
+  \item {\tt set \esc{13} \esc{2} + (cd21 * (subx1 - 0.5)) + (cd22 * (suby1 - 0.5) )}
+  \item {\tt set \esc{14} \esc{2} + (cd21 * (subx2 + 0.5)) + (cd22 * (suby2 + 0.5) )}
+  \item {\tt limits \esc{11} \esc{12} \esc{13} \esc{14}}
+  \item {\tt subimage 1 nx 1 ny}
+  \item {\tt free xconvert yconvert}
+  \item {\tt free cd11 cd21 cd12 cd22}
+  \item {\tt end}
+\end{wiplist}
+Although this is only one example,
+the others probably can be solved in a similar fashion.
+
+\subsection*		{Selecting subsections of the Image}
+\mylabel{ss:subsect}
+\index{Images!selecting subregions}
+
+Two commands exist that allow easy selection of a sub-portion of an image.
+The command
+{\tt subimage}\index{Commands!{\tt subimage}}%
+\index{Images!commands!{\tt subimage}}
+sets the range of the indices such that only a subimage is displayed
+(regardless of the range of the transfer function or the limits).
+The other command,
+{\tt quarter}\index{Commands!{\tt quarter}}%
+\index{Images!commands!{\tt quarter}}
+(which should be called right after the {\tt image} command)
+is used to select a
+particular quadrant of the current image.
+By default, the {\tt quarter} command selects the inner quarter of the image,
+but may be requested to select other quadrants.
+
+If the user would like as much of the image as possible to be displayed,
+but only the part that fits within a particular region, then the user
+should not specify the sub portion of the image (\ie do not use the
+two commands {\tt subimage} or {\tt quarter}) but rather fix
+the {\em world} coordinates\index{Coordinate System!World}
+to the desired range.
+This method of fixing the {\em world} coordinates to clip the image is very
+powerful; especially when overlaying several image plots
+(see Section~\ref{ss:imoverlay} below and
+the example in Section~\ref{p:overlay}).
+
+\subsection*		{Setting Contour Levels}
+\mylabel{ss:levels}
+\index{Images!setting contour levels}
+
+Currently, there are two commands used to specify the contour levels and
+one command that can be used to scale the contour levels.
+The commands to specify contour levels are
+{\tt levels}\index{Commands!{\tt levels}}%
+\index{Images!commands!{\tt levels}}%
+\index{Contour Plots!setting levels}%
+\index{Contour Plots!setting levels!{\tt levels}}
+and
+{\tt autolevs}.\index{Commands!{\tt autolevs}}%
+\index{Images!commands!{\tt autolevs}}%
+\index{Contour Plots!setting levels}%
+\index{Contour Plots!setting levels!{\tt autolevs}}
+The arguments to {\tt levels} are the individual contour level values.
+The arguments to {\tt autolevs} are the number of levels desired, the
+type of contour levels ({\tt linear} or {\tt logarithmic}), and,
+optionally, the minimum and maximum over which to range the computed levels.
+If the minimum and maximum are not specified, they default to the
+minimum and maximum of the current image.
+
+The command
+{\tt slev}\index{Commands!{\tt slev}}%
+\index{Images!commands!{\tt slev}}%
+\index{Contour Plots!setting levels!{\tt slev}}
+permits the user to scale the contour level array by a fixed amount.
+There are two arguments to {\tt slev};
+the first required and the second optional.
+The first argument is a string which specifies the type of scaling
+to perform and may be either {\tt absolute} or {\tt percent}.
+The type {\tt absolute} is the default and specifies that the
+scaling value be multiplied directly;
+type {\tt percent} means to use the scaling value as a percentage
+of the peak intensity of the plot.
+The second (optional) argument defines the scaling value and defaults to 1
+(no scaling).
+As an example, the commands
+\begin{wiplist}%
+  \index{Commands!{\tt levels}}
+  \index{Commands!{\tt slev}}
+  \item {\tt levels 1 2 3 4 5 6 7 8 9 10}
+\samepage
+  \item {\tt slev P 10}
+\end{wiplist}
+will set the contour levels in intervals of 10\%
+of the image peak intensity starting
+at 10\% of the image peak intensity.
+Likewise, the commands
+\begin{wiplist}%
+  \index{Commands!{\tt slev}}
+  \index{Commands!{\tt autolevs}}
+  \item {\tt autolevs 10 LIN 1 10}
+\samepage
+  \item {\tt slev A 1.0E-4}
+\end{wiplist}
+will set the contour levels to 1.0E-4, 2.0E-4, \ldots, 9.0E-4, and 1.0E-3.
+
+\subsection*		{The Header Command}
+\mylabel{ss:header}
+\index{Images!header files}
+
+The command
+{\tt header}\index{Commands!{\tt header}}%
+\index{Images!commands!{\tt header}}
+allows the user to read in certain header variables and set up
+particular defaults for the current image.
+The defaults established by a call to {\tt header}
+are the transfer function\index{Images!coordinate transfer function}
+and the {\em world} coordinates.
+\index{Coordinate System!World}\index{World Units}
+The transfer function is set relative to
+the user variables\index{User Variables}
+{\tt CRVALX}, {\tt CRVALY}, {\tt CRPIXX}, {\tt CRPIXY}, {\tt CDELTX},
+and {\tt CDELTY} (see the examples above).
+The limits (or {\em world} coordinates) are set by the header variables and the
+range of the indices specified by either
+{\tt subimage}\index{Commands!{\tt subimage}}
+\index{Images!commands!{\tt subimage}}
+or
+{\tt quarter}.\index{Commands!{\tt quarter}}
+\index{Images!commands!{\tt quarter}}
+
+If the image header does not contain the proper header values or the
+image type does not allow them to be retrieved,
+the user may specify them using the
+{\tt set}\index{Commands!{\tt set}}%
+\index{User Variables!commands!{\tt set}}
+command.
+This, however, should be done {\em after} the image is loaded and
+{\em before} the {\tt header} command is called.
+
+\subsection*		{Wedge Displays}
+\mylabel{ss:wedges}
+\index{Images!wedge displays}
+
+Sometimes, it will be helpful to be able to annotate
+a halftone plot with a wedge.
+These are useful in that they help to delineate the gray or color
+range displayed.
+This is done with the
+{\tt wedge}\index{Gray-Scale Plots!commands!{\tt wedge}}%
+\index{Images!commands!{\tt wedge}}
+command.
+The arguments to {\tt wedge} command are similar to the
+{\tt mtext}\index{Commands!{\tt mtext}}%
+\index{Labels!commands!{\tt mtext}}
+command.
+There are required arguments which specify which side of the current
+viewport to display the wedge (this also fixes the orientation);
+the displacement from the viewport edge (in character height units); and
+the thickness of the wedge (also in character height units).
+If the displacement is negative, the wedge will appear inside the viewport;
+if it is positive, the wedge will be outside.
+Optional arguments include the minimum and maximum values to be used to
+display as the extremes of the wedge and a label which will be displayed
+on the outside of the wedge.
+If a label is desired, the minimum and maximum must be specified.
+If the minimum and maximum are not given,
+the {\tt wedge} command will display the wedge
+in such a way that the entire range of values displayed by the most
+recent {\tt halftone}\index{Gray-Scale Plots!commands!{\tt halftone}}%
+\index{Images!commands!{\tt halftone}}%
+\index{Commands!{\tt halftone}}
+command will be visible.
+
+\subsection*		{The Image Transfer Function}
+\mylabel{ss:itf}
+\index{Images!image transfer function}
+
+Sometimes the raw image is not desired to be displayed;
+the image needs to be mapped differently.
+For example, often it is useful to display the logarithm of the image.
+The command
+{\tt itf}\index{Gray-Scale Plots!commands!{\tt itf}}%
+\index{Images!commands!{\tt itf}}\index{Commands!{\tt itf}}
+facilitates this.
+There are currently three types of image transfer functions available:
+\begin{itemize}
+  \item linear
+  \item logarithmic
+  \item square-root
+\end{itemize}
+Remember that the logarithm is a base-10 logarithm.
+Initially, the image transfer function is set to linear and is
+reset to linear whenever a new device is selected.
+
+\subsection*		{The Image Palette}
+\mylabel{ss:palette}
+\index{Images!color palette}
+
+For halftone plots (see below), the default is to use a gray scale ramp.
+On devices that permit the use of colors beyond the color index 15,
+different color lookup tables may be used.
+The
+{\tt palette}\index{Gray-Scale Plots!commands!{\tt palette}}%
+\index{Images!commands!{\tt palette}}%
+\index{Commands!{\tt palette}}
+command loads a new palette.
+On some interactive devices, the change is immediately displayed.
+However, the user must be careful to be sure to load the desired palette
+{\em prior} to displaying a halftone on a hardcopy device.
+There are several pre-defined palettes available.
+The {\tt palette} command has one required argument which is the number
+of the palette desired.
+The list below identifies the current list of pre-defined palettes.
+\begin{enumerate}
+  \item Gray scale.
+  \item A rainbow.
+  \item A heat scale.
+  \item The IRAF scale.
+  \item The AIPS scale.
+  \item The PGPLOT scale.
+  \item A Saoimage A scale.
+  \item A Saoimage BB scale.
+  \item A Saoimage HE scale.
+  \item A Saoimage I8 scale.
+  \item A DS scale.
+  \item A cyclic scale (Red to Green to Blue to Red\dots).
+\end{enumerate}
+If the required argument is negative, the color palette is flipped.
+%
+\begin{htmlonly}
+These palettes are shown in the example in Section~\ref{p:palettes}.
+\end{htmlonly}
+
+If a pre-defined palette is not acceptable, one may be defined by the
+user using the
+{\tt lookup}\index{Gray-Scale Plots!commands!{\tt lookup}}%
+\index{Images!commands!{\tt lookup}}\index{Commands!{\tt lookup}}
+command.
+The {\tt lookup} command maps
+the values in the {\bf X} array to the red colors, the {\bf Y} array to
+the green colors, and the {\bf ERR} array to the blue colors.
+The data in the {\bf PSTYLE} array identifies the ramp intensity level
+for the corresponding RGB values.
+The value in each of the four arrays must be between 0 and 1.
+Colors on the ramp are linearly interpolated from neighboring levels.
+An optional argument to {\tt lookup} may be used to flip the resulting
+color table.
+For example, a trivial gray scale ramp is defined below:
+\begin{wiplist}%
+  \index{Commands!{\tt data}}
+  \index{Commands!{\tt xcolumn}}
+  \index{Commands!{\tt ycolumn}}
+  \index{Commands!{\tt ecolumn}}
+  \index{Commands!{\tt pcolumn}}
+  \index{Commands!{\tt lookup}}
+  \item {\tt data stdin}\hfill \# Read data from the command line.
+\samepage
+  \item [{\tt Data Input> }] {\tt 0}\hfill \# Enter the data.
+  \item [{\tt Data Input> }] {\tt 1}
+  \item [{\tt Data Input> }] {\tt enddata}\hfill \# Finish entering data.
+  \item {\tt xcolumn 1}\hfill \# Load the red colors.
+  \item {\tt ycolumn 1}\hfill \# Load the green colors.
+  \item {\tt ecolumn 1}\hfill \# Load the blue colors.
+  \item {\tt pcolumn 1}\hfill \# Load the intensity level values.
+  \item {\tt lookup}\hfill \# Load the lookup table.
+\end{wiplist}
+
+\section		{Window Adjustments for Images}
+\mylabel{s:imwinadj}
+\index{Images!window dimensions}
+
+Sometimes the hardest job in dealing with images is getting it to fit
+properly with the rest of the plot.
+In the previous section, many commands were identified that help to
+specify how the image pixel maps onto the world coordinate
+system\index{Coordinate System!World}\index{World Units}.
+This section goes one step further by dealing with how a
+particular image should map onto the
+viewport\index{Coordinate System!Viewport}\index{Viewport}
+of a particular window\index{Coordinate System!Window}\index{Window}.
+In other words, this section will discuss how to correctly set the
+aspect ratio of the figure.
+
+At first glance, it might be thought that the best place for \wip\ to
+control the aspect ratio of an image is within the
+{\tt header}\index{Commands!{\tt header}}%
+\index{Images!commands!{\tt header}}
+command.
+After all, it loads the coordinate transfer function and sets the world
+coordinate limits based on the information from the image header.
+This would be fine if only one image was ever dealt with on a plot.
+But this will fail whenever one image is to be overlaid on
+top of another image and the two images have different dimensions.
+Hence, it was decided to keep this task under the user's control.
+Unfortunately, this means more work for the user.
+
+The rest of this section will introduce the commands necessary to set
+the aspect ratio for one image and try to illustrate how to properly
+set the aspect ratio for multiple (overlaid) images.
+Additional examples of these techniques will be found
+in Appendix~\ref{a:samples}.
+
+\subsection*		{The Window Adjustment Commands}
+\mylabel{ss:winadj}
+\index{Images!window adjustment}
+
+In general, the image plot should be displayed in such a way that
+the size of a pixel in the $x$-direction is the same as the size
+of a pixel in the $y$-direction.
+The {\tt winadj}\index{Commands!{\tt winadj}}%
+\index{Coordinate System!commands!{\tt winadj}}
+command permits the user to reconfigure the viewport such that the
+scale in the $x$- and $y$-directions are equal.
+This command must be used {\em after} the image is loaded and
+{\em before} the
+{\tt header}\index{Commands!{\tt header}}%
+\index{Images!commands!{\tt header}}
+command is called (\ie before the world coordinates of the plot window are set).
+To illustrate, suppose we have an image named ``myimage''
+which is dimensioned 80 by 33.
+The following commands constrain the viewport so that the halftone
+plot fits properly (\ie has an aspect ratio of 80:33):
+\begin{wiplist}%
+  \index{Commands!{\tt image}}
+  \index{Commands!{\tt winadj}}
+  \index{Commands!{\tt header}}
+  \index{Commands!{\tt halftone}}
+  \index{Images!commands!{\tt header}}
+  \item {\tt image myimage}\hfill\# Load the image and header information.
+\samepage
+  \item {\tt winadj 0 nx 0 ny}\hfill\# Set viewport to an 80:33 aspect ratio.
+  \item {\tt header}\hfill\# Use the header info to set transfer and limits.
+  \item {\tt halftone}\hfill\# Draw the halftone.
+\end{wiplist}
+Note the use of the user variables\index{User Variables} {\tt nx} and {\tt ny}
+to specify the dimensions of the plot.
+Also, note that because pixels have a `size' associated with them,
+the width of the window (\ie the number of pixels)
+must have room for $\mbox{\tt nx} + 1$ pixels.
+In order for this to be true,
+the range of values in the $x$-direction
+must be from 0 to {\tt nx}.
+(likewise for the $y$-direction).
+
+One of the most common mistakes in generating image plots is that user
+will (a) forget to adjust the window aspect ratio; or (b) call the
+{\tt winadj} command {\em after} the
+{\tt header}\index{Commands!{\tt header}}%
+\index{Images!commands!{\tt header}},
+{\tt transfer}\index{Commands!{\tt transfer}}%
+\index{Images!commands!{\tt transfer}},
+or
+{\tt limits}\index{Commands!{\tt limits}}%
+\index{Images!commands!{\tt limits}}
+commands.
+Because the {\tt winadj} command changes both the
+viewport\index{Coordinate System!Viewport}\index{Viewport}
+{\em and}
+world\index{Coordinate System!World}\index{World Units}
+coordinates,
+it is important that the limits (world coordinates) of the
+image be established {\em after} this command is called.
+
+\subsection*            {Panel Movements}
+\mylabel{ss:paneladjust}
+\index{Images!window adjustment!with panels}
+
+To illustrate how to correctly use the {\tt winadj} command with the
+{\tt panel}\index{Commands!{\tt panel}} command,
+consider an example where two images should be displayed side by side.
+Because the two images have the same dimensional range,
+and for this example, it is desired that
+there should not be any gap between the images (\ie the boxes should
+butt up against each other).
+The following macro definition and list of commands might be used:
+\begin{wiplist}%
+  \index{Commands!{\tt define}}
+  \index{Commands!{\tt panel}}
+  \index{Commands!{\tt image}}
+  \index{Commands!{\tt winadj}}
+  \index{Commands!{\tt header}}
+  \index{Commands!{\tt halftone}}
+  \index{Commands!{\tt box}}
+  \index{Commands!{\tt end}}
+  \index{Commands!{\tt viewport}}
+  \index{Commands!{\tt xlabel}}
+  \index{Commands!{\tt mtext}}
+  \item {\tt define mytask}\hfill \# \$1=Panel number; \$2=Image plane.
+\samepage
+  \item [\wipd] {\tt panel -2 1 \$1}\hfill \# Set the requested panel.
+  \item [\wipd] {\tt image myimage.fits \$2}\hfill \# Load the image.
+  \item [\wipd] {\tt winadj 0 nx 0 ny}\hfill \# Set the aspect ratio.
+  \item [\wipd] {\tt header rd}\hfill \# Set the transfer function and limits.
+  \item [\wipd] {\tt halftone}\hfill \# Draw the halftone.
+  \item [\wipd] {\tt box bcstz bcstz}\hfill \# Draw a box with tick marks.
+  \item [\wipd] {\tt if (\$1 $<$ 2) box nhz nvdzy}\hfill \# Label the left box.
+  \item [\wipd] {\tt if (\$1 $>$ 1) box nhfz 0}\hfill \# Label bottom of right box.
+  \item [\wipd] {\tt end}\hfill \# Finish the macro definition.
+  \item {\tt viewport 0.1 0.9 0.1 0.9}\hfill \# Set an initial viewport.
+  \item {\tt mytask 1 3}\hfill \# Load the first image.
+  \item {\tt mytask 2 4}\hfill \# Load the second image.
+  \item {\tt panel 1 1 1}\hfill \# Reset the panel for common RA DEC labels.
+  \item {\tt xlabel \esc{ga} (1950)}
+  \item {\tt mtext L 3.5 0.5 0.5 \esc{gd} (1950)}
+\end{wiplist}
+These commands will actually
+generate a plot with a gap between the images!
+The gap exists even though
+the {\tt panel}\index{Commands!{\tt panel}}
+command was called with a negative argument.
+The gap would remain regardless of the value of
+the user variable {\em xsubmar}.
+
+The reason for the gap is because of the call to {\tt winadj}.
+Remember that the {\tt winadj} command sets the
+world\index{Coordinate System!World}
+coordinate system limits and then attempts to adjust
+the viewport\index{Coordinate System!Viewport}
+coordinate system to have the same aspect ratio.
+The {\tt panel} command has established a viewport (which, for this
+example, is split into two vertical halves).
+Next, the {\tt winadj} command tries to
+adjust the aspect ratio of this viewport to match the image.
+In general, the resulting viewport from {\tt panel} will not match the
+aspect ratio desired by the {\tt winadj} command and the viewport will
+adjust to obtain the proper ratio.
+As a result, either the top or the right edge (or both) will
+need to move inward.
+
+The correct solution to the problem above is to find the aspect
+ratio desired for one image and then to scale it by the number of images
+in each direction.
+Adjusting the initial viewport to this range will not only correct the
+problem seen in the example above but also remove the need for the call
+to the {\tt winadj} command inside the macro.
+In this example, there are two panels in the $x$-direction and only one
+panel in the $y$-direction.
+Hence, the commands
+that will produce the properly scaled plot with the boxes butted together
+is shown in the listing that follows
+(with the {\tt winadj} command removed from the definition of
+the {\tt mytask} macro above):
+\begin{wiplist}%
+  \index{Commands!{\tt viewport}}
+  \index{Commands!{\tt image}}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt winadj}}
+  \index{Commands!{\tt panel}}
+  \index{Commands!{\tt xlabel}}
+  \index{Commands!{\tt mtext}}
+  \item {\tt viewport 0.1 0.9 0.1 0.9}\hfill \# Set an initial viewport.
+\samepage
+  \item {\tt image myimage.fits 1}\hfill \# Do this to get Nx and Ny.
+  \item {\tt set \esc{0} 2 * nx}\hfill \# Compute the $x$-direction width.
+  \item {\tt winadj 0 \esc{0} 0 ny}\hfill \# Adjust the viewport.
+  \item {\tt mytask 1 3}\hfill \# Display the first image.
+  \item {\tt mytask 2 4}\hfill \# Display the second image.
+  \item {\tt panel 1 1 1}\hfill \# Reset the panel for common RA DEC labels.
+  \item {\tt xlabel \esc{ga} (1950)}
+  \item {\tt mtext L 3.5 0.5 0.5 \esc{gd} (1950)}
+\end{wiplist}
+The variable \esc{0} is a user variable and is discussed in
+Chapter~\ref{c:uservar}.
+
+\subsection*            {Overlaid Images}
+\mylabel{ss:imoverlay}
+\index{Images!overlaid images}
+
+A common plotting task is to overlay one image graph on top of another.
+Many times, the two (or more) images will have the same dimensions and this
+will present no problem.
+However, there are many examples where a smaller image is overlaid on
+top of a larger image (or vice-versa) or one image has a completely
+different scaling (resolution) than another.
+Making sure that the aspect ratio of these two images is maintained
+does not have to be difficult.
+
+The simple case is when one image is used to define the limits of the
+world\index{Coordinate System!World}\index{World Units}
+coordinates.
+Since the aspect ratio is defined by one image and its
+limits specify the world coordinate range of the plot,
+there is no need to compute the aspect ratio for the other image.
+The world coordinate limits need to be saved, however,
+and then loaded after the
+second image's
+header variables are read and transfer function defined.
+The following is an example of this method
+(the user variables \esc{1}--\esc{4} are discussed in Chapter~\ref{c:uservar}):
+\begin{wiplist}%
+  \index{Commands!{\tt viewport}}
+  \index{Commands!{\tt image}}
+  \index{Commands!{\tt winadj}}
+  \index{Commands!{\tt header}}
+  \index{Commands!{\tt set}}
+  \index{Commands!{\tt halftone}}
+  \index{Commands!{\tt box}}
+  \index{Commands!{\tt limits}}
+  \index{Commands!{\tt levels}}
+  \index{Commands!{\tt contour}}
+  \item {\tt viewport 0.1 0.9 0.1 0.9}\hfill \# Set an initial viewport.
+%\samepage
+  \item {\tt image first.fits 1}\hfill \# Do this to get Nx and Ny.
+  \item {\tt winadj 0 nx 0 ny}\hfill \# Adjust the viewport.
+  \item {\tt header rd}\hfill \# Set the transfer function.
+  \item {\tt set \esc{1} x1}\hfill \# Save the current $x$\dots
+  \item {\tt set \esc{2} x2}\hfill \# \dots world coordinates.
+  \item {\tt set \esc{3} y1}\hfill \# Save the current $y$\dots
+  \item {\tt set \esc{4} y2}\hfill \# \dots world coordinates.
+  \item {\tt halftone}\hfill \# Display the first image.
+  \item {\tt box bcnsthz bcnstvdyz}\hfill \# Draw and label a box.
+  \item {\tt image second.fits 2}\hfill \# Load the second image.
+  \item {\tt header rd}\hfill \# Load it's transfer function.
+  \item {\tt limits \esc{1} \esc{2} \esc{3} \esc{4}}\hfill \# Reset the world limits.
+  \item {\tt levels 2 3.5 4 5.5}\hfill \# Set the contour level values.
+  \item {\tt contour}\hfill \# Contour the second image.
+\end{wiplist}
+
+The more complicated case is when none of the images define the limits of the
+world\index{Coordinate System!World}\index{World Units}
+coordinates of the plot.
+In this case, the limits need to be established by the user.
+If these limits are simple (\ie not astronomical coordinates),
+then the {\tt winadj} command can be used to establish the world coordinates
+and the aspect ratio.
+When astronomical coordinates are used, the aspect ratio must be
+calculated based on the plot range.
+In other words, determine the aspect ratio range using similar
+coordinate systems (\eg in arcsec offsets) and then set the limits in
+the absolute coordinate system.
+The technique shown in the example above of saving the world coordinates
+and then reloading them can be well utilized for this case.
+
+\section		{Image Plots}
+\mylabel{s:implot}
+\index{Images!image plots}
+
+This section presents the various ways of generating a plot with an image.
+Each of the commands below requires that certain characteristics
+are defined prior to being called.
+Most of the image characteristics are described in Section~\ref{s:imfunc}.
+
+\subsection*		{Contour Plots}
+\mylabel{ss:contour}
+\index{Contour Plots}
+\index{Images!image plots!contour}
+
+Before any contour plots may be generated, the user must specify the
+contour levels using one or more of the techniques discuss in
+Section~\ref{s:imfunc}.
+
+There is only one command in \wip\ to generate a contour plot:
+{\tt contour}.\index{Commands!{\tt contour}}%
+\index{Images!commands!{\tt contour}}%
+\index{Contour Plots!commands!{\tt contour}}
+This command, however, permits access to many different methods to use
+for drawing the contour plots.
+There are up to three optional arguments to the {\tt contour} command.
+
+The first (optional) argument specifies the method used to
+draw the contour plot.
+By default (or if the method {\tt s} is selected),
+\wip\ draws a very simple contour plot.
+Selecting contour method {\tt t} means the plot will be drawn with continuous
+contour lines (\ie it starts a contour line and follows it until it ends).
+Contour method {\tt b} means that the contour should be drawn (just like
+contour method {\tt s}) but also allows a blanking value to be specified.
+Contour method {\tt l} draws the same contour plot as method {\tt t} except
+that it includes contour level labeling.
+The second and third optional arguments are ignored
+by the contour methods {\tt s} and {\tt t}.
+
+The contour method {\tt t} will draw positive contours values with
+solid lines ({\tt lstyle 1}\index{Commands!{\tt lstyle}}) and
+negative contour values with dashed lines ({\tt lstyle 2}).
+This change of line styles may be overridden by specifying the contour
+method as {\tt -t}.
+Using the method {\tt -t} will mean that the {\tt contour} command will draw
+both positive and negative contour values with the same (\ie the current)
+line style.
+Note that the
+other two methods of drawing contour plots always uses the current line
+style regardless of the value of the contour level.
+
+If contour method {\tt b} is selected, an additional optional argument may be
+given that specifies the blanking value (image array values equal to this
+blanking value are ignored in the plot).
+The blanking value, if omitted, defaults to 0.
+
+If contour method {\tt l} is selected, the second (optional) argument may be
+provided to specify the spacing along the contour between labels
+(in grid cells) and the third (optional) argument is used to specify
+the minimum number of cells that must be crossed before drawing
+the first contour label.
+If not present, the second argument defaults to 16 and the third to 8.
+
+\subsection*		{Gray-Scale Plots}
+\mylabel{ss:gray}
+\index{Gray-Scale Plots}
+\index{Images!image plots!gray-scale}
+
+Gray scale and color image plots are generated in \wip\ using the
+{\tt halftone}\index{Commands!{\tt halftone}}%
+\index{Images!commands!{\tt halftone}}%
+\index{Gray-Scale Plots!commands!{\tt halftone}}
+command.
+By default, a gray scale halftone is generated.
+To create color, the display or hardcopy device must be capable of
+handling color maps and one must be loaded either with the
+{\tt palette}\index{Commands!{\tt palette}}%
+\index{Images!commands!{\tt palette}}%
+\index{Gray-Scale Plots!commands!{\tt palette}}
+or
+{\tt lookup}\index{Commands!{\tt lookup}}%
+\index{Images!commands!{\tt lookup}}%
+\index{Gray-Scale Plots!commands!{\tt lookup}}
+command (see Section~\ref{ss:palette}).
+The {\tt halftone} command has two optional arguments that
+may be used to delimit the minimum and maximum intensity range
+of the gray scale.
+By default, the minimum and maximum of the image are used.
+
+Currently, \wip\ uses the most recently loaded lookup table
+when displaying a halftone.
+Some devices permit this to be changed after the halftone
+is displayed but since this is not the case for hardcopy devices,
+the user should be careful to insert the desired palette prior to
+calling {\tt halftone} when generating a hardcopy plot.
+
+Halftones will only be drawn if the device
+is capable of accessing color indices
+larger than 15.
+Use the command {\tt `echo cmin cmax'}\index{Commands!{\tt echo}}%
+\index{Colors!color index range}
+to display the current
+values of {\em CMIN}\index{Colors!CMIN} and {\em CMAX}\index{Colors!CMAX}).
+
+\subsection*		{Cross Section Plots}
+\mylabel{ss:xsectn}
+\index{Cross Section Plots}
+\index{Images!image plots!cross section}
+
+There is a crude cross section plot available in \wip.
+It is the
+{\tt hi2d}\index{Commands!{\tt hi2d}}%
+\index{Images!commands!{\tt hi2d}}%
+\index{Gray-Scale Plots!commands!{\tt hi2d}}
+command.
+Each cross section slice consists of a hidden line histogram.
+A bias is applied to each successive slice in order to raise it ``above''
+(the $y$-direction) the previous slice.
+This bias is the only required argument and is entered
+in the same units as the image data.
+
+Two other optional arguments may be specified to control the display of
+the cross section plot.
+The first optional argument controls the slant of the plot
+by acting as an offset to successive cross sections in the $x$-direction.
+If this argument is positive ($>$ 0), it creates a plot that appears to
+slant to the right; if negative ($<$ 0), slant left.
+The default value for this argument is no slant effect (argument is 0).
+The last (optional) argument is a flag to specify whether the indices in
+the $x$-direction are centered or represent the left edges of the bins.
+The default value for this argument is to center the bins (argument is 0).
+
+\subsection*		{Drawing A Beam}
+\mylabel{ss:beam}
+\index{Images!beam}
+
+The {\tt beam}\index{Commands!{\tt beam}}%
+\index{Images!commands!{\tt beam}}
+command was created because many astronomical image files contain information
+about the beam size and orientation used to observe the source.
+This information can be used to display the beam providing a graphical
+presentation of the resolution of the image.
+The {\tt beam}\index{Commands!{\tt beam}} command
+draws a beam at the current cursor position (with an optional offset).
+This beam is outlined in the current color using the current line properties.
+The required arguments are the beam major axis, the minor axis, and the
+position angle.
+As in all astronomical images, the position angle is defined as 0 degrees
+towards the north and increases counter-clockwise.
+
+The optional arguments include offsets, a scaling factor, a fill color
+index, and a background rectangle color index.
+The offsets permit the center of the beam to be shifted relative to the
+current cursor position.
+The scaling factor provides greater control over the aspect ratio.
+By default, the scaling factor (or if it is provided and is negative) is 
+set to $15 \times \cos(\mbox{declination})$
+(which is proper for RA-Dec type scaling).
+The fill color index is used to draw the beam with a filled color.
+The background color index (if greater than or equal to zero)
+is used as the color to draw the (filled) bounding box of the beam.
+
+The optional offsets are provided in units of the width and height of the beam.
+This permits the user to easily shift the beam location.
+As an example of how to use the optional offsets, consider drawing
+a beam in the lower right corner of the window.
+Rather than computing the position and then guessing how much to move it
+so it is slightly offset from the box (and then having to redo it all
+again if the coordinates need to be changed!), the offsets permit an
+easy alternative:
+\begin{wiplist}%
+  \index{Commands!{\tt move}}
+  \index{Commands!{\tt beam}}
+  \index{Commands!{\tt image}}
+  \index{Commands!{\tt header}}
+  \index{Images!commands!{\tt image}}
+  \index{Images!commands!{\tt header}}
+  \item {\tt image myimage}\hfill\# Load the image and header information.
+\samepage
+  \item {\tt header rd}\hfill\# Set transfer fn and limits.
+  \item {\tt halftone}\hfill\# Draw the halftone.
+  \item {\tt move x2 y1}\hfill\# Move to the lower right corner.
+  \item {\tt beam bmaj bmin bpa -0.8 0.8}\hfill\# Draw the beam.
+\end{wiplist}
+In the example above, the parameters {\tt bmaj bmin bpa} are dynamically
+read from the image header.
+It is possible some conversion of these terms may be necessary.
+In this example it was assumed
+that the major and minor sizes were in the same units as the Y-axis and
+the position angle was in degrees.
