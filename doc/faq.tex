@@ -246,7 +246,18 @@ how do I load that value into a text variable and get
 it printed to the screen without doing it one symbol at a time?
 
 \indent$\Diamond$
-This is illustrated in section~\ref{p:symbol}.
+\begin{verbatim}
+set \12 (295 + (\11 * 5))
+echo \12
+new chv
+set chv \12
+mtext B -1 0.1 0.0 V\dlsr\u = \[chv]
+free chv
+\end{verbatim}
+where register 11 is the channel number which is changed
+in some loop as we step through the channels.
+
+% This is also illustrated in section~\ref{p:symbol}.  %% check - 
 
 \subsubsection*         {Box Label is Incorrect}
 \mylabel{sss:boxy}
