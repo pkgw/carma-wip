@@ -207,6 +207,7 @@
 #    16aug96 jm  Added -lgl to sgi default libraries.
 #    20sep99 pjt Some more modern linux suggestions (-lg2c)
 #     2dec00 pjt ccmalloc now an optional build flag
+#     4sep02 pjt formal support for darwin
 #--
 #
 #  Set up some "standard" defaults.
@@ -217,7 +218,7 @@ set f77lib = ( )
 #
 #  The following is a list of acceptable hosts (all lowercase).
 #
-set hostList = (sun solaris sgi u2 convex osf i386-linux aix hpux)
+set hostList = (sun solaris sgi u2 convex osf i386-linux aix hpux darwin)
 #
 #  Set up the defaults for the command line options.
 #
@@ -368,6 +369,7 @@ if ("$wiphost" ==    'sun4') set wiphost = 'sun'
 if ("$wiphost" ==    'sun3') set wiphost = 'sun'
 if ("$wiphost" ==    'mips') set wiphost = 'sgi'
 if ("$wiphost" ==   'linux') set wiphost = 'i386-linux'
+if ("$wiphost" ==  'darwin') set wiphost = 'darwin'
 #
 set hostmatch = 0
 foreach host ($hostList)
@@ -560,6 +562,18 @@ else if ("$wiphost" == 'i386-linux') then
       set theM = "$theM -O"
       set cFlags = "$cFlags -O -Dlinux"
     endif
+else if ("$wiphost" == 'darwin') then
+    set doranlib = 1
+    set doliblm = 1
+    set f77lib = ( $f77lib -lg2c )
+    set theM = "$fcname"
+    if ($dodebug > 0) then
+      set theM = "$theM -g"
+      set cFlags = "$cFlags -g"
+    else
+      set theM = "$theM -O"
+      set cFlags = "$cFlags -O"
+    endif
 else if ("$wiphost" == 'osf') then
     set doranlib = 1
     set theM = "$fcname -u -nofor_main"
@@ -605,7 +619,7 @@ endif
 #
 if (`echo ${ccname} | grep -c "gcc"` > 0) then
     set doliblm = 1
-    set f77lib = ( $f77lib -lgcc )
+    if ("$wiphost" != 'darwin') set f77lib = ( $f77lib -<lgcc )
     if (`echo ${ccname} ${cFlags} | grep -c "ansi"` < 1) then
       echo '### The gcc compiler should be called with the -ansi flag.'
     endif
