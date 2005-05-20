@@ -208,7 +208,7 @@
 #    20sep99 pjt Some more modern linux suggestions (-lg2c)
 #     2dec00 pjt ccmalloc now an optional build flag
 #     4sep02 pjt formal support for darwin
-#    20may05 pjt better help
+#    20may05 pjt better help, moved wiphelp over the the libdirq
 #--
 #
 #  Set up some "standard" defaults.
@@ -228,6 +228,7 @@ set wipdir = $cwd
 unset pgplotdir
 unset libdir
 unset wipbin
+unset wiphelp
 unset wipxlib
 unset wipslib
 unset readlinedir
@@ -257,6 +258,9 @@ while ($#argv > 0)
   else if ("$argv[1]" == '-bin') then
     shift
     set wipbin = "$argv[1]"
+  else if ("$argv[1]" == '-help') then
+    shift
+    set wiphelp = "$argv[1]"
   else if ("$argv[1]" == '-xlib') then
     shift
     set wipxlib = "$argv[1]"
@@ -296,7 +300,7 @@ while ($#argv > 0)
     echo 'where file and directory identify items to compile (the'
     echo 'default is the entire WIP distribution).'
     echo 'and where options include:'
-    echo '  -wip dir     -pgplot path    -lib dir    -bin dir    -obj dir'
+    echo '  -wip dir     -pgplot path    -lib dir    -bin dir    -obj dir   -help dir'
     echo '  -xlib path   -slib path      -readline path'
     echo '  -copts compile_options       -linkopts link_options'
     echo '  -ccmalloc ldirs'
@@ -407,6 +411,17 @@ if ((-e ${wipdir}/wiphelp.dat) == 0) then
     echo '### the WIP help file in it.  No default help file will be included.'
     set helpfile = -DHELPFILE=\"wiphelp.dat\"
 endif
+#
+#  If the helpfile has to go somewhere else, do that, and reset helpfile directive
+#
+if ($?wiphelp != 0) then
+   if (-e $wiphelp) then
+      echo Copying ${wipdir}/wiphelp.dat to $wiphelp
+      cp ${wipdir}/wiphelp.dat $wiphelp
+      set helpfile = -DHELPFILE=\"${wiphelp}/wiphelp.dat\"
+   else
+endif
+
 #
 #  Identify the output executable.
 #
