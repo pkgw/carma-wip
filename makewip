@@ -419,7 +419,7 @@ if ($?wiphelp != 0) then
       echo Copying ${wipdir}/wiphelp.dat to $wiphelp
       cp ${wipdir}/wiphelp.dat $wiphelp
       set helpfile = -DHELPFILE=\"${wiphelp}/wiphelp.dat\"
-   else
+   endif
 endif
 
 #
