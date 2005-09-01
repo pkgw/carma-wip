@@ -19,7 +19,13 @@
 # 27-mar-04     force rebuilding some executables upon reload (+typo fix)
 # 28-jun-04     debug option
 # 20-may-05     make script more generic, less dependant on NEMO, and distribute with WIP
+# 10-jul-05     removed the always problematic never used TKDRIV driver
+# 16-jul-05     removed pp,gi,wd from drivers for gfortran
 
+
+# Other places to get pgplot from
+# cvs -d :pserver:anonymous@cvs.starlink.ac.uk:/cvs co thirdparty/caltech/pgplot
+# ftp://ftp.astro.caltech.edu/pub/pgplot/pgplot522.tar.gz   (or whichever version)
 
 
 # Example standalone WIP install outside of MIRIAD or NEMO
@@ -48,7 +54,8 @@ endif
 if ($?NEMOLIB) then
   set lib=$NEMOLIB
 endif
-set drivers=CGDRIV,GIDRIV,NUDRIV,PGDRIV,PPDRIV,PSDRIV,WDDRIV,XWDRIV,TKDRIV
+set drivers=CGDRIV,GIDRIV,NUDRIV,PGDRIV,PPDRIV,PSDRIV,WDDRIV,XWDRIV
+set drivers0=CGDRIV,NUDRIV,PGDRIV,PSDRIV,XWDRIV
 if ($?NEMOHOST) then
   set host=$NEMOHOST
 endif
@@ -73,12 +80,14 @@ if ($?host == 0) goto usage
 if (! -e $lib) mkdir $lib
 if ($status) goto usage
 
-if ($?f77) then
-  setenv F77 $f77
-endif
-
-if ($?cc) then
-  setenv CC $cc
+if (0) then
+  # do we really want this ?
+  if ($?f77) then
+    setenv F77 $f77
+  endif
+  if ($?cc) then
+    setenv CC $cc
+  endif
 endif
 
 cd $dir
@@ -100,11 +109,19 @@ endif
 
 cd pgplot
 cp drivers.list $lib
-
 cd $lib
-
 cp drivers.list new.list
 cp drivers.list old.list
+
+
+
+
+if ($?F77) then
+  if ($F77  == gfortran) then
+    echo NOTE: SPECIAL lightweight pgplot for strict gfortran
+    set drivers=$drivers0
+  endif
+endif
 
 echo Building drivers for $drivers
 
@@ -186,3 +203,5 @@ usage:
   echo "  debug=0              clean demo example from lib"
   echo "  cc=gcc               changed a (supperted) C compiler for this system"
   echo "  f77=g77              changed a (supperted) Fortran compiler for this system"
+
+
