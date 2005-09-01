@@ -26,5 +26,5 @@
         2.3.5  21sep02 mask reading in linux corrected
 */
 #ifndef WIP_VERSION
-#define WIP_VERSION "Version: 2.3.5 21sep02"
+#define WIP_VERSION "Version: 2.3.6 1sep05"
 #endif /* WIP_VERSION */
