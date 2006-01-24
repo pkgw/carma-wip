@@ -616,3 +616,40 @@ even though the loop is being executed twenty times:
   \item {\tt set \esc{0} 0}\hfill\# Initialize the counter.
   \item {\tt loop 20 dummy \esc{0}}\hfill\# Loop through the macro.
 \end{wiplist}
+
+
+\subsubsection*         {Printing labels next to points using loops}
+
+It is perhaps not immediately obvious how to print a text label \"next\"
+to a point using WIP. The {\tt loop} command can also be used for this,
+but at the cost of having to know the number of points.
+
+\begin{verbatim}
+
+# Labels points in a file
+# $1 = column number in datafile # $2 = x offset
+# $3 = y offset
+# $4 = expand factor for charactor size
+define labelthem
+set \0 \0 + 1
+new "var"
+lines \0 \0
+str var $1 $1
+set \1 x[\0] + $2
+set \2 y[\0] + $3
+move \1 \2
+expand $4
+label \[var]
+free var
+expand 1
+end
+
+
+data datafile
+xcol 1
+ycol 2
+points
+loop 30 labelthem 3 0.03 0. 0.6
+
+
+\end{verbatim}
