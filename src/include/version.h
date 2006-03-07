@@ -24,7 +24,8 @@
         2.3.3  10oct00 include fix for cd1_1/2_2 for cdelt in image.c
         2.3.4  30nov00 more stringspace, fixed  FWHM reporting in Gaussfit
         2.3.5  21sep02 mask reading in linux corrected
+        2.3.7  07mar06 removed "hardcopy" command if -x on command line.
 */
 #ifndef WIP_VERSION
-#define WIP_VERSION "Version: 2.3.6 1sep05"
+#define WIP_VERSION "Version: 2.3.7 07mar06"
 #endif /* WIP_VERSION */

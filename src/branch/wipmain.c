@@ -203,12 +203,15 @@ int main(int argc, char *argv[])
     }
 
     if (interactive == 0) {         /* Command line force close check. */
-      if (mode > 0) {
            /* This section should not matter for non-hardcopy devices. */
+	/* ...but it does! - mwp 03/07/2006 */
+/*
+      if (mode > 0) {
         (void)Strcpy(line, "hardcopy");
         if (wipprocess(line, &mode, FALSE))
           wipoutput(stderr, "Trouble spooling command.\n");
       }
+*/
       mode = 0;
     }
 
