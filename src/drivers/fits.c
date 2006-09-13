@@ -30,6 +30,7 @@
  *    10nov93  jm  ANSI-fied the code and changed level 2 I/O calls to
  *                 level 3 ANSI supported I/O calls.
  *    01aug95  jm  Added byte size fits files.
+ *    13sep06 pjt  add TYPE_DOUBLE for 64bit support (BITPIX=-64)
  *
  * Routines:
  * Void *fitopen(Const char *name, int naxis, int axes[]);
@@ -49,10 +50,11 @@
 
 /* Define parameters needed just for this driver. */
 
-#define TYPE_BYTES 1
-#define TYPE_FLOAT 2
-#define TYPE_16INT 3
-#define TYPE_32INT 4
+#define TYPE_BYTES  1
+#define TYPE_FLOAT  2
+#define TYPE_16INT  3
+#define TYPE_32INT  4
+#define TYPE_DOUBLE 5
 
 /* Define private structure used to handle image. */
 
@@ -79,14 +81,7 @@ static char *Buf2 = (char *)NULL;
 static size_t Maxdim = 0;
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 Void *fitopen(Const char *name, int naxis, int nsize[])
-#else
-Void *fitopen(name, naxis, nsize)
-Const char *name;
-int naxis;
-int nsize[];
-#endif /* PROTOTYPE */
 /*
   This opens a FITS file and readies it for i/o.
 
@@ -106,7 +101,7 @@ int nsize[];
 -----------------------------------------------------------------------*/
 {
     char *ptr;
-    char keyword[9], line[80];
+    char keyword[9], line[81];
     int n, t, i, bitpix;
     long int size, offset;
     FITS *f;
@@ -148,10 +143,11 @@ int nsize[];
 
     fitrdhdi((Void *)f, "BITPIX", &bitpix, 0);
     switch (bitpix) {
-      case   8: f->type = TYPE_BYTES; break;
-      case  16: f->type = TYPE_16INT; break;
-      case  32: f->type = TYPE_32INT; break;
-      case -32: f->type = TYPE_FLOAT; break;
+      case   8: f->type = TYPE_BYTES;  break;
+      case  16: f->type = TYPE_16INT;  break;
+      case  32: f->type = TYPE_32INT;  break;
+      case -32: f->type = TYPE_FLOAT;  break;
+      case -64: f->type = TYPE_DOUBLE; break;
       default:
         (void)fprintf(stderr,
           "### Warning: Unsupported FITS BITPIX value [%d] in file [%s].\n",
@@ -159,6 +155,16 @@ int nsize[];
         fitclose((Void *)f);
         return((Void *)NULL);
     }
+
+    if (f->type == TYPE_FLOAT && sizeof(FLOAT) != 4) {
+      (void)fprintf(stderr,
+        "### Warning: fitopen compiled with FLOAT not 4 bytes. Cannot continue\n");
+      return((Void *)NULL);
+    } else {
+      (void)fprintf(stderr,"### pjt debug\n");
+    }
+
+
 
     fitrdhdi((Void *)f, "NAXIS", &n, 0);
     if ((n < 1) || (n > MAXNAX)) {
@@ -189,9 +195,10 @@ int nsize[];
     /* Check that the file is of the right size. */
 
     switch (f->type) {
-      case TYPE_BYTES: break;
-      case TYPE_16INT: size *= 2; break;
-      default:         size *= 4; break;
+      case TYPE_BYTES:  break;
+      case TYPE_16INT:  size *= 2; break;
+      case TYPE_DOUBLE: size *= 8; break;
+      default:          size *= 4; break;
     }
     size += offset;
     if ((fseek(f->fd, 0L, SEEK_END) != 0) || (ftell(f->fd) < size)) {
@@ -213,7 +220,7 @@ int nsize[];
     f->isblanked = fithdprsnt((Void *)f, "BLANK");
     if (f->isblanked) {
       fitrdhdi((Void *)f, "BLANK", &(f->blank), 0);
-      if (f->type == TYPE_FLOAT) {
+      if (f->type == TYPE_FLOAT || f->type == TYPE_DOUBLE) {
         (void)fprintf(stderr,
           "### This FITS file has an unconventional style of blanking.\n");
         (void)fprintf(stderr, "### I am not sure this will work properly!\n");
@@ -226,10 +233,10 @@ int nsize[];
 
     if (Maxdim < nsize[0]) {
       Maxdim = nsize[0];
-      Buf1 = (Buf1 == (char *)NULL) ? (char *)malloc(sizeof(int) * nsize[0]) :
-                              (char *)realloc(Buf1, (sizeof(int) * nsize[0]));
-      Buf2 = (Buf2 == (char *)NULL) ? (char *)malloc(4 * nsize[0]) :
-                              (char *)realloc(Buf2, (4 * nsize[0]));
+      Buf1 = (Buf1 == (char *)NULL) ? (char *)malloc(2*sizeof(int) * nsize[0]) :
+                              (char *)realloc(Buf1, (2*sizeof(int) * nsize[0]));
+      Buf2 = (Buf2 == (char *)NULL) ? (char *)malloc(8 * nsize[0]) :
+                              (char *)realloc(Buf2, (8 * nsize[0]));
       if ((Buf1 == (char *)NULL) || (Buf2 == (char *)NULL)) {
         (void)fprintf(stderr,
           "### Fatal Error: Ran out of memory opening FITS file.\n");
@@ -238,18 +245,15 @@ int nsize[];
       }
     }
 
+    printf("PJT Size: %d : %d x %d\n",f->naxis,f->axes[0],f->axes[1]);
+
     /* Return with the opaque pointer. */
 
     return((Void *)f);
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 void fitclose(Void *file)
-#else
-void fitclose(file)
-Void *file;
-#endif /* PROTOTYPE */
 /*
   This closes a FITS file, and deletes any memory associated with it.
 
@@ -268,15 +272,7 @@ Void *file;
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 int fitread(Void *file, int indx, FLOAT *data, FLOAT badpixel)
-#else
-int fitread(file, indx, data, badpixel)
-Void *file;
-int indx;
-FLOAT *data;
-FLOAT badpixel;
-#endif /* PROTOTYPE */
 /*
   This reads a row of a FITS image.
 
@@ -299,15 +295,17 @@ FLOAT badpixel;
     FITS *f;
     FLOAT bscale,bzero;
     INT16 *jdat;
+    double *ddat;
     union {int i; float f;} xunion;
 
     if ((f = (FITS *)file) == (FITS *)NULL)
       return(1);
 
     switch (f->type) {
-      case TYPE_BYTES: bytes = 1; break;
-      case TYPE_16INT: bytes = 2; break;
-      default:         bytes = 4; break;
+      case TYPE_BYTES:  bytes = 1; break;
+      case TYPE_16INT:  bytes = 2; break;
+      case TYPE_DOUBLE: bytes = 8; break;
+      default:          bytes = 4; break;
     }
     length = bytes * f->axes[0];
     flen = length / sizeof(FLOAT);
@@ -325,9 +323,15 @@ FLOAT badpixel;
 #if NO_CVT
     if (f->type == TYPE_FLOAT) {
       if (fread((Void *)data, sizeof(FLOAT), flen, f->fd) != flen) {
-        (void)fprintf(stderr, "### Error: I/O read error in fitread.\n");
+        (void)fprintf(stderr, "### Error: I/O read error FLOAT in fitread.\n");
         return(1);
       }
+    } else if (f->type == TYPE_DOUBLE) {
+      if (fread((Void *)data, sizeof(double), flen, f->fd) != flen) {
+        (void)fprintf(stderr, "### Error: I/O read error double in fitread.\n");
+        return(1);
+      }
+
     } else {
       if (fread((Void *)Buf2, sizeof(char), length, f->fd) != length) {
         (void)fprintf(stderr, "### Error: I/O read error in fitread.\n");
@@ -416,6 +420,32 @@ FLOAT badpixel;
         for (i = 0; i < f->axes[0]; i++)
           data[i] = (bscale * idat[i]) + bzero;
       }
+    } else if (f->type == TYPE_DOUBLE) {
+#if NO_CVT
+      ddat = (double *)Buf2;
+      iblank = f->blank;
+#else
+      ddat = (double *)Buf1;
+      unpackd_c(Buf2, ddat, f->axes[0]);
+      unpack32_c((char *)(&(f->blank)), &iblank, 1);
+#endif
+      if (f->isblanked) {
+        for (i = 0; i < f->axes[0]; i++) {
+          xunion.f = data[i];
+          if (xunion.i != iblank) {
+            data[i] = (bscale * data[i]) + bzero;
+          } else {
+            if (wipDebugMode() > 0)
+              (void)fprintf(stderr,
+                "### Bad FITS double pixel at (%d, %d)\n", i, indx);
+            data[i] = badpixel;
+          }
+        }
+      } else if ((bscale != 1) || (bzero != 0)) {
+        for (i = 0; i < f->axes[0]; i++)
+          data[i] = (bscale * data[i]) + bzero;
+      }
+
     } else {
 
 #if NO_CVT
@@ -443,18 +473,11 @@ FLOAT badpixel;
       }
     }
 
-    return(0);
+    return 0;
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 int fitsetpl(Void *file, int naxis, int axes[])
-#else
-int fitsetpl(file, naxis, axes)
-Void *file;
-int naxis;
-int axes[];
-#endif /* PROTOTYPE */
 /*
   This sets the plane to be accessed in a FITS file which has more than
   two dimensions.
@@ -494,15 +517,7 @@ int axes[];
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 void fitrdhdd(Void *file, Const char *keyword, double *value, double def)
-#else
-void fitrdhdd(file, keyword, value, def)
-Void *file;
-Const char *keyword;
-double *value;
-double def;
-#endif /* PROTOTYPE */
 /*
   This reads the value of a double-valued FITS keyword from the file header.
 
@@ -550,15 +565,7 @@ double def;
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 void fitrdhdr(Void *file, Const char *keyword, FLOAT *value, FLOAT def)
-#else
-void fitrdhdr(file, keyword, value, def)
-Void *file;
-Const char *keyword;
-FLOAT *value;
-FLOAT def;
-#endif /* PROTOTYPE */
 /*
   This reads the value of a real-valued FITS keyword from the file header.
 
@@ -580,15 +587,7 @@ FLOAT def;
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 void fitrdhdi(Void *file, Const char *keyword, int *value, int def)
-#else
-void fitrdhdi(file, keyword, value, def)
-Void *file;
-Const char *keyword;
-int *value;
-int def;
-#endif /* PROTOTYPE */
 /*
   This reads the value of a integer-valued FITS keyword from the file header.
 
@@ -610,16 +609,7 @@ int def;
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 void fitrdhda(Void *file, Const char *keyword, char *value, Const char *defval, size_t maxlen)
-#else
-void fitrdhda(file, keyword, value, defval, maxlen)
-Void *file;
-Const char *keyword;
-char *value;
-Const char *defval;
-size_t maxlen;
-#endif /* PROTOTYPE */
 /*
   This reads the value of a character FITS keyword from the file header.
 
@@ -679,14 +669,7 @@ size_t maxlen;
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 void fitrdhd(Void *file, int n, char card[81])
-#else
-void fitrdhd(file, n, card)
-Void *file;
-int n;
-char card[81];
-#endif /* PROTOTYPE */
 /*
   This reads a FITS card. No check is made that the request is valid,
   and it sets the string to NULL if an i/o error is detected.
@@ -715,13 +698,7 @@ char card[81];
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 int fithdprsnt(Void *file, Const char *keyword)
-#else
-int fithdprsnt(file, keyword)
-Void *file;
-Const char *keyword;
-#endif /* PROTOTYPE */
 /*
   Returns 1 if keyword is present in header; 0 otherwise.
 -----------------------------------------------------------------------*/
@@ -739,14 +716,7 @@ Const char *keyword;
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 static int fitsrch(FITS *f, Const char *keyword, char card[80])
-#else
-static int fitsrch(f, keyword, card)
-FITS *f;
-Const char *keyword;
-char card[80];
-#endif /* PROTOTYPE */
 /*
   This searches for a FITS keyword in a file.
   Returns -1 if header not present; 0 indexed card number otherwise.
@@ -788,22 +758,12 @@ char card[80];
 #define BADPIXEL  -99.0
 int debugMode = 0;
 
-#ifdef PROTOTYPE
 int wipDebugMode(void)
-#else
-int wipDebugMode()
-#endif /* PROTOTYPE */
 {
     return(debugMode);
 }
 
-#ifdef PROTOTYPE
 main(int argc, char *argv[])
-#else
-main(argc, argv)
-int argc;
-char *argv[];
-#endif /* PROTOTYPE */
 {
     Void *file;
     char *infile;

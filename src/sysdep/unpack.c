@@ -6,6 +6,7 @@
 	03mar92 jm  Modified code for WIP usage (from Miriad).
 	19mar95 jm  Added code for IEEE style machines.
 	21jan98 jm  Added missing semicolons in unpackr_c().
+	13sep06 pjt Cleanup while ensure 64bit compliance
 
 Routines:
 void unpack16_c ARGS(( char *in,    int *out, int n ));
@@ -38,14 +39,7 @@ void  unpackd_c ARGS(( char *in, double *out, int n ));
 
 /*  Unpack an array of 16 bit integers into 32 bit integers. */
 /***********************************************************************/
-#ifdef PROTOTYPE
 void unpack16_c(char *in, int *out, int n)
-#else
-void unpack16_c(in, out, n)
-char *in;
-int *out;
-int n;
-#endif /* PROTOTYPE */
 {
     char *s;
     register int i;
@@ -68,14 +62,7 @@ int n;
 
 /*  Unpack an array of 32 bit integers into integers. */
 /***********************************************************************/
-#ifdef PROTOTYPE
 void unpack32_c(char *in, int *out, int n)
-#else
-void unpack32_c(in, out, n)
-char *in;
-int *out;
-int n;
-#endif /* PROTOTYPE */
 {
     register int i;
     char *s;
@@ -93,14 +80,7 @@ int n;
 
 /*  Unpack an array of IEEE reals into reals -- just do byte reversal. */
 /***********************************************************************/
-#ifdef PROTOTYPE
 void unpackr_c(char *in, float *out, int n)
-#else
-void unpackr_c(in, out, n)
-char *in;
-float *out;
-int n;
-#endif /* PROTOTYPE */
 {
     char *s;
     register int i;
@@ -121,14 +101,7 @@ int n;
  *  byte reversal.
  */
 /***********************************************************************/
-#ifdef PROTOTYPE
 void unpackd_c (char *in, double *out, int n)
-#else
-void unpackd_c(in, out, n)
-char *in;
-double *out;
-int n;
-#endif /* PROTOTYPE */
 {
     char *s;
     register int i;
@@ -191,14 +164,7 @@ int n;
 
 /*  Unpack an array of 16 bit integers into integers. */
 /***********************************************************************/
-#ifdef PROTOTYPE
 void unpack16_c(char *in, int *out, int n)
-#else
-void unpack16_c(in, out, n)
-char *in;
-int *out;
-int n;
-#endif /* PROTOTYPE */
 {
   int temp,offset,i;
   int *ind;
@@ -254,14 +220,7 @@ int n;
 
 /*  Unpack an array of 32 bit integers into integers. */
 /***********************************************************************/
-#ifdef PROTOTYPE
 void unpack32_c(char *in, int *out, int n)
-#else
-void unpack32_c(in, out, n)
-char *in;
-int *out;
-int n;
-#endif /* PROTOTYPE */
 {
   int temp,offset,i;
   int *ind;
@@ -299,14 +258,7 @@ int n;
 
 /*  Unpack an array of IEEE reals into Cray reals. */
 /***********************************************************************/
-#ifdef PROTOTYPE
 void unpackr_c(char *in, float *out, int n)
-#else
-void unpackr_c(in, out, n)
-char *in;
-float *out;
-int n;
-#endif /* PROTOTYPE */
 {
   int temp,tin,offset,i,bias;
   int *ind,*outd;
@@ -352,14 +304,7 @@ int n;
  *  This assumes that a "double" and a "float" are identical.
  */
 /***********************************************************************/
-#ifdef PROTOTYPE
 void unpackd_c(char *in, double *out, int n)
-#else
-void unpackd_c(in, out, n)
-char *in;
-double *out;
-int n;
-#endif /* PROTOTYPE */
 {
   int bias,i,tin;
   int *ind,*outd;
@@ -381,14 +326,7 @@ int n;
 #ifdef vaxc
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 void unpack16_c(char *in, int *out, int n)
-#else
-void unpack16_c(in, out, n)
-char *in;
-int *out;
-int n;
-#endif /* PROTOTYPE */
 {
     register short int *from;
     register int i;
@@ -401,14 +339,7 @@ int n;
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 void unpack32_c(char *in, int *out, int n)
-#else
-void unpack32_c(in, out, n)
-char *in;
-int *out;
-int n;
-#endif /* PROTOTYPE */
 {
     register int *from;
     register int i;
@@ -421,14 +352,7 @@ int n;
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 void unpackr_c(char *in, float *out, int n)
-#else
-void unpackr_c(in, out, n)
-char *in;
-float *out;
-int n;
-#endif /* PROTOTYPE */
 {
     register char *from;
     register int i;
@@ -448,14 +372,7 @@ int n;
 }
 
 /***********************************************************************/
-#ifdef PROTOTYPE
 void unpackd_c(char *in, double *out, int n)
-#else
-void unpackd_c(in, out, n)
-char *in;
-double *out;
-int n;
-#endif /* PROTOTYPE */
 {
     register int *from;
     register int i;
