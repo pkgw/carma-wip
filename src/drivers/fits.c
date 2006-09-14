@@ -303,7 +303,9 @@ int fitread(Void *file, int indx, FLOAT *data, FLOAT badpixel)
     }
     length = bytes * f->axes[0];
     flen = length / sizeof(FLOAT);
+#if 0
     if (f->type == TYPE_DOUBLE) flen/=2;         /* patch /2 for double's */
+#endif
     offset = (indx * length) + (bytes * f->offset);
     offset += (2880 * (((80 * f->ncards) + 2879) / 2880));
     if (fseek(f->fd, offset, SEEK_SET) != 0)
@@ -424,20 +426,13 @@ int fitread(Void *file, int indx, FLOAT *data, FLOAT badpixel)
       unpack32_c((char *)(&(f->blank)), &iblank, 1);
 #endif
       if (f->isblanked) {
+	/* actually, this is wrong, the union doesn't work yet for double */
         for (i = 0; i < f->axes[0]; i++) {
-          xunion.f = data[i];
-          if (xunion.i != iblank) {
-            data[i] = (bscale * ddat[i]) + bzero;
-          } else {
-            if (wipDebugMode() > 0)
-              (void)fprintf(stderr,
-                "### Bad FITS double pixel at (%d, %d)\n", i, indx);
-            data[i] = badpixel;
-          }
-        }
+	  data[i] = (bscale * ddat[i]) + bzero;
+	}
       } else if ((bscale != 1) || (bzero != 0)) {
         for (i = 0; i < f->axes[0]; i++)
-          data[i] = (bscale * data[i]) + bzero;
+          data[i] = (bscale * ddat[i]) + bzero;
       }
 
     } else {  /* TYPE_FLOAT */
