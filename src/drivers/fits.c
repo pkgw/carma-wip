@@ -43,6 +43,8 @@
  * void fitrdhda(Void *file, Const char *keyword, char *value, Const char *defval, size_t maxlen);
  * int fithdprsnt(Void *file, Const char *keyword);
  * static int fitsrch(FITS *f, Const char *keyword, char card[80]);
+ *
+ * TODO:   cannot handle images > 2GB
  */
 
 #define WIP_IMAGE
@@ -54,14 +56,15 @@
 #define TYPE_FLOAT  2
 #define TYPE_16INT  3
 #define TYPE_32INT  4
-#define TYPE_DOUBLE 5
+#define TYPE_64INT  5
+#define TYPE_DOUBLE 6
 
 /* Define private structure used to handle image. */
 
 typedef struct {
     FILE *fd;             /* Handle into file. */
-    int type;             /* Image type. */
-    int ncards;           /* Number of header items. */
+    int type;             /* Image type. (TYPE_xxx) */
+    int ncards;           /* Number of header items, including END */
     int naxis;            /* Number of axes. */
     int axes[MAXNAX];     /* Number of pixels along each axes. */
     long offset;          /* Offset (in pixels) to line in a plane. */
@@ -226,14 +229,14 @@ Void *fitopen(Const char *name, int naxis, int nsize[])
     }
 
     /* Make sure we have enough memory to deal with this file. */
-    /* Buf1 and Buf2 hold a line of data in the maximum datatype (BITPIX=-64) */
+    /* Buf1 and Buf2 hold a row of data in the maximum datatype (BITPIX=-64) */
 
     if (Maxdim < nsize[0]) {
       Maxdim = nsize[0];
-      Buf1 = (Buf1 == (char *)NULL) ? (char *)malloc(2*sizeof(int) * nsize[0]) :
-                              (char *)realloc(Buf1, (2*sizeof(int) * nsize[0]));
-      Buf2 = (Buf2 == (char *)NULL) ? (char *)malloc(8 * nsize[0]) :
-                              (char *)realloc(Buf2, (8 * nsize[0]));
+      Buf1 = (Buf1 == (char *)NULL) ? (char *)malloc(sizeof(double) * nsize[0]) :
+                              (char *)realloc(Buf1, (sizeof(double) * nsize[0]));
+      Buf2 = (Buf2 == (char *)NULL) ? (char *)malloc(sizeof(double) * nsize[0]) :
+	                      (char *)realloc(Buf2, (sizeof(double) * nsize[0]));
       if ((Buf1 == (char *)NULL) || (Buf2 == (char *)NULL)) {
         (void)fprintf(stderr,
           "### Fatal Error: Ran out of memory opening FITS file.\n");
@@ -432,7 +435,9 @@ int fitread(Void *file, int indx, FLOAT *data, FLOAT badpixel)
       } else if ((bscale != 1) || (bzero != 0)) {
         for (i = 0; i < f->axes[0]; i++)
           data[i] = (bscale * ddat[i]) + bzero;
-      }
+      } else
+        for (i = 0; i < f->axes[0]; i++)
+          data[i] = ddat[i];
 
     } else {  /* TYPE_FLOAT */
 
