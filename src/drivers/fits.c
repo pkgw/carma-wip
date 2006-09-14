@@ -30,7 +30,7 @@
  *    10nov93  jm  ANSI-fied the code and changed level 2 I/O calls to
  *                 level 3 ANSI supported I/O calls.
  *    01aug95  jm  Added byte size fits files.
- *    13sep06 pjt  add TYPE_DOUBLE for 64bit support (BITPIX=-64)
+ *    14sep06 pjt  add TYPE_DOUBLE for 64bit support (BITPIX=-64)
  *
  * Routines:
  * Void *fitopen(Const char *name, int naxis, int axes[]);
@@ -226,6 +226,7 @@ Void *fitopen(Const char *name, int naxis, int nsize[])
     }
 
     /* Make sure we have enough memory to deal with this file. */
+    /* Buf1 and Buf2 hold a line of data in the maximum datatype (BITPIX=-64) */
 
     if (Maxdim < nsize[0]) {
       Maxdim = nsize[0];
@@ -303,9 +304,7 @@ int fitread(Void *file, int indx, FLOAT *data, FLOAT badpixel)
     }
     length = bytes * f->axes[0];
     flen = length / sizeof(FLOAT);
-#if 0
-    if (f->type == TYPE_DOUBLE) flen/=2;         /* patch /2 for double's */
-#endif
+    if (f->type == TYPE_DOUBLE) flen /= 2;         /* patch /2 for double's */
     offset = (indx * length) + (bytes * f->offset);
     offset += (2880 * (((80 * f->ncards) + 2879) / 2880));
     if (fseek(f->fd, offset, SEEK_SET) != 0)
