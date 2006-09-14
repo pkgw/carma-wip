@@ -30,3 +30,4 @@ Some items for the future:
 
 	wip -d /xs file=aaa.dat xcol=1 ycol=3
 
+4) code has IEEEByteSwap wipdefs.h, its detection is not very good and based on OS, not CPU
