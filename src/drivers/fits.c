@@ -160,11 +160,7 @@ Void *fitopen(Const char *name, int naxis, int nsize[])
       (void)fprintf(stderr,
         "### Warning: fitopen compiled with FLOAT not 4 bytes. Cannot continue\n");
       return((Void *)NULL);
-    } else {
-      (void)fprintf(stderr,"### pjt debug\n");
-    }
-
-
+    } 
 
     fitrdhdi((Void *)f, "NAXIS", &n, 0);
     if ((n < 1) || (n > MAXNAX)) {
@@ -245,8 +241,6 @@ Void *fitopen(Const char *name, int naxis, int nsize[])
       }
     }
 
-    printf("PJT Size: %d : %d x %d\n",f->naxis,f->axes[0],f->axes[1]);
-
     /* Return with the opaque pointer. */
 
     return((Void *)f);
@@ -309,6 +303,7 @@ int fitread(Void *file, int indx, FLOAT *data, FLOAT badpixel)
     }
     length = bytes * f->axes[0];
     flen = length / sizeof(FLOAT);
+    if (f->type == TYPE_DOUBLE) flen/=2;         /* patch /2 for double's */
     offset = (indx * length) + (bytes * f->offset);
     offset += (2880 * (((80 * f->ncards) + 2879) / 2880));
     if (fseek(f->fd, offset, SEEK_SET) != 0)
@@ -327,11 +322,10 @@ int fitread(Void *file, int indx, FLOAT *data, FLOAT badpixel)
         return(1);
       }
     } else if (f->type == TYPE_DOUBLE) {
-      if (fread((Void *)data, sizeof(double), flen, f->fd) != flen) {
+      if (fread((Void *)Buf2, sizeof(double), flen, f->fd) != flen) {
         (void)fprintf(stderr, "### Error: I/O read error double in fitread.\n");
         return(1);
-      }
-
+      } 
     } else {
       if (fread((Void *)Buf2, sizeof(char), length, f->fd) != length) {
         (void)fprintf(stderr, "### Error: I/O read error in fitread.\n");
@@ -342,7 +336,7 @@ int fitread(Void *file, int indx, FLOAT *data, FLOAT badpixel)
     if (fread((Void *)Buf2, sizeof(char), length, f->fd) != length) {
       (void)fprintf(stderr, "### Error: I/O read error in fitread.\n");
       return(1);
-    }
+    }  
 #endif
 
     /* We have the data now. Convert and scale it. */
@@ -433,7 +427,7 @@ int fitread(Void *file, int indx, FLOAT *data, FLOAT badpixel)
         for (i = 0; i < f->axes[0]; i++) {
           xunion.f = data[i];
           if (xunion.i != iblank) {
-            data[i] = (bscale * data[i]) + bzero;
+            data[i] = (bscale * ddat[i]) + bzero;
           } else {
             if (wipDebugMode() > 0)
               (void)fprintf(stderr,
@@ -446,7 +440,7 @@ int fitread(Void *file, int indx, FLOAT *data, FLOAT badpixel)
           data[i] = (bscale * data[i]) + bzero;
       }
 
-    } else {
+    } else {  /* TYPE_FLOAT */
 
 #if NO_CVT
       iblank = f->blank;
