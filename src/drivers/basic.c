@@ -13,6 +13,7 @@
  *                 default (since basic images are usually in local
  *                 format anyway).  However, I have modified the format
  *                 so that one can swap (Upper case datatype) if needed.
+ *    14sep06 pjt  minor cleanup
  *
  *----------------------------------------------------------------------
  *
@@ -84,14 +85,7 @@ static char *Buf2 = (char *)NULL;
 static size_t Maxdim = 0;
 
 /************************************************************************/
-#ifdef PROTOTYPE
 Void *basopen(Const char *name, int naxis, int axes[])
-#else
-Void *basopen(name, naxis, axes)
-Const char *name;
-int naxis;
-int axes[];
-#endif /* PROTOTYPE */
 /* basopen -- Open an image file.
 
   Input:
@@ -330,12 +324,7 @@ int axes[];
 }
 
 /************************************************************************/
-#ifdef PROTOTYPE
 void basclose(Void *file)
-#else
-void basclose(file)
-Void *file;
-#endif /* PROTOTYPE */
 /* basclose -- Close up an image file.
 
   Input:
@@ -356,15 +345,7 @@ Void *file;
 
 /* ARGSUSED */
 /************************************************************************/
-#ifdef PROTOTYPE
 int basread(Void *file, int indx, FLOAT *array, FLOAT badpixel)
-#else
-int basread(file, indx, array, badpixel)
-Void *file;
-int indx;
-FLOAT *array;
-FLOAT badpixel;       /* Unused. */
-#endif /* PROTOTYPE */
 /* basread -- Read a single row from an image.  This accesses the plane
    given by the last call to bassetpl.
 
@@ -448,14 +429,7 @@ FLOAT badpixel;       /* Unused. */
 }
 
 /************************************************************************/
-#ifdef PROTOTYPE
 int bassetpl(Void *file, int naxis, int axes[])
-#else
-int bassetpl(file, naxis, axes)
-Void *file;
-int naxis;
-int axes[];
-#endif /* PROTOTYPE */
 /* bassetpl -- Set which plane of a cube is to be accessed.
 
   Input:
@@ -491,15 +465,7 @@ int axes[];
 
 /* ARGSUSED */
 /************************************************************************/
-#ifdef PROTOTYPE
 void basrdhdd(Void *file, Const char *keyword, double *value, double defval)
-#else
-void basrdhdd(file, keyword, value, defval)
-Void *file;           /* Unused */
-Const char *keyword;  /* Unused */
-double *value;
-double defval;
-#endif /* PROTOTYPE */
 /* basrdhdd -- Read a double precision-valued header variable.
 
   Input:
@@ -519,15 +485,7 @@ double defval;
 
 /* ARGSUSED */
 /************************************************************************/
-#ifdef PROTOTYPE
 void basrdhdr(Void *file, Const char *keyword, FLOAT *value, FLOAT defval)
-#else
-void basrdhdr(file, keyword, value, defval)
-Void *file;           /* Unused */
-Const char *keyword;  /* Unused */
-FLOAT *value;
-FLOAT defval;
-#endif /* PROTOTYPE */
 /* basrdhdr -- Read a real-valued header variable.
 
   Input:
@@ -550,15 +508,7 @@ FLOAT defval;
 
 /* ARGSUSED */
 /************************************************************************/
-#ifdef PROTOTYPE
 void basrdhdi(Void *file, Const char *keyword, int *value, int defval)
-#else
-void basrdhdi(file, keyword, value, defval)
-Void *file;           /* Unused */
-Const char *keyword;  /* Unused */
-int *value;
-int defval;
-#endif /* PROTOTYPE */
 /* basrdhdi -- Read an integer-valued header variable.
 
   Input:
@@ -581,16 +531,7 @@ int defval;
 
 /* ARGSUSED */
 /************************************************************************/
-#ifdef PROTOTYPE
 void basrdhda(Void *file, Const char *keyword, char *value, Const char *defval, size_t maxlen)
-#else
-void basrdhda(file, keyword, value, defval, maxlen)
-Void *file;           /* Unused */
-Const char *keyword;  /* Unused */
-char *value;
-Const char *defval;
-size_t maxlen;
-#endif /* PROTOTYPE */
 /* basrdhda -- Read a string-valued header variable.
 
   Input:
@@ -619,13 +560,7 @@ size_t maxlen;
 
 /* ARGSUSED */
 /**********************************************************************/
-#ifdef PROTOTYPE
 int bashdprsnt(Void *file, Const char *keyword)
-#else
-int bashdprsnt(file, keyword)
-Void *file;           /* Unused */
-Const char *keyword;  /* Unused */
-#endif /* PROTOTYPE */
 /*
   Returns 1 if keyword is present in header; 0 otherwise.
 ------------------------------------------------------------------------*/
@@ -644,22 +579,12 @@ Const char *keyword;  /* Unused */
 #define BADPIXEL -99.0
 int debugMode = 0;
 
-#ifdef PROTOTYPE
 int wipDebugMode(void)
-#else
-int wipDebugMode()
-#endif /* PROTOTYPE */
 {
     return(debugMode);
 }
 
-#ifdef PROTOTYPE
 main(int argc, char *argv[])
-#else
-main(argc, argv)
-int argc;
-char *argv[];
-#endif /* PROTOTYPE */
 {
     Void *file;
     char *infile;
