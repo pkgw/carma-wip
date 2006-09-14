@@ -570,7 +570,7 @@ else if ("$wiphost" == 'i386-linux') then
     set doranlib = 1
     set doliblm = 1
 #    set f77lib = ( $f77lib -lf2c )
-   set f77lib = ( $f77lib -lg2c )
+ set f77lib = ( $f77lib -lg2c )
 #    set f77lib = ( $f77lib -lg2c -lccmalloc -ldl)
     set theM = "$fcname -u"
     if ($dodebug > 0) then
@@ -583,7 +583,8 @@ else if ("$wiphost" == 'i386-linux') then
 else if ("$wiphost" == 'darwin') then
     set doranlib = 1
     set doliblm = 1
-    set f77lib = ( $f77lib -lg2c )
+    # please read the MacOSX guidelines if linker fails to succeed
+    set f77lib = ( $f77lib -lg2c -lcc_dynamic -lSystemStubs )
     set theM = "$fcname"
     if ($dodebug > 0) then
       set theM = "$theM -g"
