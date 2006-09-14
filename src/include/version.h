@@ -25,8 +25,8 @@
         2.3.4  30nov00 more stringspace, fixed  FWHM reporting in Gaussfit
         2.3.5  21sep02 mask reading in linux corrected
         2.3.7  07mar06 removed "hardcopy" command if -x on command line.
-        2.3.8  13sep06 support for bitpix -64 fits images
+        2.3.8  14sep06 support for bitpix -64 fits images
 */
 #ifndef WIP_VERSION
-#define WIP_VERSION "Version: 2.3.8 13sep06"
+#define WIP_VERSION "Version: 2.3.8 14sep06"
 #endif /* WIP_VERSION */
