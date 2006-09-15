@@ -25,6 +25,10 @@
 #define IEEEByteSwap
 #endif /* linux */
 
+#ifdef darwin
+/* TODO: if new intel, define IEEEByteSwap, on PowerPC leave alone */
+#endif
+
 #ifdef OSF
 /*			probably bad idea too */
 #define IEEEByteSwap
