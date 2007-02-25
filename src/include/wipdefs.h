@@ -6,6 +6,7 @@
  *    22aug94 jm  Added stdarg/varargs includes.
  *    13nov96 jm  Changed debug mode to a routine rather than a global variable.
  *    30nov00 pjt Only ansi-c now
+ *    25feb07 pjt fix for intel mac
  *
  */
 
@@ -26,7 +27,10 @@
 #endif /* linux */
 
 #ifdef darwin
-/* TODO: if new intel, define IEEEByteSwap, on PowerPC leave alone */
+/* on Intel, define IEEEByteSwap, on PowerPC leave alone */
+#ifdef i386
+#define IEEEByteSwap
+#endif
 #endif
 
 #ifdef OSF
