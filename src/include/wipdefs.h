@@ -42,6 +42,10 @@
 #define IEEEByteSwap
 #endif /* WIPVMS */
 
+#ifdef i386
+#define IEEEByteSwap
+#endif
+
 /* Define a default character string size (if <stdio.h> doesn't). */
 #ifndef BUFSIZ
 #define BUFSIZ 2048
