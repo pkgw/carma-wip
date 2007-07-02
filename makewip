@@ -209,6 +209,7 @@
 #     2dec00 pjt ccmalloc now an optional build flag
 #     4sep02 pjt formal support for darwin
 #    20may05 pjt better help, moved wiphelp over the the libdir
+#     2jul07 pjt more guidelines for darwin
 #--
 #
 #  Set up some "standard" defaults.
@@ -570,7 +571,7 @@ else if ("$wiphost" == 'i386-linux') then
     set doranlib = 1
     set doliblm = 1
 #    set f77lib = ( $f77lib -lf2c )
- set f77lib = ( $f77lib -lg2c )
+     set f77lib = ( $f77lib -lg2c )
 #    set f77lib = ( $f77lib -lg2c -lccmalloc -ldl)
     set theM = "$fcname -u"
     if ($dodebug > 0) then
@@ -583,8 +584,16 @@ else if ("$wiphost" == 'i386-linux') then
 else if ("$wiphost" == 'darwin') then
     set doranlib = 1
     set doliblm = 1
-    # please read the MacOSX guidelines if linker fails to succeed
-    set f77lib = ( $f77lib -lg2c -lcc_dynamic -lSystemStubs )
+    # please read the MacOSX guidelines if linker fails to succeed here
+    # you may need to properly install Xcode or choose a different C compiler
+    # using e.g.:     
+    # set ccname=/usr/local/bin/gcc
+    # if gfortran is used, you may need to replace -lg2c with -lgfortran
+    if (-e /usr/lib/libcc_dynamic.a) then
+       set f77lib = ( $f77lib -lg2c -lcc_dynamic -lSystemStubs )
+    else
+       set f77lib = ( $f77lib -lg2c              -lSystemStubs )
+    endif
     set theM = "$fcname"
     if ($dodebug > 0) then
       set theM = "$theM -g"
