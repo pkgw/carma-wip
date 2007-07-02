@@ -6,8 +6,8 @@ but this doesn't seem to be able to enter a command argument with whitespace
 wip test.wip -e wipcmd  "arg1a arg1b"
 
 pretty serious bug when images have masks. It works on either solaris
-(the old code) or linux (the new current code)....
-
+(the old code) or linux (the new current code).... We should have really used the
+miriad library!! (xyio.c and maskio.c)
 
 Some items for the future:
 --------------------------
@@ -31,3 +31,6 @@ Some items for the future:
 	wip -d /xs file=aaa.dat xcol=1 ycol=3
 
 4) code has IEEEByteSwap wipdefs.h, its detection is not very good and based on OS, not CPU
+
+5) only the first HDU of a fits file is handled. It would be nice if, like
+   in ds9, there is a way to say  "image map.fits[2]" to get at the 2nd HDU.
