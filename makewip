@@ -209,7 +209,7 @@
 #     2dec00 pjt ccmalloc now an optional build flag
 #     4sep02 pjt formal support for darwin
 #    20may05 pjt better help, moved wiphelp over the the libdir
-#     2jul07 pjt more guidelines for darwin
+#     2jul07 pjt more guidelines for darwin, fix g2c/gfortran for linux/mac
 #--
 #
 #  Set up some "standard" defaults.
@@ -571,8 +571,12 @@ else if ("$wiphost" == 'i386-linux') then
     set doranlib = 1
     set doliblm = 1
 #    set f77lib = ( $f77lib -lf2c )
-     set f77lib = ( $f77lib -lg2c )
 #    set f77lib = ( $f77lib -lg2c -lccmalloc -ldl)
+    if  ($fcname:t == gfortran) then
+	set f77lib = ( $f77lib -lgfortran )
+    else
+	set f77lib = ( $f77lib -lg2c )
+    endif
     set theM = "$fcname -u"
     if ($dodebug > 0) then
       set theM = "$theM -g"
@@ -588,11 +592,17 @@ else if ("$wiphost" == 'darwin') then
     # you may need to properly install Xcode or choose a different C compiler
     # using e.g.:     
     # set ccname=/usr/local/bin/gcc
-    # if gfortran is used, you may need to replace -lg2c with -lgfortran
-    if (-e /usr/lib/libcc_dynamic.a) then
-       set f77lib = ( $f77lib -lg2c -lcc_dynamic -lSystemStubs )
+    # note: gfortran uses -lgfortran, g77 used -lg2c 
+    # note: the following test may fail if you use e.g. named like gfortran-4.1
+    if  ($fcname:t == gfortran) then
+	set f77lib = ( $f77lib -lgfortran )
     else
-       set f77lib = ( $f77lib -lg2c              -lSystemStubs )
+	set f77lib = ( $f77lib -lg2c )
+    endif
+    if (-e /usr/lib/libcc_dynamic.a) then
+       set f77lib = ( $f77lib -lcc_dynamic -lSystemStubs )
+    else
+       set f77lib = ( $f77lib              -lSystemStubs )
     endif
     set theM = "$fcname"
     if ($dodebug > 0) then
