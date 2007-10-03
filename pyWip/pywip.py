@@ -681,7 +681,7 @@ def plot(xcol,ycol,datafile=None,color=None,size=None,style='o',width=None,
             xcol = 1
             ycol = 2
          else:
-            _plotpoints(fp,xcol,ycol,color,size,style,width)
+            _plotpoints(fp,xcol[:],ycol[:],color,size,style,width)
       else:
          _error('You must specify a datafile for plot!')
    else:
@@ -1185,7 +1185,7 @@ def _maketempfile(xdata,ydata,xerr=None,yerr=None):
             if b == 0:
                fp.write('1 ')
             else:
-               fp.write('%4.4e ' %((a+b)/b))
+               fp.write('%4.4e ' %((a+b)/a))
             if a == b:
                fp.write('1 ')
             else:
@@ -1194,9 +1194,9 @@ def _maketempfile(xdata,ydata,xerr=None,yerr=None):
                # by forcing b, the errorbar value to be ~99% of a.  This
                # reduces the a/(a-b) to 99.
                if a -b < 0:
-                  fp2.write('%4.4e ' %99)
+                  fp.write('%4.4e ' %99)
                else:
-                  fp.write('%4.4e ' %(b/(a-b)))
+                  fp.write('%4.4e ' %(a/(a-b)))
          else:
             fp.write('%s ' %xerr[i])
       if yerr:
@@ -1206,7 +1206,7 @@ def _maketempfile(xdata,ydata,xerr=None,yerr=None):
             if b == 0:
                fp.write('1 ')
             else:
-               fp.write('%4.4e ' %((a+b)/b))
+               fp.write('%4.4e ' %((a+b)/a))
             if a == b:
                fp.write('1 ')
             else:
@@ -1217,7 +1217,7 @@ def _maketempfile(xdata,ydata,xerr=None,yerr=None):
                if a -b < 0:
                   fp2.write('%4.4e ' %99)
                else:
-                  fp.write('%4.4e ' %(b/(a-b)))
+                  fp.write('%4.4e ' %(a/(a-b)))
          else:
             fp.write('%s ' %yerr[i])
       fp.write('\n')
@@ -1320,7 +1320,10 @@ def _plotpoints(fp,xlist,ylist,color=None,size=None,style='o',width=None):
          xlist[i] = math.log10(xlist[i])
    if pan['logy']:
       for i in range(len(ylist)):
-         ylist[i] = math.log10(ylist[i])
+         try:
+            ylist[i] = math.log10(ylist[i])
+         except ValueError:
+            _error("problem with taking log of %f" %ylist[i])
    _writelimits(fp)
    sym = _translatesymbol(style)
    if sym == '99':
