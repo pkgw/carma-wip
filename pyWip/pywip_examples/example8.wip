@@ -1,0 +1,31 @@
+set print ignore
+
+define dosymbol              # $1=Counter; $2=Nx; $3=Ny.
+   set \0 1 + ($1 % ($2 * $3))  # Make sure the index is in range.
+   panel -$2 -$3 -\0            # Set up the panel.
+   lwidth 1                     # Set the line width to narrow.
+   box bc bc                    # Draw the frame for this panel.
+   expand 0.5                   # Set a small character size.
+   mtext t -1.1 0.97 1.0 \[$1]
+   lwidth 2                     # Get a thicker line.
+   expand 1.0                   # Reset the character size.
+   symbol $1                    # Chose this symbol.
+   dot 0 0                      # Draw the symbol at the panel center.
+   set $1 $1 + 1                # Increment the Counter.
+end
+
+define doloop                # $1=Counter; $2=Nx; $3=Ny.
+   erase                        # Clear the screen or go to next page.
+   loop 256 dosymbol $1 $2 $3   # Draw this page and advance counter by 256.
+end
+
+viewport 0.2 0.8 0.2 0.8     # Set the viewport scale.
+winadj 0 16 0 16             # Set the aspect ratio.
+limits -1 1 -1 1             # Set limits.
+set nsig 0                   # Force display to only use integer format.
+ask 1                        # Make sure each "erase" is prompted.
+set \11 0                    # Initialize the loop counter.
+loop 4 doloop \11 16 16      # Do the first half of the job.
+set \11 1792                 # Reinitialize the loop counter.
+loop 5 doloop \11 16 16      # Do the second half of the job.
+ask 0                        # Turn off the prompt.
