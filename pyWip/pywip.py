@@ -2,7 +2,7 @@
 r'''Library functions for running WIP within python
 Started 12 April 2007 - NLC
 First used for a real plot on 19 April 2007
-last updated: 3 September 2007 - NLC
+last updated: 27 November 2007 - NLC
 
     Color Table                        Palettes
 ======================     ===============================
@@ -52,12 +52,8 @@ last updated: 3 September 2007 - NLC
 |  ps   |     pointed square     |
 |   d   |        diamond         |
 |  st   |    five-point star     |
-|  f^   |    filled triangle     |
 |  o+   |    open plus symbol    |
 | david |     star of david      |
-|  fs   |     filled square      |
-|  fo   |     filled circle      |
-|  fst  | filled five-point star |
 ----------------------------------
 
 LaTeX is supported in text strings by default.  Note that unlike math mode in
@@ -102,11 +98,18 @@ def arc(x,y,majorx,majory,deg=360,start=0,angle=0,fill='s',color=None,style=None
    width=None,limits=None,logx=None,logy=None):
    '''Draw a curved line to make circles, ellipses, arcs, etc.
 
-      x,y           - central coordinates for arc
-      majorx,majory - major axes for x and y
+      x,y           - central coordinates for arc.  If a string, convert WCS
+                      into units usable by WIP.  The WCS can be given as
+                      hh:mm:ss, dd:mm:ss or as degrees.  Note that you don't
+                      have to give all three parts, you can omit the ss.  x is
+                      always assumed to be RA and y is always assumed to be DEC.
+      majorx,majory - major axes for x and y.  Like x,y this can be given as
+                      a string to specify the WCS.
       deg           - draw arc over this many degrees
-      start         - start drawing at this degree mark
-      angle         - Tilt angle for curve
+      start         - start drawing at this degree angle measured counter-
+                      clockwise from +x axis.
+      angle         - Tilt angle for curve in degrees measured counter-clockwise
+                      from +x axis.
       fill          - a string specifying the fill style
       color         - a string with the color of the line
       style         - a string specifying the line style
@@ -125,17 +128,23 @@ def arc(x,y,majorx,majory,deg=360,start=0,angle=0,fill='s',color=None,style=None
    fp.write('fill %s\n' %fillstyle)
    fp.write('move %f %f\n' %(_translatecoords(x,coord='ra'),_translatecoords(y,coord='dec')))
    fp.write('angle %f\n' %angle)
-   fp.write('arc %f %f %f %f\n' %(majorx,majory,deg,start))
+   tmpx = _translatecoords(majorx,coord='ra')
+   tmpy = _translatecoords(majory,coord='dec')
+   fp.write('arc %f %f %f %f\n' %(tmpx,tmpy,deg,start))
    _resetdefaults(fp,color,None,None,style,width)
    fp.write('angle 0\n')
    _updatepanel(limits,logx,logy,overlap=True)
    fp.close()
 
-def axis(xaxis='bcnst',yaxis='bcnst',color=None,font=None,size=None,style=None,
+def axis(xaxis=None,yaxis=None,color=None,font=None,size=None,style=None,
    width=None,xtick=None,ytick=None):
    '''Draw the axes.
 
-      xaxis,yaxis - wip string for drawing x and y axis
+      xaxis,yaxis - wip string for drawing x and y axis.  If left as None,
+                    then axis function will try to guess something appropriate
+                    based on panel arrangement and whether log of x or y has
+                    been taken.  If an image has been plotted, then axis will
+                    assume you want WCS labeling.
       color       - the color of the axis as a string
       font        - the font to use for the axis
       size        - the size for numbers on axis
@@ -146,6 +155,9 @@ def axis(xaxis='bcnst',yaxis='bcnst',color=None,font=None,size=None,style=None,
                     between each major tick mark.
       ytick       - Same as xtick except for y axis'''
       
+   nx = _panellist[_curpanel]['nx'] # number of panels in x and y directions
+   ny = _panellist[_curpanel]['ny'] # used for automatically labelling axes
+   image = _panellist[_curpanel]['image'] # Name of image in panel 
    fp = _wipopen()
    _writeoptions(fp,color,font,size,style,width)
    if _isseq(xtick) and _isseq(ytick):
@@ -163,7 +175,29 @@ def axis(xaxis='bcnst',yaxis='bcnst',color=None,font=None,size=None,style=None,
          fp.write('ticksize 0 0 %f %f\n' %(ytick[0],ytick[1]))
       else:
          _error('You must have two arguments to ytick!')
-   fp.write('box %s %s\n' %(xaxis,yaxis))
+   if not xaxis:
+      if image: # If an image has been defined, assume user wants WCS
+         xlab = 'bcnsthz'
+      else:
+         xlab = 'bcst'
+         if ny > 0 or _curpanel/abs(nx) == (abs(ny) - 1): # space between panels
+            xlab = 'bcnst'                                # or on last row 
+         if _panellist[_curpanel]['logx']:
+            xlab = xlab + 'l'
+   else:
+      xlab = xaxis
+   if not yaxis:
+      if image: # If an image has been defined, assume user wants WCS
+         ylab = 'bcnstvdyz'
+      else:
+         ylab = 'bcst'
+         if nx > 0 or _curpanel%abs(nx) == 0: # space between panels
+            ylab = 'bcnst'                    # or on first column 
+         if _panellist[_curpanel]['logy']:
+            ylab = ylab + 'l'
+   else:
+      ylab = yaxis
+   fp.write('box %s %s\n' %(xlab,ylab))
    _resetdefaults(fp,color,font,size,style,width)
    if _isseq(xtick) or _isseq(ytick):
       fp.write('ticksize 0 0 0 0\n')
@@ -173,15 +207,19 @@ def beam(x,y,amajor,aminor,angle=0,scale='ra',color=None,fillcolor=None,
    style=None,width=None,bg=None):
    '''Draw an ellipse showing a beam.  Useful for radio data.
 
-      x,y           - Central coordinates for beam
-      amajor,aminor - major and minor axes for ellipse as arcseconds
-      angle         - tilt angle for ellipse
+      x,y           - Central coordinates for beam.  If a string, convert WCS
+                      into units usable by WIP.  The WCS can be given as
+                      hh:mm:ss, dd:mm:ss or as degrees.
+      amajor,aminor - major and minor axes for ellipse as arcseconds. Like x,y
+                      this can be given as a string to specify the WCS.
+      angle         - tilt angle for ellipse given as degrees from the +x axis
       scale         - set to None for no scaling of x axis
       color         - color of edge of ellipse
       fillcolor     - color of inside of ellipse.  Defaults to color
       style         - line style for edge of ellipse
       width         - line thickness
-      bg            - color for background box surrounding beam'''
+      bg            - color for background box surrounding beam.  Defaults to
+                      transparent.'''
    fp = _wipopen()
    if scale == 'ra':
       scl = '-1'
@@ -200,7 +238,9 @@ def beam(x,y,amajor,aminor,angle=0,scale='ra',color=None,fillcolor=None,
          fillcl = _color
    _writeoptions(fp,color,None,None,style,width)
    fp.write('move %f %f\n' %(_translatecoords(x,coord='ra'),_translatecoords(y,coord='dec')))
-   fp.write('beam %f %f %f 0 0 %s %s %s\n' %(amajor,aminor,angle,scl,fillcl,bgrect))
+   tmpx = _translatecoords(amajor,coord='ra')
+   tmpy = _translatecoords(aminor,coord='dec')
+   fp.write('beam %f %f %f 0 0 %s %s %s\n' %(tmpx,tmpy,angle,scl,fillcl,bgrect))
    _resetdefaults(fp,color,None,None,style,width)
    fp.close()
 
@@ -214,14 +254,14 @@ def bin(xcol,ycol,datafile=None,color=None,width=None,style=None,limits=None,
                   xcol and ycol are tuples/lists
       color     - the color for the histogram
       width     - the thickness of the histogram
-      style     - line style for histogram
+      style     - line style for histogram.  Defaults to solid
       limits    - If a list/tuple, use as limits.  Otherwise try to use
                   any prexisting limits or set new ones
+      coord     - are x coordinates the center or left side of the bin?
       logx      - If True, make logarithmic in x direction.  Otherwise
                   default to what has already been set for plot/panel.
       logy      - If True, make logarithmic in y direction.  Otherwise
                   default to what has already been set for plot/panel
-      coord     - are x coordinates the center or left side of the bin?
       text      - Text to be used for curve.  Defaults to "Generic Curve"'''
       
    if style:
@@ -262,10 +302,11 @@ def blowup(xmin,xmax,ymin,ymax,corners=['ll','ul'],color=None,style=None,
    r'''Draw a blow-up box around a given region.
 
       Draws a blow-up box around a region and also stores the region limits in
-      registers \9 - \12.  These are used by the connect command to draw
+      wip registers \9 - \12.  These are used by the connect command to draw
       connecting lines from the blowup box to the actual zoomed region.
 
-      xmin,xmax,ymin,ymax - four values for limits of blowup box
+      xmin,xmax,ymin,ymax - four values for limits of blowup box given as
+                            pixel values
       corners - a two element list of ll,ul,lr, or ur to specify which corners
                 of the box to store in memory.  These correspond to lower left,
                 upper left,lower right, upper right
@@ -275,8 +316,9 @@ def blowup(xmin,xmax,ymin,ymax,corners=['ll','ul'],color=None,style=None,
 
    fp = _wipopen()
    _writeoptions(fp,color,None,None,style,width)
-   fillstyle = _translatefill('h')
-   fp.write('fill %s\n' %fillstyle)
+   fp.write('limits 1 nx 1 ny\n') # ensures that xmin,xmax,ymin,ymax are all
+                                  # pixel coordinates
+   fp.write('fill %s\n' %_translatefill('h')) # always hollow
    fp.write('rect %f %f %f %f\n' %(xmin,xmax,ymin,ymax))
    if corners[0] == 'll':
       _xytovp(fp,str(xmin),str(ymin),r'\9',r'\10')
@@ -340,40 +382,61 @@ def connect(corners=['ll','ul'],color=None,style=None,width=None):
    fp.close()
 
 def contour(image,header,levels,routine='smooth',limits=None,color=None,
-   font=None,style=None,width=None):
+   font=None,style=None,width=None,border=False):
    r'''Draw contours with the specified levels.
 
       image   - string with name of image
       header  - string with header for image such as rd, px, etc.
       levels  - a list/tuple or string of contour levels.  If a string,
-                give as min:max:step
-      routine - how to draw contours: smooth, fast, neg
+                give as min:max:step to specify levels, or as 'border', if
+                you just want to draw a box around the border of the image.
+      routine - how to draw contours: smooth, fast, neg.  neg will draw negative
+                contours with the same line style as positive ones.  By default,
+                negative contours are drawn dashed.
       limits  - If not specified show whole image.  If a list/tuple of
                 four numbers, plot given sub-image.  If anything else,
                 use limits stored in \1 \2 \3 \4 (set by halftone)
       color   - color for contour lines
-      font    - font for contour labelling (not supported)
+      font    - font for contour labelling (TODO: not supported)
       style   - line style for contours
       width   - thickness of contour lines'''
    fp = _wipopen()
+   borderFlag = False # set to true if we want to draw the border instead of
+                      # contours
+   if _isstr(levels) and levels.lower() == 'border':
+      borderFlag = True
+   
    if not _panellist[_curpanel]['image']:
       _readimage(fp,image)
    elif _panellist[_curpanel]['image'] != image:
       _readimage(fp,image)
    fp.write('header %s\n' %header)
-   fp.write('levels %s\n' %_translatelevels(levels))
+   if borderFlag:
+      fp.write('set \\13 x1\n')
+      fp.write('set \\14 x2\n')
+      fp.write('set \\15 y1\n')
+      fp.write('set \\16 y2\n')
+   else:
+      fp.write('levels %s\n' %_translatelevels(levels))
    _writeimglimits(fp,limits)
    _writeoptions(fp,color,font,None,style,width)
-   if style == '--': # must set to fast to get dashed contours to show up
-      routine = 'fast'
-   if routine == 'smooth':
-      fp.write('contour t\n')
-   elif routine == 'fast':
-      fp.write('contour s\n')
-   elif routine == 'neg': # draw negative contours with same lstyle as + ones
-      fp.write('contour -t\n')
+   if borderFlag:
+      fp.write('move \\13 \\15\n')
+      fp.write('draw \\14 \\15\n')
+      fp.write('draw \\14 \\16\n')
+      fp.write('draw \\13 \\16\n')
+      fp.write('draw \\13 \\15\n')
    else:
-      _error('Invalid routine keyword.  Try fast, smooth, or neg!')
+      if style == '--': # must set to fast to get dashed contours to show up
+         routine = 'fast'
+      if routine == 'smooth':
+         fp.write('contour t\n')
+      elif routine == 'fast':
+         fp.write('contour s\n')
+      elif routine == 'neg': # draw negative contours with same lstyle as + ones
+         fp.write('contour -t\n')
+      else:
+         _error('Invalid routine keyword.  Try fast, smooth, or neg!')
    _resetdefaults(fp,color,font,None,style,width)
    fp.close()
    _updatepanel(limits,None,None,image,overlap=True)
@@ -547,63 +610,71 @@ def halftone(image,header='px',palette='gray',minmax=None,blank=None,
    fp.close()
    _updatepanel(limits,None,None,image,overlap=True)
 
-def legend(x,y,curve,dx,dy,length,align='left',color=None,font=None,size=None,
-   style=None,width=None,bg=None):
-   '''Make one line in a legend.
-
-      x,y       - x and y location for legend
-      curve     - a dictionary that is returned by plot
-      dx        - space between line and text
-      dy        - offset of line from text
-      length    - length of line
+def legend(x,y,curves,dx,dy,length,height,align='left',color=None,font=None,
+   size=None,style=None,width=None,bg=None):
+   '''Make an entire legend box.
+ 
+      x,y       - starting x and y location for legend
+      curves    - a list/tuple of dictionarys that were returned by the plot
+                  or curve functions
+      dx        - space between line and text for each entry
+      dy        - offset of line from text for each entry
+      length    - length of line for each entry
+      height    - vertical offset between each entry
       align     - alignment for text.  left, right, or center
-      color     - a string giving the color for the label
-      font      - a string giving the font to use for the label
-      size      - a number giving the size for label
-      style     - a string giving the line style for the label
-      width     - a number giving the width of the lines
+      color     - a string giving the color for the text
+      font      - a string giving the font to use for the text
+      size      - a number giving the size for text
+      style     - a string giving the line style for the text
+      width     - a number giving the thickness of the line
       bg        - color for background of text.  Default is transparent'''
 
    al = _translatealign(align)
    fp = _wipopen()
-   sym = _translatesymbol(curve['style'])
    pan = _updatepanel(None,None,None)
-   if sym == '99':
-      line = _translatelstyle(curve['style'])
-      tmpxlin = _translatecoords(x,'ra')              # starting x coordinate for line
-      tmpylin = _translatecoords(y,'dec') + dy        # y coordinate for line
-      tmpxlen = _translatecoords(x,'ra')  + length    # end x coordinate for line
-      tmpxtxt = _translatecoords(x,'ra')  + length+dx # starting x coordinate for text
-      tmpytxt = _translatecoords(y,'dec')             # starting y coordinate for text
-   else: # draw a single symbol
-      tmpxlin = _translatecoords(x,'ra')  + length/2.0 # starting x coordinate for line
-      tmpylin = _translatecoords(y,'dec') + dy         # y coordinate for line
-      tmpxlen = 1              # end x coordinate for line
-      tmpxtxt = _translatecoords(x,'ra')  +length+dx   # starting x coordinate for text
-      tmpytxt = _translatecoords(y,'dec')              # starting y coordinate for text
+   tmpxlin = _translatecoords(x,'ra')            # starting x coordinate for line
+   tmpxsym = _translatecoords(x,'ra')+length/2.0 # starting x coordinate for symbol
+   tmpxlen = _translatecoords(x,'ra')+length     # end x coordinate for line   
+   tmpylin = _translatecoords(y,'dec')+dy        # y coordinate for line
+   tmpxtxt = _translatecoords(x,'ra')+length+dx  # starting x coordinate for text
+   tmpytxt = _translatecoords(y,'dec')           # starting y coordinate for text
+   tmpskip = _translatecoords(height,'dec')      # vertical skip for each entry in legend
 
    if pan['logx'] == True:
       tmpxlin = math.log10(tmpxlin)
+      tmpxsym = math.log10(tmpxsym)
       tmpxlen = math.log10(tmpxlen)
       tmpxtxt = math.log10(tmpxtxt)
    if pan['logy'] == True:
       tmpylin = math.log10(tmpylin)
       tmpytxt = math.log10(tmpytxt)
 
-   fp.write('move %f %f\n' %(tmpxlin,tmpylin))
-   if sym == '99':
-      _writeoptions(fp,curve['color'],None,curve['size'],curve['style'],curve['width'])
-      fp.write('draw %f %f\n' %(tmpxlen,tmpylin))
-      _resetdefaults(fp,curve['color'],None,curve['size'],curve['style'],curve['width'])
-   else:
-      _writeoptions(fp,curve['color'],None,curve['size'],None,curve['width'])
-      fp.write('symbol %s\n' %sym)
-      fp.write('dot\n')
-      _resetdefaults(fp,curve['color'],None,curve['size'],curve['style'],curve['width'])
-   _writeoptions(fp,color,font,size,style,width,bg)
-   fp.write('move %f %f\n' %(tmpxtxt,tmpytxt))
-   fp.write('putlabel %s %s\n' %(al,curve['text']))
-   _resetdefaults(fp,color,font,size,style,width,bg)
+   for c in curves: #loop through each curve and put it in the legend
+      sym = _translatesymbol(c['style'])
+      # First do the symbol or line for the entry
+      if sym == '99': # draw a line
+         fp.write('move %f %f\n' %(tmpxlin,tmpylin)) # starting x/y coordinates   
+         line = _translatelstyle(c['style'])
+         _writeoptions(fp,c['color'],None,c['size'],c['style'],c['width'])
+         fp.write('draw %f %f\n' %(tmpxlen,tmpylin))
+         _resetdefaults(fp,c['color'],None,c['size'],c['style'],c['width'])
+      else: # put individual symbol
+         fp.write('move %f %f\n' %(tmpxsym,tmpylin))
+         _writeoptions(fp,c['color'],None,c['size'],None,c['width'])
+         fp.write('symbol %s\n' %sym)
+         fp.write('dot\n')
+         _resetdefaults(fp,c['color'],None,c['size'],None,c['width'])
+      # Now do the text label for the entry
+      _writeoptions(fp,color,font,size,style,width,bg)
+      fp.write('move %f %f\n' %(tmpxtxt,tmpytxt))
+      fp.write('putlabel %s %s\n' %(al,c['text']))
+      _resetdefaults(fp,color,font,size,style,width,bg)
+      if 0:
+         tmpylin = math.log10(10**(tmpskip*tmpylin))
+         tmpytxt = math.log10(10**(tmpskip*tmpytxt))
+      else:
+         tmpylin = tmpylin + tmpskip
+         tmpytxt = tmpytxt + tmpskip
    fp.close()
 
 def panel(nx,ny,idx):
@@ -629,15 +700,18 @@ def panel(nx,ny,idx):
    fp.write('bgci %s\n'   %_bg)
    if abs(nx*ny) > len(_panellist):
       tmp = {'limits' : None, 'logx' : False, 'logy' : False, 'image' : None,
-         'overlap' : False}
-      for i in range(abs(nx*ny) - len(_panellist)):
-         _panellist.append(tmp.copy())
+      'overlap' : False, 'nx' : nx, 'ny' : ny}
+      for i in range(len(_panellist)): # update existing entries with new panel
+         _panellist[i]['nx'] = nx      # configuration
+         _panellist[i]['ny'] = ny
+      for i in range(abs(nx*ny) - len(_panellist)): # add new entries up to
+         _panellist.append(tmp.copy())              # number of panels
    _curpanel = abs(idx) - 1 # set current panel number
    _writelimits(fp)
    fp.close()
 
 def plot(xcol,ycol,datafile=None,color=None,size=None,style='o',width=None,
-   limits=None,logx=False,logy=False,text='Generic Curve'):
+   fillcolor=None,limits=None,logx=False,logy=False,text='Generic Curve'):
    '''Plot data from a file or input lists/tuples.
 
       This function is extremely versatile and can be used to plot data
@@ -655,6 +729,10 @@ def plot(xcol,ycol,datafile=None,color=None,size=None,style='o',width=None,
       style     - If a string, use as the symbol or line style.  If an integer,
                   then read from datafile for symbol for each point.
       width     - Line width
+      fillcolor - Color to fill symbols with.  Only available for five-point
+                  stars, squares, circles, and triangles.  If used inappropriately,
+                  an error will occur.  Use in the same way as for color keyword.
+                  Default is 'None' which means no filling will occur (transparent).
       limits    - If None, set min/max to values in xcol and ycol.  If a list
                   or tuple of xmin,xmax,ymin,ymax, set to specified values.
                   If anything else, do not attempt to set any limits (i.e.
@@ -670,6 +748,18 @@ def plot(xcol,ycol,datafile=None,color=None,size=None,style='o',width=None,
    sFlag = False # Set to true if we are reading a column from the file for
                  # a symbol for each point
 
+   if fillcolor:
+      if _isstr(style):
+         if style == 'o':    fillstyle = 'fo'
+         elif style == '^':  fillstyle = 'f^'
+         elif style == 's':  fillstyle = 'fs'
+         elif style == 'st': fillstyle = 'fst'
+         else: _error('Only circles, triangles, squares, and five-point stars can have a fill color!')
+      if size:   # fill size must be larger because filled symbols are smaller
+         fillsize = 1.3*size # than regular versions
+      else:
+         fillsize = 1.3*float(_size)
+
    fp = _wipopen()
    pan = _updatepanel(limits,logx,logy)
    plotcurve = curve(color,size,style,width,text)
@@ -681,6 +771,8 @@ def plot(xcol,ycol,datafile=None,color=None,size=None,style='o',width=None,
             xcol = 1
             ycol = 2
          else:
+            if fillcolor: # size must be larger because filled versions are 
+               _plotpoints(fp,xcol[:],ycol[:],fillcolor,fillsize,fillstyle,width)
             _plotpoints(fp,xcol[:],ycol[:],color,size,style,width)
       else:
          _error('You must specify a datafile for plot!')
@@ -723,7 +815,17 @@ def plot(xcol,ycol,datafile=None,color=None,size=None,style='o',width=None,
          else:
             fp.write('points\n')
          _resetdefaults(fp,color,None,size,None,width)
-      else:
+         if fillcolor:
+            try: # a column number from the file given
+               blah = int(fillcolor)
+               _writeoptions(fp,None,None,fillsize,None,None)
+               fp.write('ecol %d\n' %blah)
+               fp.write('symbol %s\n' %_translatesymbol(fillstyle))
+               fp.write('points 1\n')
+            except (ValueError,TypeError):
+               _writeoptions(fp,fillcolor,None,None,None,None)
+            _resetdefaults(fp,fillcolor,None,fillsize,None,None)
+      else: # plot a line
          fp.write('lstyle %s\n' %line)
          fp.write('connect\n')
          _resetdefaults(fp,color,None,size,style,width)
@@ -867,7 +969,7 @@ def text(x,y,text,align='left',angle=None,color=None,font=None,size=None,
       fp.write('angle 0\n')
    fp.close()
 
-def title(text,offset='0',align='center',color=None,font=None,size=None,
+def title(text,offset=0,align='center',color=None,font=None,size=None,
    style=None,width=None,bg=None):
    '''Set the title of the plot to the given text.
 
@@ -966,7 +1068,8 @@ def wedge(side,offset,thickness,minmax=None,boxarg=None,color=None,font=None,
 
       This is only useful for halftone images.
 
-      side      - string containing side to draw wedge on
+      side      - string containing side to draw wedge on.  One of left, right,
+                  top, or bottom
       offset    - offset of wedge from side
       thickness - thickness of wedge
       minmax    - a list/tuple of the min/max values for the wedge.  Defaults
@@ -995,7 +1098,8 @@ def wedge(side,offset,thickness,minmax=None,boxarg=None,color=None,font=None,
    elif minmax:
       fp.write('%f %f\n' %(minmax[0],minmax[1]))
    elif boxarg:
-      fp.write('\5 \6 %s\n' %boxarg)
+      fp.write(r'\5 \6 %s' %boxarg)
+      fp.write('\n')
    else:
       fp.write('\n')
    _resetdefaults(fp,color,font,size,style,width)
@@ -1052,7 +1156,7 @@ def winadj(xmin=None,xmax=None,ymin=None,ymax=None,image=None):
       fp.write('winadj\n')
    fp.close()
 
-def xlabel(text,offset='0',align='center',color=None,font=None,size=None,
+def xlabel(text,offset=0,align='center',color=None,font=None,size=None,
    style=None,width=None,bg=None):
    '''Set the x label to the given text.
 
@@ -1080,7 +1184,7 @@ def xlabel(text,offset='0',align='center',color=None,font=None,size=None,
    _resetdefaults(fp,color,font,size,style,width,bg)
    fp.close()
 
-def ylabel(text,offset='0',align='center',color=None,font=None,size=None,
+def ylabel(text,offset=0,align='center',color=None,font=None,size=None,
    style=None,width=None,bg=None):
    '''Set the y label to the given text.
 
@@ -1317,7 +1421,10 @@ def _plotpoints(fp,xlist,ylist,color=None,size=None,style='o',width=None):
    _writeoptions(fp,color,None,size,None,width)
    if pan['logx']:
       for i in range(len(xlist)):
-         xlist[i] = math.log10(xlist[i])
+         try:
+            xlist[i] = math.log10(xlist[i])
+         except ValueError:
+            _error("problem with taking log of %f" %xlist[i])
    if pan['logy']:
       for i in range(len(ylist)):
          try:
@@ -1555,6 +1662,8 @@ def _translatelatex(latex):
          i = i + 1
       else:
          i = i + 1
+   # fix bug where the carat, ^, doesn't render properly with WIP
+   outstr = outstr.replace(r'^',r'\(756)')
    return outstr
 
 def _translatelevels(levels):
@@ -1717,7 +1826,7 @@ def _wipopen():
       fp.write('lwidth %s\n' %_lwidth)
       fp.write('bgci %s\n'   %_bg)
       _panellist = [{'logx' : False, 'logy' : False, 'limits' : None,
-         'image' : None, 'overlap' : False}]
+      'image' : None, 'overlap' : False, 'nx' : 1, 'ny' : 1}]
    else:
       fp = open(_wipfile,'a')
    return fp
