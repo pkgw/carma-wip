@@ -2,7 +2,7 @@
 r'''Library functions for running WIP within python
 Started 12 April 2007 - NLC
 First used for a real plot on 19 April 2007
-last updated: 27 November 2007 - NLC
+last updated: 13 March 2008 - NLC
 
     Color Table                        Palettes
 ======================     ===============================
@@ -316,8 +316,9 @@ def blowup(xmin,xmax,ymin,ymax,corners=['ll','ul'],color=None,style=None,
 
    fp = _wipopen()
    _writeoptions(fp,color,None,None,style,width)
-   fp.write('limits 1 nx 1 ny\n') # ensures that xmin,xmax,ymin,ymax are all
-                                  # pixel coordinates
+   fp.write('limits 1 \\7 1 \\8\n') # ensures that xmin,xmax,ymin,ymax are all
+                                    # pixel coordinates.  Assumes the user has
+                                    # set \7 and \8 through winadj
    fp.write('fill %s\n' %_translatefill('h')) # always hollow
    fp.write('rect %f %f %f %f\n' %(xmin,xmax,ymin,ymax))
    if corners[0] == 'll':
@@ -441,25 +442,31 @@ def contour(image,header,levels,routine='smooth',limits=None,color=None,
    fp.close()
    _updatepanel(limits,None,None,image,overlap=True)
 
-def curve(color=None,size=None,style=None,width=None,text=None):
+def curve(color=None,size=None,style=None,width=None,text=None,fillcolor=None):
    '''Return a generic curve that can be used by a legend.
 
       A curve is a dictionary that is returned by the plot command and can
       be used with the legend command to make it easier to make legends.  The
       keyword arguments give the default values for the dictionary.'''
       
-   c = {'color' : 'k', 'size' : 1, 'style' : 'o', 'width' : 1,
-      'text' : 'Generic Curve'}
+   c = {'color' : _colors[int(_color)], 'size' : _size, 'style' : 'o', 
+      'width' : _lwidth, 'text' : 'Generic Curve', 'fillcolor' : _bg, 
+      'fillsize' : _size, 'fillstyle' :_lstyle}
    if color:
       c['color'] = color
    if size:
-      c['size'] = size
+      c['size'] = str(size)
    if style:
       c['style'] = style
    if width:
-      c['width'] = width
+      c['width'] = str(width)
    if text:
       c['text'] = _translatelatex(text)
+   if fillcolor:
+      fillstyle,fillfactor = _translatefillsymbol(style)
+      c['fillcolor'] = fillcolor
+      c['fillsize']  = fillfactor*float(c['size'])
+      c['fillstyle'] = fillstyle
    return c
 
 def default(color=None,font=None,size=None,style=None,width=None,bg=None,
@@ -650,31 +657,31 @@ def legend(x,y,curves,dx,dy,length,height,align='left',color=None,font=None,
       tmpytxt = math.log10(tmpytxt)
 
    for c in curves: #loop through each curve and put it in the legend
-      sym = _translatesymbol(c['style'])
+      sym = c['style']
       # First do the symbol or line for the entry
-      if sym == '99': # draw a line
-         fp.write('move %f %f\n' %(tmpxlin,tmpylin)) # starting x/y coordinates   
-         line = _translatelstyle(c['style'])
+      if sym in _lstyles: # draw a line
+         fp.write('move %f %f\n' %(tmpxlin,tmpylin)) # starting x/y coordinates
          _writeoptions(fp,c['color'],None,c['size'],c['style'],c['width'])
          fp.write('draw %f %f\n' %(tmpxlen,tmpylin))
          _resetdefaults(fp,c['color'],None,c['size'],c['style'],c['width'])
       else: # put individual symbol
          fp.write('move %f %f\n' %(tmpxsym,tmpylin))
          _writeoptions(fp,c['color'],None,c['size'],None,c['width'])
-         fp.write('symbol %s\n' %sym)
+         fp.write('symbol %s\n' %_translatesymbol(c['style']))
          fp.write('dot\n')
          _resetdefaults(fp,c['color'],None,c['size'],None,c['width'])
+         if c['fillcolor'] != '-1':
+            _writeoptions(fp,c['fillcolor'],None,c['fillsize'],None,c['width'])
+            fp.write('symbol %s\n' %_translatesymbol(c['fillstyle']))
+            fp.write('dot\n')
+            _resetdefaults(fp,c['fillcolor'],None,c['fillsize'],None,c['width'])
       # Now do the text label for the entry
       _writeoptions(fp,color,font,size,style,width,bg)
       fp.write('move %f %f\n' %(tmpxtxt,tmpytxt))
       fp.write('putlabel %s %s\n' %(al,c['text']))
       _resetdefaults(fp,color,font,size,style,width,bg)
-      if 0:
-         tmpylin = math.log10(10**(tmpskip*tmpylin))
-         tmpytxt = math.log10(10**(tmpskip*tmpytxt))
-      else:
-         tmpylin = tmpylin + tmpskip
-         tmpytxt = tmpytxt + tmpskip
+      tmpylin = tmpylin + tmpskip
+      tmpytxt = tmpytxt + tmpskip
    fp.close()
 
 def panel(nx,ny,idx):
@@ -750,19 +757,15 @@ def plot(xcol,ycol,datafile=None,color=None,size=None,style='o',width=None,
 
    if fillcolor:
       if _isstr(style):
-         if style == 'o':    fillstyle = 'fo'
-         elif style == '^':  fillstyle = 'f^'
-         elif style == 's':  fillstyle = 'fs'
-         elif style == 'st': fillstyle = 'fst'
-         else: _error('Only circles, triangles, squares, and five-point stars can have a fill color!')
+         fillstyle,fillfactor = _translatefillsymbol(style)
       if size:   # fill size must be larger because filled symbols are smaller
-         fillsize = 1.3*size # than regular versions
+         fillsize = fillfactor*size # than regular versions
       else:
-         fillsize = 1.3*float(_size)
+         fillsize = fillfactor*float(_size)
 
    fp = _wipopen()
    pan = _updatepanel(limits,logx,logy)
-   plotcurve = curve(color,size,style,width,text)
+   plotcurve = curve(color,size,style,width,text,fillcolor)
    if not datafile:
       if _isseq(xcol) and _isseq(ycol):
          num = len(xcol)
@@ -791,39 +794,40 @@ def plot(xcol,ycol,datafile=None,color=None,size=None,style='o',width=None,
       if pan['logy']:
          fp.write('log y\n')
       _writeoptions(fp,None,None,size,None,width)
-      try:
+      try: # see if color is an integer, meaning a column in the datafile
          blah = int(color)
          fp.write('ecol %d\n' %blah)
          eFlag = True
       except (ValueError,TypeError):
          _writeoptions(fp,color,None,None,None,None)
-      try:
+      try: # see if style is an integer, meaning a column in the datafile 
          blah = int(style)
          fp.write('pcol %d\n' %blah)
          sym = '1'
          sFlag = True
       except (ValueError,TypeError):
          sym = _translatesymbol(style)
-         if sym == '99':
+         if sym == '99': # not a symbol so see if it is a line style
             line = _translatelstyle(style)
       _writelimits(fp)
       if sym != '99': # plot a symbol instead of a line
-         if not sFlag:
+         if not sFlag: # i.e. don't read symbols from datafile
             fp.write('symbol %s\n' %sym)
-         if eFlag:
+         if eFlag: # read colors for each point from the file
             fp.write('points 1\n')
          else:
             fp.write('points\n')
          _resetdefaults(fp,color,None,size,None,width)
          if fillcolor:
-            try: # a column number from the file given
+            fp.write('symbol %s\n' %_translatesymbol(fillstyle))
+            try: # see if fillcolor is a column number from the datafile
                blah = int(fillcolor)
                _writeoptions(fp,None,None,fillsize,None,None)
                fp.write('ecol %d\n' %blah)
-               fp.write('symbol %s\n' %_translatesymbol(fillstyle))
                fp.write('points 1\n')
             except (ValueError,TypeError):
-               _writeoptions(fp,fillcolor,None,None,None,None)
+               _writeoptions(fp,fillcolor,None,fillsize,None,None)
+               fp.write('points\n')
             _resetdefaults(fp,fillcolor,None,fillsize,None,None)
       else: # plot a line
          fp.write('lstyle %s\n' %line)
@@ -1018,13 +1022,26 @@ def vector(xcol,ycol,anglecol,lengthcol,datafile=None,color=None,size=None,
       logy      - If True, make logarithmic in y direction.  Otherwise
                   default to what has already been set for plot/panel'''
 
+   global _tmplist
    fp = _wipopen()
    pan = _updatepanel(limits,logx,logy)
    _writeoptions(fp,color,None,size,None,width)
    if not datafile:
-      datafile = _maketempfile(xcol,ycol,anglecol,lengthcol)
-      xcol = 1
-      ycol = 2
+      n1 = len(xcol)
+      n2 = len(ycol)
+      n3 = len(anglecol)
+      n4 = len(lengthcol)
+      if n1 != n2 or n1 != n3 or n1 != n4:
+         _error('In vector, xcol, ycol, anglecol, and lengthcol must all have the same number of elements!')
+      datafile = tempfile.mktemp()
+      _tmplist.append(datafile)
+      fp2 = open(datafile,'w')
+      for i in range(len(xcol)):
+         fp2.write('%4.4e  %4.4e  %4.4e  %4.4e\n' %(xcol[i],ycol[i],anglecol[i],
+            lengthcol[i]))
+      fp2.close()
+      xcol      = 1
+      ycol      = 2
       anglecol  = 3
       lengthcol = 4
 
@@ -1034,6 +1051,10 @@ def vector(xcol,ycol,anglecol,lengthcol,datafile=None,color=None,size=None,
    fp.write('ecol %d\n' %anglecol)
    fp.write('pcol %d\n' %lengthcol)
    _writelimits(fp)
+   if pan['logx']:
+      fp.write('log x\n')
+   if pan['logy']:
+      fp.write('log y\n')
    fp.write('vector\n')
    _resetdefaults(fp,color,None,size,None,width)
    _updatepanel(limits,logx,logy,overlap=True)
@@ -1139,17 +1160,18 @@ def winadj(xmin=None,xmax=None,ymin=None,ymax=None,image=None):
          if limits:
             nx = limits[1]*(blah[1] - blah[0] + 1)
             ny = limits[3]*(blah[3] - blah[2] + 1)
-            fp.write('winadj 0 %d 0 %d\n' %(nx,ny))
+            fp.write('set \\7 %d\n' %nx)
+            fp.write('set \\8 %d\n' %ny)
          else:
             fp.write('set \\7 %f\n' %(blah[1] - blah[0] + 1))
             fp.write('set \\8 %f\n' %(blah[3] - blah[2] + 1))
-            fp.write('winadj 0 \\7 0 \\8\n')
       elif limits:
          fp.write('set \\7 %f * nx\n' %limits[1])
          fp.write('set \\8 %f * ny\n' %limits[3])
-         fp.write('winadj 0 \\7 0 \\8\n')
       else:
-         fp.write('winadj 0 nx 0 ny\n')
+         fp.write('set \\7 nx\n')
+         fp.write('set \\8 ny\n')
+      fp.write('winadj 0 \\7 0 \\8\n')
    elif limits:
       fp.write('winadj %f %f %f %f\n' %tuple(limits))
    else:
@@ -1281,7 +1303,7 @@ def _maketempfile(xdata,ydata,xerr=None,yerr=None):
    _tmplist.append(blah)
    fp = open(blah,'w')
    for i in range(len(xdata)):
-      fp.write('%4.4e %4.4e ' %(_translatecoords(xdata[i],'ra'),_translatecoords(ydata[i],'dec')))
+      fp.write('%6.6e %6.6e ' %(_translatecoords(xdata[i],'ra'),_translatecoords(ydata[i],'dec')))
       if xerr:
          if logx:
             a = float(xdata[i])
@@ -1289,7 +1311,7 @@ def _maketempfile(xdata,ydata,xerr=None,yerr=None):
             if b == 0:
                fp.write('1 ')
             else:
-               fp.write('%4.4e ' %((a+b)/a))
+               fp.write('%6.6e ' %((a+b)/a))
             if a == b:
                fp.write('1 ')
             else:
@@ -1298,9 +1320,9 @@ def _maketempfile(xdata,ydata,xerr=None,yerr=None):
                # by forcing b, the errorbar value to be ~99% of a.  This
                # reduces the a/(a-b) to 99.
                if a -b < 0:
-                  fp.write('%4.4e ' %99)
+                  fp.write('%6.6e ' %99)
                else:
-                  fp.write('%4.4e ' %(a/(a-b)))
+                  fp.write('%6.6e ' %(a/(a-b)))
          else:
             fp.write('%s ' %xerr[i])
       if yerr:
@@ -1310,7 +1332,7 @@ def _maketempfile(xdata,ydata,xerr=None,yerr=None):
             if b == 0:
                fp.write('1 ')
             else:
-               fp.write('%4.4e ' %((a+b)/a))
+               fp.write('%6.6e ' %((a+b)/a))
             if a == b:
                fp.write('1 ')
             else:
@@ -1319,9 +1341,9 @@ def _maketempfile(xdata,ydata,xerr=None,yerr=None):
                # by forcing b, the errorbar value to be ~99% of a.  This
                # reduces the a/(a-b) to 99.
                if a -b < 0:
-                  fp2.write('%4.4e ' %99)
+                  fp2.write('%6.6e ' %99)
                else:
-                  fp.write('%4.4e ' %(a/(a-b)))
+                  fp.write('%6.6e ' %(a/(a-b)))
          else:
             fp.write('%s ' %yerr[i])
       fp.write('\n')
@@ -1354,7 +1376,7 @@ def _maketempfile2(xcol,ycol,datafile,xerr=None,yerr=None):
                if a == 0:
                   fp2.write('1 ')
                else:
-                  fp2.write('%4.4e ' %((a+b)/a))
+                  fp2.write('%6.6e ' %((a+b)/a))
                if a == b:
                   fp2.write('1 ')
                else:
@@ -1363,9 +1385,9 @@ def _maketempfile2(xcol,ycol,datafile,xerr=None,yerr=None):
                   # by forcing b, the errorbar value to be ~99% of a.  This
                   # reduces the a/(a-b) to 99.
                   if a -b < 0:
-                     fp2.write('%4.4e ' %99)
+                     fp2.write('%6.6e ' %99)
                   else:
-                     fp2.write('%4.4e ' %(a/(a-b)))
+                     fp2.write('%6.6e ' %(a/(a-b)))
             else:
                fp2.write('%s ' %tmp[xerr - 1])
          if yerr:
@@ -1375,7 +1397,7 @@ def _maketempfile2(xcol,ycol,datafile,xerr=None,yerr=None):
                if a == 0:
                   fp2.write('1 ')
                else:
-                  fp2.write('%4.4e ' %((a+b)/a))
+                  fp2.write('%6.6e ' %((a+b)/a))
                if a == b:
                   fp2.write('1 ')
                else:
@@ -1384,9 +1406,9 @@ def _maketempfile2(xcol,ycol,datafile,xerr=None,yerr=None):
                   # by forcing b, the errorbar value to be ~99% of a.  This
                   # reduces the a/(a-b) to 99.
                   if a -b < 0:
-                     fp2.write('%4.4e ' %99)
+                     fp2.write('%6.6e ' %99)
                   else:
-                     fp2.write('%4.4e ' %(a/(a-b)))
+                     fp2.write('%6.6e ' %(a/(a-b)))
             else:
                fp2.write('%s' %tmp[yerr - 1])
          fp2.write('\n')
@@ -1570,12 +1592,39 @@ def _translatecoords(text,coord):
       return text
    
 def _translatefill(fill):
-   '''take useful fill string and convert to wip format'''
+   '''take useful fill string and convert to wip format.  This is the type of
+      fill string used for boxes.  For filled symbols, see below.'''
    fillstr = str(fill)
    for i in range(len(_fills)):
       if fillstr == _fills[i]:
          return str(i+1)
    _error('Invalid fill style %s.  Try s,h,/, or #.' %fillstr)
+
+def _translatefillsymbol(style):
+   '''Translate a symbol style into a fill style (later retranslated by 
+      _translatesymbol.  This is for filled symbols.  For filling of boxes, see
+      above'''
+   if style:
+      if   style == 'o':  fillstyle = 'fo'
+      elif style == '^':  fillstyle = 'f^'
+      elif style == 's':  fillstyle = 'fs'
+      elif style == 'st': fillstyle = 'fst'
+      else: _error('Only circles, triangles, squares, and five-point stars can have a fill color!')
+   else:
+      if   _style == '4' : fillstyle = 'fo'
+      elif _style == '7' : fillstyle = 'f^'
+      elif _style == '0' : fillstyle = 'fs'
+      elif _style == '12': fillstyle = 'fst'
+      else: _error('Only circles, triangles, squares, and five-point stars can have a fill color!')
+
+   if fillstyle in ['fo','fs']:
+      fillfactor = 1.3
+   elif fillstyle == 'fst':
+      fillfactor = 0.8
+   else:
+      fillfactor = 0.8
+   
+   return fillstyle,fillfactor
 
 def _translatefont(font):
    '''Translate a useful font name into wip'''
@@ -1679,24 +1728,29 @@ def _translatelevels(levels):
             levs.append(float(b))
       elif len(blah2) > 1:
          try:
-            xmin = float(blah2[0])
-            xmax = float(blah2[1])
-            step = float(blah2[2])
+            xstart = float(blah2[0])
+            xstop  = float(blah2[1])
+            step   = float(blah2[2])
             levs = []
-            levs.append(xmin)
-            levs.append(xmax)
-            x = xmax - step
-            while x > xmin:
-               levs.insert(1,x)
-               x = x - step
+            x = xstart
+            if xstop > xstart and step > 0:
+               while x <= xstop:
+                  levs.append(x)
+                  x = x + step
+            elif xstop < xstart and step < 0:
+               while x >= xstop:
+                  levs.append(x)
+                  x = x + step
+            else:
+               _error('Levels %s is a an infinite loop!' %levels)
          except IndexError:
-            _error('Levels range must be specified as xmin:xmin:step!')
+            _error('Levels range must be specified as xstart:xstop:step!')
       else:
          try:
             levs.append(float(levels))
          except ValueError:
             _error('You must give at least one number for levels!')
-      return string.join(str(levs)[1:-1].split(','))
+      return string.join(str(levs)[1:-1].split(',')) # [1:-1] to strip off []
    elif _isseq(levels):
       return string.join(str(levels)[1:-1].split(','))
    else:
@@ -1911,4 +1965,3 @@ def _xytovp(fp,x,y,r1,r2):
    fp.write('\n')
    fp.write(r'set %s ((vy2 - vy1) * (%s - y1) / (y2 - y1)) + vy1' %(r2,y))
    fp.write('\n')
-
