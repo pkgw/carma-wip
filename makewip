@@ -210,6 +210,7 @@
 #     4sep02 pjt formal support for darwin
 #    20may05 pjt better help, moved wiphelp over the the libdir
 #     2jul07 pjt more guidelines for darwin, fix g2c/gfortran for linux/mac
+#     7jul10 pjt darwin only for intel, IEEEByteSwap
 #--
 #
 #  Set up some "standard" defaults.
@@ -607,10 +608,10 @@ else if ("$wiphost" == 'darwin') then
     set theM = "$fcname"
     if ($dodebug > 0) then
       set theM = "$theM -g"
-      set cFlags = "$cFlags -g"
+      set cFlags = "$cFlags -g -DIEEEByteSwap"
     else
       set theM = "$theM -O"
-      set cFlags = "$cFlags -O"
+      set cFlags = "$cFlags -O -DIEEEByteSwap"
     endif
 else if ("$wiphost" == 'osf') then
     set doranlib = 1
