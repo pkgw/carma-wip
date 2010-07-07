@@ -91,7 +91,7 @@ int wipinit()
     if ((ep = GetEnv("HOME")) != (char *)NULL) {
       SPrintf(buf, WIPINIT, ep);
       if ((fp = Fopen(buf, "r")) == (FILE *)NULL) {
-        wipoutput(stderr, "Could not open user's WIP initialization file.\n");
+        wipoutput(stderr, "Could not open user's WIP initialization file %s\n",buf);
       } else {
         while ((j = wipinput(fp, (char *)NULL, buf, BUFSIZ)) != EOF) {
           if (j == Null) continue;                /* Skip blank lines. */
