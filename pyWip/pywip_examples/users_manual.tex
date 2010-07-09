@@ -1,0 +1,432 @@
+\documentclass[12pt]{article}
+\title{PyWIP User's Guide}
+\author{Nicholas Chapman}
+\date{6 April 2010}
+\newcommand{\pywip}{PyWIP}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+Around the time I was supposed to be writing my thesis, I decided I was fed-up
+with a plotting package called WIP.  In Astronomy, people generally use
+IDL, SM, WIP, or Gnuplot for their plotting needs.  The first two cost money,
+a lot of money in the case of IDL.  WIP has two main advantages over Gnuplot:
+it can read and understand FITS/MIRIAD data files with world coordinates, and
+I know how to use it.  In most other ways WIP sucks.  Big time.
+
+So, like I said, I was supposed to be writing my thesis, which was going to
+require a ton of figures, and the thought of doing it all in WIP gave me
+nightmares.  Right then and there, I decided it would be much easier to write
+a python wrapper around WIP to make it much easier to use.  Thus, \pywip{} was
+born.
+
+The only other python plotting package I know of is matplotlib.  I had played
+with that off and on, but was ultimately unsatisfied by it.  It seemed to
+require too much overhead to make any sort of plot.  Furthermore, it took major
+effort and more overhead to do some simple things like changing the tick marks
+on the axes.  Lastly, matplotlib seems to run very slowly, even on the simplest
+of plots.  But, your mileage may vary.  If you hate \pywip{}, give it a try.
+matplotlib can do many things that \pywip{} (and WIP) cannot.  However, I do not
+need any of those features.
+
+\section{Installation}
+
+\pywip{} is easy to install.  You only need two things, WIP and python.  You
+likely already have python installed.  If you have a semi-recent version,
+greater than say, around 2.4, that should be fine.  WIP comes from installing
+MIRIAD.
+
+The most convenient way to install \pywip{} is to put it in some permanent
+location and make that location your PYTHONPATH.  Then you won't need to make a
+copy of pywip.py in every directory where you are plotting.  For this to work
+you need to set the PYTHONPATH environment variable, e.g.:\\ \texttt{setenv
+PYTHONPATH /Users/nchapman/data1/Applications/nlcpython}
+
+\section{Documentation}
+
+In addition to this guide, \pywip{} comes with numerous examples in the same
+directory as this document. You should be able to run them all and get output
+postscript plots.  Furthermore, you can find an HTML guide that lists all the
+commands with brief descriptions of their keywords in the same directory as
+pywip.py.  If this HTML document is missing you can create it easily:\\
+\texttt{pydoc -w pywip}
+
+\section{Individual Commands}
+
+\subsection{axis}
+
+If you issue the \texttt{axis()} command without any arguments, then \pywip{}
+will attempt to guess the appropriate axis to draw.  This means if you set
+the \texttt{logx} or \texttt{logy} keywords in any of your plots, then the
+appropriate x- or y-axis will be labelled logarithmically.  Furthermore,
+if you plotted an image with \texttt{header=`rd'}, then \pywip{} will label
+the axes with world coordinates.  Finally, when you are plotting multiple
+panels that join, \pywip{} will be smart enough to suppress number labelling
+where it would interfere with an adajacent panel.
+
+This command isn't perfect, but it's good enough for Rock-and-Roll.  Give it a
+whirl, and if it doesn't do it the way you like, then you can fall back on
+specifying some or of all the parameters manually as needed.  Table
+\ref{tab:axis} lists the allowed parameters.
+
+\begin{table}
+\caption{\label{tab:axis} Keywords for the \texttt{axis()} command}
+\begin{center}
+\begin{tabular}{lp{4in}}
+\hline
+\hline
+\multicolumn{1}{c}{Keyword} & \multicolumn{1}{c}{Meaning}\\
+\hline
+box       & Specifies the frame to be drawn.  Defaults to
+            \mbox{(`bottom',`left',`top',`right')}.\\
+number    & Where to put the numbers.  Defaults to (`bottom',`left')
+            but \texttt{axis()} will attempt to change these
+            depending if you have multiple panels.  The first string
+            can be either `bottom' or `top' (for x) and the second
+            one can be either `left' or `right' (for y).  If you
+            don't want any numbers, set this to ().\\
+tickstyle & Style for tickmarks.  Note, to control whether tickmarks
+            are actually shown, see the \texttt{subtick} and \texttt{majortick}
+            keywords below.  The default style is (`inside',`inside'), meaning
+            the tickmarks for (x,y) axes are drawn inside of the
+            frame.  Either string can be set to `inside', `outside',
+            or 'both'.\\
+format    & Format for the numbers.  The default is (`auto',`auto')
+            for the (x,y) axes.  If you are plotting an image, these
+            are automatically changed to (`wcs',`wcs').  Generally, you should
+            never have to set this, but the other options are `dec'
+            to force decimal labeling, and `exp' to force exponential
+            labeling.\\
+xinterval & A tuple of two numbers, where the first number is the
+            distance between major xtick intervals, and the second
+            number is the number of subticks between each major xtick.
+            If you leave this unset, reasonable defaults will be
+            chosen.\\
+yinterval & A tuple of two numbers, where the first number is the
+            distance between major ytick intervals, and the second
+            number is the number of subticks between each major ytick.
+            If you leave this unset, reasonable defaults will be
+            chosen.\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\setcounter{table}{0} % need to have a two-page table
+
+\begin{table}
+\caption{Keywords for the \texttt{axis()} command (continued)}
+\begin{center}
+\begin{tabular}{p{1in}p{4in}}
+\hline
+\hline
+\multicolumn{1}{c}{Keyword} & \multicolumn{1}{c}{Meaning}\\
+\hline
+drawtickx, drawticky   & If set to False, this is a shortcut to setting
+                         \texttt{subtickx=False} and \texttt{majortickx=False}.
+                         Note, setting \texttt{drawtick=False} while also
+                         setting the \texttt{majortick} or \texttt{subtick}
+                         keywords to True may cause weird behavior.  You have
+                         been warned. \\
+firstx, firsty         & If set to False, write only the last part of the label
+                         for the first time tick on the axis.  For example, if
+                         the full first label is 17 42 34.4, then only write
+                         34.4. This option is useful for sub-panels that join
+                         each other. The default values are True.\\
+gridx, gridy           & Draw a grid of lines at the major tick positions for
+                         either x or y.  Defaults are False, meaning no grid is
+                         shown.\\
+logx, logy             & Label x or y axis logaritmically.  Defaults are set
+                         automatically depending on whether the user
+                         has specified log labeling with plot() or some other
+                         command. Note that setting this parameter will override
+                         any settings for xinterval and yinterval.\\
+subtickx, subticky     & Draw subticks?  Defaults to True, meaning do draw
+                         subticks for both the x and y axes.\\
+majortickx, majorticky & Draw majorticks? Defaults to True, meaning do draw
+                         major ticks for both the x and y axes.\\
+verticaly              & Rotate the numbers on the y axis to be vertical?  The
+                         default is False, but it is set to True automatically
+                         if an image has been plotted.  There is not equivalent
+                         command for the xaxis numbers.\\
+zerox, zeroy           & If set to False, omit leading zero in numbers $< 10$
+                         in time labels.  This option is only valid when format
+                         is `wcs' for the given axis.  Furthermore, it is
+                         ignored when verticaly=True because it becomes
+                         impossible to align the numbers properly.  The default
+                         values are True.\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection{blowup}
+
+This command is somewhat tricky.  The input coordinates MUST be pixel values. I
+usually determine them from DS9.  Secondly,  if you have plotted only a
+sub-region of an image with halftone/contour, then you need to input the
+relative pixel values.  For example, I plotted the image
+'image.fits[172:194,136:158]'.  Later, I wanted to draw a blow-up box determined
+by the pixel coordinates 181.156,183.018,145.567,146.802 (in the xmin, xmax,
+ymin, ymax format).  However, I could not enter these values for blowup()
+because they are incorrect.  The correct values would be: 10.156, 12.018,
+10.567, 11.802.  (181.156 - 171, 183.018 - 171, 145.567 - 135, 146.802 - 135).
+I subtracted 171 and 135 for x and y respectively, because pixels in FITS images
+are counted from 1 not zero.
+
+\subsection{legend}
+
+The legend command is used to make it easier to put legends on your plots. A
+legend is essentially a series of rows, where each row has two elements: a
+symbol or line representing the data set or curve and a text label. After vast
+amounts of work, I think I finally succeeded in making a general purpose
+\texttt{legend()} command that doesn't require lots of fiddling by the user.
+Just give it x and y coordinates for the upper-left corner (given as a fraction
+of the plot width and height) and you should be good to go. Maybe someday I will
+get around to adding the option to have a box drawn around the legend
+automatically. The only caveat with \texttt{legend()} is that it should be the
+last thing plotted (well, I think \texttt{xlabel},\texttt{ylabel}, and
+\texttt{title()} are okay).
+
+Also note, the curves listed by \texttt{legend()} are accumulated for all
+panels as plots are made until a \texttt{legend()} command is issued.  Then
+the list of plots is reset.  If you don't want a particular plot shown in the
+legend, just set the \texttt{Text=None keyword}.
+
+\subsection{vector}
+
+The \texttt{vector} command is used to draw arrow fields.  So that the angles
+and lengths will always make sense when plotting arrows on a FITS image with
+WCS, internally \texttt{vector()} will reset the header to `px' (absolute pixel
+value).  What this means for the user is that \texttt{vector()} should be the
+last thing added to a plot (well, maybe before \texttt{legend()}, I'm not sure
+about that).  Also, it means that you should always specify the x and y as
+pixels, not wcs coordinates.  Otherwise, your postions, lengths, and angles will
+be all wrong.  Finally, you can use the \texttt{align} keyword to  specify
+whether the input coordinates are the left (end), center, or right (tip) of the
+arrows.
+
+\section{Keywords}
+
+\subsection{color,font,size,style,width}
+
+A number of the commands have some or all of these keywords as options.  If
+some or all of these aren't specified, the default values for these will be
+used.  The default color is black, font is roman, size is 1, style is
+solid lines, and width is 1.  You can change the defaults at any time by
+running the \texttt{default} command.  See Tables \ref{tab:colors},
+\ref{tab:fonts}, and \ref{tab:lstyles} for details.
+
+\begin{table}
+\caption{\label{tab:colors} Valid Colors}
+\begin{center}
+\begin{tabular}{cl}
+\hline
+\hline
+\multicolumn{1}{c}{Key} & \multicolumn{1}{c}{Description}\\
+\hline
+w  & white\\
+k  & black (default)\\
+r  & red\\
+g  & green\\
+b  & blue\\
+c  & cyan\\
+m  & magenta\\
+y  & yellow\\
+o  & orange\\
+gy & green-yellow\\
+gc & green-cyan\\
+bc & blue-cyan\\
+bm & blue-magenta\\
+rm & red-magenta\\
+dg & dark gray\\
+lg & light gray\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\caption{\label{tab:fonts} Valid Fonts}
+\begin{center}
+\begin{tabular}{cl}
+\hline
+\hline
+\multicolumn{1}{c}{Key} & \multicolumn{1}{c}{Description}\\
+\hline
+sf & sans-serif\\
+rm & roman (default)\\
+it & italics\\
+cu & cursive\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\caption{\label{tab:lstyles} Line Styles}
+\begin{center}
+\begin{tabular}{cl}
+\hline
+\hline
+\multicolumn{1}{c}{Key} & \multicolumn{1}{c}{Description}\\
+\hline
+  -  & solid (default)\\
+ \texttt{--}  & dashed\\
+ .-  & dot-dashed\\
+  :  & dotted\\
+-... & dash-dot-dot-dot\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection{image}
+
+The \texttt{contour}, \texttt{halftone}, and \texttt{winadj} commands all have
+the \texttt{image} keyword.  \texttt{image} is a string specifying the
+FITS/MIRIAD image name, and optionally the sub-image to plot.  For example:\\
+\texttt{image='Bob.fits'} Plot the entire image `Bob.fits'\\
+\texttt{image='Bob.fits[10:20,5:15]'} Plot `Bob.fits' but only the subimage of
+pixels 10-20 in the x and 5-15 in the y.  Finally, \texttt{image='Bob.fits(1)'}
+will plot plane 1 from `Bob.fits'.  You can combine the subimage and plane
+definitions in either order.
+
+There are several other `gotchas' to watch out for when plotting images.
+See \S\,\ref{sec:futz-images} for more details on these.
+
+\subsection{limits}
+
+The limits keyword can be have several different values.  First, if you do not
+specify limits, then \pywip{} will attempt to guess what the limits should be.
+If no limits have been set for the current panel, then \pywip{} will use the 
+min/max of the dataset for the current limits.  Otherwise, the currently
+existing limits will be reused.  Second, you can give a list/tuple of four
+values, which will become the new limits and override any previously existing
+ones.  Third, you can set \texttt{limits='last'}, meaning \pywip{} should
+use the last known limits (generally from the previous panel) as the new limits.
+Note, this will also carry over settings for \texttt{'logx'} and 
+\texttt{'logy'}.
+
+The fourth, and last possibility is to explicitly set \texttt{'limits=None'}. I
+haven't fully explored the ramifications of this, but it seems to force \pywip{}
+to set new limits based on the min/max of the dataset or image, even if limits
+were already known for the current panel. I use it in \texttt{example11.py} to
+ensure that the blowup box is not resized to the limits of the entire region. I
+think it would work for non-image type plots as well.
+
+\subsection{x,y}
+
+Several commands have the \texttt{x} and \texttt{y} keywords to specify a
+location on the plot.  This can be given as a number, but it may be more
+convenient to specify a string in the case of world coordinates.  For example,
+\texttt{x='3:30'} would move the cursor to 3 hours 30 minutes.  Similarly,
+\texttt{x='52.5'} would also move the cursor to 3 hours 30 minutes since 52.5
+degrees is the equivalent.  Note the importance of giving the value as a string.
+Without the quotes, it will move the cursor to 52.5 hour-seconds, not 52.5
+degrees, nor 3 hours 30 minutes.  \pywip{} assumes that \texttt{x} is for Right
+Ascension and \texttt{y} is for Declination.
+
+\section{Tips \& Tricks}
+
+\subsection{Using hidden variables}
+
+Say you want to make a series of plots in a for loop, and have each plot be a
+different color.  You don't need to manually type in all the colors.  Instead,
+they are part of a hidden variable that can be imported.  Hidden variables
+the user may want to access are listed in Table \ref{tab:hidden}.  They
+can be imported and used like so:\\
+\texttt{from pywip import \_colors as pycolors}
+
+\begin{table}
+\caption{\label{tab:hidden} Hidden Variables}
+\begin{center}
+\begin{tabular}{ll}
+\hline
+\hline
+\multicolumn{1}{c}{Variable} & \multicolumn{1}{c}{Meaning}\\
+\hline
+\_palettes & The palettes used for the \texttt{halftone} command\\
+\_colors   & The valid colors for fonts, symbols, lines, etc. (see Table
+             \ref{tab:colors})\\
+\_fills    & The available fill styles\\
+\_fonts    & The available fonts (See Table \ref{tab:fonts})\\
+\_lstyles  & The available line styles (Table \ref{tab:lstyles})\\
+\_symbols  & The available symbols to plot points\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\subsection{Multi-Variable Axes}
+
+To plot one variable (with numbers and tickmarks) on the bottom and a second
+variable  on the top (with a different set of numbers and tickmarks), you
+have to use the \texttt{style=None} keyword in the \texttt{plot()} command.
+This generates a phantom plot.  \pywip{} goes through the motions of setting
+limits, but won't actually plot any points.  Then, just plot the new axis:
+\texttt{axis(box=['top'],number=['top'])}.  You will also have to change the 
+axis command for the firt plot so that it doesn't interfere with the second
+\texttt{axis()} command, e.g.\ \texttt{axis(box=['bottom','left','right'])}.
+
+I did this, and it seems like it would work, so long as variable two is 
+directly proportional to variable1.  For example, $var2 = 3\times var1$ should
+be okay.  However, I had a case where $var2 = 1/var1$, and that did NOT work.
+I think it is a problem with WIP however.
+
+\subsection{\label{sec:futz-images}Futzing with images}
+
+WIP is particular about the images it will accept. Images in \pywip{} will
+always have x increasing to the right and y increasing upwards.  If you are
+plotting an image with a world coordinate system (WCS), it is up to you to make
+sure the image is rotated properly.  In astronomy you typically want Declination
+upwards and Right Ascension increasing to the left.  You may need to rotate your
+image with IRAF's \texttt{rotate} command or the \texttt{regrid} task in Miriad
+to achieve the correct rotation.  If you neglect to do this, \pywip{} will still
+do something, but the WCS will probably be wrong.
+
+Secondly, at least one world coordinate projection (gls) is not allowed.  If
+you get an error about ``unsupported projection'' then you may need to fix your
+image.  This can be done with the Miriad task \texttt{regrid}.  Thanks to 
+Jorge Pineda for this tip:
+\begin{verbatim}
+Assume you have file.fits
+fits in=file.fits op=xyin out=file.mir
+regrid in=file.mir out=file_tan.mir project=tan
+fits in=file_tan.mir op=xyout out=file_tan.fits
+\end{verbatim}
+
+Lastly, for very large fields, I think the WCS displayed by WIP will be off. 
+This can easily be seen if you plot the ra/dec, then plot their equivalent x/y
+positions on an image (get the x/y through something like \texttt{sky2xy} or
+\texttt{ds9}). They will \emph{not} line up.
+
+\subsection{World Coordinates from a data file}
+
+When reading from files, WIP needs ra/dec to be in hour-seconds and 
+degree-seconds (ra * 240, when ra is in degrees, and dec * 3600 when dec is
+in degrees).
+
+\section{Limitations}
+
+This is my current list of the limitations of \pywip.
+\begin{itemize}
+\item The colors should allow hexcodes, grayscale ranges, and rgb values
+\item The axis() command should control logx, logy, and plot range limits
+\item Cannot make shaded contour plots
+\item Cannot make transparent fill styles
+\item Only a limited number of filled symbols are available
+\item The only output formats are .ps and .gif.
+\item wedge() should probably be renamed to colorbar()
+\item The legend() command is quite nice, but is still a kludge
+\item No ability to make RGB plots like DS9
+\item WCS projections do not seem correct for large regions
+\item No way to vertically align text (in a left, center, right format)
+\item Doesn't understand numpy arrays
+\end{itemize}
+
+\end{document}
