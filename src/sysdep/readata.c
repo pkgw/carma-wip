@@ -23,6 +23,7 @@
 	18nov97 jm  Modified wipreadcol() to warn user when number of
 	            points is larger than (and truncated to) maxsize.
 	16nov04 pjt add suggestion that's an FAQ
+        14apr10 pjt no more prototypes
 
 Routines:
 void wiplines ARGS(( int first, int last ));
@@ -48,24 +49,14 @@ static int LINE2;
 
 /* Code */
 
-#ifdef PROTOTYPE
 void wiplines(int first, int last)
-#else
-void wiplines(first, last)
-int first, last;
-#endif /* PROTOTYPE */
 {
     LINE1 = first;
     LINE2 = last;
     return;
 }
 
-#ifdef PROTOTYPE
 void wipgetlines(int *first, int *last)
-#else
-void wipgetlines(first, last)
-int *first, *last;
-#endif /* PROTOTYPE */
 {
     *first = LINE1;
     *last = LINE2;
@@ -73,12 +64,7 @@ int *first, *last;
 }
 
 /*  Returns 1 on error; 0 otherwise. */
-#ifdef PROTOTYPE
 int wipopenfile(Const char *name)
-#else
-int wipopenfile(name)
-Const char *name;
-#endif /* PROTOTYPE */
 {
     char *ptr;
     char enddata[8];
@@ -112,7 +98,7 @@ Const char *name;
         wipoutput(stderr, "Trouble opening a scratch file... \n");
         wipoutput(stderr, "\t...is the temporary file [%s] writeable?\n",
           tmpName);
-        return(1);
+        return 1;
       }
 
       wipoutput(stdout,
@@ -135,26 +121,20 @@ Const char *name;
 
     if ((datafp = Fopen(ptr, "r")) == (FILE *)NULL) {
       wipoutput(stderr, "Error opening file [%s] for reading.\n", ptr);
-      return(1);
+      return 1;
     }
 
     if (filesize(datafp) <= 0L) {
       wipoutput(stderr, "No data within file [%s] to read.\n", ptr);
-      return(1);
+      return 1;
     }
 
     wiplines(1, 0);
-    return(0);
+    return 0;
 }
 
 /* Returns the number of elements read or EOF if an error occured. */
-#ifdef PROTOTYPE
 int wipreadcol(float array[], int maxsize, int nc)
-#else
-int wipreadcol(array, maxsize, nc)
-int nc, maxsize;
-float array[];
-#endif /* PROTOTYPE */
 {
     char *ptr;
     char line[BUFSIZ];
@@ -249,12 +229,7 @@ END_OF_FILE:
  *  or NULL if an error occured.  The caller should free the string
  *  when finished with it.
  */
-#ifdef PROTOTYPE
 char *wipreadstr(int first, int second)
-#else
-char *wipreadstr(first, second)
-int first, second;
-#endif /* PROTOTYPE */
 {
     char *par, *ptr;
     char line[BUFSIZ];
