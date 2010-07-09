@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-
+# A plot to show the different greek characters available
 from pywip import *
-winadj(0,10,0,6.5)
+
+winadj(10,6.5)
 x1 = 1
 x2 = 3
 text(x1,6,'\ alpha')

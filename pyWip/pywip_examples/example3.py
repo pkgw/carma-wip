@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-
+# A plot to illustrate the different font styles and ways of presenting
+# text
 from pywip import *
 
 viewport(0.2,0.8,0.2,0.9)
@@ -21,5 +22,5 @@ plot([0.5],[14],style='*')
 text(0.5,14,'Right justified',align='right')
 plot([0.5],[15],style='*')
 text(0.5,15,r'Angle = 45^{o}',angle=45)
-axis('bc','bc')
+axis(number=[],drawtickx=False,drawticky=False)
 savefig('plot-ex3.ps')

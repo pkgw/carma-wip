@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# A plot showing how to generate data internally using python
 from pywip import *
 import math
 
@@ -20,5 +20,5 @@ plot(x,y,style='+')
 title(r'y = cos(|x|)/(1+|x|)',size=1.5)
 xlabel('x')
 ylabel('y')
-axis('bcnst','bcnstv')
+axis(verticaly=True)
 savefig('plot-ex6.ps')
