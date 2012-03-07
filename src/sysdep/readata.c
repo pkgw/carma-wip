@@ -85,16 +85,15 @@ int wipopenfile(Const char *name)
     ptr = Strncpy(line, name, STRINGSIZE);       /* Make a local copy. */
     line[STRINGSIZE-1] = Null;            /* Insure a Null at the end. */
     wiplower(ptr);                              /* Make it lower case. */
-    /*
-     *  According to ANSI-C, tmpfile() opens a temporary file in binary
-     *  mode (wb+).  To avoid any reading conficts later, use tmpnam()
-     *  and hope the system allows calls to remove() (which is ANSI-C).
-     */
     if (Strcmp("stdin", ptr) != 0) {              /* An external file. */
       ptr = (char *)name;            /* Point to un-lowered file name. */
     } else {                                       /* Read from stdin. */
-      tmpName = Tmpnam((char *)NULL);    /* Get a temporary file name. */
-      if ((datafp = Fopen(tmpName, "w")) == (FILE *)NULL) {
+      /**
+       * Use mkstemp to create temporary file name, tmpnam() is deprecated.
+       */
+      char tmpName[] = "/tmp/wiptmpXXXXXX";
+      int tmp_fd     = mkstemp(tmpName);
+      if ((datafp = fdopen(tmp_fd, "w")) == (FILE *)NULL) {
         wipoutput(stderr, "Trouble opening a scratch file... \n");
         wipoutput(stderr, "\t...is the temporary file [%s] writeable?\n",
           tmpName);
